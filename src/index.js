@@ -20,10 +20,21 @@ import { ExampleDataViz } from './components/pages/ExampleDataViz';
 import { config } from './utils/oktaConfig';
 import { LoadingComponent } from './components/common';
 
+// redux
+import { createStore, applyMiddleware } from 'redux';
+import allReducer from './state/reducers';
+import { Provider } from 'react-redux';
+import thunk from 'redux-thunk';
+import logger from 'redux-logger';
+
+const store = createStore(allReducer, applyMiddleware(thunk, logger));
+
 ReactDOM.render(
   <Router>
     <React.StrictMode>
-      <App />
+      <Provider store={store}>
+        <App />
+      </Provider>
     </React.StrictMode>
   </Router>,
   document.getElementById('root')

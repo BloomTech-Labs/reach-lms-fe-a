@@ -44,9 +44,12 @@ const getProfileData = authState => {
   } catch (error) {
     return new Promise(() => {
       console.log(error);
+      console.log('Failed to get profile data');
       return [];
     });
   }
 };
+
+// get programs and courses after logging in
 
 export { sleep, getExampleData, getProfileData, getDSData };
