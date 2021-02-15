@@ -22,12 +22,12 @@ import { LoadingComponent } from './components/common';
 
 // redux
 import { createStore, applyMiddleware } from 'redux';
-import allReducer from './state/reducers';
+import rootReducer from './state/reducers';
 import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
 import logger from 'redux-logger';
 
-const store = createStore(allReducer, applyMiddleware(thunk, logger));
+const store = createStore(rootReducer, applyMiddleware(thunk, logger));
 
 ReactDOM.render(
   <Router>
