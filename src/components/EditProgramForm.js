@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { editProgramAction } from "../actions/programActions";
-import { axiosWithAuth } from "../utils/axiosWithAuth";
+import { axiosWithAuth } from "../utils/axiosWithAuth.js";
 import schema from '../validation/Schema';
 
 const initialFormErrors = {
