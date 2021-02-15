@@ -65,9 +65,9 @@ export default function EditProgram() {
 
     return (
 
-      <div>
+      <div className="container">
         <h1>Edit Program</h1>
-        <div className="container" onSubmit={editProgram}>
+        <form onSubmit={editProgram}>
           <label htmlFor="name">Name:
         <input
               type="text"
@@ -120,7 +120,7 @@ export default function EditProgram() {
           <div>{errors.description ? `${errors.description}` : ""}</div>
 
           <button>Submit</button>
-        </div>
+        </form>
       </div>
     );
   };
