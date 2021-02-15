@@ -1,7 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Button } from '../../common';
 import Header from '../Header';
+import { connect } from 'react-redux';
+
+// ant Design
+import { Button } from 'antd';
 
 function RenderHomePage(props) {
   const { userInfo, authService } = props;
@@ -22,22 +25,30 @@ function RenderHomePage(props) {
             2. Create dummy data to practice.
             3. write code for api calls, etc.
           */}
-          <p>
-            This is an example of a common example of how we'd like for you to
-            approach components.
-          </p>
-          <p>
-            <Link to="/profile-list">Profiles Example</Link>
-          </p>
-          <p>
-            <Link to="/example-list">Example List of Items</Link>
-          </p>
-          <p>
-            <Link to="/datavis">Data Visualizations Example</Link>
-          </p>
+
+          {props.userInfo.role === 'admin' ? (
+            <div>{/*map programs here for admins */}</div>
+          ) : (
+            <div>{/* map courses here for students and teachers */}</div>
+          )}
+
+          <div>
+            <h2>My Programs</h2>
+            <Button type="primary" shape="round" color="blue">
+              Add Program
+            </Button>
+          </div>
+
+          <div>
+            <h2>My Courses</h2>
+            <Button type="primary" shape="round" color="blue">
+              Add Course
+            </Button>
+          </div>
         </div>
       </div>
     </div>
   );
 }
+
 export default RenderHomePage;
