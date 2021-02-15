@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { editUserAction } from "../actions/userActions";
+import { editUserAction } from "../state/actions/userActions";
 import { axiosWithAuth } from "../utils/axiosWithAuth";
 import schema from '../validation/Schema';
 
