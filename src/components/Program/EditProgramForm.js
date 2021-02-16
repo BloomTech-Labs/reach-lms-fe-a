@@ -1,15 +1,15 @@
-import React, { useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { useHistory } from "react-router-dom";
-import { editProgramAction } from "../state/actions/programActions";
-import { axiosWithAuth } from "../utils/axiosWithAuth.js";
-import schema from '../validation/Schema';
+import React, { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import { editProgramAction } from '../../state/actions/programActions';
+import { axiosWithAuth } from '../../utils/axiosWithAuth.js';
+import schema from '../../validation/Schema';
 
 const initialFormErrors = {
-    name: '',
-    type: '',
-    description: '',
-  }
+  name: '',
+  type: '',
+  description: '',
+};
 export default function EditProgram() {
   const programToEdit = useSelector(state => state.programReducer.edit_program);
   const dispatch = useDispatch();
@@ -17,13 +17,13 @@ export default function EditProgram() {
   const [input, setInput] = useState(programToEdit);
   const user = useSelector(state => state.userReducer);
   const [errors, setErrors] = useState(initialFormErrors);
-  
+
   if (!user.role) {
-    push("/");
+    push('/');
   }
 
   function changeHandler(e) {
-    setInput({ ...input, [e.target.name]: e.target.value })
+    setInput({ ...input, [e.target.name]: e.target.value });
   }
   function editProgram(e) {
     e.preventDefault();
@@ -32,17 +32,16 @@ export default function EditProgram() {
     function validate() {
       schema
         .validate(input, { abortEarly: false })
-        .then((res) => {
+        .then(res => {
           console.log(res);
           axiosWithAuth()
             .put(``, input)
             .then(res => console.log(res))
-            .catch(err => console.log(err))
+            .catch(err => console.log(err));
           dispatch(editProgramAction(input));
-          push("/dashboard");
-
+          push('/dashboard');
         })
-        .catch((err) => {
+        .catch(err => {
           console.log(err);
           const emptyErr = {
             name: '',
@@ -51,42 +50,39 @@ export default function EditProgram() {
           };
           err.inner.forEach(element => {
             emptyErr[element.path] = element.message;
-
-
           });
-          setErrors(emptyErr)
-
-        })
-
+          setErrors(emptyErr);
+        });
     }
 
     validate();
-    }
+  }
 
-    return (
+  return (
+    <div className="container">
+      <h1>Edit Program</h1>
+      <form onSubmit={editProgram}>
+        <label htmlFor="name">
+          Name:
+          <input
+            type="text"
+            id="name"
+            name="name"
+            value={input.name}
+            onChange={changeHandler}
+          />
+        </label>
+        <div>{errors.name ? `${errors.name}` : ''}</div>
 
-      <div className="container">
-        <h1>Edit Program</h1>
-        <form onSubmit={editProgram}>
-          <label htmlFor="name">Name:
-        <input
-              type="text"
-              id="name"
-              name="name"
-              value={input.name}
-              onChange={changeHandler}
-            />
-          </label>
-          <div>{errors.name ? `${errors.name}` : ""}</div>
-          
-          <label htmlFor="type">Type:
-        <input
-              type="dropdown"
-              id="type"
-              name="type"
-              value={input.type}
-              onChange={changeHandler}
-            >
+        <label htmlFor="type">
+          Type:
+          <input
+            type="dropdown"
+            id="type"
+            name="type"
+            value={input.type}
+            onChange={changeHandler}
+          >
             <option value="">- Select A Type -</option>
             <option value="K">-K-</option>
             <option value="1st">-1st Grade-</option>
@@ -104,23 +100,24 @@ export default function EditProgram() {
             <option value="higher">-Higher-</option>
             <option value="training">-Training-</option>
             <option value="other">-Other-</option>
-            </input>
-          </label>
-          <div>{errors.type ? `${errors.type}` : ""}</div>
-          
-          <label htmlFor="description">Description:
-        <input
-              type="text"
-              id="description"
-              name="description"
-              value={input.description}
-              onChange={changeHandler}
-            />
-          </label>
-          <div>{errors.description ? `${errors.description}` : ""}</div>
+          </input>
+        </label>
+        <div>{errors.type ? `${errors.type}` : ''}</div>
 
-          <button>Submit</button>
-        </form>
-      </div>
-    );
-  };
+        <label htmlFor="description">
+          Description:
+          <input
+            type="text"
+            id="description"
+            name="description"
+            value={input.description}
+            onChange={changeHandler}
+          />
+        </label>
+        <div>{errors.description ? `${errors.description}` : ''}</div>
+
+        <button>Submit</button>
+      </form>
+    </div>
+  );
+}
