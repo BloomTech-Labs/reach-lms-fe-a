@@ -1,12 +1,11 @@
-import { combineReducers } from "redux";
+import { combineReducers } from 'redux';
 
-import programReducer from "./classReducer";
-import userReducer from "./userReducer";
-
+import programReducer from './programReducer';
+import userReducer from './userReducer';
 
 const rootReducer = combineReducers({
   programReducer,
-  userReducer
+  userReducer,
 });
 
-export default rootReducer
+export default rootReducer;

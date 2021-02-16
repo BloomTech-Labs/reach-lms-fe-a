@@ -10,19 +10,15 @@ import { Security, LoginCallback, SecureRoute } from '@okta/okta-react';
 
 import 'antd/dist/antd.less';
 
-import { NotFoundPage } from './components/pages/NotFound';
-import { ExampleListPage } from './components/pages/ExampleList';
-import { ProfileListPage } from './components/pages/ProfileList';
-import { LoginPage } from './components/pages/Login';
-import { HomePage } from './components/pages/Home';
-import { LandingPage } from './components/pages/Landing';
-import { ExampleDataViz } from './components/pages/ExampleDataViz';
+import { NotFoundPage } from './components/NotFound';
+import { LoginPage } from './components/Login';
+import { HomePage } from './components/Dashboard/';
 import { config } from './utils/oktaConfig';
-import { LoadingComponent } from './components/common';
+import LoadingComponent from './components/LoadingComponent';
 
 // redux
 import { createStore, applyMiddleware } from 'redux';
-import rootReducer from './state/reducers';
+import rootReducer from './state/reducers/rootReducer';
 import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
 import logger from 'redux-logger';
@@ -56,16 +52,12 @@ function App() {
       <Switch>
         <Route path="/login" component={LoginPage} />
         <Route path="/implicit/callback" component={LoginCallback} />
-        <Route path="/landing" component={LandingPage} />
         {/* any of the routes you need secured should be registered as SecureRoutes */}
         <SecureRoute
           path="/"
           exact
           component={() => <HomePage LoadingComponent={LoadingComponent} />}
         />
-        <SecureRoute path="/example-list" component={ExampleListPage} />
-        <SecureRoute path="/profile-list" component={ProfileListPage} />
-        <SecureRoute path="/datavis" component={ExampleDataViz} />
         <Route component={NotFoundPage} />
       </Switch>
     </Security>

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Button } from '../../common';
+
 const Header = props => {
   const { userInfo, authService } = props;
 
@@ -9,7 +9,7 @@ const Header = props => {
       <Link to="/profile/userInfo.id">
         <h2>Profile</h2>
       </Link>
-      <Button handleClick={() => authService.logout()} buttonText="Logout" />
+      <button onClick={() => authService.logout()}>Logout</button>
     </div>
   );
 };

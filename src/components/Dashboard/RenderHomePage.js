@@ -4,7 +4,7 @@ import Header from '../Header';
 import { connect } from 'react-redux';
 
 // ant Design
-import { Button } from 'antd';
+import { Button } from 'antd/lib/button';
 
 function RenderHomePage(props) {
   const { userInfo, authService } = props;
