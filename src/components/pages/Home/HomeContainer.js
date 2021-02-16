@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { useOktaAuth } from '@okta/okta-react';
 
 import RenderHomePage from './RenderHomePage';
+import EditProgramAntDesign from '../EditProgramForm(ant.design)';
 
 function HomeContainer({ LoadingComponent }) {
   const { authState, authService } = useOktaAuth();
@@ -36,6 +37,7 @@ function HomeContainer({ LoadingComponent }) {
       {authState.isAuthenticated && userInfo && (
         <RenderHomePage userInfo={userInfo} authService={authService} />
       )}
+      <EditProgramAntDesign />
     </>
   );
 }
