@@ -31,7 +31,6 @@ export default function ProgramCard(props) {
         dispatch(deleteProgram(id));
     }
 
-
 ReactDOM.render(
     <>
       <Card title={programToEdit.name} style={{ width: 300 }}>
