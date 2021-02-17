@@ -26,7 +26,7 @@ export default function ProgramCard(props) {
       .delete(`/${id}`)
       .then(res => console.log(res))
       .catch(err => console.log(err));
-
+    
     dispatch(deleteProgram(id));
   }
 
@@ -46,5 +46,5 @@ export default function ProgramCard(props) {
         </Button>
       </Card>
     </>
-  );
+  )
 }

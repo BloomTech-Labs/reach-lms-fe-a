@@ -132,7 +132,7 @@ export default function CreateClass() {
               <Option value="7th">-7th Grade-</Option>
               <Option value="8th">-8th Grade-</Option>                
               <Option value="9th">-9th Grade-</Option>
-              <Option value="10th">-10th Grade-</Opion>
+              <Option value="10th">-10th Grade-</Option>
               <Option value="11th">-11th Grade-</Option>
               <Option value="12th">-12th Grade-</Option>
               <Option value="higher">-Higher-</Option>
