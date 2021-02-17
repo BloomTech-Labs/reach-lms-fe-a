@@ -1,6 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import ProgramCard from './ProgramCard';
 
 const ProgramList = () => {
   const programs = useSelector(state => state.programReducer.programs_list);
@@ -14,9 +15,7 @@ const ProgramList = () => {
       </div>
       <div>
         {programs.map(program => {
-          {
-            /* return <ProgramCard key={program.id} info={program} /> */
-          }
+          return <ProgramCard key={program.id} info={program} />;
         })}
       </div>
     </div>

@@ -2,7 +2,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 
 const CourseList = () => {
-  const courses = useSelector(state => state.courseReducer.courses_list);
+  // const courses = useSelector(state => state.courseReducer.courses_list);
 
   return (
     <div>
@@ -10,11 +10,11 @@ const CourseList = () => {
         <h2>My Courses</h2>
       </div>
       <div>
-        {courses.map(course => {
+        {/* {courses.map(course => {
           {
-            /* return <CourseCard key={course.id} info={course} /> */
+            return <CourseCard key={course.id} info={course} />
           }
-        })}
+        })} */}
       </div>
     </div>
   );

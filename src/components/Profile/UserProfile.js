@@ -1,35 +1,29 @@
-import React, { useEffect, useState} from 'react';
-import { axiosWithAuth } from '../../utils/axiosWithAuth';
+import React from 'react';
+import 'antd/dist/antd.css';
+import { Card } from 'antd';
+import { Button } from 'antd';
+import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 
-function UserProfile() {
-
-  const { userInfo, setUserInfo } = useState();
+export default function ProgramCard() {
+  const user = useSelector(state => state.userReducer);
   const { push } = useHistory();
 
-  if (!user.role){
-    push('/')
+  function clickOnEdit(e) {
+    e.preventDefault();
+    push('/edit-user');
   }
 
-  useEffect( () => {
-    axiosWithAuth()
-    .get('')
-    .then(res => {
-      setUserInfo(res.data)
-    })
-  }, [])
-  
-  
   return (
-    <div className="user-info-container">
-      <h3>${userInfo.role}</h3>
-      <h4>${userinfo.fname} ${userInfo.lname}</h4>
-
-      <p>Email:&nbsp; ${userInfo.email}</p>
-      <p>Phone Number:&nbsp; ${userInfo.pnumber}</p>
-      <button>Edit Profile</button>
-    </div>
-  );
+    <>
+      <Card title={user.fname + ' ' + user.lname} style={{ width: 800 }}>
+        <h2>{user.role}</h2>
+        <p>{user.email}</p>
+        <p>{user.phone}</p>
+        <Button type="primary" onClick={e => clickOnEdit(e)}>
+          Edit Profile
+        </Button>
+      </Card>
+    </>
+  )
 }
-
-export default UserProfile;
