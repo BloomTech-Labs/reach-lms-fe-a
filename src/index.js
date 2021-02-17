@@ -15,6 +15,10 @@ import { LoginPage } from './components/Login';
 import { HomePage } from './components/Dashboard/';
 import { config } from './utils/oktaConfig';
 import LoadingComponent from './components/LoadingComponent';
+import UserProfile from '../src/components/Profile/UserProfile';
+import EditUserForm from '../src/components/Profile/EditUserForm';
+import CreateProgram from '../src/components/Program/CreateProgramForm';
+import EditProgram from '../src/components/Program/EditProgramForm';
 
 // redux
 import { createStore, applyMiddleware } from 'redux';
@@ -58,6 +62,10 @@ function App() {
           exact
           component={() => <HomePage LoadingComponent={LoadingComponent} />}
         />
+        <SecureRoute path="/profile" component={UserProfile} />
+        <SecureRoute path="/edit-profile" component={EditUserForm} />
+        <SecureRoute path="/create-program" component={CreateProgram} />
+        <SecureRoute path="/edit-program" component={EditProgram} />
         <Route component={NotFoundPage} />
       </Switch>
     </Security>

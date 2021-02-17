@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch, connect } from 'react-redux';
 import { axiosWithAuth } from '../../utils/axiosWithAuth';
 import { setProgramList } from '../../state/actions/programActions';
-import Header from '../Header';
+import Navigation from '../Navigation';
 import { addProgram } from '../../state/actions/programActions';
 import ProgramList from '../Program/ProgramList';
 import CourseList from '../Courses/CourseList';
@@ -45,7 +45,7 @@ const Dashboard = props => {
 
   return (
     <div>
-      <Header userInfo={userInfo} authService={authService} />
+      <Navigation authService={authService} />
       <div>
         <h1>Hi {userInfo.name} Welcome to Reach!</h1>
         <div>

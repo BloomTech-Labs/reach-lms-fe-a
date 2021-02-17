@@ -11,7 +11,7 @@ export default function ProgramCard() {
 
   function clickOnEdit(e) {
     e.preventDefault();
-    push('/edit-user');
+    push('/edit-profile');
   }
 
   return (
@@ -25,5 +25,5 @@ export default function ProgramCard() {
         </Button>
       </Card>
     </>
-  )
+  );
 }
