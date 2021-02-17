@@ -1,9 +1,15 @@
 import React, { useEffect, useState} from 'react';
 import { axiosWithAuth } from '../../utils/axiosWithAuth';
+import { useHistory } from 'react-router-dom';
 
 function UserProfile() {
 
-  const { userInfo, setUserInfo } = useState()
+  const { userInfo, setUserInfo } = useState();
+  const { push } = useHistory();
+
+  if (!user.role){
+    push('/')
+  }
 
   useEffect( () => {
     axiosWithAuth()
