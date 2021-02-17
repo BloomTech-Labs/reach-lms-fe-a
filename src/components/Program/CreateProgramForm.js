@@ -1,30 +1,77 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { axiosWithAuth } from '../../utils/axiosWithAuth';
+import * as yup from "yup";
+import createFormSchema from "../validation/createFormSchema"
 
 //name of program
 //type k-12 or higher training other
 // description
+initialForm = {
+    name: '',
+    type: '',
+    description: '',
+}
+
+initialErrors = {
+    name: '',
+    type: '',
+}
 
 function CreateProgramForm() {
-  const onSumbit = evt => {
-    {
-    }
-  };
+    const [ formValues, setFormValues] = useState(initialForm)
+    const [ errorValues, setErrorValues] = useState(initialErrors)
 
-  const onInputChange = evt => {
-    {
+
+  const onSumbit = e => {
+      e.preventDefault()
+      axiosWithAuth()
+      .put(``, newForm)
+      .then(res => {
+          setFormValues([...formValues, newForm])
+      })
+      .catch(err => {console.log(err, "You made a booboo!")})
+      setFormValues(initialForm)
+  }
+
+  const changeHandler = e => {
+      yup
+      .reach(createFormSchema, name)
+      .validate(value)
+      .then((valid) => {
+          setErrorValues({
+                  ...errorValues,
+                  [name]: " ",
+              })
+          })
+        .catch((err) => {
+            setErrorValues({
+                ...errorValues,
+                [name]: err.errors[0],
+            })
+        })
+        setFormValues({
+            ...formValues, [e.target.name]: e.target.value
+        })
     }
-  };
+        
+
+      
+
+
+  const newForm = {
+      ...formValues
+  }
 
   return (
-    <form className="programForm" onSubmit={{}}>
+    <form className="programForm" onSubmit={onSubmit}>
       <label>
         <h3>Name of Program</h3>
-        <input value={{}} onChange={{}} name="Name" type="text" />
+        <input value={formValues.name} onChange={changeHandler} name="name" type="text" />
       </label>
 
       <label>
         <h3>Type of Program</h3>
-        <select onChange={{}} value={{}} name="type">
+        <select onChange={changeHandler} value={formValues.type} name="type" type="dropdown">
           <option value="">- Select A Type -</option>
           <option value="K">-K-</option>
           <option value="1st">-1st Grade-</option>
@@ -52,11 +99,11 @@ function CreateProgramForm() {
         name="description"
         id="description"
         type="text"
-        onChange={{}}
-        value={{}}
+        onChange={changeHandler}
+        value={formValues.description}
       />
       <br />
-      <button disabled={{}}>Submit</button>
+      <button>Submit</button>
     </form>
   );
 }
