@@ -1,15 +1,29 @@
 import React from 'react';
+import 'antd/dist/antd.css';
+import { Card } from 'antd';
+import { Button } from 'antd';
+import { useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 
-function UserProfile() {
+export default function ProgramCard() {
+  const user = useSelector(state => state.userReducer);
+  const { push } = useHistory();
+
+  function clickOnEdit(e) {
+    e.preventDefault();
+    push('/edit-user');
+  }
+
   return (
-    <div className="user-info-container">
-      <h3>User Role</h3>
-      <h4>First Name Last Name</h4>
-
-      <p>Email</p>
-      <p>Phone Number</p>
-    </div>
+    <>
+      <Card title={user.fname + ' ' + user.lname} style={{ width: 800 }}>
+        <h2>{user.role}</h2>
+        <p>{user.email}</p>
+        <p>{user.phone}</p>
+        <Button type="primary" onClick={e => clickOnEdit(e)}>
+          Edit Profile
+        </Button>
+      </Card>
+    </>
   );
 }
-
-export default UserProfile;
