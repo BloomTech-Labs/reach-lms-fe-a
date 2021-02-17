@@ -5,6 +5,13 @@ import { editUserAction } from '../../state/actions/userActions';
 import { axiosWithAuth } from '../../utils/axiosWithAuth';
 import schema from '../../validation/Schema';
 
+// ant design 
+import 'antd/dist/antd.css';
+import Button from 'antd/lib/button';
+import Input from 'antd/lib/input';
+import Form from 'antd/lib/form/Form';
+import FormItem from 'antd/lib/form/FormItem';
+
 const initialFormErrors = {
   fname: '',
   lname: '',
@@ -64,57 +71,58 @@ export default function EditUser() {
   return (
     <div className="container">
       <h1>Edit User</h1>
-      <form onSubmit={editUser}>
-        <label htmlFor="fname">
+      <Form onSubmit={editUser}>
+        <FormItem 
+          label="fname">
           First Name:
-          <input
+          <Input
             type="text"
             id="fname"
             name="fname"
             value={input.fname}
             onChange={changeHandler}
           />
-        </label>
+        </FormItem>
         <div>{errors.fname ? `${errors.fname}` : ''}</div>
 
-        <label htmlFor="lname">
+        <FormItem label="lname">
           Last Name:
-          <input
+          <Input
             type="text"
             id="lname"
             name="lname"
             value={input.lname}
             onChange={changeHandler}
           />
-        </label>
+        </FormItem>
         <div>{errors.lname ? `${errors.lname}` : ''}</div>
 
-        <label htmlFor="email">
+        <FormItem label="email">
           Email:
-          <input
+          <Input
             type="email"
             id="email"
             name="email"
             value={input.email}
             onChange={changeHandler}
           />
-        </label>
+        </FormItem>
         <div>{errors.email ? `${errors.email}` : ''}</div>
 
-        <label htmlFor="phone">
+        <FormItem label="phone">
           Phone Number:
-          <input
+          <Input
             type="text"
             id="phone"
             name="phone"
             value={input.phone}
             onChange={changeHandler}
           />
-        </label>
+        </FormItem>
         <div>{errors.phone ? `${errors.phone}` : ''}</div>
 
-        <button>Submit</button>
-      </form>
+        <Button type="primary">Submit</Button>
+      </Form>
     </div>
   );
 }
