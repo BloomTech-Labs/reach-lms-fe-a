@@ -6,6 +6,7 @@ const initialState = {
   lname: '',
   email: '',
   phone: '',
+  role: '',
 };
 
 const userReducer = (state = initialState, action) => {
