@@ -9,6 +9,7 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
+import '../../styles/Nav.css';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -30,28 +31,21 @@ const Navigation = props => {
 
   return (
     <nav>
-      <ul>
-        <li>
-          <Link href="/">
-            <a>REACH</a>
-          </Link>
-        </li>
+      <div className="navBar">
+        <h1 className="logo">REACH</h1>
         {!isMobile && (
-          <>
-            <li>
-              <Link href="/profile">
-                <a>Profile</a>
-              </Link>
-            </li>
-            <li>
-              <Link href="/logout">
-                <a onClick={() => authService.logout()}>Logout</a>
-              </Link>
-            </li>
-          </>
+          <div>
+            <Link href="/profile">
+              <a className="nav-link">Profile</a>
+            </Link>
+            <Link href="/logout">
+              <a className="nav-link" onClick={() => authService.logout()}>
+                Logout
+              </a>
+            </Link>
+          </div>
         )}
-      </ul>
-
+      </div>
       {isMobile && (
         <>
           <IconButton
