@@ -44,7 +44,8 @@ export default function CreateClass() {
     push('/');
   }
 
-  function changeValues(e) {
+  const changeValues = e => {
+    console.log(e);
     e.persist();
     const correctValue = e.target.value;
 
@@ -62,13 +63,15 @@ export default function CreateClass() {
     }
     validate();
     setValues({ ...values, [e.target.name]: correctValue });
-  }
+    console.log(values);
+  };
 
   function submitForm(e) {
     e.preventDefault();
     dispatch(addProgram(values));
+    console.log(values);
     axiosWithAuth()
-      .post('', values)
+      .post('https://reach-team-a-be.herokuapp.com/programs', values)
       .then(res => {
         // console.log({createClass: res})
         //localStorage.setItem("onboarding", "true");
@@ -101,9 +104,11 @@ export default function CreateClass() {
 
         <FormItem label="Type:" name="type" rules={[{ required: true }]}>
           <Select
-            placeholder="Select a program type"
-            onChange={changeValues}
+            id="type"
+            name="type"
             value={values.type}
+            placeholder="Select a program type"
+            defaultValue=""
           >
             <Option value="">- Select A Type -</Option>
             <Option value="1st">-1st Grade-</Option>
@@ -128,7 +133,7 @@ export default function CreateClass() {
           name="description"
           rules={[
             {
-              required: false,
+              required: true,
               message: 'Please add a description for your program!',
             },
           ]}

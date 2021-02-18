@@ -8,7 +8,7 @@ import ProgramList from '../Program/ProgramList';
 import CourseList from '../Courses/CourseList';
 // ant Design
 import { saveUser } from '../../state/actions/userActions';
-
+import { Link } from 'react-router-dom';
 const Dashboard = props => {
   const { userInfo, authService } = props;
   const user = useSelector(state => state.userReducer);
@@ -20,6 +20,16 @@ const Dashboard = props => {
       .get('https://reach-team-a-be.herokuapp.com/users/getuserinfo')
       .then(res => {
         console.log(res);
+        console.log(res.data.roles);
+        let incoming_user = {
+          id: res.data.userid,
+          fname: res.data.firstname,
+          lname: res.data.lastname,
+          email: res.data.useremails,
+          phone: res.data.phonenumber,
+          role: res.data.roles[0].role.name,
+        };
+        dispatch(saveUser(incoming_user));
       })
       .catch(err => {
         console.log(err);
@@ -58,6 +68,9 @@ const Dashboard = props => {
       <Navigation authService={authService} />
       <div>
         <h1>Hi {userInfo.name} Welcome to Reach!</h1>
+        <Link to="/create-program">
+          <button>Create Program</button>
+        </Link>
         <div>
           {props.userInfo.role === 'admin' ? <ProgramList /> : <CourseList />}
         </div>
