@@ -1,15 +1,12 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useOktaAuth } from '@okta/okta-react';
 import Dashboard from './Dashboard';
-import { useDispatch } from 'react-redux';
-import { saveUser } from '../../state/actions/userActions';
 
 function HomeContainer({ LoadingComponent }) {
   const { authState, authService } = useOktaAuth();
   const [userInfo, setUserInfo] = useState(null);
   // eslint-disable-next-line
   const [memoAuthService] = useMemo(() => [authService], []);
-  const dispatch = useDispatch();
 
   useEffect(() => {
     let isSubscribed = true;
@@ -28,7 +25,6 @@ function HomeContainer({ LoadingComponent }) {
             phone: info.phone,
           };
           setUserInfo(info);
-          dispatch(saveUser(user));
         }
       })
       .catch(err => {
