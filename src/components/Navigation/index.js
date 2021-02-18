@@ -43,13 +43,15 @@ const Navigation = props => {
         <h1 className="logo">REACH</h1>
         {!isMobile && (
           <div>
-            <Link href="/profile">
-              <a className="nav-link">Profile</a>
+            <Link to="/profile" className="nav-link">
+              Profile
             </Link>
-            <Link href="/logout">
-              <a className="nav-link" onClick={() => authService.logout()}>
-                Logout
-              </a>
+            <Link
+              to="/logout"
+              className="nav-link"
+              onClick={() => authService.logout()}
+            >
+              Logout
             </Link>
           </div>
         )}
