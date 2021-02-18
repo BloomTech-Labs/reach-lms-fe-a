@@ -7,6 +7,7 @@ import { addProgram } from '../../state/actions/programActions';
 import ProgramList from '../Program/ProgramList';
 import CourseList from '../Courses/CourseList';
 // ant Design
+import { saveUser } from '../../state/actions/userActions';
 
 const Dashboard = props => {
   const { userInfo, authService } = props;
@@ -15,8 +16,17 @@ const Dashboard = props => {
 
   useEffect(() => {
     let isMounted = true;
+    axiosWithAuth()
+      .get('https://reach-team-a-be.herokuapp.com/users/getuserinfo')
+      .then(res => {
+        console.log(res);
+      })
+      .catch(err => {
+        console.log(err);
+      });
 
     async function fetchData(role) {
+      console.log(role);
       if (role === 'admin') {
         let doneLoading = await axiosWithAuth()
           .get(``)
@@ -37,7 +47,7 @@ const Dashboard = props => {
     }
 
     if (isMounted) {
-      fetchData(user.role);
+      fetchData(userInfo);
     }
 
     return () => (isMounted = false);
