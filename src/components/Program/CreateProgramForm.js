@@ -22,9 +22,9 @@ const layout = {
 };
 
 const initialValues = {
-  name: '',
-  type: '',
-  description: '',
+  programname: '',
+  programtype: '',
+  programdescription: '',
 };
 
 const initialFormErrors = {
@@ -65,7 +65,7 @@ export default function CreateClass() {
   };
 
   const changeSelect = e => {
-    setValues({ ...values, type: e });
+    setValues({ ...values, programtype: e });
   };
 
   function submitForm(e) {
@@ -77,8 +77,9 @@ export default function CreateClass() {
       .then(res => {
         // console.log({createClass: res})
         //localStorage.setItem("onboarding", "true");
+        console.log(res);
         setValues(initialValues);
-        push('/dashboard');
+        push('/');
       })
       .catch(err => {
         console.log(err);
@@ -91,24 +92,24 @@ export default function CreateClass() {
       <Form {...layout} name="basic" onFinish={submitForm}>
         <FormItem
           label="Name:"
-          name="name"
+          name="programname"
           rules={[
             { required: true, message: 'Please input your program name!' },
           ]}
         >
           <Input
-            id="name"
-            name="name"
+            id="programname"
+            name="programname"
             value={values.name}
             onChange={changeValues}
           />
         </FormItem>
 
-        <FormItem label="Type:" name="type" rules={[{ required: true }]}>
+        <FormItem label="Type:" name="programtype" rules={[{ required: true }]}>
           <Select
-            id="type"
-            name="type"
-            value={values.type}
+            id="programtype"
+            name="programtype"
+            value={values.programtype}
             placeholder="Select a program type"
             onChange={changeSelect}
           >
@@ -132,7 +133,7 @@ export default function CreateClass() {
         </FormItem>
         <FormItem
           label="Description:"
-          name="description"
+          name="programdescription"
           rules={[
             {
               required: true,
@@ -141,9 +142,9 @@ export default function CreateClass() {
           ]}
         >
           <Input
-            id="description"
-            name="description"
-            value={values.description}
+            id="programdescription"
+            name="programdescription"
+            value={values.programdescription}
             onChange={changeValues}
           />
         </FormItem>
