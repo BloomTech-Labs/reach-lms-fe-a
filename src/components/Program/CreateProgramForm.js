@@ -22,7 +22,6 @@ const layout = {
 };
 
 const initialValues = {
-  id: '',
   name: '',
   type: '',
   description: '',
@@ -45,7 +44,6 @@ export default function CreateClass() {
   }
 
   const changeValues = e => {
-    console.log(e);
     e.persist();
     const correctValue = e.target.value;
 
@@ -64,6 +62,10 @@ export default function CreateClass() {
     validate();
     setValues({ ...values, [e.target.name]: correctValue });
     console.log(values);
+  };
+
+  const changeSelect = e => {
+    setValues({ ...values, type: e });
   };
 
   function submitForm(e) {
@@ -85,7 +87,7 @@ export default function CreateClass() {
 
   return (
     <div className="container">
-      <h1>Edit Program</h1>
+      <h1>Create Program</h1>
       <Form {...layout} name="basic" onFinish={submitForm}>
         <FormItem
           label="Name:"
@@ -108,7 +110,7 @@ export default function CreateClass() {
             name="type"
             value={values.type}
             placeholder="Select a program type"
-            defaultValue=""
+            onChange={changeSelect}
           >
             <Option value="">- Select A Type -</Option>
             <Option value="1st">-1st Grade-</Option>
@@ -145,7 +147,9 @@ export default function CreateClass() {
             onChange={changeValues}
           />
         </FormItem>
-        <Button type="primary">Submit</Button>
+        <Button onClick={submitForm} type="primary">
+          Submit
+        </Button>
       </Form>
     </div>
   );
