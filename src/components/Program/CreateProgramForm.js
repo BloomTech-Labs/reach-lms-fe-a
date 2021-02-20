@@ -4,7 +4,6 @@ import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import * as yup from 'yup';
 import schema from '../../validation/Schema';
-
 import { addProgram } from '../../state/actions/programActions';
 
 // ant design
@@ -15,6 +14,7 @@ import Select from 'antd/lib/select';
 import Form from 'antd/lib/form/Form';
 import FormItem from 'antd/lib/form/FormItem';
 const { Option } = Select;
+const { TextArea } = Input;
 
 const layout = {
   labelCol: { span: 8 },
@@ -141,7 +141,15 @@ export default function CreateClass() {
             },
           ]}
         >
-          <Input
+          {/* <Input
+            id="programdescription"
+            name="programdescription"
+            value={values.programdescription}
+            onChange={changeValues}
+          /> */}
+          <TextArea
+            showCount
+            maxLength={1000}
             id="programdescription"
             name="programdescription"
             value={values.programdescription}
