@@ -16,7 +16,9 @@ const ProgramList = () => {
           {
             console.log(program);
           }
-          return <ProgramCard key={program.id} programToEdit={program} />;
+          return (
+            <ProgramCard key={program.programid} programToEdit={program} />
+          );
         })}
       </div>
     </div>
