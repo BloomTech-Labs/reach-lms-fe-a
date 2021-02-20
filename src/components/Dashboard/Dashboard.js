@@ -20,7 +20,6 @@ const Dashboard = props => {
       .get('https://reach-team-a-be.herokuapp.com/users/getuserinfo')
       .then(res => {
         console.log(res);
-        console.log(res.data.roles);
         let incoming_user = {
           id: res.data.userid,
           fname: res.data.firstname,

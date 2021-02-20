@@ -4,7 +4,6 @@ import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import * as yup from 'yup';
 import schema from '../../validation/Schema';
-
 import { addProgram } from '../../state/actions/programActions';
 
 // ant design
@@ -15,6 +14,7 @@ import Select from 'antd/lib/select';
 import Form from 'antd/lib/form/Form';
 import FormItem from 'antd/lib/form/FormItem';
 const { Option } = Select;
+const { TextArea } = Input;
 
 const layout = {
   labelCol: { span: 8 },
@@ -22,10 +22,9 @@ const layout = {
 };
 
 const initialValues = {
-  id: '',
-  name: '',
-  type: '',
-  description: '',
+  programname: '',
+  programtype: '',
+  programdescription: '',
 };
 
 const initialFormErrors = {
@@ -45,7 +44,6 @@ export default function CreateClass() {
   }
 
   const changeValues = e => {
-    console.log(e);
     e.persist();
     const correctValue = e.target.value;
 
@@ -66,6 +64,10 @@ export default function CreateClass() {
     console.log(values);
   };
 
+  const changeSelect = e => {
+    setValues({ ...values, programtype: e });
+  };
+
   function submitForm(e) {
     e.preventDefault();
     dispatch(addProgram(values));
@@ -75,8 +77,9 @@ export default function CreateClass() {
       .then(res => {
         // console.log({createClass: res})
         //localStorage.setItem("onboarding", "true");
+        console.log(res);
         setValues(initialValues);
-        push('/dashboard');
+        push('/');
       })
       .catch(err => {
         console.log(err);
@@ -85,30 +88,30 @@ export default function CreateClass() {
 
   return (
     <div className="container">
-      <h1>Edit Program</h1>
+      <h1>Create Program</h1>
       <Form {...layout} name="basic" onFinish={submitForm}>
         <FormItem
           label="Name:"
-          name="name"
+          name="programname"
           rules={[
             { required: true, message: 'Please input your program name!' },
           ]}
         >
           <Input
-            id="name"
-            name="name"
+            id="programname"
+            name="programname"
             value={values.name}
             onChange={changeValues}
           />
         </FormItem>
 
-        <FormItem label="Type:" name="type" rules={[{ required: true }]}>
+        <FormItem label="Type:" name="programtype" rules={[{ required: true }]}>
           <Select
-            id="type"
-            name="type"
-            value={values.type}
+            id="programtype"
+            name="programtype"
+            value={values.programtype}
             placeholder="Select a program type"
-            defaultValue=""
+            onChange={changeSelect}
           >
             <Option value="">- Select A Type -</Option>
             <Option value="1st">-1st Grade-</Option>
@@ -130,7 +133,7 @@ export default function CreateClass() {
         </FormItem>
         <FormItem
           label="Description:"
-          name="description"
+          name="programdescription"
           rules={[
             {
               required: true,
@@ -138,14 +141,24 @@ export default function CreateClass() {
             },
           ]}
         >
-          <Input
-            id="description"
-            name="description"
-            value={values.description}
+          {/* <Input
+            id="programdescription"
+            name="programdescription"
+            value={values.programdescription}
+            onChange={changeValues}
+          /> */}
+          <TextArea
+            showCount
+            maxLength={1000}
+            id="programdescription"
+            name="programdescription"
+            value={values.programdescription}
             onChange={changeValues}
           />
         </FormItem>
-        <Button type="primary">Submit</Button>
+        <Button onClick={submitForm} type="primary">
+          Submit
+        </Button>
       </Form>
     </div>
   );
