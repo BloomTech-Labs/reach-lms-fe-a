@@ -20,7 +20,7 @@ import LoadingComponent from './components/LoadingComponent';
 import UserProfile from '../src/components/Profile/UserProfile';
 import EditUserForm from '../src/components/Profile/EditUserForm';
 import CreateProgram from '../src/components/Program/CreateProgramForm';
-import EditProgram from '../src/components/Program/EditProgramForm';
+import EditProgram from '../src/components/Program/EditProgramForm(ant.design)';
 
 // redux
 import { createStore, applyMiddleware } from 'redux';

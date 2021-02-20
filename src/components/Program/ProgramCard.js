@@ -20,9 +20,10 @@ export default function ProgramCard(props) {
   }
 
   function deletingProgram(e, id) {
+    console.log(programToEdit);
     axiosWithAuth()
       // will have to put in the proper API call here
-      .delete(`/${id}`)
+      .delete(`https://reach-team-a-be.herokuapp.com/programs/program/${id}`)
       .then(res => console.log(res))
       .catch(err => console.log(err));
 
@@ -39,7 +40,7 @@ export default function ProgramCard(props) {
         </Button>
         <Button
           type="primary"
-          onClick={e => deletingProgram(e, programToEdit.id)}
+          onClick={e => deletingProgram(e, programToEdit.programid)}
         >
           Delete Program
         </Button>
