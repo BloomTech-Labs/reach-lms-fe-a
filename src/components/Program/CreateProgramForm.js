@@ -73,7 +73,10 @@ export default function CreateClass() {
     dispatch(addProgram(values));
     console.log(values);
     axiosWithAuth()
-      .post('https://reach-team-a-be.herokuapp.com/programs', values)
+      .post(
+        `https://reach-team-a-be.herokuapp.com/programs/${user.id}/program`,
+        values
+      )
       .then(res => {
         // console.log({createClass: res})
         //localStorage.setItem("onboarding", "true");

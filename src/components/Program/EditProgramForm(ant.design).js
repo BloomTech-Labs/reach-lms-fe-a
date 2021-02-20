@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { editProgramAction } from '../../state/actions/programActions';
@@ -13,6 +13,7 @@ import Select from 'antd/lib/select';
 import Form from 'antd/lib/form/Form';
 import FormItem from 'antd/lib/form/FormItem';
 const { Option } = Select;
+const { TextArea } = Input;
 
 const layout = {
   labelCol: { span: 8 },
@@ -29,9 +30,11 @@ export default function EditProgramAntDesign() {
   const programToEdit = useSelector(state => state.programReducer.edit_program);
   const dispatch = useDispatch();
   const { push } = useHistory();
-  const [input, setInput] = useState(programToEdit);
   const user = useSelector(state => state.userReducer);
+  const [input, setInput] = useState(programToEdit);
   const [errors, setErrors] = useState(initialFormErrors);
+
+  useEffect(() => {}, []);
 
   if (!user.role) {
     push('/');
@@ -40,9 +43,10 @@ export default function EditProgramAntDesign() {
   function changeHandler(e) {
     setInput({ ...input, [e.target.name]: e.target.value });
   }
+
   function editProgram(e) {
     e.preventDefault();
-    // console.log(values);
+    console.log(input);
 
     function validate() {
       schema
@@ -50,11 +54,16 @@ export default function EditProgramAntDesign() {
         .then(res => {
           console.log(res);
           axiosWithAuth()
-            .put(``, input)
-            .then(res => console.log(res))
+            .put(
+              `https://reach-team-a-be.herokuapp.com/programs/program/${programToEdit.programid}`,
+              input
+            )
+            .then(res => {
+              console.log(res);
+            })
             .catch(err => console.log(err));
           dispatch(editProgramAction(input));
-          push('/dashboard');
+          push('/');
         })
         .catch(err => {
           console.log(err);
@@ -73,40 +82,45 @@ export default function EditProgramAntDesign() {
     validate();
   }
 
+  const changeSelect = e => {
+    setInput({ ...input, programtype: e });
+  };
+
   return (
     <div className="container">
-      <h1>Edit Program</h1>
+      <h1>Create Program</h1>
       <Form
         {...layout}
         name="basic"
-        initialValues={{
-          name: input.name,
-          type: input.type,
-          option: input.option,
-          description: input.description,
-        }}
         onFinish={editProgram}
+        initialValues={{
+          programname: programToEdit.programname,
+          programtype: programToEdit.programtype,
+          programdescription: programToEdit.programdescription,
+        }}
       >
         <FormItem
           label="Name:"
-          name="name"
+          name="programname"
           rules={[
             { required: true, message: 'Please input your program name!' },
           ]}
         >
           <Input
-            id="name"
-            name="name"
-            value={input.name}
+            id="programname"
+            name="programname"
+            value={input.programname}
             onChange={changeHandler}
           />
         </FormItem>
 
-        <FormItem label="Type:" name="type" rules={[{ required: true }]}>
+        <FormItem label="Type:" name="programtype" rules={[{ required: true }]}>
           <Select
+            id="programtype"
+            name="programtype"
+            value={input.programtype}
             placeholder="Select a program type"
-            onChange={changeHandler}
-            value={input.type}
+            onChange={changeSelect}
           >
             <Option value="">- Select A Type -</Option>
             <Option value="1st">-1st Grade-</Option>
@@ -126,10 +140,9 @@ export default function EditProgramAntDesign() {
             <Option value="other">-Other-</Option>
           </Select>
         </FormItem>
-
         <FormItem
           label="Description:"
-          name="description"
+          name="programdescription"
           rules={[
             {
               required: true,
@@ -137,14 +150,24 @@ export default function EditProgramAntDesign() {
             },
           ]}
         >
-          <Input
-            id="description"
-            name="description"
-            value={input.description}
+          {/* <Input
+            id="programdescription"
+            name="programdescription"
+            value={values.programdescription}
+            onChange={changeValues}
+          /> */}
+          <TextArea
+            showCount
+            maxLength={1000}
+            id="programdescription"
+            name="programdescription"
+            value={input.programdescription}
             onChange={changeHandler}
           />
         </FormItem>
-        <Button type="primary">Submit</Button>
+        <Button onClick={editProgram} type="primary">
+          Submit
+        </Button>
       </Form>
     </div>
   );

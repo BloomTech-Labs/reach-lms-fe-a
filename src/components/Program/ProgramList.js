@@ -10,12 +10,15 @@ const ProgramList = () => {
     <div>
       <div>
         <h2>My Programs</h2>
-        <Link to="/add-program">Add Program</Link>
-        Add Program
       </div>
       <div>
         {programs.map(program => {
-          return <ProgramCard key={program.id} info={program} />;
+          {
+            console.log(program);
+          }
+          return (
+            <ProgramCard key={program.programid} programToEdit={program} />
+          );
         })}
       </div>
     </div>

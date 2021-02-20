@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector, useDispatch, connect } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { axiosWithAuth } from '../../utils/axiosWithAuth';
 import { setProgramList } from '../../state/actions/programActions';
 import Navigation from '../Navigation';
@@ -15,51 +15,50 @@ const Dashboard = props => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    let isMounted = true;
     axiosWithAuth()
-      .get('https://reach-team-a-be.herokuapp.com/users/getuserinfo')
+      .get(`https://reach-team-a-be.herokuapp.com/programs/${user.id}`)
       .then(res => {
         console.log(res);
-        let incoming_user = {
-          id: res.data.userid,
-          fname: res.data.firstname,
-          lname: res.data.lastname,
-          email: res.data.useremails,
-          phone: res.data.phonenumber,
-          role: res.data.roles[0].role.name,
-        };
-        dispatch(saveUser(incoming_user));
+        dispatch(setProgramList(res.data));
       })
       .catch(err => {
         console.log(err);
       });
 
-    async function fetchData(role) {
-      console.log(role);
-      if (role === 'admin') {
-        let doneLoading = await axiosWithAuth()
-          .get(``)
-          .then(res => {
-            dispatch(setProgramList(res.data.data));
-            return false;
-          })
-          .catch(err => console.log(err));
-      } else {
-        let doneLoading = await axiosWithAuth()
-          .get(``)
-          .then(res => {
-            dispatch(setProgramList(res.data.data));
-            return false;
-          })
-          .catch(err => console.log(err));
-      }
-    }
+    // axiosWithAuth()
+    //   .get(``)
+    //   .then(res => {
+    //     console.log(res)
+    //   })
+    //   .catch(err => {
+    //     console.log(err)
+    //   })
 
-    if (isMounted) {
-      fetchData(userInfo);
-    }
+    // async function fetchData() {
+    //   if (userRole === 'ADMIN') {
+    //     let doneLoading = await axiosWithAuth()
+    //       .get(`https://reach-team-a-be.herokuapp.com/${user.id}`)
+    //       .then(res => {
+    //         console.log(res)
+    //         return false;
+    //       })
+    //       .catch(err => console.log(err));
+    //   } else {
+    //     let doneLoading = await axiosWithAuth()
+    //       .get(``)
+    //       .then(res => {
+    //         dispatch(setProgramList(res.data.data));
+    //         return false;
+    //       })
+    //       .catch(err => console.log(err));
+    //   }
+    // }
 
-    return () => (isMounted = false);
+    // if (isMounted) {
+    //   fetchData(userInfo);
+    // }
+
+    // return () => (isMounted = false);
   }, []);
 
   return (
@@ -70,9 +69,7 @@ const Dashboard = props => {
         <Link to="/create-program">
           <button>Create Program</button>
         </Link>
-        <div>
-          {props.userInfo.role === 'admin' ? <ProgramList /> : <CourseList />}
-        </div>
+        <div>{user.role === 'ADMIN' ? <ProgramList /> : <CourseList />}</div>
       </div>
     </div>
   );
