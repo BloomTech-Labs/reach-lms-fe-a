@@ -18,7 +18,8 @@ const Dashboard = props => {
     axiosWithAuth()
       .get(`https://reach-team-a-be.herokuapp.com/programs/${user.id}`)
       .then(res => {
-        dispatch(setProgramList(res.data.data));
+        console.log(res);
+        dispatch(setProgramList(res.data));
       })
       .catch(err => {
         console.log(err);

@@ -13,6 +13,9 @@ const ProgramList = () => {
       </div>
       <div>
         {programs.map(program => {
+          {
+            console.log(program);
+          }
           return <ProgramCard key={program.id} programToEdit={program} />;
         })}
       </div>

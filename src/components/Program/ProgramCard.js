@@ -10,7 +10,6 @@ import { setEdit, deleteProgram } from '../../state/actions/programActions';
 export default function ProgramCard(props) {
   const { programToEdit } = props;
   const user = useSelector(state => state.userReducer);
-  const programs = useSelector(state => state.programReducer.program_list);
   const dispatch = useDispatch();
   const { push } = useHistory();
 
@@ -26,15 +25,15 @@ export default function ProgramCard(props) {
       .delete(`/${id}`)
       .then(res => console.log(res))
       .catch(err => console.log(err));
-    
+
     dispatch(deleteProgram(id));
   }
 
   return (
     <>
-      <Card title={programToEdit.name} style={{ width: 300 }}>
-        <h1>{programToEdit.type}</h1>
-        <p>{programToEdit.description}</p>
+      <Card title={programToEdit.programname} style={{ width: 300 }}>
+        <h3>{programToEdit.programtype}</h3>
+        <p>{programToEdit.programdescription}</p>
         <Button type="primary" onClick={e => clickOnEdit(e, programToEdit.id)}>
           Edit Program
         </Button>
@@ -46,5 +45,5 @@ export default function ProgramCard(props) {
         </Button>
       </Card>
     </>
-  )
+  );
 }
