@@ -1,4 +1,4 @@
-import { SAVE_USER, CLEAR_USER } from '../actions/userActions';
+import { SAVE_USER, CLEAR_USER, EDIT_USER } from '../actions/userActions';
 
 const initialState = {
   id: 0,
@@ -15,6 +15,8 @@ const userReducer = (state = initialState, action) => {
       return action.payload;
     case CLEAR_USER:
       return initialState;
+    case EDIT_USER:
+      return action.payload;
     default:
       return state;
   }

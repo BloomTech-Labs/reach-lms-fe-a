@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { editUser } from '../../state/actions/userActions';
 import { axiosWithAuth } from '../../utils/axiosWithAuth';
 import schema from '../../validation/Schema';
+import { editUser } from '../../state/actions/userActions';
 
 const initialFormErrors = {
   fname: '',
@@ -12,12 +12,18 @@ const initialFormErrors = {
   phone: '',
 };
 
-export default function EditUser() {
+export default function EditUserForm() {
   const userToEdit = useSelector(state => state.userReducer.edit_user);
   const dispatch = useDispatch();
   const { push } = useHistory();
-  const [input, setInput] = useState(userToEdit);
   const user = useSelector(state => state.userReducer);
+  const [input, setInput] = useState({
+    fname: user.fname,
+    lname: user.lname,
+    phone: user.phone,
+    email: user.email[0].useremail,
+    role: user.role,
+  });
   const [errors, setErrors] = useState(initialFormErrors);
 
   if (!user.role) {
@@ -27,7 +33,8 @@ export default function EditUser() {
   function changeHandler(e) {
     setInput({ ...input, [e.target.name]: e.target.value });
   }
-  function editUser(e) {
+
+  function editUserSubmit(e) {
     e.preventDefault();
     // console.log(values);
 
@@ -37,11 +44,14 @@ export default function EditUser() {
         .then(res => {
           console.log(res);
           axiosWithAuth()
-            .put(``, input)
+            .patch(
+              `https://reach-team-a-be.herokuapp.com/users/user/${user.id}`,
+              input
+            )
             .then(res => console.log(res))
             .catch(err => console.log(err));
           dispatch(editUser(input));
-          push('/dashboard');
+          push('/profile');
         })
         .catch(err => {
           console.log(err);
@@ -64,7 +74,7 @@ export default function EditUser() {
   return (
     <div className="container">
       <h1>Edit User</h1>
-      <form onSubmit={editUser}>
+      <form onSubmit={editUserSubmit}>
         <label htmlFor="fname">
           First Name:
           <input
