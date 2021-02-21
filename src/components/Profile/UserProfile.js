@@ -1,19 +1,16 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import 'antd/dist/antd.css';
 import { Card } from 'antd';
 import { Button } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { editUser } from '../../state/actions/userActions';
 
 export default function ProgramCard() {
   const user = useSelector(state => state.userReducer);
   const { push } = useHistory();
-  const dispatch = useDispatch();
 
   function clickOnEdit(e) {
     e.preventDefault();
-    dispatch(editUser(user));
     push('/edit-profile');
   }
 

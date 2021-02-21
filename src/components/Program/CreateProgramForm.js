@@ -74,7 +74,7 @@ export default function CreateClass() {
     console.log(values);
     axiosWithAuth()
       .post(
-        `https://reach-team-a-be.herokuapp.com/programs/${user.id}/program`,
+        `https://reach-team-a-be.herokuapp.com/programs/${user.userid}/program`,
         values
       )
       .then(res => {

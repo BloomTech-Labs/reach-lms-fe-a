@@ -16,7 +16,13 @@ const userReducer = (state = initialState, action) => {
     case CLEAR_USER:
       return initialState;
     case EDIT_USER:
-      return { ...state };
+      return {
+        ...state,
+        firstname: action.payload.firstname,
+        lastname: action.payload.lastname,
+        email: action.payload.email,
+        phonenumber: action.payload.phonenumber,
+      };
     default:
       return state;
   }
