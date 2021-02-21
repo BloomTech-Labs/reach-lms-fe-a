@@ -23,7 +23,7 @@ export default function ProgramCard() {
       <Card title={user.fname + ' ' + user.lname} style={{ width: 800 }}>
         <h3>Role: {user.role}</h3>
         <p>Phone: {user.phone}</p>
-        <p>Email: {user.email[0].useremail}</p>
+        <p>Email: {user.email}</p>
         <Button type="primary" onClick={e => clickOnEdit(e)}>
           Edit Profile
         </Button>

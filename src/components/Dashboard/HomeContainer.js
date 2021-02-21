@@ -43,7 +43,7 @@ function HomeContainer({ LoadingComponent }) {
           id: res.data.userid,
           fname: res.data.firstname,
           lname: res.data.lastname,
-          email: res.data.useremails,
+          email: res.data.email,
           phone: res.data.phonenumber,
           role: res.data.roles[0].role.name,
         };

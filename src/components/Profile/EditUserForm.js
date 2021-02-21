@@ -6,10 +6,10 @@ import schema from '../../validation/Schema';
 import { editUser } from '../../state/actions/userActions';
 
 const initialFormErrors = {
-  fname: '',
-  lname: '',
+  firstname: '',
+  lastname: '',
   email: '',
-  phone: '',
+  phonenumber: '',
 };
 
 export default function EditUserForm() {
@@ -18,10 +18,10 @@ export default function EditUserForm() {
   const { push } = useHistory();
   const user = useSelector(state => state.userReducer);
   const [input, setInput] = useState({
-    fname: user.fname,
-    lname: user.lname,
-    phone: user.phone,
-    email: user.email[0].useremail,
+    firstname: user.fname,
+    lastname: user.lname,
+    phonenumber: user.phone,
+    email: user.email,
     role: user.role,
   });
   const [errors, setErrors] = useState(initialFormErrors);
@@ -36,7 +36,6 @@ export default function EditUserForm() {
 
   function editUserSubmit(e) {
     e.preventDefault();
-    // console.log(values);
 
     function validate() {
       schema
@@ -48,7 +47,7 @@ export default function EditUserForm() {
               `https://reach-team-a-be.herokuapp.com/users/user/${user.id}`,
               input
             )
-            .then(res => console.log(res))
+            .then(res => console.log('Successful Patch: ', res))
             .catch(err => console.log(err));
           dispatch(editUser(input));
           push('/profile');
@@ -56,10 +55,10 @@ export default function EditUserForm() {
         .catch(err => {
           console.log(err);
           const emptyErr = {
-            fname: '',
-            lname: '',
+            firstname: '',
+            lastname: '',
             email: '',
-            phone: '',
+            phonenumber: '',
           };
           err.inner.forEach(element => {
             emptyErr[element.path] = element.message;
@@ -75,29 +74,29 @@ export default function EditUserForm() {
     <div className="container">
       <h1>Edit User</h1>
       <form onSubmit={editUserSubmit}>
-        <label htmlFor="fname">
+        <label htmlFor="firstname">
           First Name:
           <input
             type="text"
-            id="fname"
-            name="fname"
-            value={input.fname}
+            id="firstname"
+            name="firstname"
+            value={input.firstname}
             onChange={changeHandler}
           />
         </label>
-        <div>{errors.fname ? `${errors.fname}` : ''}</div>
+        <div>{errors.firstname ? `${errors.firstname}` : ''}</div>
 
-        <label htmlFor="lname">
+        <label htmlFor="lastname">
           Last Name:
           <input
             type="text"
-            id="lname"
-            name="lname"
-            value={input.lname}
+            id="lastname"
+            name="lastname"
+            value={input.lastname}
             onChange={changeHandler}
           />
         </label>
-        <div>{errors.lname ? `${errors.lname}` : ''}</div>
+        <div>{errors.lastname ? `${errors.lastname}` : ''}</div>
 
         <label htmlFor="email">
           Email:
@@ -111,17 +110,17 @@ export default function EditUserForm() {
         </label>
         <div>{errors.email ? `${errors.email}` : ''}</div>
 
-        <label htmlFor="phone">
+        <label htmlFor="phonenumber">
           Phone Number:
           <input
             type="text"
-            id="phone"
-            name="phone"
-            value={input.phone}
+            id="phonenumber"
+            name="phonenumber"
+            value={input.phonenumber}
             onChange={changeHandler}
           />
         </label>
-        <div>{errors.phone ? `${errors.phone}` : ''}</div>
+        <div>{errors.phonenumber ? `${errors.phonenumber}` : ''}</div>
 
         <button>Submit</button>
       </form>
