@@ -68,7 +68,6 @@ export default function EditUserForm() {
             })
             .catch(err => console.log(err));
           dispatch(editUser(input));
-          push('/profile');
         })
         .catch(err => {
           console.log(err);
@@ -83,6 +82,7 @@ export default function EditUserForm() {
           });
           setErrors(emptyErr);
         });
+      push('/profile');
     }
 
     validate();
