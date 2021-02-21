@@ -16,7 +16,7 @@ const Dashboard = props => {
 
   useEffect(() => {
     axiosWithAuth()
-      .get(`https://reach-team-a-be.herokuapp.com/programs/${user.id}`)
+      .get(`https://reach-team-a-be.herokuapp.com/programs/${user.userid}`)
       .then(res => {
         console.log(res);
         dispatch(setProgramList(res.data));

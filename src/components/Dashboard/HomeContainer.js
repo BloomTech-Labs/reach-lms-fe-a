@@ -40,11 +40,11 @@ function HomeContainer({ LoadingComponent }) {
       .get('https://reach-team-a-be.herokuapp.com/users/getuserinfo')
       .then(res => {
         let incoming_user = {
-          id: res.data.userid,
-          fname: res.data.firstname,
-          lname: res.data.lastname,
-          email: res.data.useremails,
-          phone: res.data.phonenumber,
+          userid: res.data.userid,
+          firstname: res.data.firstname,
+          lastname: res.data.lastname,
+          email: res.data.email,
+          phonenumber: res.data.phonenumber,
           role: res.data.roles[0].role.name,
         };
         dispatch(saveUser(incoming_user));
