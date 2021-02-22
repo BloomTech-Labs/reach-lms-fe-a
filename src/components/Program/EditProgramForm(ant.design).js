@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { editProgramAction } from '../../state/actions/programActions';
 import { axiosWithAuth } from '../../utils/axiosWithAuth';
-import schema from '../../validation/Schema';
+import schema from '../../validation/ProgramSchema';
 
 // ant design
 import 'antd/dist/antd.css';

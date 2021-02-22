@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { axiosWithAuth } from '../../utils/axiosWithAuth';
-import schema from '../../validation/Schema';
+import schema from '../../validation/ProgramSchema';
 import { editUser } from '../../state/actions/userActions';
 
 // ant design
