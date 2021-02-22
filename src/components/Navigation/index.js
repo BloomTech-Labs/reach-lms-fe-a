@@ -1,13 +1,29 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
-
+import styled from 'styled-components';
 import { makeStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
-import '../../styles/Nav.css';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
+
+const StyledNav = styled.nav`
+  display: flex;
+  justify-content: space-between;
+  background: #1282a2;
+  align-items: center;
+  width: 100vw;
+  height: 14vh;
+`;
+const StyledLogo = styled.h1`
+  font-size: 10vh;
+  color: white;
+`;
+const StyledLink = styled.link`
+  font-size: 2vh;
+  color: white;
+`;
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -38,21 +54,21 @@ const Navigation = props => {
   };
 
   return (
-    <nav>
+    <StyledNav>
       <div className="navBar">
-        <h1 className="logo">REACH</h1>
+        <StyledLogo>REACH</StyledLogo>
         {!isMobile && (
           <div>
-            <Link to="/profile" className="nav-link">
+            <StyledLink to="/profile" className="nav-link">
               Profile
-            </Link>
-            <Link
+            </StyledLink>
+            <StyledLink
               to="/logout"
               className="nav-link"
               onClick={() => authService.logout()}
             >
               Logout
-            </Link>
+            </StyledLink>
           </div>
         )}
         {isMobile && (
@@ -83,7 +99,7 @@ const Navigation = props => {
           </>
         )}
       </div>
-    </nav>
+    </StyledNav>
   );
 };
 
