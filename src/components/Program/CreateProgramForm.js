@@ -56,9 +56,9 @@ export default function CreateProgram() {
     setValues({ ...values, [e.target.name]: valueToUse });
   };
 
-  const changeSelect = (e, name) => {
-    setFormErrors(name, e);
-    setValues({ ...values, programtype: e });
+  const changeSelect = (value, event) => {
+    setFormErrors('programtype', value);
+    setValues({ ...values, programtype: value });
   };
 
   useEffect(() => {
@@ -88,27 +88,25 @@ export default function CreateProgram() {
     <div className="container">
       <h1>Create Program</h1>
       <Form {...layout} name="basic" onFinish={submitForm}>
-        <FormItem
-          label="Name:"
-          name="programname"
-          rules={[{ required: true, min: 1 }]}
-          validateStatus
-        >
+        <FormItem label="Name:" name="programname" validateStatus>
           <Input
             id="programname"
             name="programname"
             value={values.name}
             onChange={changeValues}
           />
+          <div style={{ color: 'red' }}>
+            {errors.programname ? `${errors.programname}` : ''}
+          </div>
         </FormItem>
-        {errors.programname ? `${errors.programname}` : ''}
-        <FormItem label="Type:" name="programtype" rules={[{ required: true }]}>
+
+        <FormItem label="Type:" name="programtype">
           <Select
             id="programtype"
             name="programtype"
             value={values.programtype}
             placeholder="Select a program type"
-            onChange={changeSelect()}
+            onSelect={(value, event) => changeSelect(value, event)}
           >
             <Option value="">- Select A Type -</Option>
             <Option value="1st">-1st Grade-</Option>
@@ -127,25 +125,12 @@ export default function CreateProgram() {
             <Option value="training">-Training-</Option>
             <Option value="other">-Other-</Option>
           </Select>
+          <div style={{ color: 'red' }}>
+            {errors.programtype ? `${errors.programtype}` : ''}
+          </div>
         </FormItem>
-        {errors.programtype ? `${errors.programtype}` : ''}
 
-        <FormItem
-          label="Description:"
-          name="programdescription"
-          rules={[
-            {
-              required: true,
-              min: 1,
-            },
-          ]}
-        >
-          {/* <Input
-            id="programdescription"
-            name="programdescription"
-            value={values.programdescription}
-            onChange={changeValues}
-          /> */}
+        <FormItem label="Description:" name="programdescription">
           <TextArea
             showCount
             maxLength={500}
@@ -154,8 +139,10 @@ export default function CreateProgram() {
             value={values.programdescription}
             onChange={changeValues}
           />
+          <div style={{ color: 'red' }}>
+            {errors.programdescription ? `${errors.programdescription}` : ''}
+          </div>
         </FormItem>
-        {errors.programdescription ? `${errors.programdescription}` : ''}
         <Button onClick={submitForm} type="primary" disabled={disabled}>
           Submit
         </Button>
