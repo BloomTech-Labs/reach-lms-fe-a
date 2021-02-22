@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import 'antd/dist/antd.css';
 import { Card } from 'antd';
 import { Button } from 'antd';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 
 export default function ProgramCard() {
@@ -16,10 +16,11 @@ export default function ProgramCard() {
 
   return (
     <>
-      <Card title={user.fname + ' ' + user.lname} style={{ width: 800 }}>
-        <h2>{user.role}</h2>
-        <p>{user.email}</p>
-        <p>{user.phone}</p>
+      <h1>Profile</h1>
+      <Card title={user.firstname + ' ' + user.lastname} style={{ width: 800 }}>
+        <h3>Role: {user.role}</h3>
+        <p>Phone: {user.phonenumber}</p>
+        <p>Email: {user.email}</p>
         <Button type="primary" onClick={e => clickOnEdit(e)}>
           Edit Profile
         </Button>

@@ -1,30 +1,45 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { editUserAction } from '../../state/actions/userActions';
 import { axiosWithAuth } from '../../utils/axiosWithAuth';
 import schema from '../../validation/Schema';
+import { editUser } from '../../state/actions/userActions';
 
-// ant design 
+// ant design
 import 'antd/dist/antd.css';
 import Button from 'antd/lib/button';
 import Input from 'antd/lib/input';
+import Select from 'antd/lib/select';
 import Form from 'antd/lib/form/Form';
 import FormItem from 'antd/lib/form/FormItem';
 
-const initialFormErrors = {
-  fname: '',
-  lname: '',
-  email: '',
-  phone: '',
+const layout = {
+  labelCol: { span: 8 },
+  wrapperCol: { span: 16 },
 };
 
-export default function EditUser() {
+const initialFormErrors = {
+  userid: '',
+  firstname: '',
+  lastname: '',
+  phonenumber: '',
+  email: '',
+  role: '',
+};
+
+export default function EditUserForm() {
   const userToEdit = useSelector(state => state.userReducer.edit_user);
   const dispatch = useDispatch();
   const { push } = useHistory();
-  const [input, setInput] = useState(userToEdit);
   const user = useSelector(state => state.userReducer);
+  const [input, setInput] = useState({
+    userid: user.id,
+    firstname: user.firstname,
+    lastname: user.lastname,
+    phonenumber: user.phonenumber,
+    email: user.email,
+    role: user.role,
+  });
   const [errors, setErrors] = useState(initialFormErrors);
 
   if (!user.role) {
@@ -34,9 +49,9 @@ export default function EditUser() {
   function changeHandler(e) {
     setInput({ ...input, [e.target.name]: e.target.value });
   }
-  function editUser(e) {
+
+  function editUserSubmit(e) {
     e.preventDefault();
-    // console.log(values);
 
     function validate() {
       schema
@@ -44,25 +59,30 @@ export default function EditUser() {
         .then(res => {
           console.log(res);
           axiosWithAuth()
-            .put(``, input)
-            .then(res => console.log(res))
+            .patch(
+              `https://reach-team-a-be.herokuapp.com/users/user/${user.userid}`,
+              input
+            )
+            .then(res => {
+              console.log('Successful Patch: ', res);
+            })
             .catch(err => console.log(err));
-          dispatch(editUserAction(input));
-          push('/dashboard');
+          dispatch(editUser(input));
         })
         .catch(err => {
           console.log(err);
           const emptyErr = {
-            fname: '',
-            lname: '',
+            firstname: '',
+            lastname: '',
             email: '',
-            phone: '',
+            phonenumber: '',
           };
           err.inner.forEach(element => {
             emptyErr[element.path] = element.message;
           });
           setErrors(emptyErr);
         });
+      push('/profile');
     }
 
     validate();
@@ -71,57 +91,76 @@ export default function EditUser() {
   return (
     <div className="container">
       <h1>Edit User</h1>
-      <Form onSubmit={editUser}>
-        <FormItem 
-          label="fname">
-          First Name:
+      <Form
+        {...layout}
+        name="basic"
+        onFinish={editUserSubmit}
+        initialValues={{
+          firstname: user.firstname,
+          lastname: user.lastname,
+          phonenumber: user.phonenumber,
+          email: user.email,
+        }}
+      >
+        <FormItem
+          label="First Name:"
+          name="firstname"
+          rules={[{ required: true, message: 'Please input your first name' }]}
+        >
           <Input
-            type="text"
-            id="fname"
-            name="fname"
-            value={input.fname}
+            id="firstname"
+            name="firstname"
+            value={input.firstname}
             onChange={changeHandler}
           />
         </FormItem>
-        <div>{errors.fname ? `${errors.fname}` : ''}</div>
+        {/* <div>{errors.firstname ? `${errors.firstname}` : ''}</div> */}
 
-        <FormItem label="lname">
-          Last Name:
+        <FormItem
+          label="Last Name:"
+          name="lastname"
+          rules={[{ required: true, message: 'Please input your last name' }]}
+        >
           <Input
-            type="text"
-            id="lname"
-            name="lname"
-            value={input.lname}
+            id="lastname"
+            name="lastname"
+            value={input.lastname}
             onChange={changeHandler}
           />
         </FormItem>
-        <div>{errors.lname ? `${errors.lname}` : ''}</div>
+        {/* <div>{errors.lastname ? `${errors.lastname}` : ''}</div> */}
 
-        <FormItem label="email">
-          Email:
+        <FormItem
+          label="Email:"
+          name="email"
+          rules={[{ required: true, message: 'Please input your email' }]}
+        >
           <Input
-            type="email"
             id="email"
             name="email"
             value={input.email}
             onChange={changeHandler}
           />
         </FormItem>
-        <div>{errors.email ? `${errors.email}` : ''}</div>
+        {/* <div>{errors.email ? `${errors.email}` : ''}</div> */}
 
-        <FormItem label="phone">
-          Phone Number:
+        <FormItem
+          label="Phone Number:"
+          name="phonenumber"
+          rules={[
+            { required: true, message: 'Please input your phone number' },
+          ]}
+        >
           <Input
-            type="text"
-            id="phone"
-            name="phone"
-            value={input.phone}
+            id="phonenumber"
+            name="phonenumber"
+            value={input.phonenumber}
             onChange={changeHandler}
           />
         </FormItem>
-        <div>{errors.phone ? `${errors.phone}` : ''}</div>
+        {/* <div>{errors.phonenumber ? `${errors.phonenumber}` : ''}</div> */}
 
-        <Button type="primary">Submit</Button>
+        <Button onClick={editUserSubmit}>Submit</Button>
       </Form>
     </div>
   );

@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useOktaAuth } from '@okta/okta-react';
 import Dashboard from './Dashboard';
-import { useDispatch } from 'react-redux';
+import { axiosWithAuth } from '../../utils/axiosWithAuth';
 import { saveUser } from '../../state/actions/userActions';
+import { useDispatch } from 'react-redux';
 
 function HomeContainer({ LoadingComponent }) {
   const { authState, authService } = useOktaAuth();
@@ -28,13 +29,30 @@ function HomeContainer({ LoadingComponent }) {
             phone: info.phone,
           };
           setUserInfo(info);
-          dispatch(saveUser(user));
         }
       })
       .catch(err => {
         isSubscribed = false;
         return setUserInfo(null);
       });
+
+    axiosWithAuth()
+      .get('https://reach-team-a-be.herokuapp.com/users/getuserinfo')
+      .then(res => {
+        let incoming_user = {
+          userid: res.data.userid,
+          firstname: res.data.firstname,
+          lastname: res.data.lastname,
+          email: res.data.email,
+          phonenumber: res.data.phonenumber,
+          role: res.data.roles[0].role.name,
+        };
+        dispatch(saveUser(incoming_user));
+      })
+      .catch(err => {
+        console.log(err);
+      });
+
     return () => (isSubscribed = false);
   }, [memoAuthService]);
 
