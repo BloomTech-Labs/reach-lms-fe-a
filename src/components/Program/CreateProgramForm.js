@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { axiosWithAuth } from '../../utils/axiosWithAuth';
 import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import * as yup from 'yup';
-import schema from '../../validation/Schema';
+import schema from '../../validation/ProgramSchema';
 import { addProgram } from '../../state/actions/programActions';
 
 // ant design
@@ -28,45 +28,42 @@ const initialValues = {
 };
 
 const initialFormErrors = {
-  name: '',
-  type: '',
+  programname: '',
+  programtype: '',
+  programdescription: '',
 };
 
-export default function CreateClass() {
+export default function CreateProgram() {
   const { push } = useHistory();
   const dispatch = useDispatch();
   const [values, setValues] = useState(initialValues);
   const [errors, setErrors] = useState(initialFormErrors);
+  const [disabled, setDisabled] = useState(true);
   const user = useSelector(state => state.userReducer);
 
-  if (!user.role) {
-    push('/');
-  }
+  const setFormErrors = (name, value) => {
+    yup
+      .reach(schema, name)
+      .validate(value)
+      .then(() => setErrors({ ...errors, [name]: '' }))
+      .catch(err => setErrors({ ...errors, [name]: err.errors[0] }));
+  };
 
   const changeValues = e => {
-    e.persist();
-    const correctValue = e.target.value;
-
-    function validate() {
-      yup
-        .reach(schema, e.target.name)
-        .validate(correctValue)
-        .then(res => {
-          // console.log(res);
-          setErrors({ ...errors, [e.target.name]: '' });
-        })
-        .catch(err => {
-          setErrors({ ...errors, [e.target.name]: err.message });
-        });
-    }
-    validate();
-    setValues({ ...values, [e.target.name]: correctValue });
-    console.log(values);
+    const { name, value, type, select } = e.target;
+    const valueToUse = type === 'select' ? Select : value;
+    setFormErrors(name, valueToUse);
+    setValues({ ...values, [e.target.name]: valueToUse });
   };
 
-  const changeSelect = e => {
-    setValues({ ...values, programtype: e });
+  const changeSelect = (value, event) => {
+    setFormErrors('programtype', value);
+    setValues({ ...values, programtype: value });
   };
+
+  useEffect(() => {
+    schema.isValid(values).then(valid => setDisabled(!valid));
+  }, [values]);
 
   function submitForm(e) {
     e.preventDefault();
@@ -78,8 +75,6 @@ export default function CreateClass() {
         values
       )
       .then(res => {
-        // console.log({createClass: res})
-        //localStorage.setItem("onboarding", "true");
         console.log(res);
         setValues(initialValues);
         push('/');
@@ -93,28 +88,25 @@ export default function CreateClass() {
     <div className="container">
       <h1>Create Program</h1>
       <Form {...layout} name="basic" onFinish={submitForm}>
-        <FormItem
-          label="Name:"
-          name="programname"
-          rules={[
-            { required: true, message: 'Please input your program name!' },
-          ]}
-        >
+        <FormItem label="Name:" name="programname" validateStatus>
           <Input
             id="programname"
             name="programname"
             value={values.name}
             onChange={changeValues}
           />
+          <div style={{ color: 'red' }}>
+            {errors.programname ? `${errors.programname}` : ''}
+          </div>
         </FormItem>
 
-        <FormItem label="Type:" name="programtype" rules={[{ required: true }]}>
+        <FormItem label="Type:" name="programtype">
           <Select
             id="programtype"
             name="programtype"
             value={values.programtype}
             placeholder="Select a program type"
-            onChange={changeSelect}
+            onSelect={(value, event) => changeSelect(value, event)}
           >
             <Option value="">- Select A Type -</Option>
             <Option value="1st">-1st Grade-</Option>
@@ -133,33 +125,25 @@ export default function CreateClass() {
             <Option value="training">-Training-</Option>
             <Option value="other">-Other-</Option>
           </Select>
+          <div style={{ color: 'red' }}>
+            {errors.programtype ? `${errors.programtype}` : ''}
+          </div>
         </FormItem>
-        <FormItem
-          label="Description:"
-          name="programdescription"
-          rules={[
-            {
-              required: true,
-              message: 'Please add a description for your program!',
-            },
-          ]}
-        >
-          {/* <Input
-            id="programdescription"
-            name="programdescription"
-            value={values.programdescription}
-            onChange={changeValues}
-          /> */}
+
+        <FormItem label="Description:" name="programdescription">
           <TextArea
             showCount
-            maxLength={1000}
+            maxLength={500}
             id="programdescription"
             name="programdescription"
             value={values.programdescription}
             onChange={changeValues}
           />
+          <div style={{ color: 'red' }}>
+            {errors.programdescription ? `${errors.programdescription}` : ''}
+          </div>
         </FormItem>
-        <Button onClick={submitForm} type="primary">
+        <Button onClick={submitForm} type="primary" disabled={disabled}>
           Submit
         </Button>
       </Form>

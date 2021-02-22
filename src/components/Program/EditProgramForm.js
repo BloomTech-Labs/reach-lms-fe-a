@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { editProgramAction } from '../../state/actions/programActions';
 import { axiosWithAuth } from '../../utils/axiosWithAuth.js';
-import schema from '../../validation/Schema';
+import schema from '../../validation/ProgramSchema';
 
 const initialFormErrors = {
   name: '',

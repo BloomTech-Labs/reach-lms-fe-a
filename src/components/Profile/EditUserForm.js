@@ -1,15 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { axiosWithAuth } from '../../utils/axiosWithAuth';
-import schema from '../../validation/Schema';
+import schema from '../../validation/ProfileSchema';
+import * as yup from 'yup';
 import { editUser } from '../../state/actions/userActions';
 
 // ant design
 import 'antd/dist/antd.css';
 import Button from 'antd/lib/button';
 import Input from 'antd/lib/input';
-import Select from 'antd/lib/select';
 import Form from 'antd/lib/form/Form';
 import FormItem from 'antd/lib/form/FormItem';
 
@@ -19,12 +19,10 @@ const layout = {
 };
 
 const initialFormErrors = {
-  userid: '',
   firstname: '',
   lastname: '',
   phonenumber: '',
   email: '',
-  role: '',
 };
 
 export default function EditUserForm() {
@@ -32,6 +30,7 @@ export default function EditUserForm() {
   const dispatch = useDispatch();
   const { push } = useHistory();
   const user = useSelector(state => state.userReducer);
+  const [disabled, setDisabled] = useState(false);
   const [input, setInput] = useState({
     userid: user.id,
     firstname: user.firstname,
@@ -42,50 +41,38 @@ export default function EditUserForm() {
   });
   const [errors, setErrors] = useState(initialFormErrors);
 
-  if (!user.role) {
-    push('/');
-  }
+  const setFormErrors = (name, value) => {
+    yup
+      .reach(schema, name)
+      .validate(value)
+      .then(() => setErrors({ ...errors, [name]: '' }))
+      .catch(err => setErrors({ ...errors, [name]: err.errors[0] }));
+  };
 
-  function changeHandler(e) {
-    setInput({ ...input, [e.target.name]: e.target.value });
-  }
+  const changeValues = e => {
+    const { name, value, type, select } = e.target;
+    const valueToUse = type === 'select' ? select : value;
+    setFormErrors(name, valueToUse);
+    setInput({ ...input, [e.target.name]: valueToUse });
+  };
+
+  useEffect(() => {
+    schema.isValid(input).then(valid => setDisabled(!valid));
+  }, [input]);
 
   function editUserSubmit(e) {
     e.preventDefault();
-
-    function validate() {
-      schema
-        .validate(input, { abortEarly: false })
-        .then(res => {
-          console.log(res);
-          axiosWithAuth()
-            .patch(
-              `https://reach-team-a-be.herokuapp.com/users/user/${user.userid}`,
-              input
-            )
-            .then(res => {
-              console.log('Successful Patch: ', res);
-            })
-            .catch(err => console.log(err));
-          dispatch(editUser(input));
-        })
-        .catch(err => {
-          console.log(err);
-          const emptyErr = {
-            firstname: '',
-            lastname: '',
-            email: '',
-            phonenumber: '',
-          };
-          err.inner.forEach(element => {
-            emptyErr[element.path] = element.message;
-          });
-          setErrors(emptyErr);
-        });
-      push('/profile');
-    }
-
-    validate();
+    axiosWithAuth()
+      .patch(
+        `https://reach-team-a-be.herokuapp.com/users/user/${user.userid}`,
+        input
+      )
+      .then(res => {
+        console.log('Successful Patch: ', res);
+      })
+      .catch(err => console.log(err));
+    dispatch(editUser(input));
+    push('/profile');
   }
 
   return (
@@ -102,65 +89,53 @@ export default function EditUserForm() {
           email: user.email,
         }}
       >
-        <FormItem
-          label="First Name:"
-          name="firstname"
-          rules={[{ required: true, message: 'Please input your first name' }]}
-        >
+        <FormItem label="First Name:" name="firstname">
           <Input
             id="firstname"
             name="firstname"
             value={input.firstname}
-            onChange={changeHandler}
+            onChange={changeValues}
           />
+          <div style={{ color: 'red' }}>
+            {errors.firstname ? `${errors.firstname}` : ''}
+          </div>
         </FormItem>
-        {/* <div>{errors.firstname ? `${errors.firstname}` : ''}</div> */}
-
-        <FormItem
-          label="Last Name:"
-          name="lastname"
-          rules={[{ required: true, message: 'Please input your last name' }]}
-        >
+        <FormItem label="Last Name:" name="lastname">
           <Input
             id="lastname"
             name="lastname"
             value={input.lastname}
-            onChange={changeHandler}
+            onChange={changeValues}
           />
+          <div style={{ color: 'red' }}>
+            {errors.lastname ? `${errors.lastname}` : ''}
+          </div>
         </FormItem>
-        {/* <div>{errors.lastname ? `${errors.lastname}` : ''}</div> */}
-
-        <FormItem
-          label="Email:"
-          name="email"
-          rules={[{ required: true, message: 'Please input your email' }]}
-        >
+        <FormItem label="Email:" name="email">
           <Input
             id="email"
             name="email"
             value={input.email}
-            onChange={changeHandler}
+            onChange={changeValues}
           />
+          <div style={{ color: 'red' }}>
+            {errors.email ? `${errors.email}` : ''}
+          </div>
         </FormItem>
-        {/* <div>{errors.email ? `${errors.email}` : ''}</div> */}
-
-        <FormItem
-          label="Phone Number:"
-          name="phonenumber"
-          rules={[
-            { required: true, message: 'Please input your phone number' },
-          ]}
-        >
+        <FormItem label="Phone Number:" name="phonenumber">
           <Input
             id="phonenumber"
             name="phonenumber"
             value={input.phonenumber}
-            onChange={changeHandler}
+            onChange={changeValues}
           />
+          <div style={{ color: 'red' }}>
+            {errors.phonenumber ? `${errors.phonenumber}` : ''}
+          </div>
         </FormItem>
-        {/* <div>{errors.phonenumber ? `${errors.phonenumber}` : ''}</div> */}
-
-        <Button onClick={editUserSubmit}>Submit</Button>
+        <Button onClick={editUserSubmit} type="primary" disabled={disabled}>
+          Submit
+        </Button>
       </Form>
     </div>
   );

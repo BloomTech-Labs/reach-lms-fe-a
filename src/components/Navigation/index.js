@@ -62,8 +62,9 @@ const Navigation = props => {
               className={classes.menuButton}
               color="inherit"
               aria-label="menu"
+              onClick={handleClick}
             >
-              <MenuIcon onClick={handleClick} />
+              <MenuIcon />
             </IconButton>
             <Menu
               id="simple-menu"
@@ -75,7 +76,7 @@ const Navigation = props => {
               <Link to="/profile">
                 <MenuItem onClick={handleClose}>Profile</MenuItem>
               </Link>
-              <Link onClick={() => authService.logout()}>
+              <Link to="/" onClick={() => authService.logout()}>
                 <MenuItem onClick={handleClose}>Logout</MenuItem>
               </Link>
             </Menu>

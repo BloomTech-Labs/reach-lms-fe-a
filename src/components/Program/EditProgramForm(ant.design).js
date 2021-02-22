@@ -3,7 +3,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { editProgramAction } from '../../state/actions/programActions';
 import { axiosWithAuth } from '../../utils/axiosWithAuth';
-import schema from '../../validation/Schema';
+import * as yup from 'yup';
+import schema from '../../validation/ProgramSchema';
 
 // ant design
 import 'antd/dist/antd.css';
@@ -21,9 +22,9 @@ const layout = {
 };
 
 const initialFormErrors = {
-  name: '',
-  type: '',
-  description: '',
+  programname: '',
+  programtype: '',
+  programdescription: '',
 };
 
 export default function EditProgramAntDesign() {
@@ -32,59 +33,47 @@ export default function EditProgramAntDesign() {
   const { push } = useHistory();
   const user = useSelector(state => state.userReducer);
   const [input, setInput] = useState(programToEdit);
+  const [disabled, setDisabled] = useState(false);
   const [errors, setErrors] = useState(initialFormErrors);
 
-  useEffect(() => {}, []);
+  const setFormErrors = (name, value) => {
+    yup
+      .reach(schema, name)
+      .validate(value)
+      .then(() => setErrors({ ...errors, [name]: '' }))
+      .catch(err => setErrors({ ...errors, [name]: err.errors[0] }));
+  };
 
-  if (!user.role) {
-    push('/');
-  }
+  const changeValues = e => {
+    const { name, value, type, select } = e.target;
+    const valueToUse = type === 'select' ? Select : value;
+    setFormErrors(name, valueToUse);
+    setInput({ ...input, [e.target.name]: valueToUse });
+  };
 
-  function changeHandler(e) {
-    setInput({ ...input, [e.target.name]: e.target.value });
-  }
+  const changeSelect = (value, event) => {
+    setFormErrors('programtype', value);
+    setInput({ ...input, programtype: value });
+  };
+
+  useEffect(() => {
+    schema.isValid(input).then(valid => setDisabled(!valid));
+  }, [input]);
 
   function editProgram(e) {
     e.preventDefault();
-    console.log(input);
-
-    function validate() {
-      schema
-        .validate(input, { abortEarly: false })
-        .then(res => {
-          console.log(res);
-          axiosWithAuth()
-            .put(
-              `https://reach-team-a-be.herokuapp.com/programs/program/${programToEdit.programid}`,
-              input
-            )
-            .then(res => {
-              console.log(res);
-            })
-            .catch(err => console.log(err));
-          dispatch(editProgramAction(input));
-          push('/');
-        })
-        .catch(err => {
-          console.log(err);
-          const emptyErr = {
-            name: '',
-            type: '',
-            description: '',
-          };
-          err.inner.forEach(element => {
-            emptyErr[element.path] = element.message;
-          });
-          setErrors(emptyErr);
-        });
-    }
-
-    validate();
+    axiosWithAuth()
+      .put(
+        `https://reach-team-a-be.herokuapp.com/programs/program/${programToEdit.programid}`,
+        input
+      )
+      .then(res => {
+        console.log(res);
+      })
+      .catch(err => console.log(err));
+    dispatch(editProgramAction(input));
+    push('/');
   }
-
-  const changeSelect = e => {
-    setInput({ ...input, programtype: e });
-  };
 
   return (
     <div className="container">
@@ -99,22 +88,19 @@ export default function EditProgramAntDesign() {
           programdescription: programToEdit.programdescription,
         }}
       >
-        <FormItem
-          label="Name:"
-          name="programname"
-          rules={[
-            { required: true, message: 'Please input your program name!' },
-          ]}
-        >
+        <FormItem label="Name:" name="programname">
           <Input
             id="programname"
             name="programname"
             value={input.programname}
-            onChange={changeHandler}
+            onChange={changeValues}
           />
+          <div style={{ color: 'red' }}>
+            {errors.programname ? `${errors.programname}` : ''}
+          </div>
         </FormItem>
 
-        <FormItem label="Type:" name="programtype" rules={[{ required: true }]}>
+        <FormItem label="Type:" name="programtype">
           <Select
             id="programtype"
             name="programtype"
@@ -139,33 +125,24 @@ export default function EditProgramAntDesign() {
             <Option value="training">-Training-</Option>
             <Option value="other">-Other-</Option>
           </Select>
+          <div style={{ color: 'red' }}>
+            {errors.programtype ? `${errors.programtype}` : ''}
+          </div>
         </FormItem>
-        <FormItem
-          label="Description:"
-          name="programdescription"
-          rules={[
-            {
-              required: true,
-              message: 'Please add a description for your program!',
-            },
-          ]}
-        >
-          {/* <Input
-            id="programdescription"
-            name="programdescription"
-            value={values.programdescription}
-            onChange={changeValues}
-          /> */}
+        <FormItem label="Description:" name="programdescription">
           <TextArea
             showCount
             maxLength={1000}
             id="programdescription"
             name="programdescription"
             value={input.programdescription}
-            onChange={changeHandler}
+            onChange={changeValues}
           />
+          <div style={{ color: 'red' }}>
+            {errors.programdescription ? `${errors.programdescription}` : ''}
+          </div>
         </FormItem>
-        <Button onClick={editProgram} type="primary">
+        <Button onClick={editProgram} type="primary" disabled={disabled}>
           Submit
         </Button>
       </Form>
