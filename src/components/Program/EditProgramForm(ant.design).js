@@ -62,39 +62,17 @@ export default function EditProgramAntDesign() {
 
   function editProgram(e) {
     e.preventDefault();
-
-    function validate() {
-      schema
-        .validate(input, { abortEarly: false })
-        .then(res => {
-          console.log(res);
-          axiosWithAuth()
-            .put(
-              `https://reach-team-a-be.herokuapp.com/programs/program/${programToEdit.programid}`,
-              input
-            )
-            .then(res => {
-              console.log(res);
-            })
-            .catch(err => console.log(err));
-          dispatch(editProgramAction(input));
-          push('/');
-        })
-        .catch(err => {
-          console.log(err);
-          const emptyErr = {
-            name: '',
-            type: '',
-            description: '',
-          };
-          err.inner.forEach(element => {
-            emptyErr[element.path] = element.message;
-          });
-          setErrors(emptyErr);
-        });
-    }
-
-    validate();
+    axiosWithAuth()
+      .put(
+        `https://reach-team-a-be.herokuapp.com/programs/program/${programToEdit.programid}`,
+        input
+      )
+      .then(res => {
+        console.log(res);
+      })
+      .catch(err => console.log(err));
+    dispatch(editProgramAction(input));
+    push('/');
   }
 
   return (
