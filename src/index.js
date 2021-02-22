@@ -21,6 +21,8 @@ import UserProfile from '../src/components/Profile/UserProfile';
 import EditUserForm from '../src/components/Profile/EditUserForm';
 import CreateProgram from '../src/components/Program/CreateProgramForm';
 import EditProgram from '../src/components/Program/EditProgramForm(ant.design)';
+import CourseList from './components/Courses/CourseList';
+import AddCourseForm from './components/Courses/AddCourseForm';
 
 // redux
 import { createStore, applyMiddleware } from 'redux';
@@ -69,6 +71,8 @@ function App() {
           <SecureRoute path="/edit-profile" component={EditUserForm} />
           <SecureRoute path="/create-program" component={CreateProgram} />
           <SecureRoute path="/edit-program" component={EditProgram} />
+          <SecureRoute path="/courses" component={CourseList} />
+          <SecureRoute path="/add-course" component={AddCourseForm} />
           <Route component={NotFoundPage} />
         </Switch>
       </div>

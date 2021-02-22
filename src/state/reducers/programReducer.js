@@ -7,6 +7,7 @@ import {
   SET_PROGRAM_LIST,
   FILTER_STATE,
   CLEAR_PROGRAMS,
+  VIEW_PROGRAM,
 } from '../actions/programActions';
 
 const initialState = {
@@ -14,6 +15,7 @@ const initialState = {
   programs_list: [],
   edit_program: {},
   filtered_program_list: [],
+  viewProgramId: '',
 };
 
 const programReducer = (state = initialState, action) => {
@@ -70,6 +72,8 @@ const programReducer = (state = initialState, action) => {
     case FILTER_STATE:
       console.log('action.payload', action.payload);
       return { ...state, filtered_program_list: action.payload };
+    case VIEW_PROGRAM:
+      return { ...state, viewProgramId: action.payload };
     case CLEAR_PROGRAMS:
       return initialState;
     default:
