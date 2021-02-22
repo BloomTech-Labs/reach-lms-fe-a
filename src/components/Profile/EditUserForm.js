@@ -129,10 +129,10 @@ export default function EditUserForm() {
             value={input.phonenumber}
             onChange={changeValues}
           />
+          <div style={{ color: 'red' }}>
+            {errors.phonenumber ? `${errors.phonenumber}` : ''}
+          </div>
         </FormItem>
-        <div style={{ color: 'red' }}>
-          {errors.phonenumber ? `${errors.phonenumber}` : ''}
-        </div>
         <Button onClick={editUserSubmit} type="primary" disabled={disabled}>
           Submit
         </Button>
