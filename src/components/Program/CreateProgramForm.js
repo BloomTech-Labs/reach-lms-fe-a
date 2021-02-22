@@ -50,7 +50,7 @@ export default function CreateProgram() {
   };
 
   const changeValues = e => {
-    const { name, value, type, select } = e.target;
+    const { name, value, type } = e.target;
     const valueToUse = type === 'select' ? Select : value;
     setFormErrors(name, valueToUse);
     setValues({ ...values, [e.target.name]: valueToUse });

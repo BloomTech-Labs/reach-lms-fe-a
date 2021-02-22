@@ -31,7 +31,6 @@ export default function EditProgramAntDesign() {
   const programToEdit = useSelector(state => state.programReducer.edit_program);
   const dispatch = useDispatch();
   const { push } = useHistory();
-  const user = useSelector(state => state.userReducer);
   const [input, setInput] = useState(programToEdit);
   const [disabled, setDisabled] = useState(false);
   const [errors, setErrors] = useState(initialFormErrors);
@@ -45,8 +44,8 @@ export default function EditProgramAntDesign() {
   };
 
   const changeValues = e => {
-    const { name, value, type, select } = e.target;
-    const valueToUse = type === 'select' ? Select : value;
+    const { name, value } = e.target;
+    const valueToUse = value;
     setFormErrors(name, valueToUse);
     setInput({ ...input, [e.target.name]: valueToUse });
   };

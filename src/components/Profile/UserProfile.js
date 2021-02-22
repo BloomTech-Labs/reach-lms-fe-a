@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import 'antd/dist/antd.css';
 import { Card } from 'antd';
 import { Button } from 'antd';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 
 export default function UserProfile() {
