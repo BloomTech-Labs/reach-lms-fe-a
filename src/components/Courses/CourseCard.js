@@ -5,7 +5,7 @@ import { Button } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { axiosWithAuth } from '../../utils/axiosWithAuth';
-import { setEdit, deleteCourse } from '../../state/actions/courseActions';
+import { setEditCourse, deleteCourse } from '../../state/actions/courseActions';
 
 export default function CourseCard(props) {
   const { courseToEdit } = props;
@@ -14,7 +14,7 @@ export default function CourseCard(props) {
   const { push } = useHistory();
 
   function clickOnEdit(e, id) {
-    dispatch(setEdit(courseToEdit));
+    dispatch(setEditCourse(courseToEdit));
     push('/edit-course');
   }
 

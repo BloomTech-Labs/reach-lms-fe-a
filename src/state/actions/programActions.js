@@ -8,6 +8,7 @@ export const EDIT_PROGRAM = 'EDIT_PROGRAM';
 export const SET_PROGRAM_LIST = 'SET_PROGRAM_LIST';
 export const FILTER_STATE = 'FILTER_STATE';
 export const CLEAR_PROGRAMS = 'CLEAR_PROGRAMS';
+export const VIEW_PROGRAM = 'VIEW_PROGRAM';
 
 export const addProgram = value => {
   return { type: ADD_PROGRAM, payload: value };
@@ -42,6 +43,9 @@ export const setProgramList = value => {
   return { type: SET_PROGRAM_LIST, payload: value };
 };
 
+export const viewProgram = value => {
+  return { type: VIEW_PROGRAM, payload: value };
+};
 export const filterState = value => {
   return { type: FILTER_STATE, payload: value };
 };

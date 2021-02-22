@@ -30,15 +30,15 @@ export const setEditCourse = value => {
   return { type: SET_EDIT, payload: value };
 };
 
-export const deleteCOURSE = value => {
+export const deleteCourse = value => {
   return { type: DELETE_COURSE, payload: value };
 };
 
-export const editProgramAction = value => {
+export const editCourseAction = value => {
   return { type: EDIT_COURSE, payload: value };
 };
 
-export const setProgramList = value => {
+export const setCourseList = value => {
   return { type: SET_COURSE_LIST, payload: value };
 };
 
@@ -46,6 +46,6 @@ export const filterState = value => {
   return { type: FILTER_STATE, payload: value };
 };
 
-export const clearPrograms = () => {
+export const clearCourses = () => {
   return { type: CLEAR_COURSES };
 };
