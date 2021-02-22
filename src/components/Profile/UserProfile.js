@@ -5,7 +5,7 @@ import { Button } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 
-export default function ProgramCard() {
+export default function UserProfile() {
   const user = useSelector(state => state.userReducer);
   const { push } = useHistory();
 
@@ -14,9 +14,17 @@ export default function ProgramCard() {
     push('/edit-profile');
   }
 
+  function returnHome(e) {
+    e.preventDefault();
+    push('/');
+  }
+
   return (
     <>
       <h1>Profile</h1>
+      <Button type="primary" onClick={e => returnHome(e)}>
+        Home
+      </Button>
       <Card title={user.firstname + ' ' + user.lastname} style={{ width: 800 }}>
         <h3>Role: {user.role}</h3>
         <p>Phone: {user.phonenumber}</p>
