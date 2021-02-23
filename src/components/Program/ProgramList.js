@@ -12,9 +12,7 @@ const ProgramList = props => {
       </div>
       <div>
         {programs.map(program => {
-          return (
-            <ProgramCard key={program.programid} programToEdit={program} />
-          );
+          return <ProgramCard key={program.programid} program={program} />;
         })}
       </div>
     </div>
