@@ -2,7 +2,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import ProgramCard from './ProgramCard';
 
-const ProgramList = () => {
+const ProgramList = props => {
   const programs = useSelector(state => state.programReducer.programs_list);
 
   return (
@@ -12,12 +12,7 @@ const ProgramList = () => {
       </div>
       <div>
         {programs.map(program => {
-          {
-            console.log(program);
-          }
-          return (
-            <ProgramCard key={program.programid} programToEdit={program} />
-          );
+          return <ProgramCard key={program.programid} program={program} />;
         })}
       </div>
     </div>

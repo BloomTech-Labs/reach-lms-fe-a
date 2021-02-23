@@ -41,21 +41,9 @@ const { Header, Footer, Content } = Layout;
 //
 
 const Dashboard = props => {
-  const { userInfo, authService } = props;
+  const { userInfo, authService, programList } = props;
   const user = useSelector(state => state.userReducer);
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    axiosWithAuth()
-      .get(`https://reach-team-a-be.herokuapp.com/programs/${user.userid}`)
-      .then(res => {
-        console.log(res);
-        dispatch(setProgramList(res.data));
-      })
-      .catch(err => {
-        console.log(err);
-      });
-  }, []);
 
   return (
     <Layout>

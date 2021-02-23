@@ -4,6 +4,7 @@ import Dashboard from './Dashboard';
 import { axiosWithAuth } from '../../utils/axiosWithAuth';
 import { saveUser } from '../../state/actions/userActions';
 import { useDispatch } from 'react-redux';
+import { setProgramList } from '../../state/actions/programActions';
 
 function HomeContainer({ LoadingComponent }) {
   const { authState, authService } = useOktaAuth();
@@ -47,7 +48,19 @@ function HomeContainer({ LoadingComponent }) {
           phonenumber: res.data.phonenumber,
           role: res.data.roles[0].role.name,
         };
+        setUserInfo(incoming_user);
         dispatch(saveUser(incoming_user));
+        return incoming_user;
+      })
+      .then(incoming_user => {
+        axiosWithAuth()
+          .get(
+            `https://reach-team-a-be.herokuapp.com/programs/${incoming_user.userid}`
+          )
+          .then(res => {
+            console.log(res);
+            dispatch(setProgramList(res.data));
+          });
       })
       .catch(err => {
         console.log(err);

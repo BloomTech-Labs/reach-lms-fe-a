@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import 'antd/dist/antd.css';
 import { Card } from 'antd';
 import { Button, Dropdown, Menu } from 'antd';
@@ -9,31 +9,39 @@ import { setEdit, deleteProgram } from '../../state/actions/programActions';
 import { setCourseList } from '../../state/actions/courseActions';
 
 export default function ProgramCard(props) {
-  const { programToEdit } = props;
-  const user = useSelector(state => state.userReducer);
+  const { program } = props;
   const dispatch = useDispatch();
   const { push } = useHistory();
 
+  const handleMenuClick = e => {
+    if (e.key === 'edit') {
+      dispatch(setEdit(program));
+      push('/edit-program');
+    } else {
+      axiosWithAuth()
+        .delete(
+          `https://reach-team-a-be.herokuapp.com/programs/program/${program.programid}`
+        )
+        .then(res => {
+          console.log(program.programid);
+          dispatch(deleteProgram(program.programid));
+          console.log(res);
+        })
+        .catch(err => console.log(err));
+    }
+  };
+
   const menu = (
-    <Menu>
-      <Menu.Item onClick={e => clickOnEdit(e, programToEdit.id)}>
-        Edit Program
-      </Menu.Item>
-      <Menu.Item onClick={e => deletingProgram(e, programToEdit.programid)}>
-        Delete Program
-      </Menu.Item>
+    <Menu onClick={handleMenuClick}>
+      <Menu.Item key="edit">Edit Program</Menu.Item>
+      <Menu.Item key="delete">Delete Program</Menu.Item>
     </Menu>
   );
 
-  function clickOnEdit() {
-    dispatch(setEdit(programToEdit));
-    push('/edit-program');
-  }
+  function clickOnEdit() {}
 
-  function deletingProgram(e, id) {
-    console.log(programToEdit);
+  function deletingProgram(id) {
     axiosWithAuth()
-      // will have to put in the proper API call here
       .delete(`https://reach-team-a-be.herokuapp.com/programs/program/${id}`)
       .then(res => console.log(res))
       .catch(err => console.log(err));
@@ -49,17 +57,15 @@ export default function ProgramCard(props) {
 
   return (
     <>
+      {console.log('ProgramToEdit: ' + program)}
       <Card
-        title={programToEdit.programname}
+        title={program.programname}
         extra={<Dropdown.Button overlay={menu}></Dropdown.Button>}
         style={{ width: 800 }}
       >
-        <h3>{programToEdit.programtype}</h3>
-        <p>{programToEdit.programdescription}</p>
-        <Button
-          onClick={e => viewProgram(programToEdit.programid)}
-          type="primary"
-        >
+        <h3>{program.programtype}</h3>
+        <p>{program.programdescription}</p>
+        <Button onClick={e => viewProgram(program.programid)} type="primary">
           View Program
         </Button>
       </Card>
