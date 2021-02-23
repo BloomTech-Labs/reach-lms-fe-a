@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import styled from 'styled-components';
 import { makeStyles } from '@material-ui/core/styles';
@@ -20,9 +20,9 @@ const StyledLogo = styled.h1`
   font-size: 10vh;
   color: white;
 `;
-const StyledLink = styled.link`
+const StyledLink = styled(NavLink)`
   font-size: 2vh;
-  color: white;
+  color: black;
 `;
 
 const useStyles = makeStyles(theme => ({

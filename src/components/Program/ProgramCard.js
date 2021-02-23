@@ -2,15 +2,14 @@ import React from 'react';
 import 'antd/dist/antd.css';
 import { Card } from 'antd';
 import { Button, Dropdown, Menu } from 'antd';
-import { useSelector, useDispatch } from 'react-redux';
-import { useHistory, Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import { axiosWithAuth } from '../../utils/axiosWithAuth';
 import { setEdit, deleteProgram } from '../../state/actions/programActions';
 import { setCourseList } from '../../state/actions/courseActions';
 
 export default function ProgramCard(props) {
   const { programToEdit } = props;
-  const user = useSelector(state => state.userReducer);
   const dispatch = useDispatch();
   const { push } = useHistory();
 
@@ -31,7 +30,6 @@ export default function ProgramCard(props) {
   }
 
   function deletingProgram(e, id) {
-    console.log(programToEdit);
     axiosWithAuth()
       // will have to put in the proper API call here
       .delete(`https://reach-team-a-be.herokuapp.com/programs/program/${id}`)

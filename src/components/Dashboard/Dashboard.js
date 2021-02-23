@@ -8,21 +8,9 @@ import CourseList from '../Courses/CourseList';
 // ant Design
 import { Link } from 'react-router-dom';
 const Dashboard = props => {
-  const { userInfo, authService } = props;
+  const { userInfo, authService, programList } = props;
   const user = useSelector(state => state.userReducer);
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    axiosWithAuth()
-      .get(`https://reach-team-a-be.herokuapp.com/programs/${user.userid}`)
-      .then(res => {
-        console.log(res);
-        dispatch(setProgramList(res.data));
-      })
-      .catch(err => {
-        console.log(err);
-      });
-  }, []);
 
   return (
     <div>
@@ -32,7 +20,13 @@ const Dashboard = props => {
         <Link to="/create-program">
           <button>Create Program</button>
         </Link>
-        <div>{user.role === 'ADMIN' ? <ProgramList /> : <CourseList />}</div>
+        <div>
+          {user.role === 'ADMIN' ? (
+            <ProgramList programList={programList} />
+          ) : (
+            <CourseList />
+          )}
+        </div>
       </div>
     </div>
   );
