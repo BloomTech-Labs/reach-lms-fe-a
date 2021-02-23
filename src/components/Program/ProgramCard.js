@@ -7,7 +7,7 @@ import { useHistory } from 'react-router-dom';
 import { axiosWithAuth } from '../../utils/axiosWithAuth';
 import { setEdit, deleteProgram } from '../../state/actions/programActions';
 import { setCourseList } from '../../state/actions/courseActions';
-import { viewProgram } from '../../state/actions/programActions';
+import { setProgramId } from '../../state/actions/programActions';
 
 export default function ProgramCard(props) {
   const { program } = props;
@@ -39,15 +39,6 @@ export default function ProgramCard(props) {
     </Menu>
   );
 
-  function deletingProgram(id) {
-    axiosWithAuth()
-      .delete(`https://reach-team-a-be.herokuapp.com/programs/program/${id}`)
-      .then(res => console.log(res))
-      .catch(err => console.log(err));
-
-    dispatch(deleteProgram(id));
-  }
-
   const viewProgramHandler = id => {
     axiosWithAuth()
       .get(`https://reach-team-a-be.herokuapp.com/courses/${id}`)
@@ -55,7 +46,7 @@ export default function ProgramCard(props) {
         console.log(res);
         console.log(id);
         dispatch(setCourseList(res.data));
-        dispatch(viewProgram(id));
+        dispatch(setProgramId(id));
       })
       .catch(err => console.log(err));
     push('/courses');
@@ -63,7 +54,6 @@ export default function ProgramCard(props) {
 
   return (
     <>
-      {console.log('ProgramToEdit: ' + program)}
       <Card
         title={program.programname}
         extra={<Dropdown.Button overlay={menu}></Dropdown.Button>}

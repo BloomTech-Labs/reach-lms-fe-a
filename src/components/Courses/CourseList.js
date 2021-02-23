@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import CourseCard from './CourseCard';
@@ -6,6 +6,7 @@ import CourseCard from './CourseCard';
 const CourseList = () => {
   const courseList = useSelector(state => state.courseReducer.courses_list);
   const programId = useSelector(state => state.programReducer.viewProgramId);
+  const dispatch = useDispatch();
 
   return (
     <div>
@@ -16,10 +17,9 @@ const CourseList = () => {
         </Link>
       </div>
       <div>
-        {console.log(programId)}
         {courseList.map(course => {
           {
-            return <CourseCard key={course.id} info={course} />;
+            return <CourseCard key={course.id} course={course} />;
           }
         })}
       </div>

@@ -26,7 +26,6 @@ export default function UserProfile() {
         Home
       </Button>
       <Card title={user.firstname + ' ' + user.lastname} style={{ width: 800 }}>
-        ow to
         <h3>Role: {user.role}</h3>
         <p>Phone: {user.phonenumber}</p>
         <p>Email: {user.email}</p>

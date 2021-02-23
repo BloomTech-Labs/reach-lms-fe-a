@@ -58,7 +58,6 @@ function HomeContainer({ LoadingComponent }) {
             `https://reach-team-a-be.herokuapp.com/programs/${incoming_user.userid}`
           )
           .then(res => {
-            console.log(res);
             dispatch(setProgramList(res.data));
           });
       })
