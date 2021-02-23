@@ -7,6 +7,7 @@ import { useHistory } from 'react-router-dom';
 import { axiosWithAuth } from '../../utils/axiosWithAuth';
 import { setEdit, deleteProgram } from '../../state/actions/programActions';
 import { setCourseList } from '../../state/actions/courseActions';
+import { viewProgram } from '../../state/actions/programActions';
 
 export default function ProgramCard(props) {
   const { program } = props;
@@ -38,8 +39,6 @@ export default function ProgramCard(props) {
     </Menu>
   );
 
-  function clickOnEdit() {}
-
   function deletingProgram(id) {
     axiosWithAuth()
       .delete(`https://reach-team-a-be.herokuapp.com/programs/program/${id}`)
@@ -49,9 +48,16 @@ export default function ProgramCard(props) {
     dispatch(deleteProgram(id));
   }
 
-  const viewProgram = id => {
-    console.log(id);
-    dispatch(setCourseList(id));
+  const viewProgramHandler = id => {
+    axiosWithAuth()
+      .get(`https://reach-team-a-be.herokuapp.com/courses/${id}`)
+      .then(res => {
+        console.log(res);
+        console.log(id);
+        dispatch(setCourseList(res.data));
+        dispatch(viewProgram(id));
+      })
+      .catch(err => console.log(err));
     push('/courses');
   };
 
@@ -65,7 +71,10 @@ export default function ProgramCard(props) {
       >
         <h3>{program.programtype}</h3>
         <p>{program.programdescription}</p>
-        <Button onClick={e => viewProgram(program.programid)} type="primary">
+        <Button
+          onClick={() => viewProgramHandler(program.programid)}
+          type="primary"
+        >
           View Program
         </Button>
       </Card>
