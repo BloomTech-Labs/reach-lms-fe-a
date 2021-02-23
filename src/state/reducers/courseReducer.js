@@ -1,7 +1,7 @@
 import {
   ADD_COURSE,
   SEARCH_COURSE,
-  SET_EDIT,
+  SET_EDIT_COURSE,
   DELETE_COURSE,
   EDIT_COURSE,
   SET_COURSE_LIST,
@@ -51,7 +51,7 @@ const courseReducer = (state = initialState, action) => {
       }
       let results = filterResults();
       return { ...state, search_courses: results };
-    case SET_EDIT:
+    case SET_EDIT_COURSE:
       return { ...state, edit_course: action.payload };
     case DELETE_COURSE:
       let newCourseList = [...state.courses_list].filter(item => {

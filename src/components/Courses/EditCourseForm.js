@@ -32,16 +32,16 @@ const initialFormErrors = {
   coursedescription: '',
 };
 
-export default function AddCourse() {
+export default function EditCourseForm() {
   const courseToEdit = useSelector(state => state.courseReducer.edit_course);
   const currentProgramId = useSelector(
     state => state.programReducer.viewProgramId
   );
   const { push } = useHistory();
   const dispatch = useDispatch();
-  const [values, setValues] = useState(initialValues);
+  const [values, setValues] = useState(courseToEdit);
   const [errors, setErrors] = useState(initialFormErrors);
-  const [disabled, setDisabled] = useState(true);
+  const [disabled, setDisabled] = useState(false);
 
   const setFormErrors = (name, value) => {
     yup
@@ -65,6 +65,7 @@ export default function AddCourse() {
   function submitForm(e) {
     e.preventDefault();
     console.log(values);
+    console.log(courseToEdit);
     axiosWithAuth()
       .put(
         `https://reach-team-a-be.herokuapp.com/courses/${courseToEdit.courseid}`,
@@ -73,7 +74,6 @@ export default function AddCourse() {
       .then(res => {
         console.log(res);
         dispatch(editCourseAction(values));
-        setValues(initialValues);
         push('/courses');
       })
       .catch(err => {
@@ -83,8 +83,17 @@ export default function AddCourse() {
 
   return (
     <div className="container">
-      <h1>Add Course</h1>
-      <Form {...layout} name="basic" onFinish={submitForm}>
+      <h1>Edit Course</h1>
+      <Form
+        {...layout}
+        name="basic"
+        onFinish={submitForm}
+        initialValues={{
+          coursename: courseToEdit.coursename,
+          coursecode: courseToEdit.coursecode,
+          coursedescription: courseToEdit.coursedescription,
+        }}
+      >
         <FormItem label="Course Name:" name="coursename" validateStatus>
           <Input
             id="coursename"
