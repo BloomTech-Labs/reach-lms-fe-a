@@ -38,7 +38,7 @@ export default function CourseCard(props) {
           Edit Course
         </Button>
         <Button type="primary" onClick={e => deletingCourse(e, info.courseid)}>
-          Delete Program
+          Delete Course
         </Button>
       </Card>
     </>

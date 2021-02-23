@@ -88,7 +88,7 @@ export default function CreateProgram() {
     <div className="container">
       <h1>Create Program</h1>
       <Form {...layout} name="basic" onFinish={submitForm}>
-        <FormItem label="Name:" name="programname" validateStatus>
+        <FormItem label="Program Name:" name="programname" validateStatus>
           <Input
             id="programname"
             name="programname"
@@ -100,7 +100,7 @@ export default function CreateProgram() {
           </div>
         </FormItem>
 
-        <FormItem label="Type:" name="programtype">
+        <FormItem label="Program Type:" name="programtype">
           <Select
             id="programtype"
             name="programtype"
@@ -130,7 +130,7 @@ export default function CreateProgram() {
           </div>
         </FormItem>
 
-        <FormItem label="Description:" name="programdescription">
+        <FormItem label="Program Description:" name="programdescription">
           <TextArea
             showCount
             maxLength={500}
