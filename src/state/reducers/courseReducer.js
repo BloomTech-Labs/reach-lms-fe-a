@@ -54,17 +54,15 @@ const courseReducer = (state = initialState, action) => {
     case SET_EDIT:
       return { ...state, edit_course: action.payload };
     case DELETE_COURSE:
-      let newProgramList = [...state.courses_list];
-      console.log('courses list', newProgramList);
-      let index = newProgramList.findIndex(el => el.id === action.payload);
-      console.log('index of course to delete', index);
-      newProgramList.splice(index, 1);
-      return { ...state, courses_list: newProgramList };
+      let newCourseList = [...state.courses_list].filter(item => {
+        return item.courseid !== action.payload;
+      });
+      return { ...state, courses_list: newCourseList };
     case EDIT_COURSE:
-      let updatedPrograms = [...state.courses_list];
-      let index2 = updatedPrograms.findIndex(el => el.id === action.payload.id);
-      updatedPrograms.splice(index2, 1, action.payload);
-      return { ...state, courses_list: updatedPrograms };
+      let updatedCourses = [...state.courses_list];
+      let index2 = updatedCourses.findIndex(el => el.id === action.payload.id);
+      updatedCourses.splice(index2, 1, action.payload);
+      return { ...state, courses_list: updatedCourses };
     case SET_COURSE_LIST:
       return { ...state, courses_list: action.payload };
     case FILTER_STATE:

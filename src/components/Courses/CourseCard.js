@@ -8,18 +8,18 @@ import { axiosWithAuth } from '../../utils/axiosWithAuth';
 import { setEditCourse, deleteCourse } from '../../state/actions/courseActions';
 
 export default function CourseCard(props) {
-  const { courseToEdit } = props;
+  const { info } = props;
   const user = useSelector(state => state.userReducer);
   const dispatch = useDispatch();
   const { push } = useHistory();
 
   function clickOnEdit(e, id) {
-    dispatch(setEditCourse(courseToEdit));
+    dispatch(setEditCourse(info));
     push('/edit-course');
   }
 
   function deletingCourse(e, id) {
-    console.log(courseToEdit);
+    console.log(info);
     axiosWithAuth()
       // will have to put in the proper API call here
       .delete(``)
@@ -31,16 +31,13 @@ export default function CourseCard(props) {
 
   return (
     <>
-      <Card title={courseToEdit.courseName} style={{ width: 300 }}>
-        <h3>{courseToEdit.courseType}</h3>
-        <p>{courseToEdit.courseDescription}</p>
-        <Button type="primary" onClick={e => clickOnEdit(e, courseToEdit.id)}>
+      <Card title={info.coursename} style={{ width: 300 }}>
+        <h3>{info.coursecode}</h3>
+        <p>{info.coursedescription}</p>
+        <Button type="primary" onClick={e => clickOnEdit(e, info.id)}>
           Edit Course
         </Button>
-        <Button
-          type="primary"
-          onClick={e => deletingCourse(e, courseToEdit.courseid)}
-        >
+        <Button type="primary" onClick={e => deletingCourse(e, info.courseid)}>
           Delete Program
         </Button>
       </Card>

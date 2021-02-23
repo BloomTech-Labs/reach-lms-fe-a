@@ -15,7 +15,7 @@ const initialState = {
   programs_list: [],
   edit_program: {},
   filtered_program_list: [],
-  viewProgramId: '',
+  viewProgramId: null,
 };
 
 const programReducer = (state = initialState, action) => {
