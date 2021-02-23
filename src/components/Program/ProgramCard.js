@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import 'antd/dist/antd.css';
 import { Card } from 'antd';
 import { Button, Dropdown, Menu } from 'antd';
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { axiosWithAuth } from '../../utils/axiosWithAuth';
 import { setEdit, deleteProgram } from '../../state/actions/programActions';
