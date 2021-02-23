@@ -13,7 +13,6 @@ import Input from 'antd/lib/input';
 import Select from 'antd/lib/select';
 import Form from 'antd/lib/form/Form';
 import FormItem from 'antd/lib/form/FormItem';
-const { Option } = Select;
 const { TextArea } = Input;
 
 const layout = {
@@ -73,8 +72,8 @@ export default function AddCourse() {
       )
       .then(res => {
         console.log(res);
-        setValues(initialValues);
         dispatch(addCourse(values));
+        setValues(initialValues);
         push('/courses');
       })
       .catch(err => {

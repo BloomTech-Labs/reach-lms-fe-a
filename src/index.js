@@ -23,6 +23,7 @@ import CreateProgram from '../src/components/Program/CreateProgramForm';
 import EditProgram from '../src/components/Program/EditProgramForm(ant.design)';
 import CourseList from './components/Courses/CourseList';
 import AddCourseForm from './components/Courses/AddCourseForm';
+import EditCourseForm from './components/Courses/EditCourseForm';
 
 // redux
 import { createStore, applyMiddleware } from 'redux';
@@ -89,6 +90,7 @@ function App() {
           <SecureRoute path="/edit-program" component={EditProgram} />
           <SecureRoute path="/courses" component={CourseList} />
           <SecureRoute path="/add-course" component={AddCourseForm} />
+          <SecureRoute path="/edit-course" component={EditCourseForm} />
           <Route component={NotFoundPage} />
         </Switch>
       </div>
