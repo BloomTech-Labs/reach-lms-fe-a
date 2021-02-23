@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import styled from 'styled-components';
@@ -8,22 +8,45 @@ import MenuIcon from '@material-ui/icons/Menu';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 
+//styled-components**
 const StyledNav = styled.nav`
   display: flex;
-  justify-content: space-between;
-  background: #1282a2;
-  align-items: center;
-  width: 100vw;
-  height: 14vh;
+  flex-direction: row;
+  width: 100%;
+  background: none;
 `;
 const StyledLogo = styled.h1`
-  font-size: 10vh;
-  color: white;
+  position: relative;
+  font-size: 6vw;
+  color: #252839;
+  -webkit-text-stroke: 0.3vw #383d52;
+  text-transform: uppercase;
+  &::before {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    color: #01fe87;
+    -webkit-text-stroke: 0vw #383d52;
+    border-right: 2px solid #01fe87;
+    overflow: hidden;
+    animation: animate 6s linear infinite;
+  }
+  @keyframes animate {
+    0%,
+    10%,
+    100% {
+      width: 0%;
+    }
+    70%,
+    90% {
+      width: 100%;
+    }
+  }
 `;
-const StyledLink = styled.link`
-  font-size: 2vh;
-  color: white;
-`;
+const StyledMenu = styled.div``;
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -39,7 +62,7 @@ const useStyles = makeStyles(theme => ({
 
 const Navigation = props => {
   const classes = useStyles();
-  let isMobile = useMediaQuery('(max-width: 800px)');
+  // let isMobile = useMediaQuery('(max-width: 800px)');
   const { authService } = props;
 
   // material ui menu
@@ -55,50 +78,48 @@ const Navigation = props => {
 
   return (
     <StyledNav>
-      <div className="navBar">
-        <StyledLogo>REACH</StyledLogo>
-        {!isMobile && (
+      <StyledLogo data-text="Reach...">REACH...</StyledLogo>
+      {/* {!isMobile && (
           <div>
-            <StyledLink to="/profile" className="nav-link">
+            <Link to="/profile" className="nav-link">
               Profile
-            </StyledLink>
-            <StyledLink
+            </Link>
+            <Link
               to="/logout"
               className="nav-link"
               onClick={() => authService.logout()}
             >
               Logout
-            </StyledLink>
+            </Link>
           </div>
-        )}
-        {isMobile && (
-          <>
-            <IconButton
-              edge="start"
-              className={classes.menuButton}
-              color="inherit"
-              aria-label="menu"
-              onClick={handleClick}
-            >
-              <MenuIcon />
-            </IconButton>
-            <Menu
-              id="simple-menu"
-              anchorEl={anchorEl}
-              keepMounted
-              open={Boolean(anchorEl)}
-              onClose={handleClose}
-            >
-              <Link to="/profile">
-                <MenuItem onClick={handleClose}>Profile</MenuItem>
-              </Link>
-              <Link to="/" onClick={() => authService.logout()}>
-                <MenuItem onClick={handleClose}>Logout</MenuItem>
-              </Link>
-            </Menu>
-          </>
-        )}
-      </div>
+        )} */}
+      {/* {isMobile && ( */}
+      <>
+        <IconButton
+          edge="start"
+          className={classes.menuButton}
+          color="inherit"
+          aria-label="menu"
+          onClick={handleClick}
+        >
+          <MenuIcon />
+        </IconButton>
+        <Menu
+          id="simple-menu"
+          anchorEl={anchorEl}
+          keepMounted
+          open={Boolean(anchorEl)}
+          onClose={handleClose}
+        >
+          <Link to="/profile">
+            <MenuItem onClick={handleClose}>Profile</MenuItem>
+          </Link>
+          <Link to="/" onClick={() => authService.logout()}>
+            <MenuItem onClick={handleClose}>Logout</MenuItem>
+          </Link>
+        </Menu>
+      </>
+      {/* )} */}
     </StyledNav>
   );
 };

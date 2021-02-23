@@ -26,7 +26,7 @@ const initialFormErrors = {
 };
 
 export default function EditUserForm() {
-  const userToEdit = useSelector(state => state.userReducer.edit_user);
+  // const userToEdit = useSelector(state => state.userReducer.edit_user);
   const dispatch = useDispatch();
   const { push } = useHistory();
   const user = useSelector(state => state.userReducer);
