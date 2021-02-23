@@ -40,7 +40,9 @@ export default function AddCourse() {
   const [errors, setErrors] = useState(initialFormErrors);
   const [disabled, setDisabled] = useState(true);
   const user = useSelector(state => state.userReducer);
-  const programid = useSelector(state => state.programReducer.viewProgramId);
+  const currentProgramId = useSelector(
+    state => state.programReducer.viewProgramId
+  );
 
   const setFormErrors = (name, value) => {
     yup
@@ -66,7 +68,7 @@ export default function AddCourse() {
     console.log(values);
     axiosWithAuth()
       .post(
-        `https://reach-team-a-be.herokuapp.com/courses/${programid}/course`,
+        `https://reach-team-a-be.herokuapp.com/courses/${currentProgramId}/course`,
         values
       )
       .then(res => {
