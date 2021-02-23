@@ -74,7 +74,7 @@ export default function CourseCard(props) {
         extra={<Dropdown.Button overlay={menu}></Dropdown.Button>}
         style={{ width: 800 }}
       >
-        <h3>{course.coursetype}</h3>
+        <h3>{course.coursecode}</h3>
         <p>{course.coursedescription}</p>
         <Button
           onClick={() => viewCourseHandler(course.courseid)}

@@ -23,21 +23,38 @@ import CreateProgram from '../src/components/Program/CreateProgramForm';
 import EditProgram from '../src/components/Program/EditProgramForm(ant.design)';
 import CourseList from './components/Courses/CourseList';
 import AddCourseForm from './components/Courses/AddCourseForm';
+import EditCourseForm from './components/Courses/EditCourseForm';
 
 // redux
 import { createStore, applyMiddleware } from 'redux';
+import { persistStore, persistReducer } from 'redux-persist';
+import { PersistGate } from 'redux-persist/integration/react';
+import storage from 'redux-persist/lib/storage'; // defaults to localStorage for web
 import rootReducer from './state/reducers/rootReducer';
 import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
 import logger from 'redux-logger';
 
-const store = createStore(rootReducer, applyMiddleware(thunk, logger));
+const persistConfig = {
+  key: 'courses_list',
+  storage,
+};
+
+const persistedCourseReducer = persistReducer(persistConfig, rootReducer);
+
+const store = createStore(
+  persistedCourseReducer,
+  applyMiddleware(thunk, logger)
+);
+let persistor = persistStore(store);
 
 ReactDOM.render(
   <Router>
     <React.StrictMode>
       <Provider store={store}>
-        <App />
+        <PersistGate loading={null} persistor={persistor}>
+          <App />
+        </PersistGate>
       </Provider>
     </React.StrictMode>
   </Router>,
@@ -73,6 +90,7 @@ function App() {
           <SecureRoute path="/edit-program" component={EditProgram} />
           <SecureRoute path="/courses" component={CourseList} />
           <SecureRoute path="/add-course" component={AddCourseForm} />
+          <SecureRoute path="/edit-course" component={EditCourseForm} />
           <Route component={NotFoundPage} />
         </Switch>
       </div>
