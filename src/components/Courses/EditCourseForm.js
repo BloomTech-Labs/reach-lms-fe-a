@@ -6,6 +6,8 @@ import * as yup from 'yup';
 import schema from '../../validation/CourseSchema';
 import { editCourseAction } from '../../state/actions/courseActions';
 
+// css
+import '../../styles/Form.css';
 // ant design
 import 'antd/dist/antd.css';
 import Button from 'antd/lib/button';
@@ -16,7 +18,7 @@ import FormItem from 'antd/lib/form/FormItem';
 const { TextArea } = Input;
 
 const layout = {
-  labelCol: { span: 8 },
+  labelCol: { span: 7 },
   wrapperCol: { span: 16 },
 };
 
@@ -72,9 +74,13 @@ export default function EditCourseForm() {
       });
   }
 
+  const goBack = () => {
+    push('/');
+  };
+
   return (
     <div className="container">
-      <h1>Edit Course</h1>
+      <h1 className="edit-form-h1">Edit Course</h1>
       <Form
         {...layout}
         name="basic"
@@ -84,6 +90,7 @@ export default function EditCourseForm() {
           coursecode: courseToEdit.coursecode,
           coursedescription: courseToEdit.coursedescription,
         }}
+        className="form"
       >
         <FormItem label="Course Name:" name="coursename" validateStatus>
           <Input
@@ -117,14 +124,25 @@ export default function EditCourseForm() {
             name="coursedescription"
             value={values.coursedescription}
             onChange={changeValues}
+            rows={4}
           />
           <div style={{ color: 'red' }}>
             {errors.coursedescription ? `${errors.coursedescription}` : ''}
           </div>
         </FormItem>
-        <Button onClick={submitForm} type="primary" disabled={disabled}>
-          Submit
-        </Button>
+        <div className="button-container">
+          <Button onClick={goBack} type="secondary" className="button">
+            Cancel
+          </Button>
+          <Button
+            onClick={submitForm}
+            type="primary"
+            disabled={disabled}
+            className="button"
+          >
+            Submit
+          </Button>
+        </div>
       </Form>
     </div>
   );

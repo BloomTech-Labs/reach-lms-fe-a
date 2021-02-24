@@ -6,6 +6,8 @@ import { axiosWithAuth } from '../../utils/axiosWithAuth';
 import * as yup from 'yup';
 import schema from '../../validation/ProgramSchema';
 
+// css
+import '../../styles/Form.css';
 // ant design
 import 'antd/dist/antd.css';
 import Button from 'antd/lib/button';
