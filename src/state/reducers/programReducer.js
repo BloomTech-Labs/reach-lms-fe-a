@@ -70,7 +70,7 @@ const programReducer = (state = initialState, action) => {
     case EDIT_PROGRAM:
       let updatedPrograms = [...state.programs_list];
       let index2 = updatedPrograms.findIndex(
-        el => el.programid === action.payload
+        el => el.programid === action.payload.programid
       );
       updatedPrograms.splice(index2, 1, action.payload);
       return { ...state, programs_list: updatedPrograms };

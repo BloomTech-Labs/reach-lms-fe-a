@@ -39,6 +39,7 @@ export default function CourseCard(props) {
   );
 
   function clickOnEdit(e, id) {
+    console.log('course', course);
     dispatch(setEditCourse(course));
     push('/edit-course');
   }

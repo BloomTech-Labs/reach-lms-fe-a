@@ -1,7 +1,7 @@
 import {
   ADD_COURSE,
   SEARCH_COURSE,
-  SET_EDIT,
+  SET_EDIT_COURSE,
   DELETE_COURSE,
   EDIT_COURSE,
   SET_COURSE_LIST,
@@ -51,7 +51,7 @@ const courseReducer = (state = initialState, action) => {
       }
       let results = filterResults();
       return { ...state, search_courses: results };
-    case SET_EDIT:
+    case SET_EDIT_COURSE:
       return { ...state, edit_course: action.payload };
     case DELETE_COURSE:
       let newCourseList = [...state.courses_list].filter(item => {
@@ -60,7 +60,9 @@ const courseReducer = (state = initialState, action) => {
       return { ...state, courses_list: newCourseList };
     case EDIT_COURSE:
       let updatedCourses = [...state.courses_list];
-      let index2 = updatedCourses.findIndex(el => el.id === action.payload.id);
+      let index2 = updatedCourses.findIndex(
+        el => el.courseid === action.payload.courseid
+      );
       updatedCourses.splice(index2, 1, action.payload);
       return { ...state, courses_list: updatedCourses };
     case SET_COURSE_LIST:
