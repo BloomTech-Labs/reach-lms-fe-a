@@ -75,7 +75,7 @@ export default function EditCourseForm() {
   }
 
   const goBack = () => {
-    push('/');
+    push('/courses');
   };
 
   return (
