@@ -1,123 +1,168 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { editProgramAction } from '../../state/actions/programActions';
-import { axiosWithAuth } from '../../utils/axiosWithAuth.js';
+import { axiosWithAuth } from '../../utils/axiosWithAuth';
+import * as yup from 'yup';
 import schema from '../../validation/ProgramSchema';
 
-const initialFormErrors = {
-  name: '',
-  type: '',
-  description: '',
+// css
+import '../../styles/Form.css';
+// ant design
+import 'antd/dist/antd.css';
+import Button from 'antd/lib/button';
+import Input from 'antd/lib/input';
+import Select from 'antd/lib/select';
+import Form from 'antd/lib/form/Form';
+import FormItem from 'antd/lib/form/FormItem';
+const { Option } = Select;
+const { TextArea } = Input;
+
+const layout = {
+  labelCol: { span: 7 },
+  wrapperCol: { span: 16 },
 };
-export default function EditProgram() {
+
+const initialFormErrors = {
+  programname: '',
+  programtype: '',
+  programdescription: '',
+};
+
+export default function EditProgramAntDesign() {
   const programToEdit = useSelector(state => state.programReducer.edit_program);
   const dispatch = useDispatch();
   const { push } = useHistory();
   const [input, setInput] = useState(programToEdit);
-  const user = useSelector(state => state.userReducer);
+  const [disabled, setDisabled] = useState(false);
   const [errors, setErrors] = useState(initialFormErrors);
 
-  if (!user.role) {
+  const setFormErrors = (name, value) => {
+    yup
+      .reach(schema, name)
+      .validate(value)
+      .then(() => setErrors({ ...errors, [name]: '' }))
+      .catch(err => setErrors({ ...errors, [name]: err.errors[0] }));
+  };
+
+  const changeValues = e => {
+    const { name, value } = e.target;
+    const valueToUse = value;
+    setFormErrors(name, valueToUse);
+    setInput({ ...input, [e.target.name]: valueToUse });
+  };
+
+  const changeSelect = (value, event) => {
+    setFormErrors('programtype', value);
+    setInput({ ...input, programtype: value });
+  };
+
+  useEffect(() => {
+    schema.isValid(input).then(valid => setDisabled(!valid));
+  }, [input]);
+
+  function editProgram(e) {
+    e.preventDefault();
+    axiosWithAuth()
+      .put(
+        `https://reach-team-a-be.herokuapp.com/programs/program/${programToEdit.programid}`,
+        input
+      )
+      .then(res => {
+        console.log(res);
+      })
+      .catch(err => console.log(err));
+    dispatch(editProgramAction(input));
     push('/');
   }
 
-  function changeHandler(e) {
-    setInput({ ...input, [e.target.name]: e.target.value });
-  }
-  function editProgram(e) {
-    e.preventDefault();
-    // console.log(values);
-
-    function validate() {
-      schema
-        .validate(input, { abortEarly: false })
-        .then(res => {
-          console.log(res);
-          axiosWithAuth()
-            .put(``, input)
-            .then(res => console.log(res))
-            .catch(err => console.log(err));
-          dispatch(editProgramAction(input));
-          push('/dashboard');
-        })
-        .catch(err => {
-          console.log(err);
-          const emptyErr = {
-            name: '',
-            type: '',
-            description: '',
-          };
-          err.inner.forEach(element => {
-            emptyErr[element.path] = element.message;
-          });
-          setErrors(emptyErr);
-        });
-    }
-
-    validate();
-  }
+  const goBack = () => {
+    push('/');
+  };
 
   return (
     <div className="container">
-      <h1>Edit Program</h1>
-      <form onSubmit={editProgram}>
-        <label htmlFor="name">
-          Name:
-          <input
-            type="text"
-            id="name"
-            name="name"
-            value={input.name}
-            onChange={changeHandler}
+      <h1 className="edit-form-h1">Edit Program</h1>
+      <Form
+        {...layout}
+        name="basic"
+        onFinish={editProgram}
+        initialValues={{
+          programname: programToEdit.programname,
+          programtype: programToEdit.programtype,
+          programdescription: programToEdit.programdescription,
+        }}
+        className="form"
+      >
+        <FormItem label="Program Name:" name="programname">
+          <Input
+            id="programname"
+            name="programname"
+            value={input.programname}
+            onChange={changeValues}
           />
-        </label>
-        <div>{errors.name ? `${errors.name}` : ''}</div>
+          <div style={{ color: 'red' }}>
+            {errors.programname ? `${errors.programname}` : ''}
+          </div>
+        </FormItem>
 
-        <label htmlFor="type">
-          Type:
-          <input
-            type="dropdown"
-            id="type"
-            name="type"
-            value={input.type}
-            onChange={changeHandler}
+        <FormItem label="Program Type:" name="programtype">
+          <Select
+            id="programtype"
+            name="programtype"
+            value={input.programtype}
+            placeholder="Select a program type"
+            onChange={changeSelect}
           >
-            <option value="">- Select A Type -</option>
-            <option value="K">-K-</option>
-            <option value="1st">-1st Grade-</option>
-            <option value="2nd">-2nd Grade-</option>
-            <option value="3rd">-3rd Grade-</option>
-            <option value="4th">-4th Grade-</option>
-            <option value="5th">-5th Grade-</option>
-            <option value="6th">-6th Grade-</option>
-            <option value="7th">-7th Grade-</option>
-            <option value="8th">-8th Grade-</option>
-            <option value="9th">-9th Grade-</option>
-            <option value="10th">-10th Grade-</option>
-            <option value="11th">-11th Grade-</option>
-            <option value="12th">-12th Grade-</option>
-            <option value="higher">-Higher-</option>
-            <option value="training">-Training-</option>
-            <option value="other">-Other-</option>
-          </input>
-        </label>
-        <div>{errors.type ? `${errors.type}` : ''}</div>
-
-        <label htmlFor="description">
-          Description:
-          <input
-            type="text"
-            id="description"
-            name="description"
-            value={input.description}
-            onChange={changeHandler}
+            <Option value="">- Select A Type -</Option>
+            <Option value="1st">-1st Grade-</Option>
+            <Option value="2nd">-2nd Grade-</Option>
+            <Option value="3rd">-3rd Grade-</Option>
+            <Option value="4th">-4th Grade-</Option>
+            <Option value="5th">-5th Grade-</Option>
+            <Option value="6th">-6th Grade-</Option>
+            <Option value="7th">-7th Grade-</Option>
+            <Option value="8th">-8th Grade-</Option>
+            <Option value="9th">-9th Grade-</Option>
+            <Option value="10th">-10th Grade-</Option>
+            <Option value="11th">-11th Grade-</Option>
+            <Option value="12th">-12th Grade-</Option>
+            <Option value="higher">-Higher-</Option>
+            <Option value="training">-Training-</Option>
+            <Option value="other">-Other-</Option>
+          </Select>
+          <div style={{ color: 'red' }}>
+            {errors.programtype ? `${errors.programtype}` : ''}
+          </div>
+        </FormItem>
+        <FormItem label="Program Description:" name="programdescription">
+          <TextArea
+            showCount
+            maxLength={1000}
+            id="programdescription"
+            name="programdescription"
+            value={input.programdescription}
+            onChange={changeValues}
+            rows={4}
           />
-        </label>
-        <div>{errors.description ? `${errors.description}` : ''}</div>
-
-        <button>Submit</button>
-      </form>
+          <div style={{ color: 'red' }}>
+            {errors.programdescription ? `${errors.programdescription}` : ''}
+          </div>
+        </FormItem>
+        <div className="button-container">
+          <Button onClick={goBack} type="secondary" className="button">
+            Cancel
+          </Button>
+          <Button
+            onClick={editProgram}
+            type="primary"
+            disabled={disabled}
+            className="button"
+          >
+            Submit
+          </Button>
+        </div>
+      </Form>
     </div>
   );
 }

@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
-import { Link, NavLink } from 'react-router-dom';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
+import React from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { makeStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';

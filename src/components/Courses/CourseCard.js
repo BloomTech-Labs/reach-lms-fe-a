@@ -2,14 +2,13 @@ import React from 'react';
 import 'antd/dist/antd.css';
 import { Card } from 'antd';
 import { Button, Menu, Dropdown } from 'antd';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { axiosWithAuth } from '../../utils/axiosWithAuth';
 import { setEditCourse, deleteCourse } from '../../state/actions/courseActions';
 
 export default function CourseCard(props) {
   const { course } = props;
-  const user = useSelector(state => state.userReducer);
   const dispatch = useDispatch();
   const { push } = useHistory();
 
@@ -37,23 +36,6 @@ export default function CourseCard(props) {
       <Menu.Item key="delete">Delete Course</Menu.Item>
     </Menu>
   );
-
-  function clickOnEdit(e, id) {
-    console.log('course', course);
-    dispatch(setEditCourse(course));
-    push('/edit-course');
-  }
-
-  function deletingCourse(id) {
-    console.log(course);
-    axiosWithAuth()
-      // will have to put in the proper API call here
-      .delete(``)
-      .then(res => console.log(res))
-      .catch(err => console.log(err));
-
-    dispatch(deleteCourse(id));
-  }
 
   const viewCourseHandler = id => {
     axiosWithAuth()

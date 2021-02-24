@@ -1,9 +1,7 @@
 import styled from 'styled-components';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
-import { axiosWithAuth } from '../../utils/axiosWithAuth';
-import { setProgramList } from '../../state/actions/programActions';
+import { useSelector } from 'react-redux';
 import Navigation from '../Navigation';
 import ProgramList from '../Program/ProgramList';
 import CourseList from '../Courses/CourseList';
@@ -32,9 +30,8 @@ const StyledCreate = styled.div`
 const { Header, Footer, Content } = Layout;
 
 const Dashboard = props => {
-  const { userInfo, authService, programList } = props;
+  const { userInfo, authService } = props;
   const user = useSelector(state => state.userReducer);
-  const dispatch = useDispatch();
 
   return (
     <Layout>

@@ -6,6 +6,9 @@ import schema from '../../validation/ProfileSchema';
 import * as yup from 'yup';
 import { editUser } from '../../state/actions/userActions';
 
+// css
+import '../../styles/Form.css';
+
 // ant design
 import 'antd/dist/antd.css';
 import Button from 'antd/lib/button';
@@ -14,7 +17,7 @@ import Form from 'antd/lib/form/Form';
 import FormItem from 'antd/lib/form/FormItem';
 
 const layout = {
-  labelCol: { span: 8 },
+  labelCol: { span: 7 },
   wrapperCol: { span: 16 },
 };
 
@@ -75,9 +78,13 @@ export default function EditUserForm() {
     push('/profile');
   }
 
+  const goBack = () => {
+    push('/profile');
+  };
+
   return (
     <div className="container">
-      <h1>Edit User</h1>
+      <h1 className="edit-form-h1">Edit User</h1>
       <Form
         {...layout}
         name="basic"
@@ -88,6 +95,7 @@ export default function EditUserForm() {
           phonenumber: user.phonenumber,
           email: user.email,
         }}
+        className="form"
       >
         <FormItem label="First Name:" name="firstname">
           <Input
@@ -133,9 +141,19 @@ export default function EditUserForm() {
             {errors.phonenumber ? `${errors.phonenumber}` : ''}
           </div>
         </FormItem>
-        <Button onClick={editUserSubmit} type="primary" disabled={disabled}>
-          Submit
-        </Button>
+        <div className="button-container">
+          <Button onClick={goBack} type="secondary" className="button">
+            Cancel
+          </Button>
+          <Button
+            onClick={editUserSubmit}
+            type="primary"
+            disabled={disabled}
+            className="button"
+          >
+            Submit
+          </Button>
+        </div>
       </Form>
     </div>
   );
