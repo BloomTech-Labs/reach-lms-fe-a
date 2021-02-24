@@ -17,7 +17,7 @@ const { Option } = Select;
 const { TextArea } = Input;
 
 const layout = {
-  labelCol: { span: 8 },
+  labelCol: { span: 7 },
   wrapperCol: { span: 16 },
 };
 
@@ -76,7 +76,7 @@ export default function EditProgramAntDesign() {
 
   return (
     <div className="container">
-      <h1>Create Program</h1>
+      <h1>Edit Program</h1>
       <Form
         {...layout}
         name="basic"
@@ -86,8 +86,9 @@ export default function EditProgramAntDesign() {
           programtype: programToEdit.programtype,
           programdescription: programToEdit.programdescription,
         }}
+        className="form"
       >
-        <FormItem label="Name:" name="programname">
+        <FormItem label="Program Name:" name="programname">
           <Input
             id="programname"
             name="programname"
@@ -99,7 +100,7 @@ export default function EditProgramAntDesign() {
           </div>
         </FormItem>
 
-        <FormItem label="Type:" name="programtype">
+        <FormItem label="Program Type:" name="programtype">
           <Select
             id="programtype"
             name="programtype"
@@ -128,7 +129,7 @@ export default function EditProgramAntDesign() {
             {errors.programtype ? `${errors.programtype}` : ''}
           </div>
         </FormItem>
-        <FormItem label="Description:" name="programdescription">
+        <FormItem label="Program Description:" name="programdescription">
           <TextArea
             showCount
             maxLength={1000}

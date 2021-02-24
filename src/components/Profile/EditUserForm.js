@@ -5,6 +5,7 @@ import { axiosWithAuth } from '../../utils/axiosWithAuth';
 import schema from '../../validation/ProfileSchema';
 import * as yup from 'yup';
 import { editUser } from '../../state/actions/userActions';
+import '../../styles/Form.css';
 
 // ant design
 import 'antd/dist/antd.css';

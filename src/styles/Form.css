@@ -1,0 +1,29 @@
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.form {
+    width: 60%;
+    background: lightcyan;
+    display: flex;
+    justify-content: left;
+    flex-direction: column;
+    border-radius: 10px;
+    padding: 2%;
+}
+
+h1 {
+    margin: 5% auto;
+}
+
+button {
+    width: 30%;
+    margin: 0 auto;
+}
+
+label {
+    padding-left: 0px;
+}
