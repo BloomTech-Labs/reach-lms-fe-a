@@ -46,7 +46,10 @@ const StyledLogo = styled.h1`
     }
   }
 `;
-const StyledMenu = styled.div``;
+const StyledMenu = styled.div`
+  color: white;
+  margin-left: 70%;
+`;
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -94,7 +97,7 @@ const Navigation = props => {
           </div>
         )} */}
       {/* {isMobile && ( */}
-      <>
+      <StyledMenu>
         <IconButton
           edge="start"
           className={classes.menuButton}
@@ -118,7 +121,7 @@ const Navigation = props => {
             <MenuItem onClick={handleClose}>Logout</MenuItem>
           </Link>
         </Menu>
-      </>
+      </StyledMenu>
       {/* )} */}
     </StyledNav>
   );
