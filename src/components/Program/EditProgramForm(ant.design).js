@@ -74,9 +74,13 @@ export default function EditProgramAntDesign() {
     push('/');
   }
 
+  const goBack = () => {
+    push('/');
+  };
+
   return (
     <div className="container">
-      <h1>Edit Program</h1>
+      <h1 className="edit-form-h1">Edit Program</h1>
       <Form
         {...layout}
         name="basic"
@@ -137,14 +141,25 @@ export default function EditProgramAntDesign() {
             name="programdescription"
             value={input.programdescription}
             onChange={changeValues}
+            rows={4}
           />
           <div style={{ color: 'red' }}>
             {errors.programdescription ? `${errors.programdescription}` : ''}
           </div>
         </FormItem>
-        <Button onClick={editProgram} type="primary" disabled={disabled}>
-          Submit
-        </Button>
+        <div className="button-container">
+          <Button onClick={goBack} type="secondary" className="button">
+            Cancel
+          </Button>
+          <Button
+            onClick={editProgram}
+            type="primary"
+            disabled={disabled}
+            className="button"
+          >
+            Submit
+          </Button>
+        </div>
       </Form>
     </div>
   );
