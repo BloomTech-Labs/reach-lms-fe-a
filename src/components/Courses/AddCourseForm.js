@@ -38,7 +38,6 @@ export default function AddCourse() {
   const [values, setValues] = useState(initialValues);
   const [errors, setErrors] = useState(initialFormErrors);
   const [disabled, setDisabled] = useState(true);
-  const user = useSelector(state => state.userReducer);
   const currentProgramId = useSelector(
     state => state.programReducer.viewProgramId
   );

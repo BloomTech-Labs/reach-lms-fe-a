@@ -20,12 +20,6 @@ const layout = {
   wrapperCol: { span: 16 },
 };
 
-const initialValues = {
-  coursename: '',
-  coursecode: '',
-  coursedescription: '',
-};
-
 const initialFormErrors = {
   coursename: '',
   coursecode: '',
@@ -34,9 +28,6 @@ const initialFormErrors = {
 
 export default function EditCourseForm() {
   const courseToEdit = useSelector(state => state.courseReducer.edit_course);
-  const currentProgramId = useSelector(
-    state => state.programReducer.viewProgramId
-  );
   const { push } = useHistory();
   const dispatch = useDispatch();
   const [values, setValues] = useState(courseToEdit);

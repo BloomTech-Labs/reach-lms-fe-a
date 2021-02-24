@@ -29,7 +29,7 @@ function HomeContainer({ LoadingComponent }) {
             email: info.email,
             phone: info.phone,
           };
-          setUserInfo(info);
+          setUserInfo(user);
         }
       })
       .catch(err => {
@@ -53,6 +53,7 @@ function HomeContainer({ LoadingComponent }) {
         return incoming_user;
       })
       .then(incoming_user => {
+        // add a ternary: if user is admin, get programs, if teacher/student get courses
         axiosWithAuth()
           .get(
             `https://reach-team-a-be.herokuapp.com/programs/${incoming_user.userid}`
