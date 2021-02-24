@@ -60,7 +60,9 @@ const courseReducer = (state = initialState, action) => {
       return { ...state, courses_list: newCourseList };
     case EDIT_COURSE:
       let updatedCourses = [...state.courses_list];
-      let index2 = updatedCourses.findIndex(el => el.id === action.payload.id);
+      let index2 = updatedCourses.findIndex(
+        el => el.courseid === action.payload.courseid
+      );
       updatedCourses.splice(index2, 1, action.payload);
       return { ...state, courses_list: updatedCourses };
     case SET_COURSE_LIST:
