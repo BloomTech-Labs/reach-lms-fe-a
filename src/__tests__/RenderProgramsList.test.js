@@ -13,8 +13,10 @@ afterEach(() => {
 
 const store = createStore(rootReducer);
 
-jest.mock('../selectors', () => ({
-  programSelector: jest.fn(() => Promise.resolve([])),
+const mockDispatch = jest.fn();
+jest.mock('react-redux', () => ({
+  useSelector: jest.fn(),
+  useDispatch: () => mockDispatch,
 }));
 
 describe('<ProgramList /> test suite', () => {

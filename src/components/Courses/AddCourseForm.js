@@ -6,6 +6,9 @@ import * as yup from 'yup';
 import schema from '../../validation/CourseSchema';
 import { addCourse } from '../../state/actions/courseActions';
 
+// css
+import '../../styles/Form.css';
+
 // ant design
 import 'antd/dist/antd.css';
 import Button from 'antd/lib/button';
@@ -80,10 +83,14 @@ export default function AddCourse() {
       });
   }
 
+  const goBack = () => {
+    push('/');
+  };
+
   return (
     <div className="container">
-      <h1>Add Course</h1>
-      <Form {...layout} name="basic" onFinish={submitForm}>
+      <h1 className="edit-form-h1">Add Course</h1>
+      <Form {...layout} name="basic" onFinish={submitForm} className="form">
         <FormItem label="Course Name:" name="coursename" validateStatus>
           <Input
             id="coursename"
@@ -121,9 +128,19 @@ export default function AddCourse() {
             {errors.coursedescription ? `${errors.coursedescription}` : ''}
           </div>
         </FormItem>
-        <Button onClick={submitForm} type="primary" disabled={disabled}>
-          Submit
-        </Button>
+        <div className="button-container">
+          <Button onClick={goBack} type="secondary" className="button">
+            Cancel
+          </Button>
+          <Button
+            onClick={submitForm}
+            type="primary"
+            disabled={disabled}
+            className="button"
+          >
+            Submit
+          </Button>
+        </div>
       </Form>
     </div>
   );
