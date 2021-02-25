@@ -91,7 +91,7 @@ export default function AddCourse() {
     <div className="container">
       <h1 className="edit-form-h1">Add Course</h1>
       <Form {...layout} name="basic" onFinish={submitForm} className="form">
-        <FormItem label="Course Name:" validateStatus>
+        <FormItem htmlFor="coursename" label="Course Name:" validateStatus>
           <Input
             id="coursename"
             name="coursename"
@@ -103,7 +103,7 @@ export default function AddCourse() {
           </div>
         </FormItem>
 
-        <FormItem label="Course Code:">
+        <FormItem htmlFor="coursecode" label="Course Code:">
           <Input
             id="coursecode"
             name="coursecode"
@@ -115,7 +115,7 @@ export default function AddCourse() {
           </div>
         </FormItem>
 
-        <FormItem label="Course Description:">
+        <FormItem htmlFor="coursedescription" label="Course Description:">
           <TextArea
             showCount
             maxLength={250}
