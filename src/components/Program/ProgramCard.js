@@ -5,7 +5,11 @@ import { Button, Dropdown, Menu } from 'antd';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { axiosWithAuth } from '../../utils/axiosWithAuth';
-import { setEdit, deleteProgram } from '../../state/actions/programActions';
+import {
+  setEdit,
+  deleteProgram,
+  currentProgram,
+} from '../../state/actions/programActions';
 import { setCourseList } from '../../state/actions/courseActions';
 import { setProgramId } from '../../state/actions/programActions';
 
@@ -39,14 +43,13 @@ export default function ProgramCard(props) {
     </Menu>
   );
 
-  const viewProgramHandler = id => {
+  const viewProgramHandler = program => {
     axiosWithAuth()
-      .get(`https://reach-team-a-be.herokuapp.com/courses/${id}`)
+      .get(`https://reach-team-a-be.herokuapp.com/courses/${program.programid}`)
       .then(res => {
         console.log(res);
-        console.log(id);
         dispatch(setCourseList(res.data));
-        dispatch(setProgramId(id));
+        dispatch(currentProgram(program));
       })
       .catch(err => console.log(err));
     push('/courses');
@@ -61,10 +64,7 @@ export default function ProgramCard(props) {
       >
         <h3>{program.programtype}</h3>
         <p>{program.programdescription}</p>
-        <Button
-          onClick={() => viewProgramHandler(program.programid)}
-          type="primary"
-        >
+        <Button onClick={() => viewProgramHandler(program)} type="primary">
           View Program
         </Button>
       </Card>
