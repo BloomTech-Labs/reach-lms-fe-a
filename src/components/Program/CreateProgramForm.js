@@ -95,7 +95,7 @@ export default function CreateProgram() {
     <div className="container">
       <h1 className="edit-form-h1">Create Program</h1>
       <Form {...layout} name="basic" onFinish={submitForm} className="form">
-        <FormItem label="Program Name:" name="programname" validateStatus>
+        <FormItem htmlFor="programname" label="Program Name:" validateStatus>
           <Input
             id="programname"
             name="programname"
@@ -107,7 +107,7 @@ export default function CreateProgram() {
           </div>
         </FormItem>
 
-        <FormItem label="Program Type:" name="programtype">
+        <FormItem htmlFor="programtype" label="Program Type:">
           <Select
             id="programtype"
             name="programtype"
@@ -137,7 +137,7 @@ export default function CreateProgram() {
           </div>
         </FormItem>
 
-        <FormItem label="Program Description:" name="programdescription">
+        <FormItem htmlFor="programdescription" label="Program Description:">
           <TextArea
             showCount
             maxLength={500}

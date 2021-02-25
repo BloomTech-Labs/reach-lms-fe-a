@@ -94,7 +94,7 @@ export default function EditProgramAntDesign() {
         }}
         className="form"
       >
-        <FormItem label="Program Name:" name="programname">
+        <FormItem label="Program Name:">
           <Input
             id="programname"
             name="programname"
@@ -106,7 +106,7 @@ export default function EditProgramAntDesign() {
           </div>
         </FormItem>
 
-        <FormItem label="Program Type:" name="programtype">
+        <FormItem label="Program Type:">
           <Select
             id="programtype"
             name="programtype"
@@ -135,7 +135,7 @@ export default function EditProgramAntDesign() {
             {errors.programtype ? `${errors.programtype}` : ''}
           </div>
         </FormItem>
-        <FormItem label="Program Description:" name="programdescription">
+        <FormItem label="Program Description:">
           <TextArea
             showCount
             maxLength={1000}

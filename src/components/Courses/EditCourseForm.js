@@ -92,7 +92,7 @@ export default function EditCourseForm() {
         }}
         className="form"
       >
-        <FormItem label="Course Name:" name="coursename" validateStatus>
+        <FormItem label="Course Name:" validateStatus>
           <Input
             id="coursename"
             name="coursename"
@@ -104,7 +104,7 @@ export default function EditCourseForm() {
           </div>
         </FormItem>
 
-        <FormItem label="Course Code:" name="coursecode">
+        <FormItem label="Course Code:">
           <Input
             id="coursecode"
             name="coursecode"
@@ -116,7 +116,7 @@ export default function EditCourseForm() {
           </div>
         </FormItem>
 
-        <FormItem label="Course Description:" name="coursedescription">
+        <FormItem label="Course Description:">
           <TextArea
             showCount
             maxLength={250}

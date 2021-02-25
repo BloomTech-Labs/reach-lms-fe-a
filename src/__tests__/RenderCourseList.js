@@ -1,35 +1,35 @@
-import ProgramList from '../components/Program/ProgramList';
+import CourseList from '../components/Courses/CourseList';
 import React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
-import { render, waitFor, screen } from '@testing-library/react';
+import { render, waitFor } from '@testing-library/react';
 import * as reactRedux from 'react-redux';
 import expect from 'expect';
-import userEvent from '@testing-library/user-event';
+import Dashboard from '../components/Dashboard/Dashboard';
 
-const mockPrograms = {
-  programs: [
+const mockCourses = {
+  courses: [
     {
-      programId: 1,
-      programname: 'name1',
-      programtype: '1st',
-      programDescription: 'description1',
+      courseid: 1,
+      coursename: 'name1',
+      coursecode: '1st',
+      coursedescription: 'description1',
     },
     {
-      programId: 2,
-      programname: 'name2',
-      programtype: '2nd',
-      programDescription: 'description2',
+      courseid: 2,
+      coursename: 'name2',
+      coursecode: '2nd',
+      coursedescription: 'description2',
     },
     {
-      programId: 3,
-      programname: 'name3',
-      programtype: '3rd',
-      programDescription: 'description3',
+      courseid: 3,
+      coursename: 'name3',
+      coursecode: '3rd',
+      coursedescription: 'description3',
     },
   ],
 };
 
-describe('<ProgramList /> test suite', () => {
+describe('<courseList /> test suite', () => {
   // listen for redux's dispatch and selector calls
   const useSelectorMock = jest.spyOn(reactRedux, 'useSelector');
   const useDispatchMock = jest.spyOn(reactRedux, 'useDispatch');
@@ -43,12 +43,12 @@ describe('<ProgramList /> test suite', () => {
     // when spyOn detects dispatch/selector call, mock dispatch and selector
     // return values
     useDispatchMock.mockReturnValue(jest.fn());
-    useSelectorMock.mockReturnValue(mockPrograms.programs);
+    useSelectorMock.mockReturnValue(mockCourses.courses);
 
     //render component
     const { getByText } = render(
       <Router>
-        <ProgramList />
+        <CourseList />
       </Router>
     );
 
@@ -57,15 +57,19 @@ describe('<ProgramList /> test suite', () => {
     await waitFor(() => {
       let name = getByText(/name1/i);
       expect(name).toBeInTheDocument();
+      let type = getByText(/1st/i);
+      expect(type).toBeInTheDocument();
+      let description = getByText(/description1/i);
+      expect(description).toBeInTheDocument();
     });
   });
 
   test('Component renders properly, title showing', () => {
     const { getByText } = render(
       <Router>
-        <ProgramList />
+        <CourseList />
       </Router>
     );
-    expect(getByText(/my programs/i).innerHTML).toBe('My Programs');
+    expect(getByText(/my courses/i).innerHTML).toBe('My Courses');
   });
 });

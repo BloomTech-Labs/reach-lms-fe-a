@@ -2,7 +2,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import ProgramCard from './ProgramCard';
 
-const ProgramList = props => {
+const ProgramList = () => {
   const programs = useSelector(state => state.programReducer.programs_list);
 
   return (
