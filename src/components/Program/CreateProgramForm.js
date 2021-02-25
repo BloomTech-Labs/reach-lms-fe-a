@@ -6,6 +6,9 @@ import * as yup from 'yup';
 import schema from '../../validation/ProgramSchema';
 import { addProgram } from '../../state/actions/programActions';
 
+// css
+import '../../styles/Form.css';
+
 // ant design
 import 'antd/dist/antd.css';
 import Button from 'antd/lib/button';
@@ -84,10 +87,14 @@ export default function CreateProgram() {
       });
   }
 
+  const goBack = () => {
+    push('/');
+  };
+
   return (
     <div className="container">
-      <h1>Create Program</h1>
-      <Form {...layout} name="basic" onFinish={submitForm}>
+      <h1 className="edit-form-h1">Create Program</h1>
+      <Form {...layout} name="basic" onFinish={submitForm} className="form">
         <FormItem label="Program Name:" name="programname" validateStatus>
           <Input
             id="programname"
@@ -138,14 +145,25 @@ export default function CreateProgram() {
             name="programdescription"
             value={values.programdescription}
             onChange={changeValues}
+            rows={4}
           />
           <div style={{ color: 'red' }}>
             {errors.programdescription ? `${errors.programdescription}` : ''}
           </div>
         </FormItem>
-        <Button onClick={submitForm} type="primary" disabled={disabled}>
-          Submit
-        </Button>
+        <div className="button-container">
+          <Button onClick={goBack} type="secondary" className="button">
+            Cancel
+          </Button>
+          <Button
+            onClick={submitForm}
+            type="primary"
+            disabled={disabled}
+            className="button"
+          >
+            Submit
+          </Button>
+        </div>
       </Form>
     </div>
   );

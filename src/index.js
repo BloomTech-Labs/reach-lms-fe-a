@@ -34,6 +34,8 @@ import rootReducer from './state/reducers/rootReducer';
 import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
 import logger from 'redux-logger';
+import Dashboard from './components/Dashboard/Dashboard';
+import HomeContainer from './components/Dashboard/HomeContainer';
 
 const persistConfig = {
   key: 'courses_list',
@@ -91,6 +93,7 @@ function App() {
           <SecureRoute path="/courses" component={CourseList} />
           <SecureRoute path="/add-course" component={AddCourseForm} />
           <SecureRoute path="/edit-course" component={EditCourseForm} />
+          <SecureRoute path="/" component={HomeContainer} />
           <Route component={NotFoundPage} />
         </Switch>
       </div>

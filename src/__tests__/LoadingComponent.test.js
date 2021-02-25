@@ -1,7 +1,7 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 
-import { LoadingComponent } from '../components/common';
+import LoadingComponent from '../components/LoadingComponent';
 
 describe('Loading Common Component', () => {
   test('it should mount a div based on props', () => {
