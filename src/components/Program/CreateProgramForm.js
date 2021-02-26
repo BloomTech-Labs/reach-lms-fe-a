@@ -114,23 +114,56 @@ export default function CreateProgram() {
             value={values.programtype}
             placeholder="Select a program type"
             onSelect={(value, event) => changeSelect(value, event)}
+            data-testid="select"
           >
-            <Option value="">- Select A Type -</Option>
-            <Option value="1st">-1st Grade-</Option>
-            <Option value="2nd">-2nd Grade-</Option>
-            <Option value="3rd">-3rd Grade-</Option>
-            <Option value="4th">-4th Grade-</Option>
-            <Option value="5th">-5th Grade-</Option>
-            <Option value="6th">-6th Grade-</Option>
-            <Option value="7th">-7th Grade-</Option>
-            <Option value="8th">-8th Grade-</Option>
-            <Option value="9th">-9th Grade-</Option>
-            <Option value="10th">-10th Grade-</Option>
-            <Option value="11th">-11th Grade-</Option>
-            <Option value="12th">-12th Grade-</Option>
-            <Option value="higher">-Higher-</Option>
-            <Option value="training">-Training-</Option>
-            <Option value="other">-Other-</Option>
+            <Option data-testid="select-option" value="">
+              - Select A Type -
+            </Option>
+            <Option data-testid="select-option" value="1st">
+              -1st Grade-
+            </Option>
+            <Option data-testid="select-option" value="2nd">
+              -2nd Grade-
+            </Option>
+            <Option data-testid="select-option" value="3rd">
+              -3rd Grade-
+            </Option>
+            <Option data-testid="select-option" value="4th">
+              -4th Grade-
+            </Option>
+            <Option data-testid="select-option" value="5th">
+              -5th Grade-
+            </Option>
+            <Option data-testid="select-option" value="6th">
+              -6th Grade-
+            </Option>
+            <Option data-testid="select-option" value="7th">
+              -7th Grade-
+            </Option>
+            <Option data-testid="select-option" value="8th">
+              -8th Grade-
+            </Option>
+            <Option data-testid="select-option" value="9th">
+              -9th Grade-
+            </Option>
+            <Option data-testid="select-option" value="10th">
+              -10th Grade-
+            </Option>
+            <Option data-testid="select-option" value="11th">
+              -11th Grade-
+            </Option>
+            <Option data-testid="select-option" value="12th">
+              -12th Grade-
+            </Option>
+            <Option data-testid="select-option" value="higher">
+              -Higher-
+            </Option>
+            <Option data-testid="select-option" value="training">
+              -Training-
+            </Option>
+            <Option data-testid="select-option" value="other">
+              -Other-
+            </Option>
           </Select>
           <div style={{ color: 'red' }}>
             {errors.programtype ? `${errors.programtype}` : ''}
