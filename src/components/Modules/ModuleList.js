@@ -1,12 +1,19 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import ModuleCard from './ModuleCard';
 import { useHistory } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { currentModule } from '../../state/actions/moduleActions';
+import { axiosWithAuth } from '../../utils/axiosWithAuth';
+import { addStudent } from '../../state/actions/courseActions';
+
 //ant d
 import { Layout } from 'antd';
 import { Menu } from 'antd';
+import Form from 'antd/lib/form/Form';
+import FormItem from 'antd/lib/form/FormItem';
+import Input from 'antd/lib/input';
+import Button from 'antd/lib/button';
 const { SubMenu } = Menu;
 
 //ant Design
@@ -17,6 +24,15 @@ const ModuleList = props => {
   const { push } = useHistory();
   const modules = useSelector(state => state.moduleReducer.modules_list);
   const currentCourse = useSelector(state => state.courseReducer.currentCourse);
+  const [newStudent, setNewStudent] = useState({
+    studentname: '',
+  });
+
+  const changeValues = e => {
+    const { name, value } = e.target;
+    const valueToUse = value;
+    setNewStudent({ ...newStudent, [e.target.name]: valueToUse });
+  };
 
   const handleClick = e => {
     console.log('click ', e);
@@ -27,6 +43,40 @@ const ModuleList = props => {
     dispatch(currentModule(moduleClicked));
     push('/module-text');
   };
+
+  function addStudentHandler(e) {
+    e.preventDefault();
+    console.log(currentCourse);
+    console.log(newStudent);
+    axiosWithAuth()
+      .put(
+        `https://reach-team-a-be.herokuapp.com/students/${currentCourse.courseid}`,
+        newStudent
+      )
+      .then(res => {
+        console.log(res);
+        dispatch(addStudent(res.data));
+        setNewStudent('');
+      })
+      .catch(err => {
+        console.log(err);
+      });
+    // console.log(values);
+    // axiosWithAuth()
+    //   .post(
+    //     `https://reach-team-a-be.herokuapp.com/courses/${currentProgram.programid}/course`,
+    //     values
+    //   )
+    //   .then(res => {
+    //     console.log('Newly made course', res);
+    //     dispatch(addCourse(res.data));
+    //     setValues(initialValues);
+    //     push('/courses');
+    //   })
+    //   .catch(err => {
+    //     console.log(err);
+    //   });
+  }
 
   return (
     <Layout>
@@ -60,11 +110,25 @@ const ModuleList = props => {
           </Menu>
         </div>
         <div>
-          {/* <form>
-        <input></input>
-          <button onClick={addStudentHandler}>Add Student</button>
-        </form> */}
-
+          <Form>
+            <FormItem htmlFor="studentname" label="Add Student:" validateStatus>
+              <Input
+                id="studentname"
+                name="studentname"
+                value={newStudent.studentname}
+                onChange={changeValues}
+              />
+            </FormItem>
+            <Button
+              onClick={addStudentHandler}
+              type="primary"
+              className="button"
+            >
+              Submit
+            </Button>
+          </Form>
+        </div>
+        <div>
           <Menu
             // onClick={handleClick}
             style={{ width: '80%' }}
