@@ -44,7 +44,6 @@ export default function CourseCard(props) {
         console.log(res);
         console.log(id);
         // dispatch(setModuleList(res.data));
-        // dispatch(viewProgram(id));
       })
       .catch(err => console.log(err));
     push('/courses');

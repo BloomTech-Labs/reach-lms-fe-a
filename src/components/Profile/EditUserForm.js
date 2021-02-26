@@ -97,7 +97,7 @@ export default function EditUserForm() {
         }}
         className="form"
       >
-        <FormItem label="First Name:" name="firstname">
+        <FormItem htmlFor="firstname" label="First Name:">
           <Input
             id="firstname"
             name="firstname"
@@ -108,7 +108,7 @@ export default function EditUserForm() {
             {errors.firstname ? `${errors.firstname}` : ''}
           </div>
         </FormItem>
-        <FormItem label="Last Name:" name="lastname">
+        <FormItem htmlFor="lastname" label="Last Name:">
           <Input
             id="lastname"
             name="lastname"
@@ -119,7 +119,7 @@ export default function EditUserForm() {
             {errors.lastname ? `${errors.lastname}` : ''}
           </div>
         </FormItem>
-        <FormItem label="Email:" name="email">
+        <FormItem htmlFor="email" label="Email:" name="email">
           <Input
             id="email"
             name="email"
@@ -130,7 +130,7 @@ export default function EditUserForm() {
             {errors.email ? `${errors.email}` : ''}
           </div>
         </FormItem>
-        <FormItem label="Phone Number:" name="phonenumber">
+        <FormItem htmlFor="phonenumber" label="Phone Number:">
           <Input
             id="phonenumber"
             name="phonenumber"

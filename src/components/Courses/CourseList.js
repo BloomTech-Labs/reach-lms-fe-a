@@ -14,6 +14,9 @@ const CourseList = props => {
   const dispatch = useDispatch();
   const { push } = useHistory();
   const courseList = useSelector(state => state.courseReducer.courses_list);
+  const currentProgram = useSelector(
+    state => state.programReducer.currentProgram
+  );
 
   const viewCourseHandler = id => {
     axiosWithAuth()
@@ -33,6 +36,7 @@ const CourseList = props => {
   return (
     <div>
       <div>
+        <h1>{currentProgram.programname}</h1>
         <h2>My Courses</h2>
         <Link to="/add-course">
           <button>Add Course</button>

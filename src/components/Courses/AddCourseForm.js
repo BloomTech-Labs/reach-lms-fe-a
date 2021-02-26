@@ -41,8 +41,8 @@ export default function AddCourse() {
   const [values, setValues] = useState(initialValues);
   const [errors, setErrors] = useState(initialFormErrors);
   const [disabled, setDisabled] = useState(true);
-  const currentProgramId = useSelector(
-    state => state.programReducer.viewProgramId
+  const currentProgram = useSelector(
+    state => state.programReducer.currentProgram
   );
 
   const setFormErrors = (name, value) => {
@@ -69,7 +69,7 @@ export default function AddCourse() {
     console.log(values);
     axiosWithAuth()
       .post(
-        `https://reach-team-a-be.herokuapp.com/courses/${currentProgramId}/course`,
+        `https://reach-team-a-be.herokuapp.com/courses/${currentProgram.programid}/course`,
         values
       )
       .then(res => {
@@ -91,7 +91,7 @@ export default function AddCourse() {
     <div className="container">
       <h1 className="edit-form-h1">Add Course</h1>
       <Form {...layout} name="basic" onFinish={submitForm} className="form">
-        <FormItem label="Course Name:" name="coursename" validateStatus>
+        <FormItem htmlFor="coursename" label="Course Name:" validateStatus>
           <Input
             id="coursename"
             name="coursename"
@@ -103,7 +103,7 @@ export default function AddCourse() {
           </div>
         </FormItem>
 
-        <FormItem label="Course Code:" name="coursecode">
+        <FormItem htmlFor="coursecode" label="Course Code:">
           <Input
             id="coursecode"
             name="coursecode"
@@ -115,7 +115,7 @@ export default function AddCourse() {
           </div>
         </FormItem>
 
-        <FormItem label="Course Description:" name="coursedescription">
+        <FormItem htmlFor="coursedescription" label="Course Description:">
           <TextArea
             showCount
             maxLength={250}
