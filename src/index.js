@@ -26,6 +26,7 @@ import AddCourseForm from './components/Courses/AddCourseForm';
 import EditCourseForm from './components/Courses/EditCourseForm';
 import ModuleList from './components/Modules/ModuleList';
 import ModuleText from './components/Modules/ModuleText';
+import AddModuleForm from './components/Modules/AddModuleForm';
 
 // redux
 import { createStore, applyMiddleware } from 'redux';
@@ -97,6 +98,7 @@ function App() {
           <SecureRoute path="/edit-course" component={EditCourseForm} />
           <SecureRoute path="/modules" component={ModuleList} />
           <SecureRoute path="/module-text" component={ModuleText} />
+          <SecureRoute path="/add-module" component={AddModuleForm} />
           <SecureRoute path="/" component={HomeContainer} />
           <Route component={NotFoundPage} />
         </Switch>

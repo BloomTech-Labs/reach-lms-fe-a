@@ -32,6 +32,8 @@ export default function ModuleCard(props) {
   return (
     <>
       <Card title={module.modulename}>
+        <h3>{module.moduledescription}</h3>
+        <p>{module.modulecontent}</p>
         <Button
           onClick={() => viewModuleHandler(module.moduleid)}
           type="primary"

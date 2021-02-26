@@ -47,9 +47,6 @@ const CourseList = props => {
           return <CourseCard key={course.id} course={course} />;
         })}
       </div>
-      <Button onClick={() => viewCourseHandler(course.courseid)} type="primary">
-        View Course
-      </Button>
     </div>
   );
 };
