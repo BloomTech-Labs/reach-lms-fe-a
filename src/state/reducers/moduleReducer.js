@@ -7,6 +7,7 @@ import {
   SET_MODULE_LIST,
   FILTER_STATE,
   CLEAR_MODULES,
+  CURRENT_MODULE,
 } from '../actions/moduleActions';
 
 const initialState = {
@@ -14,6 +15,7 @@ const initialState = {
   modules_list: [],
   edit_module: {},
   filtered_module_list: [],
+  currentModule: {},
 };
 
 const moduleReducer = (state = initialState, action) => {
@@ -67,6 +69,8 @@ const moduleReducer = (state = initialState, action) => {
       return { ...state, modules_list: updatedModules };
     case SET_MODULE_LIST:
       return { ...state, modules_list: action.payload };
+    case CURRENT_MODULE:
+      return { ...state, currentModule: action.payload };
     case FILTER_STATE:
       console.log('action.payload', action.payload);
       return { ...state, filtered_module_list: action.payload };
