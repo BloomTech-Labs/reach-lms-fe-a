@@ -61,7 +61,7 @@ export default function EditModuleForm() {
     console.log(moduleToEdit);
     axiosWithAuth()
       .put(
-        `https://reach-team-a-be.herokuapp.com/courses/${moduleToEdit.moduleId}`,
+        `https://reach-team-a-be.herokuapp.com/modules/${moduleToEdit.moduleid}`,
         values
       )
       .then(res => {

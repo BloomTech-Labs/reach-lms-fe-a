@@ -10,8 +10,8 @@ import 'antd/dist/antd.css';
 //ant design
 import { Card, Menu, Dropdown } from 'antd';
 
-export default function ModuleText(props) {
-  const { module } = props;
+export default function ModuleText() {
+  const module = useSelector(state => state.moduleReducer.currentModule);
   const user = useSelector(state => state.userReducer);
   const dispatch = useDispatch();
   const { push } = useHistory();
@@ -23,12 +23,13 @@ export default function ModuleText(props) {
     } else {
       axiosWithAuth()
         .delete(
-          `https://reach-team-a-be.herokuapp.com/modules/module/${module.moduleId}`
+          `https://reach-team-a-be.herokuapp.com/modules/${module.moduleid}`
         )
         .then(res => {
           console.log(module.moduleid);
           dispatch(deleteModule(module.moduleid));
           console.log(res);
+          push('/modules');
         })
         .catch(err => console.log(err));
     }
@@ -63,7 +64,15 @@ export default function ModuleText(props) {
     <>
       <Card
         title={module.modulename}
-        extra={<Dropdown.Button overlay={menu}></Dropdown.Button>}
+        extra={
+          user.role === 'ADMIN' ? (
+            <Dropdown.Button overlay={menu}></Dropdown.Button>
+          ) : user.role === 'TEACHER' ? (
+            <Dropdown.Button overlay={menu}></Dropdown.Button>
+          ) : (
+            <div></div>
+          )
+        }
         style={{ width: 800 }}
       >
         <h3>{module.moduledescription}</h3>

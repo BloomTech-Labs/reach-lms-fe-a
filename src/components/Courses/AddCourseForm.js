@@ -84,7 +84,7 @@ export default function AddCourse() {
   }
 
   const goBack = () => {
-    push('/');
+    push('/courses');
   };
 
   return (

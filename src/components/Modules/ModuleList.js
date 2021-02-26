@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import ModuleCard from './ModuleCard';
 import { useHistory } from 'react-router-dom';
 import { Link } from 'react-router-dom';
-
+import { currentModule } from '../../state/actions/moduleActions';
 //ant d
 import { Layout } from 'antd';
 import { Menu } from 'antd';
@@ -20,6 +20,12 @@ const ModuleList = props => {
 
   const handleClick = e => {
     console.log('click ', e);
+    const moduleClicked = modules.filter(module => {
+      return module.moduleid == e.key;
+    })[0];
+    console.log(moduleClicked);
+    dispatch(currentModule(moduleClicked));
+    push('/module-text');
   };
 
   return (

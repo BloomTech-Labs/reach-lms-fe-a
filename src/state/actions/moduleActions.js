@@ -8,6 +8,7 @@ export const EDIT_MODULE = 'EDIT_MODULE';
 export const SET_MODULE_LIST = 'SET_MODULE_LIST';
 export const FILTER_STATE = 'FILTER_STATE';
 export const CLEAR_MODULES = 'CLEAR_MODULES';
+export const CURRENT_MODULE = 'CURRENT_MODULE';
 
 export const addModule = value => {
   return { type: ADD_MODULE, payload: value };
@@ -44,6 +45,10 @@ export const setModuleList = value => {
 
 export const filterState = value => {
   return { type: FILTER_STATE, payload: value };
+};
+
+export const currentModule = value => {
+  return { type: CURRENT_MODULE, payload: value };
 };
 
 export const clearCourses = () => {
