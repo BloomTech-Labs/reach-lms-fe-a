@@ -56,18 +56,32 @@ const ModuleList = props => {
                   </Menu.Item>
                 );
               })}
-              {/* <Menu.Item key="1">Option 1</Menu.Item>
-            <Menu.Item key="2">Option 2</Menu.Item>
-            <Menu.Item key="3">Option 3</Menu.Item>
-            <Menu.Item key="4">Option 4</Menu.Item> */}
             </SubMenu>
           </Menu>
-          {/* <div>Modules</div>
+        </div>
         <div>
-          {modules.map(module => {
-            return <ul>{module.modulename}</ul>
-          })}
-        </div> */}
+          {/* <form>
+        <input></input>
+          <button onClick={addStudentHandler}>Add Student</button>
+        </form> */}
+
+          <Menu
+            // onClick={handleClick}
+            style={{ width: '80%' }}
+            // defaultSelectedKeys={['1']}
+            defaultOpenKeys={['sub2']}
+            mode="inline"
+          >
+            <SubMenu key="sub2" title="Students">
+              {currentCourse.students.map(student => {
+                return (
+                  <Menu.Item key={student.studentid}>
+                    {student.studentname}
+                  </Menu.Item>
+                );
+              })}
+            </SubMenu>
+          </Menu>
         </div>
       </Content>
       <Footer></Footer>

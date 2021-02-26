@@ -33,7 +33,11 @@ export default function EditProgramAntDesign() {
   const programToEdit = useSelector(state => state.programReducer.edit_program);
   const dispatch = useDispatch();
   const { push } = useHistory();
-  const [input, setInput] = useState(programToEdit);
+  const [input, setInput] = useState({
+    programname: programToEdit.programname,
+    programtype: programToEdit.programtype,
+    programdescription: programToEdit.programdescription,
+  });
   const [disabled, setDisabled] = useState(false);
   const [errors, setErrors] = useState(initialFormErrors);
 
@@ -63,6 +67,7 @@ export default function EditProgramAntDesign() {
 
   function editProgram(e) {
     e.preventDefault();
+    console.log(input);
     axiosWithAuth()
       .put(
         `https://reach-team-a-be.herokuapp.com/programs/program/${programToEdit.programid}`,
