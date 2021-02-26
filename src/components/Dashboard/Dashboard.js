@@ -7,12 +7,13 @@ import ProgramList from '../Program/ProgramList';
 import CourseList from '../Courses/CourseList';
 //ant d
 import { Layout } from 'antd';
+import { Button } from 'antd';
 
 //styled components
 const StyledTitle = styled.div`
   display: flex;
   flex-direction: column;
-  height: 27vh;
+  height: 3vh;
   font-size: 2vw;
   color: black;
   background: none;
@@ -20,10 +21,11 @@ const StyledTitle = styled.div`
 `;
 const StyledWrapper = styled.div`
   display: flex;
+  margin-left: 10%;
 `;
 const StyledCreate = styled.div`
-  margin-top: 0.5%;
-  margin-left: 36%;
+  margin-top: 1.5%;
+  margin-left: 65%;
 `;
 
 // ant Design
@@ -40,18 +42,15 @@ const Dashboard = props => {
       </Header>
       <Content>
         <StyledTitle>
-          <StyledWrapper>
-            <h1>Hi {userInfo.name} Welcome to Reach!</h1>
-            <StyledCreate>
-              <Link to="/create-program">
-                <button>Create Program</button>
-              </Link>
-            </StyledCreate>
-          </StyledWrapper>
+          <StyledCreate>
+            <Link to="/create-program">
+              <Button>Create Program</Button>
+            </Link>
+          </StyledCreate>
         </StyledTitle>
-        <div className="programs">
+        <StyledWrapper>
           <div>{user.role === 'ADMIN' ? <ProgramList /> : <CourseList />}</div>
-        </div>
+        </StyledWrapper>
       </Content>
       <Footer></Footer>
     </Layout>
