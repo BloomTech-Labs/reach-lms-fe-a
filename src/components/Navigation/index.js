@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { makeStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
+import Menu from '@material-ui/icons/Menu';
 import MenuIcon from '@material-ui/icons/Menu';
-import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 
 //styled-components**
@@ -16,7 +16,7 @@ const StyledNav = styled.nav`
 `;
 const StyledLogo = styled.h1`
   position: relative;
-  font-size: 6vw;
+  font-size: 4vw;
   color: #252839;
   -webkit-text-stroke: 0.3vw #383d52;
   text-transform: uppercase;

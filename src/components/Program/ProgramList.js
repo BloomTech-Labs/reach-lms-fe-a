@@ -1,6 +1,10 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import ProgramCard from './ProgramCard';
+import styled from 'styled-components';
+
+//styled components
+const StyledPrograms = styled.div``;
 
 const ProgramList = () => {
   const programs = useSelector(state => state.programReducer.programs_list);
@@ -10,11 +14,11 @@ const ProgramList = () => {
       <div>
         <h2>My Programs</h2>
       </div>
-      <div>
+      <StyledPrograms>
         {programs.map(program => {
           return <ProgramCard key={program.programid} program={program} />;
         })}
-      </div>
+      </StyledPrograms>
     </div>
   );
 };

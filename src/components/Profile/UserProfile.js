@@ -11,7 +11,7 @@ import { Avatar, Image } from 'antd';
 
 const StyledLogo = styled.h1`
   position: relative;
-  font-size: 6vw;
+  font-size: 4vw;
   color: #252839;
   -webkit-text-stroke: 0.3vw #383d52;
   text-transform: uppercase;
