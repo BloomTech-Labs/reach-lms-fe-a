@@ -5,7 +5,12 @@ import { Button, Menu, Dropdown } from 'antd';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { axiosWithAuth } from '../../utils/axiosWithAuth';
-import { setEditCourse, deleteCourse } from '../../state/actions/courseActions';
+import {
+  setEditCourse,
+  currentCourse,
+  deleteCourse,
+} from '../../state/actions/courseActions';
+import { setModuleList } from '../../state/actions/moduleActions';
 
 export default function CourseCard(props) {
   const { course } = props;
@@ -39,14 +44,14 @@ export default function CourseCard(props) {
 
   const viewCourseHandler = id => {
     axiosWithAuth()
-      .get(`https://reach-team-a-be.herokuapp.com/courses/${id}`)
+      .get(`https://reach-team-a-be.herokuapp.com/modules/${id}`)
       .then(res => {
         console.log(res);
-        console.log(id);
-        // dispatch(setModuleList(res.data));
+        dispatch(setModuleList(res.data));
+        dispatch(currentCourse(course));
       })
       .catch(err => console.log(err));
-    push('/courses');
+    push('/modules');
   };
 
   return (

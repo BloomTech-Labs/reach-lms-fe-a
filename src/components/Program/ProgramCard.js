@@ -11,7 +11,6 @@ import {
   currentProgram,
 } from '../../state/actions/programActions';
 import { setCourseList } from '../../state/actions/courseActions';
-import { setProgramId } from '../../state/actions/programActions';
 
 export default function ProgramCard(props) {
   const { program } = props;

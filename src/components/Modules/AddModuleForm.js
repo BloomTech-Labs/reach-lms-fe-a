@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import * as yup from 'yup';
 import schema from '../../validation/ModuleSchema';
-import { addCourse } from '../../state/actions/moduleActions';
+import { addModule } from '../../state/actions/moduleActions';
 
 // css
 import '../../styles/Form.css';
@@ -41,7 +41,7 @@ export default function AddModule() {
   const [values, setValues] = useState(initialValues);
   const [errors, setErrors] = useState(initialFormErrors);
   const [disabled, setDisabled] = useState(true);
-  const courseId = useSelector(state => state.courseReducer.viewCourseId);
+  const currentCourse = useSelector(state => state.courseReducer.currentCourse);
 
   const setFormErrors = (name, value) => {
     yup
@@ -67,12 +67,12 @@ export default function AddModule() {
     console.log(values);
     axiosWithAuth()
       .post(
-        `https://reach-team-a-be.herokuapp.com/modules/${courseId}/module`,
+        `https://reach-team-a-be.herokuapp.com/modules/${currentCourse.courseid}/module`,
         values
       )
       .then(res => {
         console.log(res);
-        dispatch(addCourse(values));
+        dispatch(addModule(values));
         setValues(initialValues);
         push('/modules');
       })

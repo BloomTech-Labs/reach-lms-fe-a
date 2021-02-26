@@ -7,6 +7,7 @@ import {
   SET_COURSE_LIST,
   FILTER_STATE,
   CLEAR_COURSES,
+  CURRENT_COURSE,
 } from '../actions/courseActions';
 
 const initialState = {
@@ -14,6 +15,7 @@ const initialState = {
   courses_list: [],
   edit_course: {},
   filtered_course_list: [],
+  currentCourse: {},
 };
 
 const courseReducer = (state = initialState, action) => {
@@ -70,6 +72,8 @@ const courseReducer = (state = initialState, action) => {
     case FILTER_STATE:
       console.log('action.payload', action.payload);
       return { ...state, filtered_course_list: action.payload };
+    case CURRENT_COURSE:
+      return { ...state, currentCourse: action.payload };
     case CLEAR_COURSES:
       return initialState;
     default:
