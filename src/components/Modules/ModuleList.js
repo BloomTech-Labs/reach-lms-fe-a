@@ -139,8 +139,8 @@ const ModuleList = props => {
             <SubMenu key="sub2" title="Students">
               {currentCourse.students.map(student => {
                 return (
-                  <Menu.Item key={student.studentid}>
-                    {student.studentname}
+                  <Menu.Item key={student.student.studentid}>
+                    {student.student.studentname}
                   </Menu.Item>
                 );
               })}
