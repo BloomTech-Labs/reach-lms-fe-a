@@ -119,40 +119,40 @@ export default function CreateProgram() {
             <Option data-testid="select-option" value="">
               - Select A Type -
             </Option>
-            <Option data-testid="select-option" value="1st">
+            <Option data-testid="select-option" value="1st Grade">
               -1st Grade-
             </Option>
-            <Option data-testid="select-option" value="2nd">
+            <Option data-testid="select-option" value="2nd Grade">
               -2nd Grade-
             </Option>
-            <Option data-testid="select-option" value="3rd">
+            <Option data-testid="select-option" value="3rd Grade">
               -3rd Grade-
             </Option>
-            <Option data-testid="select-option" value="4th">
+            <Option data-testid="select-option" value="4th Grade">
               -4th Grade-
             </Option>
-            <Option data-testid="select-option" value="5th">
+            <Option data-testid="select-option" value="5th Grade">
               -5th Grade-
             </Option>
-            <Option data-testid="select-option" value="6th">
+            <Option data-testid="select-option" value="6th Grade">
               -6th Grade-
             </Option>
-            <Option data-testid="select-option" value="7th">
+            <Option data-testid="select-option" value="7th Grade">
               -7th Grade-
             </Option>
-            <Option data-testid="select-option" value="8th">
+            <Option data-testid="select-option" value="8th Grade">
               -8th Grade-
             </Option>
-            <Option data-testid="select-option" value="9th">
+            <Option data-testid="select-option" value="9th Grade">
               -9th Grade-
             </Option>
-            <Option data-testid="select-option" value="10th">
+            <Option data-testid="select-option" value="10th Grade">
               -10th Grade-
             </Option>
-            <Option data-testid="select-option" value="11th">
+            <Option data-testid="select-option" value="11th Grade">
               -11th Grade-
             </Option>
-            <Option data-testid="select-option" value="12th">
+            <Option data-testid="select-option" value="12th Grade">
               -12th Grade-
             </Option>
             <Option data-testid="select-option" value="higher">

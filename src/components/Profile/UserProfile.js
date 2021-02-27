@@ -1,11 +1,11 @@
 import React from 'react';
-import 'antd/dist/antd.css';
-import { Card } from 'antd';
-import { Button } from 'antd';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 //ant d
+import 'antd/dist/antd.css';
+import { Card } from 'antd';
+import { Button } from 'antd';
 import { Layout } from 'antd';
 import { Avatar, Image } from 'antd';
 
@@ -41,6 +41,11 @@ const StyledLogo = styled.h1`
   }
 `;
 
+const StyledAvatar = styled.div`
+  margin-left: 95%;
+  margin-top: 4%;
+`;
+
 export default function UserProfile() {
   const user = useSelector(state => state.userReducer);
   const { push } = useHistory();
@@ -59,13 +64,15 @@ export default function UserProfile() {
   return (
     <Layout>
       <Sider>
-        <Avatar
-          style={{ backgroundColor: '#87d068' }}
-          src={
-            <Image src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
-          }
-          size={100}
-        />
+        <StyledAvatar>
+          <Avatar
+            style={{ backgroundColor: '#87d068' }}
+            src={
+              <Image src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
+            }
+            size={50}
+          />
+        </StyledAvatar>
       </Sider>
       <Layout>
         <Header>
@@ -82,10 +89,10 @@ export default function UserProfile() {
             <Button type="primary" onClick={e => clickOnEdit(e)}>
               Edit Profile
             </Button>
-            <Button type="primary" onClick={e => returnHome(e)}>
-              Home
-            </Button>
           </Card>
+          <Button type="primary" onClick={e => returnHome(e)}>
+            Home
+          </Button>
         </Content>
         <Footer></Footer>
       </Layout>
