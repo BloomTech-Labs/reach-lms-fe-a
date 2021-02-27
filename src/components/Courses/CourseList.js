@@ -5,9 +5,14 @@ import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { axiosWithAuth } from '../../utils/axiosWithAuth';
 import CourseCard from './CourseCard';
+import SearchPage from '../Search/SearchPage';
 
+//ant d
 import 'antd/dist/antd.css';
+import { Layout } from 'antd';
 import { Button } from 'antd';
+
+const { Heeader, Footer, Content } = Layout;
 
 const CourseList = props => {
   const { course } = props;
@@ -18,29 +23,15 @@ const CourseList = props => {
     state => state.programReducer.currentProgram
   );
 
-  const viewCourseHandler = id => {
-    axiosWithAuth()
-      .get(
-        `https://reach-team-a-be.herokuapp.com/modules/module/${course.courseid}`
-      )
-      .then(res => {
-        console.log(res);
-        console.log(id);
-        // dispatch(setModuleList(res.data));
-        // dispatch(setCourseId(id));
-      })
-      .catch(err => console.log(err));
-    push('/modules');
-  };
-
   return (
     <div>
       <div>
         <h1>{currentProgram.programname}</h1>
         <h2>My Courses</h2>
         <Link to="/add-course">
-          <button>Add Course</button>
+          <Button>Add Course</Button>
         </Link>
+        <SearchPage />
       </div>
       <div>
         {courseList.map(course => {

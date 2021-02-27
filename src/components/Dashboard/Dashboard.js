@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux';
 import Navigation from '../Navigation';
 import ProgramList from '../Program/ProgramList';
 import CourseList from '../Courses/CourseList';
+import SearchPage from '../Search/SearchPage';
 //ant d
 import { Layout } from 'antd';
 import { Button } from 'antd';
@@ -12,12 +13,7 @@ import { Button } from 'antd';
 //styled components
 const StyledTitle = styled.div`
   display: flex;
-  flex-direction: column;
-  height: 3vh;
-  font-size: 2vw;
-  color: black;
-  background: none;
-  margin-top: 0%;
+  margin-left: 10%;
 `;
 const StyledWrapper = styled.div`
   display: flex;
@@ -42,11 +38,9 @@ const Dashboard = props => {
       </Header>
       <Content>
         <StyledTitle>
-          <StyledCreate>
-            <Link to="/create-program">
-              <Button>Create Program</Button>
-            </Link>
-          </StyledCreate>
+          <Link to="/create-program">
+            <Button>Create Program</Button>
+          </Link>
         </StyledTitle>
         <StyledWrapper>
           <div>{user.role === 'ADMIN' ? <ProgramList /> : <CourseList />}</div>

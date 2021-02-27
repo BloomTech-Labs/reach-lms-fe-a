@@ -2,7 +2,7 @@ import React from 'react';
 
 const SearchBar = ({ keyword, setKeyword }) => {
   const BarStyling = {
-    width: '20rem',
+    width: '15rem',
     background: '#F2F1F9',
     border: 'none',
     padding: '0.5rem',
@@ -12,7 +12,7 @@ const SearchBar = ({ keyword, setKeyword }) => {
       style={BarStyling}
       key="random1"
       value={keyword}
-      placeholder={'search country'}
+      placeholder={'search for user by name'}
       onChange={e => setKeyword(e.target.value)}
     />
   );
