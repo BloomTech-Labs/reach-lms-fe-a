@@ -73,8 +73,8 @@ export default function AddCourse() {
         values
       )
       .then(res => {
-        console.log(res);
-        dispatch(addCourse(values));
+        console.log('Newly made course', res);
+        dispatch(addCourse(res.data));
         setValues(initialValues);
         push('/courses');
       })

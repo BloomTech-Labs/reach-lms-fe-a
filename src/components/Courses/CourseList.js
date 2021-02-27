@@ -1,7 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import CourseCard from './CourseCard';
 import SearchPage from '../Search/SearchPage';
@@ -13,7 +12,6 @@ import { Button } from 'antd';
 
 const CourseList = props => {
   const { course } = props;
-  const dispatch = useDispatch();
   const { push } = useHistory();
   const { Header, Footer, Sider, Content } = Layout;
   const courseList = useSelector(state => state.courseReducer.courses_list);
