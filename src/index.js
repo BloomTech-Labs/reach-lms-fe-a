@@ -48,19 +48,16 @@ const persistConfig = {
 
 const persistedCourseReducer = persistReducer(persistConfig, rootReducer);
 
-const store = createStore(
-  persistedCourseReducer,
-  applyMiddleware(thunk, logger)
-);
+const store = createStore(rootReducer, applyMiddleware(thunk, logger));
 let persistor = persistStore(store);
 
 ReactDOM.render(
   <Router>
     <React.StrictMode>
       <Provider store={store}>
-        <PersistGate loading={null} persistor={persistor}>
-          <App />
-        </PersistGate>
+        {/* <PersistGate loading={null} persistor={persistor}> */}
+        <App />
+        {/* </PersistGate> */}
       </Provider>
     </React.StrictMode>
   </Router>,

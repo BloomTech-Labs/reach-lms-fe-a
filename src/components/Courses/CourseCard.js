@@ -47,6 +47,7 @@ export default function CourseCard(props) {
       .get(`https://reach-team-a-be.herokuapp.com/modules/${id}`)
       .then(res => {
         console.log(res);
+        console.log(course);
         dispatch(currentCourse(course));
         dispatch(setModuleList(res.data));
       })
