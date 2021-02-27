@@ -5,7 +5,6 @@ import { useSelector } from 'react-redux';
 import Navigation from '../Navigation';
 import ProgramList from '../Program/ProgramList';
 import CourseList from '../Courses/CourseList';
-import SearchPage from '../Search/SearchPage';
 //ant d
 import { Layout } from 'antd';
 import { Button } from 'antd';

@@ -2,7 +2,7 @@ import React from 'react';
 
 const SearchBar = ({ keyword, setKeyword }) => {
   const BarStyling = {
-    width: '15rem',
+    width: '10rem',
     background: '#F2F1F9',
     border: 'none',
     padding: '0.5rem',

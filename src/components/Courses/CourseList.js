@@ -3,7 +3,6 @@ import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { axiosWithAuth } from '../../utils/axiosWithAuth';
 import CourseCard from './CourseCard';
 import SearchPage from '../Search/SearchPage';
 
@@ -12,33 +11,37 @@ import 'antd/dist/antd.css';
 import { Layout } from 'antd';
 import { Button } from 'antd';
 
-const { Heeader, Footer, Content } = Layout;
-
 const CourseList = props => {
   const { course } = props;
   const dispatch = useDispatch();
   const { push } = useHistory();
+  const { Header, Footer, Sider, Content } = Layout;
   const courseList = useSelector(state => state.courseReducer.courses_list);
   const currentProgram = useSelector(
     state => state.programReducer.currentProgram
   );
 
   return (
-    <div>
-      <div>
+    <Layout>
+      <Header>
         <h1>{currentProgram.programname}</h1>
-        <h2>My Courses</h2>
-        <Link to="/add-course">
-          <Button>Add Course</Button>
-        </Link>
-        <SearchPage />
-      </div>
-      <div>
-        {courseList.map(course => {
-          return <CourseCard key={course.id} course={course} />;
-        })}
-      </div>
-    </div>
+      </Header>
+      <Layout>
+        <Content>
+          <h2>My Courses</h2>
+          <Link to="/add-course">
+            <Button>Add Course</Button>
+          </Link>
+          {courseList.map(course => {
+            return <CourseCard key={course.id} course={course} />;
+          })}
+        </Content>
+        <Sider>
+          <SearchPage />
+        </Sider>
+      </Layout>
+      <Footer></Footer>
+    </Layout>
   );
 };
 
