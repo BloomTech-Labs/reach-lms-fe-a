@@ -55,27 +55,16 @@ const ModuleList = props => {
       )
       .then(res => {
         console.log(res);
-        dispatch(addStudent(res.data));
+        const addedStudent = {
+          studentid: res.data.studentid,
+          studentname: res.data.studentname,
+        };
+        dispatch(addStudent(addedStudent));
         setNewStudent('');
       })
       .catch(err => {
         console.log(err);
       });
-    // console.log(values);
-    // axiosWithAuth()
-    //   .post(
-    //     `https://reach-team-a-be.herokuapp.com/courses/${currentProgram.programid}/course`,
-    //     values
-    //   )
-    //   .then(res => {
-    //     console.log('Newly made course', res);
-    //     dispatch(addCourse(res.data));
-    //     setValues(initialValues);
-    //     push('/courses');
-    //   })
-    //   .catch(err => {
-    //     console.log(err);
-    //   });
   }
 
   return (
@@ -139,8 +128,8 @@ const ModuleList = props => {
             <SubMenu key="sub2" title="Students">
               {currentCourse.students.map(student => {
                 return (
-                  <Menu.Item key={student.student.studentid}>
-                    {student.student.studentname}
+                  <Menu.Item key={student.studentid}>
+                    {student.studentname}
                   </Menu.Item>
                 );
               })}
