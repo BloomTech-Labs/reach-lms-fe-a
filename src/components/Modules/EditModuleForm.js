@@ -32,7 +32,11 @@ export default function EditModuleForm() {
   const moduleToEdit = useSelector(state => state.moduleReducer.edit_module);
   const dispatch = useDispatch();
   const { push } = useHistory();
-  const [values, setValues] = useState(moduleToEdit);
+  const [values, setValues] = useState({
+    modulename: moduleToEdit.modulename,
+    moduledescription: moduleToEdit.moduledescription,
+    modulecontent: moduleToEdit.modulecontent,
+  });
   const [errors, setErrors] = useState(initialFormErrors);
   const [disabled, setDisabled] = useState(false);
 
