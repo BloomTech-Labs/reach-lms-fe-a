@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import ModuleCard from './ModuleCard';
 import { useHistory } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { currentModule } from '../../state/actions/moduleActions';
@@ -31,6 +30,7 @@ const ModuleList = props => {
   const { push } = useHistory();
   const modules = useSelector(state => state.moduleReducer.modules_list);
   const currentCourse = useSelector(state => state.courseReducer.currentCourse);
+  const user = useSelector(state => state.userReducer);
   const [newStudent, setNewStudent] = useState({
     studentname: '',
   });
@@ -103,9 +103,11 @@ const ModuleList = props => {
       <Content>
         <div>
           <h1>{currentCourse.coursename}</h1>
-          <Link to="/add-module">
-            <button>Add Module</button>
-          </Link>
+          {(user.role === 'ADMIN' || user.role === 'TEACHER') && (
+            <Link to="/add-module">
+              <button>Add Module</button>
+            </Link>
+          )}
         </div>
         <div>
           <Menu
@@ -126,54 +128,64 @@ const ModuleList = props => {
             </SubMenu>
           </Menu>
         </div>
-        <div>
-          <Form>
-            <FormItem htmlFor="studentname" label="Add Student:" validateStatus>
-              <Input
-                id="studentname"
-                name="studentname"
-                value={newStudent.studentname}
-                onChange={changeValues}
-              />
-            </FormItem>
-            <Button
-              onClick={addStudentHandler}
-              type="primary"
-              className="button"
+        {(user.role === 'ADMIN' || user.role === 'TEACHER') && (
+          <div>
+            <Form>
+              <FormItem
+                htmlFor="studentname"
+                label="Add Student:"
+                validateStatus
+              >
+                <Input
+                  id="studentname"
+                  name="studentname"
+                  value={newStudent.studentname}
+                  onChange={changeValues}
+                />
+              </FormItem>
+              <Button
+                onClick={addStudentHandler}
+                type="primary"
+                className="button"
+              >
+                Submit
+              </Button>
+            </Form>
+          </div>
+        )}
+        {(user.role === 'ADMIN' || user.role === 'TEACHER') && (
+          <div>
+            <Menu
+              // onClick={handleClick}
+              style={{ width: '80%' }}
+              // defaultSelectedKeys={['1']}
+              defaultOpenKeys={['sub2']}
+              mode="inline"
             >
-              Submit
-            </Button>
-          </Form>
-        </div>
-        <div>
-          <Menu
-            // onClick={handleClick}
-            style={{ width: '80%' }}
-            // defaultSelectedKeys={['1']}
-            defaultOpenKeys={['sub2']}
-            mode="inline"
-          >
-            <SubMenu key="sub2" title="Students">
-              {currentCourse.students.map(student => {
-                return (
-                  <>
-                    <Menu.Item key={student.student.studentid}>
-                      {student.student.studentname}
-                    </Menu.Item>
-                    <Tooltip title="Delete">
-                      <IconButton
-                        aria-label="delete"
-                        onClick={() => deleteStudent(student.student.studentid)}
-                      >
-                        <DeleteIcon></DeleteIcon>
-                      </IconButton>
-                    </Tooltip>
-                  </>
-                );
-              })}
-            </SubMenu>
-          </Menu>
-        </div>
+              <SubMenu key="sub2" title="Students">
+                {currentCourse.students.map(student => {
+                  return (
+                    <>
+                      <Menu.Item key={student.student.studentid}>
+                        {student.student.studentname}
+                      </Menu.Item>
+                      <Tooltip title="Delete">
+                        <IconButton
+                          aria-label="delete"
+                          onClick={() =>
+                            deleteStudent(student.student.studentid)
+                          }
+                        >
+                          <DeleteIcon></DeleteIcon>
+                        </IconButton>
+                      </Tooltip>
+                    </>
+                  );
+                })}
+              </SubMenu>
+            </Menu>
+          </div>
+        )}
       </Content>
       <Footer></Footer>
     </Layout>

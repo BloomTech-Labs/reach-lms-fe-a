@@ -1,19 +1,13 @@
 import styled from 'styled-components';
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import Navigation from '../Navigation';
 import ProgramList from '../Program/ProgramList';
 import CourseList from '../Courses/CourseList';
 //ant d
 import { Layout } from 'antd';
-import { Button } from 'antd';
 
 //styled components
-const StyledTitle = styled.div`
-  display: flex;
-  margin-left: 10%;
-`;
 const StyledWrapper = styled.div`
   display: flex;
   margin-left: 10%;
@@ -36,11 +30,6 @@ const Dashboard = props => {
         <Navigation authService={authService} />
       </Header>
       <Content>
-        <StyledTitle>
-          <Link to="/create-program">
-            <Button>Create Program</Button>
-          </Link>
-        </StyledTitle>
         <StyledWrapper>
           <div>{user.role === 'ADMIN' ? <ProgramList /> : <CourseList />}</div>
         </StyledWrapper>

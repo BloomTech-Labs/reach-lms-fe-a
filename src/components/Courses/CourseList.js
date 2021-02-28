@@ -38,7 +38,7 @@ const CourseList = props => {
           })}
         </Content>
         <Sider>
-          <SearchPage />
+          {(user.role === 'ADMIN' || user.role === 'TEACHER') && <SearchPage />}
         </Sider>
       </Layout>
       <Footer></Footer>

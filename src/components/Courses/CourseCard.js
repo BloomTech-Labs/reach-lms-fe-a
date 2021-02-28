@@ -2,7 +2,7 @@ import React from 'react';
 import 'antd/dist/antd.css';
 import { Card } from 'antd';
 import { Button, Menu, Dropdown } from 'antd';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { axiosWithAuth } from '../../utils/axiosWithAuth';
 import {
@@ -16,6 +16,7 @@ export default function CourseCard(props) {
   const { course } = props;
   const dispatch = useDispatch();
   const { push } = useHistory();
+  const user = useSelector(state => state.userReducer);
 
   const handleMenuClick = e => {
     console.log(course);
@@ -62,7 +63,11 @@ export default function CourseCard(props) {
     <>
       <Card
         title={course.coursename}
-        extra={<Dropdown.Button overlay={menu}></Dropdown.Button>}
+        extra={
+          (user.role === 'ADMIN' || user.role === 'TEACHER') && (
+            <Dropdown.Button overlay={menu}></Dropdown.Button>
+          )
+        }
         style={{ width: 800 }}
       >
         <h3>{course.coursecode}</h3>
