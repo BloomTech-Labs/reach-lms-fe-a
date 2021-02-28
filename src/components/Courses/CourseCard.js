@@ -18,6 +18,7 @@ export default function CourseCard(props) {
   const { push } = useHistory();
 
   const handleMenuClick = e => {
+    console.log(course);
     if (e.key === 'edit') {
       dispatch(setEditCourse(course));
       push('/edit-course');
