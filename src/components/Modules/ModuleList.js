@@ -21,8 +21,6 @@ import Form from 'antd/lib/form/Form';
 import FormItem from 'antd/lib/form/FormItem';
 import Input from 'antd/lib/input';
 import Button from 'antd/lib/button';
-import { update } from 'plotly.js';
-import { Delete } from '@material-ui/icons';
 const { SubMenu } = Menu;
 //ant Design
 const { Header, Footer, Content } = Layout;

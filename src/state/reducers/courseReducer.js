@@ -9,6 +9,7 @@ import {
   CLEAR_COURSES,
   CURRENT_COURSE,
   ADD_STUDENT,
+  DELETE_STUDENT,
 } from '../actions/courseActions';
 
 const initialState = {
@@ -80,7 +81,7 @@ const courseReducer = (state = initialState, action) => {
         return {
           ...state,
           currentCourse: { ...state.currentCourse, students: action.payload },
-          courses_list: { ...state },
+          // courses_list: { ...state }, still need to do this
         };
       } else {
         return {
@@ -95,6 +96,7 @@ const courseReducer = (state = initialState, action) => {
       return initialState;
     default:
       return state;
+    case DELETE_STUDENT:
   }
 };
 
