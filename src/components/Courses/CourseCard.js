@@ -51,8 +51,10 @@ export default function CourseCard(props) {
         dispatch(currentCourse(course));
         dispatch(setModuleList(res.data));
       })
+      .then(err => {
+        push('/modules');
+      })
       .catch(err => console.log(err));
-    push('/modules');
   };
 
   return (

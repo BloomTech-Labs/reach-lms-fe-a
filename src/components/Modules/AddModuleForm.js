@@ -72,7 +72,7 @@ export default function AddModule() {
       )
       .then(res => {
         console.log(res);
-        dispatch(addModule(values));
+        dispatch(addModule(res.data));
         setValues(initialValues);
         push('/modules');
       })
