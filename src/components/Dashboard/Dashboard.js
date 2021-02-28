@@ -4,6 +4,8 @@ import { useSelector } from 'react-redux';
 import Navigation from '../Navigation';
 import ProgramList from '../Program/ProgramList';
 import CourseList from '../Courses/CourseList';
+import { useHistory } from 'react-router-dom';
+
 //ant d
 import { Layout } from 'antd';
 
@@ -23,12 +25,10 @@ const { Header, Footer, Content } = Layout;
 const Dashboard = props => {
   const { userInfo, authService } = props;
   const user = useSelector(state => state.userReducer);
+  const { push } = useHistory();
 
   return (
     <Layout>
-      <Header>
-        <Navigation authService={authService} />
-      </Header>
       <Content>
         <StyledWrapper>
           <div>{user.role === 'ADMIN' ? <ProgramList /> : <CourseList />}</div>

@@ -6,6 +6,7 @@ import { currentModule } from '../../state/actions/moduleActions';
 import { axiosWithAuth } from '../../utils/axiosWithAuth';
 import {
   addStudent,
+  addTeacher,
   editCourseAction,
   deleteStudent,
 } from '../../state/actions/courseActions';
@@ -34,11 +35,21 @@ const ModuleList = props => {
   const [newStudent, setNewStudent] = useState({
     studentname: '',
   });
+  const [newTeacher, setNewTeacher] = useState({
+    teachername: '',
+  });
 
-  const changeValues = e => {
+  const changeStudentValues = e => {
+    console.log(e.target);
     const { name, value } = e.target;
     const valueToUse = value;
     setNewStudent({ ...newStudent, [e.target.name]: valueToUse });
+  };
+
+  const changeTeacherValues = e => {
+    const { name, value } = e.target;
+    const valueToUse = value;
+    setNewTeacher({ ...newTeacher, [e.target.name]: valueToUse });
   };
 
   const handleClick = e => {
@@ -79,6 +90,34 @@ const ModuleList = props => {
       });
   }
 
+  function addTeacherHandler(e) {
+    e.preventDefault();
+    console.log(currentCourse);
+    console.log(newStudent);
+    axiosWithAuth()
+      .put(
+        `https://reach-team-a-be.herokuapp.com/teachers/${currentCourse.courseid}`,
+        newTeacher
+      )
+      .then(res => {
+        console.log(res);
+        const addedTeacher = {
+          teacher: {
+            teacherid: res.data.teacherid,
+            teachername: res.data.teachername,
+          },
+        };
+        dispatch(addTeacher(addedTeacher));
+        const updatedCourse = currentCourse;
+        updatedCourse.teachers.push(addedTeacher);
+        dispatch(editCourseAction(updatedCourse));
+        setNewTeacher('');
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }
+
   const deleteStudent = studentId => {
     console.log(studentId);
     console.log(currentCourse.courseid);
@@ -89,6 +128,22 @@ const ModuleList = props => {
       .then(res => {
         console.log(res);
         dispatch(deleteStudent(studentId));
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+
+  const deleteTeacher = teacher => {
+    console.log(teacher);
+    console.log(currentCourse.courseid);
+    axiosWithAuth()
+      .delete(
+        `https://reach-team-a-be.herokuapp.com/students/${currentCourse.courseid}/${teacher}`
+      )
+      .then(res => {
+        console.log(res);
+        dispatch(deleteStudent(teacher));
       })
       .catch(err => {
         console.log(err);
@@ -128,64 +183,126 @@ const ModuleList = props => {
             </SubMenu>
           </Menu>
         </div>
-        {(user.role === 'ADMIN' || user.role === 'TEACHER') && (
-          <div>
-            <Form>
-              <FormItem
-                htmlFor="studentname"
-                label="Add Student:"
-                validateStatus
+        {/* {ADD TEACHER FORM and TEACHER LIST} */}
+        <div>
+          {user.role === 'ADMIN' && (
+            <div>
+              <Form>
+                <FormItem
+                  htmlFor="teachername"
+                  label="Add Teacher:"
+                  validateStatus
+                >
+                  <Input
+                    id="teachername"
+                    name="teachername"
+                    value={newTeacher.teachername}
+                    onChange={changeTeacherValues}
+                  />
+                </FormItem>
+                <Button
+                  onClick={addTeacherHandler}
+                  type="primary"
+                  className="button"
+                >
+                  Submit
+                </Button>
+              </Form>
+            </div>
+          )}
+          {(user.role === 'ADMIN' || user.role === 'TEACHER') && (
+            <div>
+              <Menu
+                // onClick={handleClick}
+                style={{ width: '80%' }}
+                // defaultSelectedKeys={['1']}
+                defaultOpenKeys={['sub3']}
+                mode="inline"
               >
-                <Input
-                  id="studentname"
-                  name="studentname"
-                  value={newStudent.studentname}
-                  onChange={changeValues}
-                />
-              </FormItem>
-              <Button
-                onClick={addStudentHandler}
-                type="primary"
-                className="button"
+                <SubMenu key="sub3" title="Teachers">
+                  {currentCourse.teachers.map(teacher => {
+                    return (
+                      <>
+                        <Menu.Item key={teacher.teacher.teacherid}>
+                          {teacher.teacher.teachername}
+                        </Menu.Item>
+                        <Tooltip title="Delete">
+                          <IconButton
+                            aria-label="delete"
+                            onClick={() => deleteTeacher(teacher.teacher)}
+                          >
+                            <DeleteIcon></DeleteIcon>
+                          </IconButton>
+                        </Tooltip>
+                      </>
+                    );
+                  })}
+                </SubMenu>
+              </Menu>
+            </div>
+          )}
+        </div>
+        {/* {ADD STUDENT form and STUDENT LIST} */}
+        <div>
+          {(user.role === 'ADMIN' || user.role === 'TEACHER') && (
+            <div>
+              <Form>
+                <FormItem
+                  htmlFor="studentname"
+                  label="Add Student:"
+                  validateStatus
+                >
+                  <Input
+                    id="studentname"
+                    name="studentname"
+                    value={newStudent.studentname}
+                    onChange={changeStudentValues}
+                  />
+                </FormItem>
+                <Button
+                  onClick={addStudentHandler}
+                  type="primary"
+                  className="button"
+                >
+                  Submit
+                </Button>
+              </Form>
+            </div>
+          )}
+          {(user.role === 'ADMIN' || user.role === 'TEACHER') && (
+            <div>
+              <Menu
+                // onClick={handleClick}
+                style={{ width: '80%' }}
+                // defaultSelectedKeys={['1']}
+                defaultOpenKeys={['sub2']}
+                mode="inline"
               >
-                Submit
-              </Button>
-            </Form>
-          </div>
-        )}
-        {(user.role === 'ADMIN' || user.role === 'TEACHER') && (
-          <div>
-            <Menu
-              // onClick={handleClick}
-              style={{ width: '80%' }}
-              // defaultSelectedKeys={['1']}
-              defaultOpenKeys={['sub2']}
-              mode="inline"
-            >
-              <SubMenu key="sub2" title="Students">
-                {currentCourse.students.map(student => {
-                  return (
-                    <>
-                      <Menu.Item key={student.student.studentid}>
-                        {student.student.studentname}
-                      </Menu.Item>
-                      <Tooltip title="Delete">
-                        <IconButton
-                          aria-label="delete"
-                          onClick={() =>
-                            deleteStudent(student.student.studentid)
-                          }
-                        >
-                          <DeleteIcon></DeleteIcon>
-                        </IconButton>
-                      </Tooltip>
-                    </>
-                  );
-                })}
-              </SubMenu>
-            </Menu>
-          </div>
-        )}
+                <SubMenu key="sub2" title="Students">
+                  {currentCourse.students.map(student => {
+                    return (
+                      <>
+                        <Menu.Item key={student.student.studentid}>
+                          {student.student.studentname}
+                        </Menu.Item>
+                        <Tooltip title="Delete">
+                          <IconButton
+                            aria-label="delete"
+                            onClick={() =>
+                              deleteStudent(student.student.studentid)
+                            }
+                          >
+                            <DeleteIcon></DeleteIcon>
+                          </IconButton>
+                        </Tooltip>
+                      </>
+                    );
+                  })}
+                </SubMenu>
+              </Menu>
+            </div>
+          )}
+        </div>
       </Content>
       <Footer></Footer>
     </Layout>

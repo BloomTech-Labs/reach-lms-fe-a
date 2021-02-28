@@ -5,6 +5,9 @@ import { axiosWithAuth } from '../../utils/axiosWithAuth';
 import { saveUser } from '../../state/actions/userActions';
 import { useDispatch } from 'react-redux';
 import { setProgramList } from '../../state/actions/programActions';
+import Navigation from '../Navigation';
+import { Layout } from 'antd';
+const { Header, Footer, Content } = Layout;
 
 function HomeContainer({ LoadingComponent }) {
   const { authState, authService } = useOktaAuth();
@@ -75,7 +78,12 @@ function HomeContainer({ LoadingComponent }) {
         <LoadingComponent message="Fetching user profile..." />
       )}
       {authState.isAuthenticated && userInfo && (
-        <Dashboard userInfo={userInfo} authService={authService} />
+        <>
+          <Header>
+            <Navigation authService={authService} />
+          </Header>
+          <Dashboard userInfo={userInfo} authService={authService} />
+        </>
       )}
     </>
   );
