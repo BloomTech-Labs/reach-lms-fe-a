@@ -8,6 +8,7 @@ import { axiosWithAuth } from '../../utils/axiosWithAuth';
 import {
   addStudent,
   editCourseAction,
+  deleteStudent,
 } from '../../state/actions/courseActions';
 
 // material ui
@@ -87,6 +88,7 @@ const ModuleList = props => {
       )
       .then(res => {
         console.log(res);
+        dispatch(deleteStudent(studentId));
       })
       .catch(err => {
         console.log(err);
