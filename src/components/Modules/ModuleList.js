@@ -10,6 +10,10 @@ import {
   editCourseAction,
 } from '../../state/actions/courseActions';
 
+// material ui
+import DeleteIcon from '@material-ui/icons/Delete';
+import IconButton from '@material-ui/core/IconButton';
+import Tooltip from '@material-ui/core/Tooltip';
 //ant d
 import { Layout } from 'antd';
 import { Menu } from 'antd';
@@ -18,8 +22,8 @@ import FormItem from 'antd/lib/form/FormItem';
 import Input from 'antd/lib/input';
 import Button from 'antd/lib/button';
 import { update } from 'plotly.js';
+import { Delete } from '@material-ui/icons';
 const { SubMenu } = Menu;
-
 //ant Design
 const { Header, Footer, Content } = Layout;
 
@@ -75,6 +79,21 @@ const ModuleList = props => {
         console.log(err);
       });
   }
+
+  const deleteStudent = studentId => {
+    console.log(studentId);
+    console.log(currentCourse.courseid);
+    axiosWithAuth()
+      .delete(
+        `https://reach-team-a-be.herokuapp.com/students/${currentCourse.courseid}/${studentId}`
+      )
+      .then(res => {
+        console.log(res);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
 
   return (
     <Layout>
@@ -137,9 +156,19 @@ const ModuleList = props => {
             <SubMenu key="sub2" title="Students">
               {currentCourse.students.map(student => {
                 return (
-                  <Menu.Item key={student.student.studentid}>
-                    {student.student.studentname}
-                  </Menu.Item>
+                  <>
+                    <Menu.Item key={student.student.studentid}>
+                      {student.student.studentname}
+                    </Menu.Item>
+                    <Tooltip title="Delete">
+                      <IconButton
+                        aria-label="delete"
+                        onClick={() => deleteStudent(student.student.studentid)}
+                      >
+                        <DeleteIcon></DeleteIcon>
+                      </IconButton>
+                    </Tooltip>
+                  </>
                 );
               })}
             </SubMenu>

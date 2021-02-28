@@ -9,7 +9,6 @@ import {
   CLEAR_COURSES,
   CURRENT_COURSE,
   ADD_STUDENT,
-  currentCourse,
 } from '../actions/courseActions';
 
 const initialState = {
