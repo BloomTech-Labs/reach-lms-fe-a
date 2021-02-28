@@ -81,6 +81,7 @@ const courseReducer = (state = initialState, action) => {
         return {
           ...state,
           currentCourse: { ...state.currentCourse, students: action.payload },
+          courses_list: { ...state },
         };
       } else {
         return {
@@ -91,14 +92,6 @@ const courseReducer = (state = initialState, action) => {
           },
         };
       }
-    // if (state.courses_list === false) {
-    //   return { ...state, courses_list: [action.payload] };
-    // } else {
-    //   return {
-    //     ...state,
-    //     courses_list: [...state.courses_list, action.payload],
-    //   };
-    // }
     case CLEAR_COURSES:
       return initialState;
     default:

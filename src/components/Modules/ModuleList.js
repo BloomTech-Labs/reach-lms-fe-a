@@ -5,7 +5,10 @@ import { useHistory } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { currentModule } from '../../state/actions/moduleActions';
 import { axiosWithAuth } from '../../utils/axiosWithAuth';
-import { addStudent } from '../../state/actions/courseActions';
+import {
+  addStudent,
+  editCourseAction,
+} from '../../state/actions/courseActions';
 
 //ant d
 import { Layout } from 'antd';
@@ -14,6 +17,7 @@ import Form from 'antd/lib/form/Form';
 import FormItem from 'antd/lib/form/FormItem';
 import Input from 'antd/lib/input';
 import Button from 'antd/lib/button';
+import { update } from 'plotly.js';
 const { SubMenu } = Menu;
 
 //ant Design
@@ -62,6 +66,9 @@ const ModuleList = props => {
           },
         };
         dispatch(addStudent(addedStudent));
+        const updatedCourse = currentCourse;
+        updatedCourse.students.push(addedStudent);
+        dispatch(editCourseAction(updatedCourse));
         setNewStudent('');
       })
       .catch(err => {

@@ -38,7 +38,6 @@ import rootReducer from './state/reducers/rootReducer';
 import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
 import logger from 'redux-logger';
-import Dashboard from './components/Dashboard/Dashboard';
 import HomeContainer from './components/Dashboard/HomeContainer';
 
 const persistConfig = {
@@ -48,16 +47,19 @@ const persistConfig = {
 
 const persistedCourseReducer = persistReducer(persistConfig, rootReducer);
 
-const store = createStore(rootReducer, applyMiddleware(thunk, logger));
+const store = createStore(
+  persistedCourseReducer,
+  applyMiddleware(thunk, logger)
+);
 let persistor = persistStore(store);
 
 ReactDOM.render(
   <Router>
     <React.StrictMode>
       <Provider store={store}>
-        {/* <PersistGate loading={null} persistor={persistor}> */}
-        <App />
-        {/* </PersistGate> */}
+        <PersistGate loading={null} persistor={persistor}>
+          <App />
+        </PersistGate>
       </Provider>
     </React.StrictMode>
   </Router>,
