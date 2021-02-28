@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { editModuleAction } from '../../state/actions/moduleActions';
+import {
+  currentModule,
+  editModuleAction,
+} from '../../state/actions/moduleActions';
 import { axiosWithAuth } from '../../utils/axiosWithAuth';
 import * as yup from 'yup';
 import schema from '../../validation/ModuleSchema';
@@ -32,11 +35,7 @@ export default function EditModuleForm() {
   const moduleToEdit = useSelector(state => state.moduleReducer.edit_module);
   const dispatch = useDispatch();
   const { push } = useHistory();
-  const [values, setValues] = useState({
-    modulename: moduleToEdit.modulename,
-    moduledescription: moduleToEdit.moduledescription,
-    modulecontent: moduleToEdit.modulecontent,
-  });
+  const [values, setValues] = useState(moduleToEdit);
   const [errors, setErrors] = useState(initialFormErrors);
   const [disabled, setDisabled] = useState(false);
 
@@ -63,15 +62,21 @@ export default function EditModuleForm() {
     e.preventDefault();
     console.log(values);
     console.log(moduleToEdit);
+    const newModule = {
+      modulename: values.modulename,
+      moduledescription: values.moduledescription,
+      modulecontent: values.modulecontent,
+    };
     axiosWithAuth()
       .put(
         `https://reach-team-a-be.herokuapp.com/modules/${moduleToEdit.moduleid}`,
-        values
+        newModule
       )
       .then(res => {
         console.log(res);
         dispatch(editModuleAction(values));
-        push('/modules');
+        dispatch(currentModule(values));
+        push('/module-text');
       })
       .catch(err => {
         console.log(err);
