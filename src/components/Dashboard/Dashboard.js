@@ -5,7 +5,6 @@ import { useHistory } from 'react-router-dom';
 import Navigation from '../Navigation';
 import ProgramList from '../Program/ProgramList';
 import CourseList from '../Courses/CourseList';
-import FooterApp from '../FooterApp';
 
 //ant d
 import { Layout } from 'antd';
@@ -34,9 +33,7 @@ const Dashboard = props => {
           <div>{user.role === 'ADMIN' ? <ProgramList /> : <CourseList />}</div>
         </StyledWrapper>
       </Content>
-      <Footer>
-        <FooterApp />
-      </Footer>
+      <Footer></Footer>
     </Layout>
   );
 };

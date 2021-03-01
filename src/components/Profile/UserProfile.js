@@ -4,7 +4,6 @@ import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { useOktaAuth } from '@okta/okta-react';
 import styled from 'styled-components';
-import FooterApp from '../FooterApp';
 
 //material-ui
 import { makeStyles } from '@material-ui/core/styles';
@@ -164,9 +163,7 @@ export default function UserProfile() {
           </Card>
         </StyledDiv>
       </Content>
-      <Footer>
-        <FooterApp />
-      </Footer>
+      <Footer></Footer>
     </Layout>
   );
 }
