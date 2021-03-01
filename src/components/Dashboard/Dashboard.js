@@ -1,10 +1,11 @@
-import styled from 'styled-components';
 import React from 'react';
+import styled from 'styled-components';
 import { useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import Navigation from '../Navigation';
 import ProgramList from '../Program/ProgramList';
 import CourseList from '../Courses/CourseList';
-import { useHistory } from 'react-router-dom';
+import FooterApp from '../FooterApp';
 
 //ant d
 import { Layout } from 'antd';
@@ -13,10 +14,6 @@ import { Layout } from 'antd';
 const StyledWrapper = styled.div`
   display: flex;
   margin-left: 10%;
-`;
-const StyledCreate = styled.div`
-  margin-top: 1.5%;
-  margin-left: 65%;
 `;
 
 // ant Design
@@ -37,7 +34,9 @@ const Dashboard = props => {
           <div>{user.role === 'ADMIN' ? <ProgramList /> : <CourseList />}</div>
         </StyledWrapper>
       </Content>
-      <Footer></Footer>
+      <Footer>
+        <FooterApp />
+      </Footer>
     </Layout>
   );
 };

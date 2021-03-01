@@ -65,7 +65,6 @@ const useStyles = makeStyles(theme => ({
 
 const Navigation = props => {
   const classes = useStyles();
-  // let isMobile = useMediaQuery('(max-width: 800px)');
   const { authService } = props;
 
   // material ui menu

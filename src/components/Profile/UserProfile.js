@@ -1,7 +1,18 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import { useOktaAuth } from '@okta/okta-react';
 import styled from 'styled-components';
+import FooterApp from '../FooterApp';
+
+//material-ui
+import { makeStyles } from '@material-ui/core/styles';
+import IconButton from '@material-ui/core/IconButton';
+import Menu from '@material-ui/core/Menu';
+import MenuIcon from '@material-ui/icons/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
+
 //ant d
 import 'antd/dist/antd.css';
 import { Card } from 'antd';
@@ -9,8 +20,8 @@ import { Button } from 'antd';
 import { Layout } from 'antd';
 import { Avatar, Image } from 'antd';
 
+//styled components
 const StyledHeader = styled.div`
-  background: black;
   display: flex;
   justify-content: left;
   align-items: center;
@@ -52,50 +63,97 @@ const StyledLogo = styled.h1`
 const StyledAvatar = styled.div`
   margin-right: 2%;
 `;
-
 const StyledDiv = styled.div`
   display: flex;
+  margin-left: 10%;
+  margin-top: 5%;
 `;
+const StyledMenu = styled.div`
+  color: white;
+  margin-left: 70%;
+`;
+const useStyles = makeStyles(theme => ({
+  root: {
+    flexGrow: 1,
+  },
+  menuButton: {
+    marginRight: theme.spacing(2),
+  },
+  title: {
+    flexGrow: 1,
+  },
+}));
 
 export default function UserProfile() {
   const user = useSelector(state => state.userReducer);
   const { push } = useHistory();
-  const { Header, Footer, Sider, Content } = Layout;
+  const { Header, Footer, Content } = Layout;
+  const { authService } = useOktaAuth();
 
   function clickOnEdit(e) {
     e.preventDefault();
     push('/edit-profile');
   }
 
-  function returnHome(e) {
-    e.preventDefault();
-    push('/');
-  }
+  const classes = useStyles();
+
+  // material ui menu
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const handleClick = event => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   return (
     <Layout>
-      <StyledHeader>
-        <StyledAvatar>
-          <Avatar
-            style={{ backgroundColor: '#87d068' }}
-            src={
-              <Image src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
-            }
-            size={90}
-          />
-        </StyledAvatar>
-        <StyledLogo data-text="Profile...">Profile...</StyledLogo>
-      </StyledHeader>
+      <Header>
+        <StyledHeader>
+          <StyledAvatar>
+            <Avatar
+              style={{ backgroundColor: '#87d068' }}
+              src={
+                <Image src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
+              }
+              size={50}
+            />
+          </StyledAvatar>
+          <StyledLogo data-text="Profile...">Profile...</StyledLogo>
+          <StyledMenu>
+            <IconButton
+              edge="start"
+              className={classes.menuButton}
+              color="inherit"
+              aria-label="menu"
+              onClick={handleClick}
+            >
+              <MenuIcon />
+            </IconButton>
+            <Menu
+              id="simple-menu"
+              anchorEl={anchorEl}
+              keepMounted
+              open={Boolean(anchorEl)}
+              onClose={handleClose}
+            >
+              <Link to="/">
+                <MenuItem onClick={handleClose}>Home</MenuItem>
+              </Link>
+              <Link to="/" onClick={() => authService.logout()}>
+                <MenuItem onClick={handleClose}>Logout</MenuItem>
+              </Link>
+            </Menu>
+          </StyledMenu>
+        </StyledHeader>
+      </Header>
       <Content>
         <StyledDiv>
           <Card
             title={user.firstname + ' ' + user.lastname}
             style={{ width: 800 }}
-            extra={
-              <Button type="primary" onClick={e => returnHome(e)}>
-                Home
-              </Button>
-            }
           >
             <h3>Role: {user.role}</h3>
             <p>Phone: {user.phonenumber}</p>
@@ -106,7 +164,9 @@ export default function UserProfile() {
           </Card>
         </StyledDiv>
       </Content>
-      <Footer></Footer>
+      <Footer>
+        <FooterApp />
+      </Footer>
     </Layout>
   );
 }
