@@ -9,6 +9,7 @@ import SearchPage from '../Search/SearchPage';
 import 'antd/dist/antd.css';
 import { Layout } from 'antd';
 import { Button } from 'antd';
+import Navigation from '../Navigation';
 
 const CourseList = props => {
   const { course } = props;
@@ -23,10 +24,13 @@ const CourseList = props => {
   return (
     <Layout>
       <Header>
-        <h1>{currentProgram.programname}</h1>
+        <Navigation />
       </Header>
       <Layout>
         <Content>
+          {user.role === 'ADMIN' && (
+            <h1>Program: {currentProgram.programname}</h1>
+          )}
           <h2>My Courses</h2>
           {user.role === 'ADMIN' && (
             <Link to="/add-course">
@@ -37,9 +41,9 @@ const CourseList = props => {
             return <CourseCard key={course.id} course={course} />;
           })}
         </Content>
-        <Sider>
+        {/* <Sider>
           {(user.role === 'ADMIN' || user.role === 'TEACHER') && <SearchPage />}
-        </Sider>
+        </Sider> */}
       </Layout>
       <Footer></Footer>
     </Layout>

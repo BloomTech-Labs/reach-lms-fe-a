@@ -70,7 +70,8 @@ export default function CourseCard(props) {
         }
         style={{ width: 800 }}
       >
-        <h3>{course.coursecode}</h3>
+        <h3>{course.program.programname}</h3>
+        <h4>{course.coursecode}</h4>
         <p>{course.coursedescription}</p>
         <Button
           onClick={() => viewCourseHandler(course.courseid)}
