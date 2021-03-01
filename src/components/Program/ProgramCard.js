@@ -63,6 +63,7 @@ export default function ProgramCard(props) {
         title={program.programname}
         extra={<Dropdown.Button overlay={menu}></Dropdown.Button>}
         style={{ width: 800, margin: '3% 0' }}
+        className="program-card"
       >
         <h3>{program.programtype}</h3>
         <p>{program.programdescription}</p>

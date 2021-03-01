@@ -5,6 +5,7 @@ import { axiosWithAuth } from '../../utils/axiosWithAuth';
 import { saveUser } from '../../state/actions/userActions';
 import { useDispatch } from 'react-redux';
 import { setProgramList } from '../../state/actions/programActions';
+import { setCourseList } from '../../state/actions/courseActions';
 
 function HomeContainer({ LoadingComponent }) {
   const { authState, authService } = useOktaAuth();
@@ -62,6 +63,23 @@ function HomeContainer({ LoadingComponent }) {
             .then(res => {
               dispatch(setProgramList(res.data));
             });
+        } else if (incoming_user.role === 'TEACHER') {
+          axiosWithAuth()
+            .get(
+              `https://reach-team-a-be.herokuapp.com/courses/teacher/${incoming_user.userid}`
+            )
+            .then(res => {
+              console.log(res);
+              dispatch(setCourseList(res.data));
+            });
+        } else {
+          // axiosWithAuth()
+          //   .get(
+          //     `https://reach-team-a-be.herokuapp.com/programs/${incoming_user.userid}`
+          //   )
+          //   .then(res => {
+          //     dispatch(setProgramList(res.data));
+          //   });
         }
       })
       .catch(err => {
