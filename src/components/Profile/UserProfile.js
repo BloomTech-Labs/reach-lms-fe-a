@@ -55,7 +55,6 @@ const StyledAvatar = styled.div`
 
 const StyledDiv = styled.div`
   display: flex;
-  justify-content: center;
 `;
 
 export default function UserProfile() {

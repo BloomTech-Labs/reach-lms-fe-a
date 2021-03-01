@@ -6,8 +6,18 @@ import { Button } from 'antd';
 import { Link } from 'react-router-dom';
 
 //styled components
-const StyledPrograms = styled.div``;
-const StyledContent = styled.div``;
+const StyledPrograms = styled.div`
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+`;
+const StyledContent = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+`;
 
 const StyledTitle = styled.div`
   display: flex;
@@ -18,6 +28,11 @@ const HeaderDiv = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin: 5% 0;
+`;
+
+const StyledH2 = styled.h2`
+  font-size: 1.75rem;
 `;
 
 const ProgramList = () => {
@@ -26,10 +41,12 @@ const ProgramList = () => {
   return (
     <StyledContent>
       <HeaderDiv>
-        <h2>My Programs</h2>
+        <StyledH2>My Programs</StyledH2>
         <StyledTitle>
           <Link to="/create-program">
-            <Button>Create Program</Button>
+            <Button size="large" style={{ background: '#01fe87' }}>
+              Create Program
+            </Button>
           </Link>
         </StyledTitle>
       </HeaderDiv>
