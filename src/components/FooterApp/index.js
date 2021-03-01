@@ -17,6 +17,10 @@ const StyledH4 = styled.h4`
   color: #01fe87;
   font-size: 1.15rem;
   margin-top: 0.5%;
+  @media (max-width: 400px) {
+    margin-top: 2%;
+    font-size: 1rem;
+  }
 `;
 
 function FooterApp() {

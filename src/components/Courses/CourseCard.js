@@ -11,6 +11,8 @@ import {
   deleteCourse,
 } from '../../state/actions/courseActions';
 import { setModuleList } from '../../state/actions/moduleActions';
+// css
+import '../../styles/CourseCard.css';
 
 export default function CourseCard(props) {
   const { course } = props;
@@ -68,7 +70,7 @@ export default function CourseCard(props) {
             <Dropdown.Button overlay={menu}></Dropdown.Button>
           )
         }
-        style={{ width: 800 }}
+        className="course-card"
       >
         <h3>{course.program.programname}</h3>
         <h4>{course.coursecode}</h4>
