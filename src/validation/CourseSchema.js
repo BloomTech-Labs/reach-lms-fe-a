@@ -4,7 +4,7 @@ export default yup.object().shape({
   coursename: yup.string().min(5, 'Course name must be at least 5 characters.'),
   coursecode: yup
     .string()
-    .min(5, 'Course name must be at least 5 characters.')
+    .min(3, 'Course name must be at least 5 characters.')
     .max(7, 'Course code must be no longer than 7 characters.'),
   coursedescription: yup
     .string()

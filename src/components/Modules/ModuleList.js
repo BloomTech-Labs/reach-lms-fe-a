@@ -9,6 +9,7 @@ import {
   addTeacher,
   editCourseAction,
   deleteStudent,
+  deleteTeacher,
 } from '../../state/actions/courseActions';
 
 // material ui
@@ -87,13 +88,14 @@ const ModuleList = props => {
       })
       .catch(err => {
         console.log(err);
+        alert(`Student ${newStudent.studentname} not found`);
       });
   }
 
   function addTeacherHandler(e) {
     e.preventDefault();
     console.log(currentCourse);
-    console.log(newStudent);
+    console.log(newTeacher);
     axiosWithAuth()
       .put(
         `https://reach-team-a-be.herokuapp.com/teachers/${currentCourse.courseid}`,
@@ -115,10 +117,11 @@ const ModuleList = props => {
       })
       .catch(err => {
         console.log(err);
+        alert(`Teacher ${newTeacher.teachername} not found`);
       });
   }
 
-  const deleteStudent = studentId => {
+  const deleteStudentHandler = studentId => {
     console.log(studentId);
     console.log(currentCourse.courseid);
     axiosWithAuth()
@@ -134,16 +137,16 @@ const ModuleList = props => {
       });
   };
 
-  const deleteTeacher = teacher => {
+  const deleteTeacherHandler = teacher => {
     console.log(teacher);
     console.log(currentCourse.courseid);
     axiosWithAuth()
       .delete(
-        `https://reach-team-a-be.herokuapp.com/students/${currentCourse.courseid}/${teacher}`
+        `https://reach-team-a-be.herokuapp.com/teachers/${currentCourse.courseid}/${teacher.teacherid}`
       )
       .then(res => {
         console.log(res);
-        dispatch(deleteStudent(teacher));
+        dispatch(deleteTeacher(teacher.teacherid));
       })
       .catch(err => {
         console.log(err);
@@ -229,7 +232,9 @@ const ModuleList = props => {
                         <Tooltip title="Delete">
                           <IconButton
                             aria-label="delete"
-                            onClick={() => deleteTeacher(teacher.teacher)}
+                            onClick={() =>
+                              deleteTeacherHandler(teacher.teacher)
+                            }
                           >
                             <DeleteIcon></DeleteIcon>
                           </IconButton>
@@ -289,7 +294,7 @@ const ModuleList = props => {
                           <IconButton
                             aria-label="delete"
                             onClick={() =>
-                              deleteStudent(student.student.studentid)
+                              deleteStudentHandler(student.student.studentid)
                             }
                           >
                             <DeleteIcon></DeleteIcon>
