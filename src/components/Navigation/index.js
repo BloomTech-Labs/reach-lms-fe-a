@@ -80,7 +80,9 @@ const Navigation = props => {
 
   return (
     <StyledNav>
-      <StyledLogo data-text="Reach...">REACH...</StyledLogo>
+      <Link to="/">
+        <StyledLogo data-text="Reach...">REACH...</StyledLogo>
+      </Link>
       <StyledMenu>
         <IconButton
           edge="start"
