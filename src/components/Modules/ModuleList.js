@@ -35,11 +35,6 @@ const ModuleList = props => {
   const user = useSelector(state => state.userReducer);
   const [newStudent, setNewStudent] = useState({ studentname: '' });
   const [newTeacher, setNewTeacher] = useState({ teachername: '' });
-  const [studentList, setStudentList] = useState(modules);
-
-  useEffect(() => {
-    setStudentList();
-  }, [studentList]);
 
   const changeStudentValues = e => {
     console.log(e.target);
