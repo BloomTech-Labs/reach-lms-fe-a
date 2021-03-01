@@ -33,12 +33,13 @@ const ModuleList = props => {
   const modules = useSelector(state => state.moduleReducer.modules_list);
   const currentCourse = useSelector(state => state.courseReducer.currentCourse);
   const user = useSelector(state => state.userReducer);
-  const [newStudent, setNewStudent] = useState({
-    studentname: '',
-  });
-  const [newTeacher, setNewTeacher] = useState({
-    teachername: '',
-  });
+  const [newStudent, setNewStudent] = useState({ studentname: '' });
+  const [newTeacher, setNewTeacher] = useState({ teachername: '' });
+  const [studentList, setStudentList] = useState(modules);
+
+  useEffect(() => {
+    setStudentList();
+  }, [studentList]);
 
   const changeStudentValues = e => {
     console.log(e.target);
@@ -68,7 +69,7 @@ const ModuleList = props => {
     console.log(currentCourse);
     console.log(newStudent);
     axiosWithAuth()
-      .put(
+      .post(
         `https://reach-team-a-be.herokuapp.com/students/${currentCourse.courseid}`,
         newStudent
       )
@@ -97,7 +98,7 @@ const ModuleList = props => {
     console.log(currentCourse);
     console.log(newTeacher);
     axiosWithAuth()
-      .put(
+      .post(
         `https://reach-team-a-be.herokuapp.com/teachers/${currentCourse.courseid}`,
         newTeacher
       )

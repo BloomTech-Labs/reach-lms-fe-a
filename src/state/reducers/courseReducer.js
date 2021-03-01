@@ -111,9 +111,11 @@ const courseReducer = (state = initialState, action) => {
         };
       }
     case DELETE_TEACHER:
-      let newTeacherList = [...state.currentCourse.teachers].filter(teacher => {
-        return teacher.teacherid !== action.payload;
-      });
+      let newTeacherList = [...state.currentCourse.teachers];
+      let index = newTeacherList.findIndex(
+        el => el.teacherid === action.payload
+      );
+      newTeacherList.splice(index, 1);
       return {
         ...state,
         currentCourse: { ...state.currentCourse, teachers: newTeacherList },
@@ -123,9 +125,11 @@ const courseReducer = (state = initialState, action) => {
     default:
       return state;
     case DELETE_STUDENT:
-      let newStudentList = [...state.currentCourse.students].filter(student => {
-        return student.studentid !== action.payload;
-      });
+      let newStudentList = [...state.currentCourse.students];
+      let studentIndex = newStudentList.findIndex(
+        el => el.studentid === action.payload
+      );
+      newStudentList.splice(studentIndex, 1);
       return {
         ...state,
         currentCourse: { ...state.currentCourse, students: newStudentList },
