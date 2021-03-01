@@ -120,10 +120,6 @@ const courseReducer = (state = initialState, action) => {
         ...state,
         currentCourse: { ...state.currentCourse, teachers: newTeacherList },
       };
-    case CLEAR_COURSES:
-      return initialState;
-    default:
-      return state;
     case DELETE_STUDENT:
       let newStudentList = [...state.currentCourse.students];
       let studentIndex = newStudentList.findIndex(
@@ -134,6 +130,10 @@ const courseReducer = (state = initialState, action) => {
         ...state,
         currentCourse: { ...state.currentCourse, students: newStudentList },
       };
+    case CLEAR_COURSES:
+      return initialState;
+    default:
+      return state;
   }
 };
 

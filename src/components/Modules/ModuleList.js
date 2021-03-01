@@ -133,6 +133,9 @@ const ModuleList = props => {
         console.log(res);
         dispatch(deleteStudent(studentId));
       })
+      .then(err => {
+        dispatch(editCourseAction(currentCourse));
+      })
       .catch(err => {
         console.log(err);
       });
@@ -148,6 +151,9 @@ const ModuleList = props => {
       .then(res => {
         console.log(res);
         dispatch(deleteTeacher(teacher.teacherid));
+      })
+      .then(err => {
+        dispatch(editCourseAction(currentCourse));
       })
       .catch(err => {
         console.log(err);
