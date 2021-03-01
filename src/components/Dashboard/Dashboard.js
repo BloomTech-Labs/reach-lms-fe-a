@@ -29,6 +29,9 @@ const Dashboard = props => {
 
   return (
     <Layout>
+      <Header>
+        <Navigation authService={authService} />
+      </Header>
       <Content>
         <StyledWrapper>
           <div>{user.role === 'ADMIN' ? <ProgramList /> : <CourseList />}</div>

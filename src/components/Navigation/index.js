@@ -14,6 +14,7 @@ const StyledNav = styled.nav`
   justify-content: space-between;
   width: 100%;
   background: none;
+  margin-bottom: 10%;
 `;
 const StyledLogo = styled.h1`
   position: relative;

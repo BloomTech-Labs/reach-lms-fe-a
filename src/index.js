@@ -39,6 +39,7 @@ import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
 import logger from 'redux-logger';
 import HomeContainer from './components/Dashboard/HomeContainer';
+import Navigation from './components/Navigation';
 
 const persistConfig = {
   key: 'courses_list',
