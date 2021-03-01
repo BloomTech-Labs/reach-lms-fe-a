@@ -6,6 +6,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Menu from '@material-ui/core/Menu';
 import MenuIcon from '@material-ui/icons/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
+import { useOktaAuth } from '@okta/okta-react';
 
 //styled-components**
 const StyledNav = styled.nav`
@@ -65,8 +66,8 @@ const useStyles = makeStyles(theme => ({
 
 const Navigation = props => {
   const classes = useStyles();
+  const { authService } = useOktaAuth();
   // let isMobile = useMediaQuery('(max-width: 800px)');
-  const { authService } = props;
 
   // material ui menu
   const [anchorEl, setAnchorEl] = React.useState(null);
