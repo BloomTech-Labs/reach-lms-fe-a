@@ -15,6 +15,7 @@ const CourseList = props => {
   const { push } = useHistory();
   const { Header, Footer, Sider, Content } = Layout;
   const courseList = useSelector(state => state.courseReducer.courses_list);
+  const user = useSelector(state => state.userReducer);
   const currentProgram = useSelector(
     state => state.programReducer.currentProgram
   );
@@ -27,15 +28,17 @@ const CourseList = props => {
       <Layout>
         <Content>
           <h2>My Courses</h2>
-          <Link to="/add-course">
-            <Button>Add Course</Button>
-          </Link>
+          {user.role === 'ADMIN' && (
+            <Link to="/add-course">
+              <Button>Add Course</Button>
+            </Link>
+          )}
           {courseList.map(course => {
             return <CourseCard key={course.id} course={course} />;
           })}
         </Content>
         <Sider>
-          <SearchPage />
+          {(user.role === 'ADMIN' || user.role === 'TEACHER') && <SearchPage />}
         </Sider>
       </Layout>
       <Footer></Footer>

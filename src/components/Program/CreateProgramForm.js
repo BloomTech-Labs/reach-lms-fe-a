@@ -155,13 +155,13 @@ export default function CreateProgram() {
             <Option data-testid="select-option" value="12th Grade">
               -12th Grade-
             </Option>
-            <Option data-testid="select-option" value="higher">
+            <Option data-testid="select-option" value="Higher">
               -Higher-
             </Option>
-            <Option data-testid="select-option" value="training">
+            <Option data-testid="select-option" value="Training">
               -Training-
             </Option>
-            <Option data-testid="select-option" value="other">
+            <Option data-testid="select-option" value="Other">
               -Other-
             </Option>
           </Select>

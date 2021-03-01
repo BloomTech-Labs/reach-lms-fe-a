@@ -9,7 +9,15 @@ import { Button } from 'antd';
 import { Layout } from 'antd';
 import { Avatar, Image } from 'antd';
 
+const StyledHeader = styled.div`
+  background: black;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+`;
+
 const StyledLogo = styled.h1`
+  margin-bottom: 0;
   position: relative;
   font-size: 4vw;
   color: #252839;
@@ -31,7 +39,7 @@ const StyledLogo = styled.h1`
   @keyframes animate {
     0%,
     10%,
-    100% {
+    70% {
       width: 0%;
     }
     70%,
@@ -42,8 +50,11 @@ const StyledLogo = styled.h1`
 `;
 
 const StyledAvatar = styled.div`
-  margin-left: 95%;
-  margin-top: 4%;
+  margin-right: 2%;
+`;
+
+const StyledDiv = styled.div`
+  display: flex;
 `;
 
 export default function UserProfile() {
@@ -63,25 +74,28 @@ export default function UserProfile() {
 
   return (
     <Layout>
-      <Sider>
+      <StyledHeader>
         <StyledAvatar>
           <Avatar
             style={{ backgroundColor: '#87d068' }}
             src={
               <Image src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
             }
-            size={50}
+            size={90}
           />
         </StyledAvatar>
-      </Sider>
-      <Layout>
-        <Header>
-          <StyledLogo data-text="Profile...">Profile...</StyledLogo>
-        </Header>
-        <Content>
+        <StyledLogo data-text="Profile...">Profile...</StyledLogo>
+      </StyledHeader>
+      <Content>
+        <StyledDiv>
           <Card
             title={user.firstname + ' ' + user.lastname}
             style={{ width: 800 }}
+            extra={
+              <Button type="primary" onClick={e => returnHome(e)}>
+                Home
+              </Button>
+            }
           >
             <h3>Role: {user.role}</h3>
             <p>Phone: {user.phonenumber}</p>
@@ -90,12 +104,9 @@ export default function UserProfile() {
               Edit Profile
             </Button>
           </Card>
-          <Button type="primary" onClick={e => returnHome(e)}>
-            Home
-          </Button>
-        </Content>
-        <Footer></Footer>
-      </Layout>
+        </StyledDiv>
+      </Content>
+      <Footer></Footer>
     </Layout>
   );
 }

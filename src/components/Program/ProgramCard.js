@@ -22,6 +22,7 @@ export default function ProgramCard(props) {
       dispatch(setEdit(program));
       push('/edit-program');
     } else {
+      console.log(program);
       axiosWithAuth()
         .delete(
           `https://reach-team-a-be.herokuapp.com/programs/program/${program.programid}`
@@ -37,7 +38,9 @@ export default function ProgramCard(props) {
 
   const menu = (
     <Menu onClick={handleMenuClick}>
-      <Menu.Item key="edit">Edit Program</Menu.Item>
+      <Menu.Item key="edit" extra="">
+        Edit Program
+      </Menu.Item>
       <Menu.Item key="delete">Delete Program</Menu.Item>
     </Menu>
   );
@@ -59,7 +62,7 @@ export default function ProgramCard(props) {
       <Card
         title={program.programname}
         extra={<Dropdown.Button overlay={menu}></Dropdown.Button>}
-        style={{ width: 800 }}
+        style={{ width: 800, margin: '3% 0' }}
       >
         <h3>{program.programtype}</h3>
         <p>{program.programdescription}</p>

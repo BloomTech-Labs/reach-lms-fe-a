@@ -9,6 +9,9 @@ import {
   CLEAR_COURSES,
   CURRENT_COURSE,
   ADD_STUDENT,
+  DELETE_STUDENT,
+  ADD_TEACHER,
+  DELETE_TEACHER,
 } from '../actions/courseActions';
 
 const initialState = {
@@ -76,17 +79,57 @@ const courseReducer = (state = initialState, action) => {
     case CURRENT_COURSE:
       return { ...state, currentCourse: action.payload };
     case ADD_STUDENT:
+      if (state.currentCourse.students === false) {
+        return {
+          ...state,
+          currentCourse: { ...state.currentCourse, students: action.payload },
+          // courses_list: { ...state }, still need to do this
+        };
+      } else {
+        return {
+          ...state,
+          currentCourse: {
+            ...state.currentCourse,
+            students: [...state.currentCourse.students, action.payload],
+          },
+        };
+      }
+    case ADD_TEACHER:
+      if (state.currentCourse.teachers === false) {
+        return {
+          ...state,
+          currentCourse: { ...state.currentCourse, teachers: action.payload },
+          // courses_list: { ...state }, still need to do this
+        };
+      } else {
+        return {
+          ...state,
+          currentCourse: {
+            ...state.currentCourse,
+            teachers: [...state.currentCourse.teachers, action.payload],
+          },
+        };
+      }
+    case DELETE_TEACHER:
+      let newTeacherList = [...state.currentCourse.teachers].filter(teacher => {
+        return teacher.teacherid !== action.payload;
+      });
       return {
         ...state,
-        currentCourse: {
-          ...state,
-          students: state.students.append(action.payload),
-        },
+        currentCourse: { ...state.currentCourse, teachers: newTeacherList },
       };
     case CLEAR_COURSES:
       return initialState;
     default:
       return state;
+    case DELETE_STUDENT:
+      let newStudentList = [...state.currentCourse.students].filter(student => {
+        return student.studentid !== action.payload;
+      });
+      return {
+        ...state,
+        currentCourse: { ...state.currentCourse, students: newStudentList },
+      };
   }
 };
 

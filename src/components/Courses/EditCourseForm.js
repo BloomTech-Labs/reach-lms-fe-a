@@ -32,11 +32,7 @@ export default function EditCourseForm() {
   const courseToEdit = useSelector(state => state.courseReducer.edit_course);
   const { push } = useHistory();
   const dispatch = useDispatch();
-  const [values, setValues] = useState({
-    coursename: courseToEdit.coursename,
-    coursecode: courseToEdit.coursecode,
-    coursedescription: courseToEdit.coursedescription,
-  });
+  const [values, setValues] = useState(courseToEdit);
   const [errors, setErrors] = useState(initialFormErrors);
   const [disabled, setDisabled] = useState(false);
 

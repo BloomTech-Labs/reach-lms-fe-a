@@ -38,8 +38,8 @@ import rootReducer from './state/reducers/rootReducer';
 import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
 import logger from 'redux-logger';
-import Dashboard from './components/Dashboard/Dashboard';
 import HomeContainer from './components/Dashboard/HomeContainer';
+import Navigation from './components/Navigation';
 
 const persistConfig = {
   key: 'courses_list',

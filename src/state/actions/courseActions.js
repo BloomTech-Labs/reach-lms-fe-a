@@ -10,6 +10,9 @@ export const FILTER_STATE = 'FILTER_STATE';
 export const CLEAR_COURSES = 'CLEAR_COURSES';
 export const CURRENT_COURSE = 'CURRENT_COURSE';
 export const ADD_STUDENT = 'ADD_STUDENT';
+export const DELETE_STUDENT = 'DELETE_STUDENT';
+export const ADD_TEACHER = 'ADD_TEACHER';
+export const DELETE_TEACHER = 'DELETE_TEACHER';
 
 export const addCourse = value => {
   return { type: ADD_COURSE, payload: value };
@@ -58,4 +61,16 @@ export const currentCourse = value => {
 
 export const addStudent = value => {
   return { type: ADD_STUDENT, payload: value };
+};
+
+export const deleteStudent = value => {
+  return { type: DELETE_STUDENT, payload: value };
+};
+
+export const addTeacher = value => {
+  return { type: ADD_TEACHER, payload: value };
+};
+
+export const deleteTeacher = value => {
+  return { type: DELETE_TEACHER, payload: value };
 };

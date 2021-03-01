@@ -11,8 +11,10 @@ import MenuItem from '@material-ui/core/MenuItem';
 const StyledNav = styled.nav`
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
   width: 100%;
   background: none;
+  margin-bottom: 10%;
 `;
 const StyledLogo = styled.h1`
   position: relative;
@@ -47,7 +49,6 @@ const StyledLogo = styled.h1`
 `;
 const StyledMenu = styled.div`
   color: white;
-  margin-left: 70%;
 `;
 
 const useStyles = makeStyles(theme => ({
@@ -81,21 +82,6 @@ const Navigation = props => {
   return (
     <StyledNav>
       <StyledLogo data-text="Reach...">REACH...</StyledLogo>
-      {/* {!isMobile && (
-          <div>
-            <Link to="/profile" className="nav-link">
-              Profile
-            </Link>
-            <Link
-              to="/logout"
-              className="nav-link"
-              onClick={() => authService.logout()}
-            >
-              Logout
-            </Link>
-          </div>
-        )} */}
-      {/* {isMobile && ( */}
       <StyledMenu>
         <IconButton
           edge="start"
@@ -121,7 +107,6 @@ const Navigation = props => {
           </Link>
         </Menu>
       </StyledMenu>
-      {/* )} */}
     </StyledNav>
   );
 };

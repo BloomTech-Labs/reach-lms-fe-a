@@ -54,13 +54,15 @@ function HomeContainer({ LoadingComponent }) {
       })
       .then(incoming_user => {
         // add a ternary: if user is admin, get programs, if teacher/student get courses
-        axiosWithAuth()
-          .get(
-            `https://reach-team-a-be.herokuapp.com/programs/${incoming_user.userid}`
-          )
-          .then(res => {
-            dispatch(setProgramList(res.data));
-          });
+        if (incoming_user.role === 'ADMIN') {
+          axiosWithAuth()
+            .get(
+              `https://reach-team-a-be.herokuapp.com/programs/${incoming_user.userid}`
+            )
+            .then(res => {
+              dispatch(setProgramList(res.data));
+            });
+        }
       })
       .catch(err => {
         console.log(err);
@@ -75,7 +77,9 @@ function HomeContainer({ LoadingComponent }) {
         <LoadingComponent message="Fetching user profile..." />
       )}
       {authState.isAuthenticated && userInfo && (
-        <Dashboard userInfo={userInfo} authService={authService} />
+        <>
+          <Dashboard userInfo={userInfo} authService={authService} />
+        </>
       )}
     </>
   );
