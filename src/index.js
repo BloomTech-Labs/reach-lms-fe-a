@@ -39,7 +39,7 @@ import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
 import logger from 'redux-logger';
 import HomeContainer from './components/Dashboard/HomeContainer';
-import Navigation from './components/Navigation';
+import FooterApp from '../src/components/FooterApp';
 
 const persistConfig = {
   key: 'courses_list',
@@ -104,6 +104,7 @@ function App() {
           <SecureRoute path="/" component={HomeContainer} />
           <Route component={NotFoundPage} />
         </Switch>
+        <FooterApp />
       </div>
     </Security>
   );

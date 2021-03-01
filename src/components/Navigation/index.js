@@ -66,8 +66,7 @@ const useStyles = makeStyles(theme => ({
 
 const Navigation = props => {
   const classes = useStyles();
-  const { authService } = useOktaAuth();
-  // let isMobile = useMediaQuery('(max-width: 800px)');
+  const { authService } = props;
 
   // material ui menu
   const [anchorEl, setAnchorEl] = React.useState(null);
