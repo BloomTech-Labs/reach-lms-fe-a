@@ -6,7 +6,6 @@ import IconButton from '@material-ui/core/IconButton';
 import Menu from '@material-ui/core/Menu';
 import MenuIcon from '@material-ui/icons/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
-import { useOktaAuth } from '@okta/okta-react';
 
 //styled-components**
 const StyledNav = styled.nav`
