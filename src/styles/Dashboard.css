@@ -1,0 +1,5 @@
+@media (max-width: 450px) {
+    .ant-layout-header {
+        padding: 0px;
+    }
+}

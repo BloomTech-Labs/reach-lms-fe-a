@@ -11,6 +11,8 @@ import {
   currentProgram,
 } from '../../state/actions/programActions';
 import { setCourseList } from '../../state/actions/courseActions';
+// css
+import '../../styles/ProgramCard.css';
 
 export default function ProgramCard(props) {
   const { program } = props;
@@ -58,11 +60,10 @@ export default function ProgramCard(props) {
   };
 
   return (
-    <>
+    <div className="program-card-container">
       <Card
         title={program.programname}
         extra={<Dropdown.Button overlay={menu}></Dropdown.Button>}
-        style={{ width: 800, margin: '3% 0' }}
         className="program-card"
       >
         <h3>{program.programtype}</h3>
@@ -71,6 +72,6 @@ export default function ProgramCard(props) {
           View Program
         </Button>
       </Card>
-    </>
+    </div>
   );
 }

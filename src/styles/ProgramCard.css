@@ -1,0 +1,40 @@
+.program-card-container {
+
+}
+
+.program-card {
+    width: 800px;
+    margin: 3% 0;
+}
+
+/* media queries */
+@media (max-width: 885px) {
+    .program-card {
+        width: 600px;
+    }
+}
+
+@media (max-width: 665px) {
+    .program-card {
+        width: 400px;
+    }
+}
+
+@media (max-width: 450px) {
+    .program-card {
+        width: 325px;
+        margin: 10% 0;
+    }
+}
+
+@media (max-width: 350px) {
+    .program-card {
+        width: 275px;
+    }
+    .ant-card-head-title {
+        
+    }
+    .ant-btn-icon-only {
+        width: 24px;
+    }
+}
