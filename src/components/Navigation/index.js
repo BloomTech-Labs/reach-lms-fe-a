@@ -6,7 +6,6 @@ import IconButton from '@material-ui/core/IconButton';
 import Menu from '@material-ui/core/Menu';
 import MenuIcon from '@material-ui/icons/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
-import { useOktaAuth } from '@okta/okta-react';
 
 //styled-components**
 const StyledNav = styled.nav`
@@ -81,7 +80,9 @@ const Navigation = props => {
 
   return (
     <StyledNav>
-      <StyledLogo data-text="Reach...">REACH...</StyledLogo>
+      <Link to="/">
+        <StyledLogo data-text="Reach...">REACH...</StyledLogo>
+      </Link>
       <StyledMenu>
         <IconButton
           edge="start"

@@ -9,6 +9,9 @@ import CourseList from '../Courses/CourseList';
 //ant d
 import { Layout } from 'antd';
 
+// css
+import '../../styles/Dashboard.css';
+
 //styled components
 const StyledWrapper = styled.div`
   display: flex;

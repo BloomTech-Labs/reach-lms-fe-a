@@ -22,6 +22,11 @@ const StyledContent = styled.div`
 const StyledTitle = styled.div`
   display: flex;
   margin-left: 10%;
+  @media (max-width: 450px) {
+    display: flex;
+    justify-content: center;
+    margin-left: 0%;
+  }
 `;
 
 const HeaderDiv = styled.div`
@@ -29,6 +34,9 @@ const HeaderDiv = styled.div`
   justify-content: space-between;
   align-items: center;
   margin: 5% 0;
+  @media (max-width: 450px) {
+    flex-direction: column;
+  }
 `;
 
 const StyledH2 = styled.h2`

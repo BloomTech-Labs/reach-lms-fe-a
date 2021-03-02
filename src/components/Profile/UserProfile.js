@@ -19,6 +19,9 @@ import { Button } from 'antd';
 import { Layout } from 'antd';
 import { Avatar, Image } from 'antd';
 
+// css
+import '../../styles/Profile.css';
+
 //styled components
 const StyledHeader = styled.div`
   display: flex;
@@ -70,6 +73,9 @@ const StyledDiv = styled.div`
 const StyledMenu = styled.div`
   color: white;
   margin-left: 70%;
+  @media (max-width: 550px) {
+    margin-left: %;
+  }
 `;
 const useStyles = makeStyles(theme => ({
   root: {
@@ -152,7 +158,7 @@ export default function UserProfile() {
         <StyledDiv>
           <Card
             title={user.firstname + ' ' + user.lastname}
-            style={{ width: 800 }}
+            className="profile-card"
           >
             <h3>Role: {user.role}</h3>
             <p>Phone: {user.phonenumber}</p>
