@@ -42,7 +42,9 @@ export default function CourseCard(props) {
   const menu = (
     <Menu onClick={handleMenuClick}>
       <Menu.Item key="edit">Edit Course</Menu.Item>
-      <Menu.Item key="delete">Delete Course</Menu.Item>
+      {user.role === 'ADMIN' && (
+        <Menu.Item key="delete">Delete Course</Menu.Item>
+      )}
     </Menu>
   );
 
@@ -72,9 +74,9 @@ export default function CourseCard(props) {
         }
         className="course-card"
       >
-        <h3>{course.program.programname}</h3>
-        <h4>{course.coursecode}</h4>
-        <p>{course.coursedescription}</p>
+        <h3>Program: {course.program.programname}</h3>
+        <h4>Course Code: {course.coursecode}</h4>
+        <p>Description: {course.coursedescription}</p>
         <Button
           onClick={() => viewCourseHandler(course.courseid)}
           type="primary"
