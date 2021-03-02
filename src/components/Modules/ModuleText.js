@@ -3,12 +3,24 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { setEditModule, deleteModule } from '../../state/actions/moduleActions';
 import { axiosWithAuth } from '../../utils/axiosWithAuth';
+import Navigation from '../Navigation';
+import styled from 'styled-components';
 
 // css
 import 'antd/dist/antd.css';
 
 //ant design
 import { Card, Menu, Dropdown } from 'antd';
+import { Layout } from 'antd';
+const { Header, Footer, Content } = Layout;
+
+//styled components
+const StyledContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-top: 3%;
+  margin-left: 10%;
+`;
 
 export default function ModuleText() {
   const module = useSelector(state => state.moduleReducer.currentModule);
@@ -61,23 +73,31 @@ export default function ModuleText() {
   }
 
   return (
-    <>
-      <Card
-        title={module.modulename}
-        extra={
-          user.role === 'ADMIN' ? (
-            <Dropdown.Button overlay={menu}></Dropdown.Button>
-          ) : user.role === 'TEACHER' ? (
-            <Dropdown.Button overlay={menu}></Dropdown.Button>
-          ) : (
-            <div></div>
-          )
-        }
-        style={{ width: 800 }}
-      >
-        <h3>{module.moduledescription}</h3>
-        <p>{module.modulecontent}</p>
-      </Card>
-    </>
+    <Layout>
+      <Header>
+        <Navigation />
+      </Header>
+      <StyledContainer>
+        <Content>
+          <Card
+            title={module.modulename}
+            extra={
+              user.role === 'ADMIN' ? (
+                <Dropdown.Button overlay={menu}></Dropdown.Button>
+              ) : user.role === 'TEACHER' ? (
+                <Dropdown.Button overlay={menu}></Dropdown.Button>
+              ) : (
+                <div></div>
+              )
+            }
+            style={{ width: 800 }}
+          >
+            <h3>{module.moduledescription}</h3>
+            <p>{module.modulecontent}</p>
+          </Card>
+        </Content>
+      </StyledContainer>
+      <Footer></Footer>
+    </Layout>
   );
 }
