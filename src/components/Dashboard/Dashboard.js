@@ -33,7 +33,9 @@ const Dashboard = props => {
       </Header>
       <Content>
         <StyledWrapper>
-          <div>{user.role === 'ADMIN' ? <ProgramList /> : <CourseList />}</div>
+          <div>
+            {user.role === 'ADMIN' ? <ProgramList /> : push('/courses')}
+          </div>
         </StyledWrapper>
       </Content>
       <Footer></Footer>

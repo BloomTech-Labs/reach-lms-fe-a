@@ -83,7 +83,7 @@ const CourseList = props => {
   return (
     <Layout>
       <Header>
-        {user.role === 'ADMIN' && <Navigation authService={authService} />}
+        <Navigation authService={authService} />}
       </Header>
       <Layout>
         <Content>
