@@ -80,9 +80,7 @@ const CourseList = props => {
 
   return (
     <Layout>
-      <Header>
-        <Navigation />
-      </Header>
+      <Header></Header>
       <Layout>
         <Content>
           <StyledWrapper>

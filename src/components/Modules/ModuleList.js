@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { Link } from 'react-router-dom';
+import styled from 'styled-components';
 import { currentModule } from '../../state/actions/moduleActions';
 import { axiosWithAuth } from '../../utils/axiosWithAuth';
 import {
@@ -11,6 +12,7 @@ import {
   deleteStudent,
   deleteTeacher,
 } from '../../state/actions/courseActions';
+import Navigation from '../Navigation';
 
 // material ui
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -26,6 +28,31 @@ import Button from 'antd/lib/button';
 const { SubMenu } = Menu;
 //ant Design
 const { Header, Footer, Content } = Layout;
+
+// styled components
+const StyledMenuRow = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
+const StyledContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-left: 10%;
+`;
+
+const HeaderDiv = styled.div`
+  display: flex;
+  width: 80%;
+  justify-content: space-between;
+  align-items: center;
+  margin: 5% 0;
+`;
+
+const StyledForm = styled(Form)`
+  display: flex;
+  align-items: center;
+`;
 
 const ModuleList = props => {
   const dispatch = useDispatch();
@@ -158,41 +185,43 @@ const ModuleList = props => {
   return (
     <Layout>
       <Header>
-        {/* {header was blocking h1 and h2 so i moved them down. feel free to move back when working.} */}
+        <Navigation />
       </Header>
       <Content>
-        <div>
-          <h1>{currentCourse.coursename}</h1>
-          {(user.role === 'ADMIN' || user.role === 'TEACHER') && (
-            <Link to="/add-module">
-              <button>Add Module</button>
-            </Link>
-          )}
-        </div>
-        <div>
-          <Menu
-            onClick={handleClick}
-            style={{ width: '80%' }}
-            // defaultSelectedKeys={['1']}
-            defaultOpenKeys={['sub1']}
-            mode="inline"
-          >
-            <SubMenu key="sub1" title="Modules">
-              {modules.map(module => {
-                return (
-                  <Menu.Item key={module.moduleid}>
-                    {module.modulename}
-                  </Menu.Item>
-                );
-              })}
-            </SubMenu>
-          </Menu>
-        </div>
-        {/* {ADD TEACHER FORM and TEACHER LIST} */}
-        <div>
-          {user.role === 'ADMIN' && (
-            <div>
-              <Form>
+        <StyledContainer>
+          <HeaderDiv>
+            <h1>{currentCourse.coursename}</h1>
+            {(user.role === 'ADMIN' || user.role === 'TEACHER') && (
+              <Link to="/add-module">
+                <Button size="large" style={{ background: '#01fe87' }}>
+                  Add Module
+                </Button>
+              </Link>
+            )}
+          </HeaderDiv>
+          <div>
+            <Menu
+              onClick={handleClick}
+              style={{ width: '80%' }}
+              // defaultSelectedKeys={['1']}
+              defaultOpenKeys={['sub1']}
+              mode="inline"
+            >
+              <SubMenu key="sub1" title="Modules">
+                {modules.map(module => {
+                  return (
+                    <Menu.Item key={module.moduleid}>
+                      {module.modulename}
+                    </Menu.Item>
+                  );
+                })}
+              </SubMenu>
+            </Menu>
+          </div>
+          {/* {ADD TEACHER FORM and TEACHER LIST} */}
+          <div>
+            {user.role === 'ADMIN' && (
+              <StyledForm>
                 <FormItem
                   htmlFor="teachername"
                   label="Add Teacher:"
@@ -212,104 +241,110 @@ const ModuleList = props => {
                 >
                   Submit
                 </Button>
-              </Form>
-            </div>
-          )}
-          {(user.role === 'ADMIN' || user.role === 'TEACHER') && (
-            <div>
-              <Menu
-                // onClick={handleClick}
-                style={{ width: '80%' }}
-                // defaultSelectedKeys={['1']}
-                defaultOpenKeys={['sub3']}
-                mode="inline"
-              >
-                <SubMenu key="sub3" title="Teachers">
-                  {currentCourse.teachers.map(teacher => {
-                    return (
-                      <>
-                        <Menu.Item key={teacher.teacher.teacherid}>
-                          {teacher.teacher.teachername}
-                        </Menu.Item>
-                        <Tooltip title="Delete">
-                          <IconButton
-                            aria-label="delete"
-                            onClick={() =>
-                              deleteTeacherHandler(teacher.teacher)
-                            }
-                          >
-                            <DeleteIcon></DeleteIcon>
-                          </IconButton>
-                        </Tooltip>
-                      </>
-                    );
-                  })}
-                </SubMenu>
-              </Menu>
-            </div>
-          )}
-        </div>
-        {/* {ADD STUDENT form and STUDENT LIST} */}
-        <div>
-          {(user.role === 'ADMIN' || user.role === 'TEACHER') && (
-            <div>
-              <Form>
-                <FormItem
-                  htmlFor="studentname"
-                  label="Add Student:"
-                  validateStatus
+              </StyledForm>
+            )}
+            {(user.role === 'ADMIN' || user.role === 'TEACHER') && (
+              <div>
+                <Menu
+                  // onClick={handleClick}
+                  style={{ width: '80%' }}
+                  // defaultSelectedKeys={['1']}
+                  defaultOpenKeys={['sub3']}
+                  mode="inline"
                 >
-                  <Input
-                    id="studentname"
-                    name="studentname"
-                    value={newStudent.studentname}
-                    onChange={changeStudentValues}
-                  />
-                </FormItem>
-                <Button
-                  onClick={addStudentHandler}
-                  type="primary"
-                  className="button"
-                >
-                  Submit
-                </Button>
-              </Form>
-            </div>
-          )}
-          {(user.role === 'ADMIN' || user.role === 'TEACHER') && (
-            <div>
-              <Menu
-                // onClick={handleClick}
-                style={{ width: '80%' }}
-                // defaultSelectedKeys={['1']}
-                defaultOpenKeys={['sub2']}
-                mode="inline"
-              >
-                <SubMenu key="sub2" title="Students">
-                  {currentCourse.students.map(student => {
-                    return (
-                      <>
-                        <Menu.Item key={student.student.studentid}>
-                          {student.student.studentname}
-                        </Menu.Item>
-                        <Tooltip title="Delete">
-                          <IconButton
-                            aria-label="delete"
-                            onClick={() =>
-                              deleteStudentHandler(student.student.studentid)
-                            }
+                  <SubMenu key="sub3" title="Teachers">
+                    {currentCourse.teachers.map(teacher => {
+                      return (
+                        <StyledMenuRow>
+                          <Menu.Item
+                            key={teacher.teacher.teacherid}
+                            style={{ marginTop: '2.5%' }}
                           >
-                            <DeleteIcon></DeleteIcon>
-                          </IconButton>
-                        </Tooltip>
-                      </>
-                    );
-                  })}
-                </SubMenu>
-              </Menu>
-            </div>
-          )}
-        </div>
+                            {teacher.teacher.teachername}
+                          </Menu.Item>
+                          <Tooltip title="Delete">
+                            <IconButton
+                              aria-label="delete"
+                              onClick={() =>
+                                deleteTeacherHandler(teacher.teacher)
+                              }
+                            >
+                              <DeleteIcon></DeleteIcon>
+                            </IconButton>
+                          </Tooltip>
+                        </StyledMenuRow>
+                      );
+                    })}
+                  </SubMenu>
+                </Menu>
+              </div>
+            )}
+          </div>
+          {/* {ADD STUDENT form and STUDENT LIST} */}
+          <div>
+            {(user.role === 'ADMIN' || user.role === 'TEACHER') && (
+              <div>
+                <Form>
+                  <FormItem
+                    htmlFor="studentname"
+                    label="Add Student:"
+                    validateStatus
+                  >
+                    <Input
+                      id="studentname"
+                      name="studentname"
+                      value={newStudent.studentname}
+                      onChange={changeStudentValues}
+                    />
+                  </FormItem>
+                  <Button
+                    onClick={addStudentHandler}
+                    type="primary"
+                    className="button"
+                  >
+                    Submit
+                  </Button>
+                </Form>
+              </div>
+            )}
+            {(user.role === 'ADMIN' || user.role === 'TEACHER') && (
+              <div>
+                <Menu
+                  // onClick={handleClick}
+                  style={{ width: '80%' }}
+                  // defaultSelectedKeys={['1']}
+                  defaultOpenKeys={['sub2']}
+                  mode="inline"
+                >
+                  <SubMenu key="sub2" title="Students">
+                    {currentCourse.students.map(student => {
+                      return (
+                        <StyledMenuRow>
+                          <Menu.Item
+                            key={student.student.studentid}
+                            style={{ marginTop: '2.5%' }}
+                          >
+                            {student.student.studentname}
+                          </Menu.Item>
+                          <Tooltip title="Delete">
+                            <IconButton
+                              aria-label="delete"
+                              onClick={() =>
+                                deleteStudentHandler(student.student.studentid)
+                              }
+                            >
+                              <DeleteIcon></DeleteIcon>
+                            </IconButton>
+                          </Tooltip>
+                        </StyledMenuRow>
+                      );
+                    })}
+                  </SubMenu>
+                </Menu>
+              </div>
+            )}
+          </div>
+        </StyledContainer>
       </Content>
       <Footer></Footer>
     </Layout>
