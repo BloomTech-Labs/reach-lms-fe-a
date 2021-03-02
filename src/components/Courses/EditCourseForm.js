@@ -58,10 +58,15 @@ export default function EditCourseForm() {
   function submitForm(e) {
     e.preventDefault();
     console.log(values);
+    const editedCourse = {
+      coursename: values.coursename,
+      coursecode: values.coursecode,
+      coursedescription: values.coursedescription,
+    };
     axiosWithAuth()
-      .put(
+      .patch(
         `https://reach-team-a-be.herokuapp.com/courses/${courseToEdit.courseid}`,
-        values
+        editedCourse
       )
       .then(res => {
         console.log(res);

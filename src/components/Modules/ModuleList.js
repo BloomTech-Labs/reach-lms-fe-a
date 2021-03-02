@@ -167,7 +167,17 @@ const ModuleList = props => {
       )
       .then(res => {
         console.log(res);
-        dispatch(deleteStudent(studentId));
+        const newStudentList = [];
+        for (let i = 0; i < res.data.length; i++) {
+          let newStudent = {
+            student: {
+              studentid: res.data[i].studentid,
+              studentname: res.data[i].studentname,
+            },
+          };
+          newStudentList.push(newStudent);
+        }
+        dispatch(deleteStudent(newStudentList));
       })
       .then(err => {
         dispatch(editCourseAction(currentCourse));
@@ -186,16 +196,21 @@ const ModuleList = props => {
       )
       .then(res => {
         console.log(res);
-        dispatch(
-          deleteTeacher({
-            teacherid: teacherId,
-            courseid: currentCourse.courseid,
-          })
-        );
+        const newTeacherList = [];
+        for (let i = 0; i < res.data.length; i++) {
+          let newTeacher = {
+            teacher: {
+              teacherid: res.data[i].teacherid,
+              teachername: res.data[i].teachername,
+            },
+          };
+          newTeacherList.push(newTeacher);
+        }
+        dispatch(deleteTeacher(newTeacherList));
       })
-      // .then(res => {
-      //   dispatch(editCourseAction(currentCourse));
-      // })
+      .then(res => {
+        dispatch(editCourseAction(currentCourse));
+      })
       .catch(err => {
         console.log(err);
       });

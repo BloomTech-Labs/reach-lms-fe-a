@@ -72,7 +72,7 @@ export default function CourseCard(props) {
         }
         className="course-card"
       >
-        <h3>{course.program.programname}</h3>
+        {/* <h3>{course.program.programname}</h3> */}
         <h4>{course.coursecode}</h4>
         <p>{course.coursedescription}</p>
         <Button
