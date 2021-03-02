@@ -82,9 +82,11 @@ const CourseList = props => {
 
   return (
     <Layout>
-      <Header>
-        <Navigation authService={authService} />}
-      </Header>
+      {user.role === 'ADMIN' && (
+        <Header>
+          <Navigation authService={authService} />
+        </Header>
+      )}
       <Layout>
         <Content>
           <StyledWrapper>

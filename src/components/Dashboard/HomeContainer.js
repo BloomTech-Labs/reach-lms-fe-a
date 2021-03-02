@@ -76,7 +76,7 @@ function HomeContainer({ LoadingComponent }) {
             .then(res => {
               console.log(res);
               const courseList = [];
-              for (let i = 0; i < res.data.courses.length(); i++) {
+              for (let i = 0; i < res.data.courses.length; i++) {
                 let newCourse = res.data.courses[i].course;
                 courseList.push(newCourse);
               }
