@@ -103,6 +103,7 @@ const Navigation = props => {
           <Link to="/profile">
             <MenuItem onClick={handleClose}>Profile</MenuItem>
           </Link>
+
           <Link to="/" onClick={() => authService.logout()}>
             <MenuItem onClick={handleClose}>Logout</MenuItem>
           </Link>

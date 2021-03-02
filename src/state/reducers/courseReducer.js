@@ -12,6 +12,7 @@ import {
   DELETE_STUDENT,
   ADD_TEACHER,
   DELETE_TEACHER,
+  SET_TEACHER_COURSE_LIST,
 } from '../actions/courseActions';
 
 const initialState = {
@@ -73,6 +74,9 @@ const courseReducer = (state = initialState, action) => {
       return { ...state, courses_list: updatedCourses };
     case SET_COURSE_LIST:
       return { ...state, courses_list: action.payload };
+    case SET_TEACHER_COURSE_LIST:
+      console.log(action.payload);
+      return { ...state, courses_list: action.payload };
     case FILTER_STATE:
       console.log('action.payload', action.payload);
       return { ...state, filtered_course_list: action.payload };
@@ -95,7 +99,7 @@ const courseReducer = (state = initialState, action) => {
         };
       }
     case ADD_TEACHER:
-      if (state.currentCourse.teachers === false) {
+      if (state.currentCourse.teachers === []) {
         return {
           ...state,
           currentCourse: { ...state.currentCourse, teachers: action.payload },
@@ -112,14 +116,42 @@ const courseReducer = (state = initialState, action) => {
       }
     case DELETE_TEACHER:
       let newTeacherList = [...state.currentCourse.teachers];
-      let index = newTeacherList.findIndex(
-        el => el.teacherid === action.payload
+      console.log(newTeacherList);
+      console.log(action.payload.teacherid);
+      let deleteTeacherIndex = newTeacherList.findIndex(
+        el => el.teacherid === action.payload.teacherid
       );
-      newTeacherList.splice(index, 1);
+      console.log(deleteTeacherIndex);
+      if (deleteTeacherIndex === 0) {
+        newTeacherList.shift();
+      } else {
+        newTeacherList.splice(deleteTeacherIndex, 1);
+      }
+
+      // update teachers array inside of course inside of courses list
+      // pass in an object containing teacherid and courseid
+      // action payload is teacher id
+      let newCoursesList = [...state.courses_list];
+      console.log(newCoursesList);
+      console.log(action.payload);
+      let courseIndex = newCoursesList.findIndex(
+        el => el.courseid === action.payload.courseid
+      );
+      console.log(courseIndex);
+      let teacherIndex = newCoursesList[courseIndex].teachers.findIndex(
+        el => el.teacherid === action.payload.teacherid
+      );
+      if (teacherIndex === 0) {
+        newCoursesList[courseIndex].teachers.shift();
+      } else {
+        newCoursesList[courseIndex].teachers.splice(teacherIndex, 1);
+      }
       return {
         ...state,
+        courses_list: newCoursesList,
         currentCourse: { ...state.currentCourse, teachers: newTeacherList },
       };
+
     case DELETE_STUDENT:
       let newStudentList = [...state.currentCourse.students];
       let studentIndex = newStudentList.findIndex(

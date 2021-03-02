@@ -5,7 +5,10 @@ import { axiosWithAuth } from '../../utils/axiosWithAuth';
 import { saveUser } from '../../state/actions/userActions';
 import { useDispatch } from 'react-redux';
 import { setProgramList } from '../../state/actions/programActions';
-import { setCourseList } from '../../state/actions/courseActions';
+import {
+  setCourseList,
+  setTeacherCourseList,
+} from '../../state/actions/courseActions';
 
 function HomeContainer({ LoadingComponent }) {
   const { authState, authService } = useOktaAuth();
@@ -41,6 +44,7 @@ function HomeContainer({ LoadingComponent }) {
     axiosWithAuth()
       .get('https://reach-team-a-be.herokuapp.com/users/getuserinfo')
       .then(res => {
+        console.log('userinfo', res);
         let incoming_user = {
           userid: res.data.userid,
           firstname: res.data.firstname,
@@ -48,6 +52,7 @@ function HomeContainer({ LoadingComponent }) {
           email: res.data.email,
           phonenumber: res.data.phonenumber,
           role: res.data.roles[0].role.name,
+          username: res.data.username,
         };
         setUserInfo(incoming_user);
         dispatch(saveUser(incoming_user));
@@ -66,20 +71,37 @@ function HomeContainer({ LoadingComponent }) {
         } else if (incoming_user.role === 'TEACHER') {
           axiosWithAuth()
             .get(
-              `https://reach-team-a-be.herokuapp.com/courses/teacher/${incoming_user.userid}`
+              `https://reach-team-a-be.herokuapp.com/teachers/${incoming_user.username}`
             )
             .then(res => {
               console.log(res);
-              dispatch(setCourseList(res.data));
+              const courseList = [];
+              for (let i = 0; i < res.data.courses.length(); i++) {
+                let newCourse = res.data.courses[i].course;
+                courseList.push(newCourse);
+              }
+              dispatch(setCourseList(courseList));
+            })
+            .catch(err => {
+              console.log('get courses by teacherid did not work', err);
             });
         } else {
-          // axiosWithAuth()
-          //   .get(
-          //     `https://reach-team-a-be.herokuapp.com/programs/${incoming_user.userid}`
-          //   )
-          //   .then(res => {
-          //     dispatch(setProgramList(res.data));
-          //   });
+          axiosWithAuth()
+            .get(
+              `https://reach-team-a-be.herokuapp.com/students/${incoming_user.username}`
+            )
+            .then(res => {
+              console.log(res);
+              const courseList = [];
+              for (let i = 0; i < res.data.courses.length(); i++) {
+                let newCourse = res.data.courses[i].course;
+                courseList.push(newCourse);
+              }
+              dispatch(setCourseList(courseList));
+            })
+            .catch(err => {
+              console.log('get courses by teacherid did not work', err);
+            });
         }
       })
       .catch(err => {

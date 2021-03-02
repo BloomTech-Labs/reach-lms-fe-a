@@ -145,9 +145,9 @@ const ModuleList = props => {
           },
         };
         dispatch(addTeacher(addedTeacher));
-        const updatedCourse = currentCourse;
-        updatedCourse.teachers.push(addedTeacher);
-        dispatch(editCourseAction(updatedCourse));
+        // const updatedCourse = currentCourse;
+        // updatedCourse.teachers.push(addedTeacher);
+        // dispatch(editCourseAction(updatedCourse));
         setNewTeacher('');
       })
       .catch(err => {
@@ -184,9 +184,15 @@ const ModuleList = props => {
       )
       .then(res => {
         console.log(res);
-        dispatch(deleteTeacher(teacherId));
+        dispatch(
+          deleteTeacher({
+            teacherid: teacherId,
+            courseid: currentCourse.courseid,
+          })
+        );
+        return res;
       })
-      .then(err => {
+      .then(res => {
         dispatch(editCourseAction(currentCourse));
       })
       .catch(err => {

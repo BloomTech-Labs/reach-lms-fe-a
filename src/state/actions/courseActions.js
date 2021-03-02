@@ -6,6 +6,7 @@ export const SEARCH_COURSE = 'SEARCH_COURSE';
 export const SET_EDIT_COURSE = 'SET_EDIT_COURSE';
 export const EDIT_COURSE = 'EDIT_COURSE';
 export const SET_COURSE_LIST = 'SET_COURSE_LIST';
+export const SET_TEACHER_COURSE_LIST = 'SET_TEACHER_COURSE_LIST';
 export const FILTER_STATE = 'FILTER_STATE';
 export const CLEAR_COURSES = 'CLEAR_COURSES';
 export const CURRENT_COURSE = 'CURRENT_COURSE';
@@ -45,6 +46,10 @@ export const editCourseAction = value => {
 
 export const setCourseList = value => {
   return { type: SET_COURSE_LIST, payload: value };
+};
+
+export const setTeacherCourseList = value => {
+  return { type: SET_TEACHER_COURSE_LIST, payload: value };
 };
 
 export const filterState = value => {
