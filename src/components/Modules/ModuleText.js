@@ -10,6 +10,7 @@ import styled from 'styled-components';
 import 'antd/dist/antd.css';
 
 //ant design
+import Button from 'antd/lib/button';
 import { Card, Menu, Dropdown } from 'antd';
 import { Layout } from 'antd';
 const { Header, Footer, Content } = Layout;
@@ -54,6 +55,10 @@ export default function ModuleText() {
     </Menu>
   );
 
+  const goBack = () => {
+    push('/modules');
+  };
+
   function clickOnEdit(e, id) {
     console.log('module', module);
     dispatch(setEditModule(module));
@@ -94,6 +99,9 @@ export default function ModuleText() {
           >
             <h3>{module.moduledescription}</h3>
             <p>{module.modulecontent}</p>
+            <Button onClick={goBack} type="secondary" className="button">
+              Return to Modules
+            </Button>
           </Card>
         </Content>
       </StyledContainer>
