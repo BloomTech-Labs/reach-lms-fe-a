@@ -74,7 +74,7 @@ const StyledMenu = styled.div`
   color: white;
   margin-left: 70%;
   @media (max-width: 550px) {
-    margin-left: %;
+    margin-left: 50%;
   }
 `;
 const useStyles = makeStyles(theme => ({
