@@ -33,6 +33,7 @@ const { Header, Footer, Content } = Layout;
 const StyledMenuRow = styled.div`
   display: flex;
   justify-content: space-between;
+  margin-left: 2%;
 `;
 
 const StyledContainer = styled.div`
@@ -51,12 +52,18 @@ const HeaderDiv = styled.div`
 
 const StyledForm = styled(Form)`
   display: flex;
-  align-items: center;
+  align-content: flex-end;
+  margin-left: 1%;
 `;
 
 const StyledSubmit = styled.div`
-  margin-bottom: 2%;
   margin-left: 2%;
+  padding-top: 5%;
+`;
+
+const StyledFormItem = styled(FormItem)`
+  padding-top: 5%;
+  margin-bottom: 0;
 `;
 
 const ModuleList = props => {
@@ -168,16 +175,16 @@ const ModuleList = props => {
       });
   };
 
-  const deleteTeacherHandler = teacher => {
-    console.log(teacher);
+  const deleteTeacherHandler = teacherId => {
+    console.log(teacherId);
     console.log(currentCourse.courseid);
     axiosWithAuth()
       .delete(
-        `https://reach-team-a-be.herokuapp.com/teachers/${currentCourse.courseid}/${teacher.teacherid}`
+        `https://reach-team-a-be.herokuapp.com/teachers/${currentCourse.courseid}/${teacherId}`
       )
       .then(res => {
         console.log(res);
-        dispatch(deleteTeacher(teacher.teacherid));
+        dispatch(deleteTeacher(teacherId));
       })
       .then(err => {
         dispatch(editCourseAction(currentCourse));
@@ -227,7 +234,7 @@ const ModuleList = props => {
           <div>
             {user.role === 'ADMIN' && (
               <StyledForm>
-                <FormItem
+                <StyledFormItem
                   htmlFor="teachername"
                   label="Add Teacher:"
                   validateStatus
@@ -238,7 +245,7 @@ const ModuleList = props => {
                     value={newTeacher.teachername}
                     onChange={changeTeacherValues}
                   />
-                </FormItem>
+                </StyledFormItem>
                 <StyledSubmit>
                   <Button
                     onClick={addTeacherHandler}
@@ -260,7 +267,7 @@ const ModuleList = props => {
                   mode="inline"
                 >
                   <SubMenu key="sub3" title="Teachers">
-                    {currentCourse.teachers.map(teacher => {
+                    {currentCourse.teachers.map((teacher, index) => {
                       return (
                         <StyledMenuRow>
                           <Menu.Item
@@ -273,7 +280,7 @@ const ModuleList = props => {
                             <IconButton
                               aria-label="delete"
                               onClick={() =>
-                                deleteTeacherHandler(teacher.teacher)
+                                deleteTeacherHandler(teacher.teacher.teacherid)
                               }
                             >
                               <DeleteIcon></DeleteIcon>
@@ -292,7 +299,7 @@ const ModuleList = props => {
             {(user.role === 'ADMIN' || user.role === 'TEACHER') && (
               <div>
                 <StyledForm>
-                  <FormItem
+                  <StyledFormItem
                     htmlFor="studentname"
                     label="Add Student:"
                     validateStatus
@@ -303,7 +310,7 @@ const ModuleList = props => {
                       value={newStudent.studentname}
                       onChange={changeStudentValues}
                     />
-                  </FormItem>
+                  </StyledFormItem>
                   <StyledSubmit>
                     <Button
                       onClick={addStudentHandler}
