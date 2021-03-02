@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { Link } from 'react-router-dom';
@@ -52,6 +52,11 @@ const HeaderDiv = styled.div`
 const StyledForm = styled(Form)`
   display: flex;
   align-items: center;
+`;
+
+const StyledSubmit = styled.div`
+  margin-bottom: 2%;
+  margin-left: 2%;
 `;
 
 const ModuleList = props => {
@@ -234,13 +239,15 @@ const ModuleList = props => {
                     onChange={changeTeacherValues}
                   />
                 </FormItem>
-                <Button
-                  onClick={addTeacherHandler}
-                  type="primary"
-                  className="button"
-                >
-                  Submit
-                </Button>
+                <StyledSubmit>
+                  <Button
+                    onClick={addTeacherHandler}
+                    type="primary"
+                    className="button"
+                  >
+                    Submit
+                  </Button>
+                </StyledSubmit>
               </StyledForm>
             )}
             {(user.role === 'ADMIN' || user.role === 'TEACHER') && (
@@ -284,7 +291,7 @@ const ModuleList = props => {
           <div>
             {(user.role === 'ADMIN' || user.role === 'TEACHER') && (
               <div>
-                <Form>
+                <StyledForm>
                   <FormItem
                     htmlFor="studentname"
                     label="Add Student:"
@@ -297,14 +304,16 @@ const ModuleList = props => {
                       onChange={changeStudentValues}
                     />
                   </FormItem>
-                  <Button
-                    onClick={addStudentHandler}
-                    type="primary"
-                    className="button"
-                  >
-                    Submit
-                  </Button>
-                </Form>
+                  <StyledSubmit>
+                    <Button
+                      onClick={addStudentHandler}
+                      type="primary"
+                      className="button"
+                    >
+                      Submit
+                    </Button>
+                  </StyledSubmit>
+                </StyledForm>
               </div>
             )}
             {(user.role === 'ADMIN' || user.role === 'TEACHER') && (
