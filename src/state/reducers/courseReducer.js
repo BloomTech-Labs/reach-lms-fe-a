@@ -102,8 +102,7 @@ const courseReducer = (state = initialState, action) => {
       if (state.currentCourse.teachers === []) {
         return {
           ...state,
-          currentCourse: { ...state.currentCourse, teachers: action.payload },
-          // courses_list: { ...state }, still need to do this
+          currentCourse: { ...state.currentCourse, teachers: [action.payload] },
         };
       } else {
         return {
