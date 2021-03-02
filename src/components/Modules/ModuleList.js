@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import { useOktaAuth } from '@okta/okta-react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { currentModule } from '../../state/actions/moduleActions';
@@ -67,6 +68,7 @@ const StyledFormItem = styled(FormItem)`
 `;
 
 const ModuleList = props => {
+  const { authService } = useOktaAuth();
   const dispatch = useDispatch();
   const { push } = useHistory();
   const modules = useSelector(state => state.moduleReducer.modules_list);
@@ -190,11 +192,10 @@ const ModuleList = props => {
             courseid: currentCourse.courseid,
           })
         );
-        return res;
       })
-      .then(res => {
-        dispatch(editCourseAction(currentCourse));
-      })
+      // .then(res => {
+      //   dispatch(editCourseAction(currentCourse));
+      // })
       .catch(err => {
         console.log(err);
       });
@@ -203,7 +204,7 @@ const ModuleList = props => {
   return (
     <Layout>
       <Header>
-        <Navigation />
+        <Navigation authService={authService} />
       </Header>
       <Content>
         <StyledContainer>
@@ -285,9 +286,9 @@ const ModuleList = props => {
                           <Tooltip title="Delete">
                             <IconButton
                               aria-label="delete"
-                              onClick={() =>
-                                deleteTeacherHandler(teacher.teacher.teacherid)
-                              }
+                              onClick={() => {
+                                deleteTeacherHandler(teacher.teacher.teacherid);
+                              }}
                             >
                               <DeleteIcon></DeleteIcon>
                             </IconButton>
