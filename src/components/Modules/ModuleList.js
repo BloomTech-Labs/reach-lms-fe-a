@@ -279,42 +279,41 @@ const ModuleList = props => {
                 </StyledSubmit>
               </StyledForm>
             )}
-            {(user.role === 'ADMIN' || user.role === 'TEACHER') && (
-              <div>
-                <Menu
-                  // onClick={handleClick}
-                  style={{ width: '80%' }}
-                  // defaultSelectedKeys={['1']}
-                  defaultOpenKeys={['sub3']}
-                  mode="inline"
-                >
-                  <SubMenu key="sub3" title="Teachers">
-                    {currentCourse.teachers.map((teacher, index) => {
-                      return (
-                        <StyledMenuRow>
-                          <Menu.Item
-                            key={teacher.teacher.teacherid}
-                            style={{ marginTop: '2.5%' }}
-                          >
-                            {teacher.teacher.teachername}
-                          </Menu.Item>
-                          <Tooltip title="Delete">
-                            <IconButton
-                              aria-label="delete"
-                              onClick={() => {
+            <div>
+              <Menu
+                // onClick={handleClick}
+                style={{ width: '80%' }}
+                // defaultSelectedKeys={['1']}
+                defaultOpenKeys={['sub3']}
+                mode="inline"
+              >
+                <SubMenu key="sub3" title="Teachers">
+                  {currentCourse.teachers.map((teacher, index) => {
+                    return (
+                      <StyledMenuRow>
+                        <Menu.Item
+                          key={teacher.teacher.teacherid}
+                          style={{ marginTop: '2.5%' }}
+                        >
+                          {teacher.teacher.teachername}
+                        </Menu.Item>
+                        <Tooltip title="Delete">
+                          <IconButton
+                            aria-label="delete"
+                            onClick={() => {
+                              user.role === 'ADMIN' &&
                                 deleteTeacherHandler(teacher.teacher.teacherid);
-                              }}
-                            >
-                              <DeleteIcon></DeleteIcon>
-                            </IconButton>
-                          </Tooltip>
-                        </StyledMenuRow>
-                      );
-                    })}
-                  </SubMenu>
-                </Menu>
-              </div>
-            )}
+                            }}
+                          >
+                            <DeleteIcon></DeleteIcon>
+                          </IconButton>
+                        </Tooltip>
+                      </StyledMenuRow>
+                    );
+                  })}
+                </SubMenu>
+              </Menu>
+            </div>
           </div>
           {/* {ADD STUDENT form and STUDENT LIST} */}
           <div>
