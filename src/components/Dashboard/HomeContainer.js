@@ -93,14 +93,14 @@ function HomeContainer({ LoadingComponent }) {
             .then(res => {
               console.log(res);
               const courseList = [];
-              for (let i = 0; i < res.data.courses.length(); i++) {
+              for (let i = 0; i < res.data.courses.length; i++) {
                 let newCourse = res.data.courses[i].course;
                 courseList.push(newCourse);
               }
               dispatch(setCourseList(courseList));
             })
             .catch(err => {
-              console.log('get courses by teacherid did not work', err);
+              console.log('get courses by studentid did not work', err);
             });
         }
       })
