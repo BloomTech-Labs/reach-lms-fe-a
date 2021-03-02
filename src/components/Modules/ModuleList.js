@@ -175,16 +175,16 @@ const ModuleList = props => {
       });
   };
 
-  const deleteTeacherHandler = teacher => {
-    console.log(teacher);
+  const deleteTeacherHandler = teacherId => {
+    console.log(teacherId);
     console.log(currentCourse.courseid);
     axiosWithAuth()
       .delete(
-        `https://reach-team-a-be.herokuapp.com/teachers/${currentCourse.courseid}/${teacher.teacherid}`
+        `https://reach-team-a-be.herokuapp.com/teachers/${currentCourse.courseid}/${teacherId}`
       )
       .then(res => {
         console.log(res);
-        dispatch(deleteTeacher(teacher.teacherid));
+        dispatch(deleteTeacher(teacherId));
       })
       .then(err => {
         dispatch(editCourseAction(currentCourse));
@@ -267,7 +267,7 @@ const ModuleList = props => {
                   mode="inline"
                 >
                   <SubMenu key="sub3" title="Teachers">
-                    {currentCourse.teachers.map(teacher => {
+                    {currentCourse.teachers.map((teacher, index) => {
                       return (
                         <StyledMenuRow>
                           <Menu.Item
@@ -280,7 +280,7 @@ const ModuleList = props => {
                             <IconButton
                               aria-label="delete"
                               onClick={() =>
-                                deleteTeacherHandler(teacher.teacher)
+                                deleteTeacherHandler(teacher.teacher.teacherid)
                               }
                             >
                               <DeleteIcon></DeleteIcon>
