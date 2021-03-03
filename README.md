@@ -30,17 +30,15 @@ Deployed link: a.reachlms.dev
 
 ### Key Features
 
-- feature one
-- feature two
-- feature three
-- feature four
-- feature five
+- Mobile First: the application is highly responsive to different screen sizes and also supports larger sceens.
+- User Roles: Each user has one of three roles: admin, teachers, and students. Each role has a specific set of features available once inside the app.
+- User Profiles: Each user can view and update their own user profile once inside the app.
+- Program Management: Admins can create a program once inside the app and can update and delete that program as well.
+- Curriculum Management: Admins can create, update, and delete courses per program, as well as modules per course.
 
 #### Front end deployed to `AWS`
 
 #### [Back end](https://reach-team-a-be.herokuapp.com) built using: Heroku
-
-#### 🚫 back end framework goes here
 
 - point one
 - point two
