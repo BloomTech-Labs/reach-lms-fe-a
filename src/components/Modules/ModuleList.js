@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { useOktaAuth } from '@okta/okta-react';
@@ -51,6 +51,14 @@ const HeaderDiv = styled.div`
   margin: 5% 0;
 `;
 
+const StyledSpan = styled.span`
+  font-size: 24px;
+  color: gray;
+  :hover {
+    color: lightgray;
+  }
+`;
+
 const StyledForm = styled(Form)`
   display: flex;
   align-content: flex-end;
@@ -76,6 +84,35 @@ const ModuleList = props => {
   const user = useSelector(state => state.userReducer);
   const [newStudent, setNewStudent] = useState({ studentname: '' });
   const [newTeacher, setNewTeacher] = useState({ teachername: '' });
+  const [studentList, setStudentList] = useState([]);
+
+  useEffect(() => {
+    let mounted = true;
+    axiosWithAuth()
+      .get('https://reach-team-a-be.herokuapp.com/students/')
+      .then(res => {
+        console.log('studentslist', res);
+        const filteredStudentsList = res.data;
+        for (let i = 0; i < currentCourse.students.length; i++) {
+          let studentIndex = filteredStudentsList.findIndex(student => {
+            console.log(student.studentid);
+            console.log(currentCourse.students[i].student.studentid);
+            return (
+              student.studentid === currentCourse.students[i].student.studentid
+            );
+          });
+          console.log(studentIndex);
+          filteredStudentsList.splice(studentIndex, 1);
+        }
+        if (mounted) {
+          setStudentList(filteredStudentsList);
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
+    return () => (mounted = false);
+  }, [currentCourse.students]);
 
   const changeStudentValues = e => {
     console.log(e.target);
@@ -98,6 +135,33 @@ const ModuleList = props => {
     console.log(moduleClicked);
     dispatch(currentModule(moduleClicked));
     push('/module-text');
+  };
+
+  const AddStudent = (e, newStudente) => {
+    e.preventDefault();
+    console.log(currentCourse);
+    axiosWithAuth()
+      .post(
+        `https://reach-team-a-be.herokuapp.com/students/${currentCourse.courseid}`,
+        { studentname: newStudente }
+      )
+      .then(res => {
+        console.log(res);
+        const addedStudent = {
+          student: {
+            studentid: res.data.studentid,
+            studentname: res.data.studentname,
+          },
+        };
+        dispatch(addStudent(addedStudent));
+        const updatedCourse = currentCourse;
+        updatedCourse.students.push(addedStudent);
+        dispatch(editCourseAction(updatedCourse));
+      })
+      .catch(err => {
+        console.log(err);
+        alert(`Student ${newStudent.studentname} not found`);
+      });
   };
 
   function addStudentHandler(e) {
@@ -357,7 +421,7 @@ const ModuleList = props => {
                   defaultOpenKeys={['sub2']}
                   mode="inline"
                 >
-                  <SubMenu key="sub2" title="Students">
+                  <SubMenu key="sub2" title="Registered Students">
                     {currentCourse.students.map(student => {
                       return (
                         <StyledMenuRow>
@@ -382,6 +446,33 @@ const ModuleList = props => {
                     })}
                   </SubMenu>
                 </Menu>
+                <div style={{ marginTop: '10px' }}>
+                  <Menu
+                    style={{ width: '80%' }}
+                    // defaultSelectedKeys={['1']}
+                    defaultOpenKeys={['sub1']}
+                    mode="inline"
+                  >
+                    <SubMenu key="sub6" title="Students">
+                      {studentList.map(student => {
+                        return (
+                          <Menu.Item key={student.studentid}>
+                            <StyledMenuRow>
+                              {student.studentname}
+                              <StyledSpan
+                                onClick={e => {
+                                  AddStudent(e, student.studentname);
+                                }}
+                              >
+                                +
+                              </StyledSpan>
+                            </StyledMenuRow>
+                          </Menu.Item>
+                        );
+                      })}
+                    </SubMenu>
+                  </Menu>
+                </div>
               </div>
             )}
           </div>

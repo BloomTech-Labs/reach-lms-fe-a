@@ -4,7 +4,6 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import { render, waitFor } from '@testing-library/react';
 import * as reactRedux from 'react-redux';
 import expect from 'expect';
-import Dashboard from '../components/Dashboard/Dashboard';
 
 const mockCourses = {
   courses: [
@@ -13,21 +12,33 @@ const mockCourses = {
       coursename: 'name1',
       coursecode: '1st',
       coursedescription: 'description1',
+      program: { programname: 'program1' },
     },
     {
       courseid: 2,
       coursename: 'name2',
       coursecode: '2nd',
       coursedescription: 'description2',
+      program: { programname: 'program2' },
     },
     {
       courseid: 3,
       coursename: 'name3',
       coursecode: '3rd',
       coursedescription: 'description3',
+      program: { programname: 'program3' },
     },
   ],
 };
+
+jest.mock('@okta/okta-react', () => ({
+  useOktaAuth: () => {
+    return {
+      authState: {},
+      authService: {},
+    };
+  },
+}));
 
 describe('<courseList /> test suite', () => {
   // listen for redux's dispatch and selector calls
