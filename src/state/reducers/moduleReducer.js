@@ -21,7 +21,6 @@ const initialState = {
 const moduleReducer = (state = initialState, action) => {
   switch (action.type) {
     case ADD_MODULE:
-      console.log(action.payload);
       if (state.modules_list === false) {
         return { ...state, modules_list: [action.payload] };
       } else {
@@ -72,7 +71,6 @@ const moduleReducer = (state = initialState, action) => {
     case CURRENT_MODULE:
       return { ...state, currentModule: action.payload };
     case FILTER_STATE:
-      console.log('action.payload', action.payload);
       return { ...state, filtered_module_list: action.payload };
     case CLEAR_MODULES:
       return initialState;

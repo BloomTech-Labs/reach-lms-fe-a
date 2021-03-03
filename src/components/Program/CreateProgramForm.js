@@ -17,7 +17,7 @@ import Input from 'antd/lib/input';
 import Select from 'antd/lib/select';
 import Form from 'antd/lib/form/Form';
 import FormItem from 'antd/lib/form/FormItem';
-import { Layout } from 'antd';
+import Layout from 'antd/lib/layout';
 const { Option } = Select;
 const { TextArea } = Input;
 const { Header, Footer, Content } = Layout;
@@ -82,14 +82,12 @@ export default function CreateProgram() {
   function submitForm(e) {
     e.preventDefault();
     dispatch(addProgram(values));
-    console.log(values);
     axiosWithAuth()
       .post(
         `https://reach-team-a-be.herokuapp.com/programs/${user.userid}/program`,
         values
       )
       .then(res => {
-        console.log(res);
         setValues(initialValues);
         push('/');
       })

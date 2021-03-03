@@ -17,7 +17,7 @@ import Input from 'antd/lib/input';
 import Select from 'antd/lib/select';
 import Form from 'antd/lib/form/Form';
 import FormItem from 'antd/lib/form/FormItem';
-import { Layout } from 'antd';
+import Layout from 'antd/lib/layout';
 const { TextArea } = Input;
 const { Header, Footer, Content } = Layout;
 
@@ -69,7 +69,6 @@ export default function EditCourseForm() {
 
   function submitForm(e) {
     e.preventDefault();
-    console.log(values);
     const editedCourse = {
       coursename: values.coursename,
       coursecode: values.coursecode,
@@ -81,7 +80,6 @@ export default function EditCourseForm() {
         editedCourse
       )
       .then(res => {
-        console.log(res);
         dispatch(editCourseAction(values));
         push('/courses');
       })

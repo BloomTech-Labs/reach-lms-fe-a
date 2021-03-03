@@ -1,15 +1,14 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { useHistory } from 'react-router-dom';
 import { useOktaAuth } from '@okta/okta-react';
 import styled from 'styled-components';
 import CourseCard from './CourseCard';
 
 //ant d
 import 'antd/dist/antd.css';
-import { Layout } from 'antd';
-import { Button } from 'antd';
+import Layout from 'antd/lib/layout';
+import Button from 'antd/lib/button';
 import Navigation from '../Navigation';
 
 // styled components
@@ -69,10 +68,8 @@ const StyledH2 = styled.h2`
   font-size: 1.75rem;
 `;
 
-const CourseList = props => {
+const CourseList = () => {
   const { authService } = useOktaAuth();
-  const { course } = props;
-  const { push } = useHistory();
   const { Header, Footer, Content } = Layout;
   const courseList = useSelector(state => state.courseReducer.courses_list);
   const user = useSelector(state => state.userReducer);

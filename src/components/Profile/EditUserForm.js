@@ -71,10 +71,9 @@ export default function EditUserForm() {
         input
       )
       .then(res => {
-        console.log('Successful Patch: ', res);
+        dispatch(editUser(input));
       })
       .catch(err => console.log(err));
-    dispatch(editUser(input));
     push('/profile');
   }
 

@@ -17,7 +17,7 @@ import Input from 'antd/lib/input';
 import Select from 'antd/lib/select';
 import Form from 'antd/lib/form/Form';
 import FormItem from 'antd/lib/form/FormItem';
-import { Layout } from 'antd';
+import Layout from 'antd/lib/layout';
 const { Option } = Select;
 const { TextArea } = Input;
 const { Header, Footer, Content } = Layout;
@@ -79,15 +79,12 @@ export default function EditProgramAntDesign() {
 
   function editProgram(e) {
     e.preventDefault();
-    console.log(input);
     axiosWithAuth()
       .put(
         `https://reach-team-a-be.herokuapp.com/programs/program/${programToEdit.programid}`,
         input
       )
-      .then(res => {
-        console.log(res);
-      })
+      .then(res => {})
       .catch(err => console.log(err));
     dispatch(editProgramAction(input));
     push('/');

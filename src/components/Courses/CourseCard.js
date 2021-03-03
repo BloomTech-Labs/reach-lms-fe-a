@@ -1,7 +1,9 @@
 import React from 'react';
 import 'antd/dist/antd.css';
-import { Card } from 'antd';
-import { Button, Menu, Dropdown } from 'antd';
+import Card from 'antd/lib/card';
+import Button from 'antd/lib/button';
+import Menu from 'antd/lib/menu';
+import Dropdown from 'antd/lib/dropdown';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { axiosWithAuth } from '../../utils/axiosWithAuth';
@@ -21,7 +23,6 @@ export default function CourseCard(props) {
   const user = useSelector(state => state.userReducer);
 
   const handleMenuClick = e => {
-    console.log(course);
     if (e.key === 'edit') {
       dispatch(setEditCourse(course));
       push('/edit-course');
@@ -31,9 +32,7 @@ export default function CourseCard(props) {
           `https://reach-team-a-be.herokuapp.com/courses/${course.courseid}`
         )
         .then(res => {
-          console.log(course.courseid);
           dispatch(deleteCourse(course.courseid));
-          console.log(res);
         })
         .catch(err => console.log(err));
     }
@@ -52,8 +51,6 @@ export default function CourseCard(props) {
     axiosWithAuth()
       .get(`https://reach-team-a-be.herokuapp.com/modules/${id}`)
       .then(res => {
-        console.log(res);
-        console.log(course);
         dispatch(currentCourse(course));
         dispatch(setModuleList(res.data));
       })
