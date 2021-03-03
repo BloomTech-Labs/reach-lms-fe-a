@@ -22,7 +22,7 @@ const StyledWrapper = styled.div`
 const { Header, Footer, Content } = Layout;
 
 const Dashboard = props => {
-  const { userInfo, authService } = props;
+  const { authService } = props;
   const user = useSelector(state => state.userReducer);
   const { push } = useHistory();
 

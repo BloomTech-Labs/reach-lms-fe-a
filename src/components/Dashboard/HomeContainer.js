@@ -118,7 +118,7 @@ function HomeContainer({ LoadingComponent }) {
       )}
       {authState.isAuthenticated && userInfo && (
         <>
-          <Dashboard userInfo={userInfo} authService={authService} />
+          <Dashboard authService={authService} />
         </>
       )}
     </>

@@ -59,7 +59,6 @@ const StyledSpan = styled.span`
   }
 `;
 
-
 const StyledForm = styled(Form)`
   display: flex;
   align-content: flex-end;
@@ -86,32 +85,30 @@ const ModuleList = props => {
   const [newStudent, setNewStudent] = useState({ studentname: '' });
   const [newTeacher, setNewTeacher] = useState({ teachername: '' });
   const [studentList, setStudentList] = useState([]);
-  
 
   useEffect(() => {
+    let mounted = true;
     axiosWithAuth()
-      .get(
-        `https://reach-team-a-be.herokuapp.com/students/`
-      )
+      .get('https://reach-team-a-be.herokuapp.com/students/')
       .then(res => {
-        console.log("studentslist", res);
+        console.log('studentslist', res);
         const filteredStudentsList = res.data;
-        for(let i = 0; i < currentCourse.students.length; i++) {
+        for (let i = 0; i < currentCourse.students.length; i++) {
           let studentIndex = filteredStudentsList.find(student => {
-          return student.studentid === currentCourse.students[i].studentid;
+            return student.studentid === currentCourse.students[i].studentid;
           });
           console.log(studentIndex);
           filteredStudentsList.splice(studentIndex, 1);
         }
-        setStudentList(filteredStudentsList);
-        })
+        if (mounted) {
+          setStudentList(filteredStudentsList);
+        }
+      })
       .catch(err => {
         console.log(err);
       });
-
-  },[]);
-
-  
+    return () => (mounted = false);
+  }, []);
 
   const changeStudentValues = e => {
     console.log(e.target);
@@ -314,74 +311,7 @@ const ModuleList = props => {
                   );
                 })}
               </SubMenu>
-
             </Menu>
-
-         <div style={{marginTop:"10px"}}>
-            <Menu
-              style={{ width: '80%' }}
-              // defaultSelectedKeys={['1']}
-              defaultOpenKeys={['sub1']}
-              mode="inline"
-            >
-              <SubMenu key="sub6" title="Students">
-
-              {studentList.map(student => {
-                      
-                      return (
-                    <Menu.Item key={student.studentid}>
-                    <StyledMenuRow>
-                     {student.studentname}
-                    <StyledSpan onClick={(e) => {
-                     AddStudent(e, student.studentname);
-                    }}>
-                      +
-                    </StyledSpan>
-                    </StyledMenuRow>
-                  </Menu.Item>
-                      );
-            })}
-{/* 
-                {allStudentNotInCourse.map(student => {
-                      
-                        return (
-                      <Menu.Item key={student.studentid}>
-                      <StyledMenuRow>
-                       {student.studentname}
-                      <StyledSpan onClick={(e) => {
-                       AddStudent(e, student.studentname);
-                      }}>
-                        +
-                      </StyledSpan>
-                      </StyledMenuRow>
-                    </Menu.Item>
-                        );
-              })} */}
-              </SubMenu>
-            </Menu>
-            </div>
-
-
-      {
-        /*
-         {studentList.map(student => {
-                  return (
-                    <Menu.Item key={student.studentid}>
-                      {currentCourse.students.forEach(courseStudent => {
-                      <StyledMenuRow>
-                      {courseStudent}
-                      <StyledSpan onClick={(e) => {
-                       AddStudent(e, student.studentname);
-                      }}>
-                        +
-                      </StyledSpan>
-                      </StyledMenuRow>
-                       })}
-                    </Menu.Item>
-                  );
-              })} */
-      }
-
           </div>
           {/* {ADD TEACHER FORM and TEACHER LIST} */}
           <div>
@@ -513,6 +443,33 @@ const ModuleList = props => {
                     })}
                   </SubMenu>
                 </Menu>
+                <div style={{ marginTop: '10px' }}>
+                  <Menu
+                    style={{ width: '80%' }}
+                    // defaultSelectedKeys={['1']}
+                    defaultOpenKeys={['sub1']}
+                    mode="inline"
+                  >
+                    <SubMenu key="sub6" title="Students">
+                      {studentList.map(student => {
+                        return (
+                          <Menu.Item key={student.studentid}>
+                            <StyledMenuRow>
+                              {student.studentname}
+                              <StyledSpan
+                                onClick={e => {
+                                  AddStudent(e, student.studentname);
+                                }}
+                              >
+                                +
+                              </StyledSpan>
+                            </StyledMenuRow>
+                          </Menu.Item>
+                        );
+                      })}
+                    </SubMenu>
+                  </Menu>
+                </div>
               </div>
             )}
           </div>
