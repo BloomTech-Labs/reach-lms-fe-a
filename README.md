@@ -16,12 +16,10 @@ Deployed link: a.reachlms.dev
 <br>
 <br>
 
-🚫 Optional examples of using images with links for your tech stack, make sure to change these to fit your project
-
 ![MIT](https://img.shields.io/packagist/l/doctrine/orm.svg)
 ![React](https://img.shields.io/badge/react-v16.7.0--alpha.2-blue.svg)
-
-🚫 more info on using badges [here](https://github.com/badges/shields)
+![Redux](https://img.shields.io/badge/react-redux-brightgreen)
+![Java](https://img.shields.io/badge/java-spring-red)
 
 - Fork and clone the repo to install it as your own remote.
   - **note** please [be sure to set your remote](https://help.github.jp/enterprise/2.11/user/articles/changing-a-remote-s-url/) for this repo to point to your Labs Team Front End Repository.
@@ -62,7 +60,6 @@ Authentication system built with Okta...
 
 # Installation Instructions
 
-🚫explain how to install the required dependencies to get this project up and running with yarn and NPM
 
 Run npm i and npm start in the main folder to run on localhost:3000. Project is already deployed with AWS here: a.reachlms.dev 
 
