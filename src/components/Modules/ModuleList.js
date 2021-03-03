@@ -86,7 +86,7 @@ const ModuleList = props => {
   const [newStudent, setNewStudent] = useState({ studentname: '' });
   const [newTeacher, setNewTeacher] = useState({ teachername: '' });
   const [studentList, setStudentList] = useState([]);
-  const courseStudents = [];
+  
 
   useEffect(() => {
     axiosWithAuth()
@@ -95,13 +95,23 @@ const ModuleList = props => {
       )
       .then(res => {
         console.log("studentslist", res);
-        setStudentList(res.data);
+        const filteredStudentsList = res.data;
+        for(let i = 0; i < currentCourse.students.length; i++) {
+          let studentIndex = filteredStudentsList.find(student => {
+          return student.studentid === currentCourse.students[i].studentid;
+          });
+          console.log(studentIndex);
+          filteredStudentsList.splice(studentIndex, 1);
+        }
+        setStudentList(filteredStudentsList);
         })
       .catch(err => {
         console.log(err);
       });
 
   },[]);
+
+  
 
   const changeStudentValues = e => {
     console.log(e.target);
@@ -316,12 +326,28 @@ const ModuleList = props => {
             >
               <SubMenu key="sub6" title="Students">
 
-                {studentList.map(student => {
+              {studentList.map(student => {
+                      
+                      return (
+                    <Menu.Item key={student.studentid}>
+                    <StyledMenuRow>
+                     {student.studentname}
+                    <StyledSpan onClick={(e) => {
+                     AddStudent(e, student.studentname);
+                    }}>
+                      +
+                    </StyledSpan>
+                    </StyledMenuRow>
+                  </Menu.Item>
+                      );
+            })}
+{/* 
+                {allStudentNotInCourse.map(student => {
                       
                         return (
                       <Menu.Item key={student.studentid}>
                       <StyledMenuRow>
-                      {currentCourse.students.map(courseStudent => courseStudent.studentname !== student.studentname && student.studentname)}
+                       {student.studentname}
                       <StyledSpan onClick={(e) => {
                        AddStudent(e, student.studentname);
                       }}>
@@ -330,7 +356,7 @@ const ModuleList = props => {
                       </StyledMenuRow>
                     </Menu.Item>
                         );
-              })}
+              })} */}
               </SubMenu>
             </Menu>
             </div>
