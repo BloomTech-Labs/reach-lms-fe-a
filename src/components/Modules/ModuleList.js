@@ -279,41 +279,45 @@ const ModuleList = props => {
                 </StyledSubmit>
               </StyledForm>
             )}
-            <div>
-              <Menu
-                // onClick={handleClick}
-                style={{ width: '80%' }}
-                // defaultSelectedKeys={['1']}
-                defaultOpenKeys={['sub3']}
-                mode="inline"
-              >
-                <SubMenu key="sub3" title="Teachers">
-                  {currentCourse.teachers.map((teacher, index) => {
-                    return (
-                      <StyledMenuRow>
-                        <Menu.Item
-                          key={teacher.teacher.teacherid}
-                          style={{ marginTop: '2.5%' }}
-                        >
-                          {teacher.teacher.teachername}
-                        </Menu.Item>
-                        <Tooltip title="Delete">
-                          <IconButton
-                            aria-label="delete"
-                            onClick={() => {
-                              user.role === 'ADMIN' &&
-                                deleteTeacherHandler(teacher.teacher.teacherid);
-                            }}
+            {user.role === 'ADMIN' && (
+              <div>
+                <Menu
+                  // onClick={handleClick}
+                  style={{ width: '80%' }}
+                  // defaultSelectedKeys={['1']}
+                  defaultOpenKeys={['sub3']}
+                  mode="inline"
+                >
+                  <SubMenu key="sub3" title="Teachers">
+                    {currentCourse.teachers.map((teacher, index) => {
+                      return (
+                        <StyledMenuRow>
+                          <Menu.Item
+                            key={teacher.teacher.teacherid}
+                            style={{ marginTop: '2.5%' }}
                           >
-                            <DeleteIcon></DeleteIcon>
-                          </IconButton>
-                        </Tooltip>
-                      </StyledMenuRow>
-                    );
-                  })}
-                </SubMenu>
-              </Menu>
-            </div>
+                            {teacher.teacher.teachername}
+                          </Menu.Item>
+                          <Tooltip title="Delete">
+                            <IconButton
+                              aria-label="delete"
+                              onClick={() => {
+                                user.role === 'ADMIN' &&
+                                  deleteTeacherHandler(
+                                    teacher.teacher.teacherid
+                                  );
+                              }}
+                            >
+                              <DeleteIcon></DeleteIcon>
+                            </IconButton>
+                          </Tooltip>
+                        </StyledMenuRow>
+                      );
+                    })}
+                  </SubMenu>
+                </Menu>
+              </div>
+            )}
           </div>
           {/* {ADD STUDENT form and STUDENT LIST} */}
           <div>
