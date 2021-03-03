@@ -1,25 +1,20 @@
 import {
   ADD_COURSE,
-  SEARCH_COURSE,
   SET_EDIT_COURSE,
   DELETE_COURSE,
   EDIT_COURSE,
   SET_COURSE_LIST,
-  FILTER_STATE,
   CLEAR_COURSES,
   CURRENT_COURSE,
   ADD_STUDENT,
   DELETE_STUDENT,
   ADD_TEACHER,
   DELETE_TEACHER,
-  SET_TEACHER_COURSE_LIST,
 } from '../actions/courseActions';
 
 const initialState = {
-  search_courses: [],
   courses_list: [],
   edit_course: {},
-  filtered_course_list: [],
   currentCourse: {},
 };
 
@@ -34,29 +29,6 @@ const courseReducer = (state = initialState, action) => {
           courses_list: [...state.courses_list, action.payload],
         };
       }
-    case SEARCH_COURSE:
-      function filterResults() {
-        const inputCopy = { ...action.payload.search_input };
-        let results = action.payload.results;
-        for (let i in inputCopy) {
-          //deletes keys in fields that were left empty
-          if (!inputCopy[i]) {
-            delete inputCopy[i];
-          }
-        }
-        let filteredResults = results.filter(el => {
-          const keys = Object.keys(inputCopy);
-          for (let i in keys) {
-            if (el[keys[i]] !== inputCopy[keys[i]]) {
-              return false;
-            }
-          }
-          return true;
-        });
-        return filteredResults ? filteredResults : results;
-      }
-      let results = filterResults();
-      return { ...state, search_courses: results };
     case SET_EDIT_COURSE:
       return { ...state, edit_course: action.payload };
     case DELETE_COURSE:
@@ -73,10 +45,6 @@ const courseReducer = (state = initialState, action) => {
       return { ...state, courses_list: updatedCourses };
     case SET_COURSE_LIST:
       return { ...state, courses_list: action.payload };
-    case SET_TEACHER_COURSE_LIST:
-      return { ...state, courses_list: action.payload };
-    case FILTER_STATE:
-      return { ...state, filtered_course_list: action.payload };
     case CURRENT_COURSE:
       return { ...state, currentCourse: action.payload };
     case ADD_STUDENT:

@@ -1,13 +1,8 @@
-import { axiosWithAuth } from '../../utils/axiosWithAuth';
-
 export const ADD_COURSE = 'ADD_COURSE';
 export const DELETE_COURSE = 'DELETE_COURSE';
-export const SEARCH_COURSE = 'SEARCH_COURSE';
 export const SET_EDIT_COURSE = 'SET_EDIT_COURSE';
 export const EDIT_COURSE = 'EDIT_COURSE';
 export const SET_COURSE_LIST = 'SET_COURSE_LIST';
-export const SET_TEACHER_COURSE_LIST = 'SET_TEACHER_COURSE_LIST';
-export const FILTER_STATE = 'FILTER_STATE';
 export const CLEAR_COURSES = 'CLEAR_COURSES';
 export const CURRENT_COURSE = 'CURRENT_COURSE';
 export const ADD_STUDENT = 'ADD_STUDENT';
@@ -17,19 +12,6 @@ export const DELETE_TEACHER = 'DELETE_TEACHER';
 
 export const addCourse = value => {
   return { type: ADD_COURSE, payload: value };
-};
-
-export const searchCourse = value => dispatch => {
-  return axiosWithAuth()
-    .get(``)
-    .then(res => {
-      let payload = {
-        results: res.data.data,
-        search_input: value,
-      };
-      dispatch({ type: SEARCH_COURSE, payload: payload });
-    })
-    .catch(err => console.log(err));
 };
 
 export const setEditCourse = value => {
@@ -46,14 +28,6 @@ export const editCourseAction = value => {
 
 export const setCourseList = value => {
   return { type: SET_COURSE_LIST, payload: value };
-};
-
-export const setTeacherCourseList = value => {
-  return { type: SET_TEACHER_COURSE_LIST, payload: value };
-};
-
-export const filterState = value => {
-  return { type: FILTER_STATE, payload: value };
 };
 
 export const clearCourses = () => {
