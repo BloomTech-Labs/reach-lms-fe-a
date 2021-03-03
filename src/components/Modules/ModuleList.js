@@ -20,8 +20,8 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 //ant d
-import { Layout } from 'antd';
-import { Menu } from 'antd';
+import Layout from 'antd/lib/layout';
+import Menu from 'antd/lib/menu';
 import Form from 'antd/lib/form/Form';
 import FormItem from 'antd/lib/form/FormItem';
 import Input from 'antd/lib/input';
@@ -91,17 +91,13 @@ const ModuleList = props => {
     axiosWithAuth()
       .get('https://reach-team-a-be.herokuapp.com/students/')
       .then(res => {
-        console.log('studentslist', res);
         const filteredStudentsList = res.data;
         for (let i = 0; i < currentCourse.students.length; i++) {
           let studentIndex = filteredStudentsList.findIndex(student => {
-            console.log(student.studentid);
-            console.log(currentCourse.students[i].student.studentid);
             return (
               student.studentid === currentCourse.students[i].student.studentid
             );
           });
-          console.log(studentIndex);
           filteredStudentsList.splice(studentIndex, 1);
         }
         if (mounted) {
@@ -115,38 +111,33 @@ const ModuleList = props => {
   }, [currentCourse.students]);
 
   const changeStudentValues = e => {
-    console.log(e.target);
-    const { name, value } = e.target;
+    const { value } = e.target;
     const valueToUse = value;
     setNewStudent({ ...newStudent, [e.target.name]: valueToUse });
   };
 
   const changeTeacherValues = e => {
-    const { name, value } = e.target;
+    const { value } = e.target;
     const valueToUse = value;
     setNewTeacher({ ...newTeacher, [e.target.name]: valueToUse });
   };
 
   const handleClick = e => {
-    console.log('click ', e);
     const moduleClicked = modules.filter(module => {
-      return module.moduleid == e.key;
+      return module.moduleid.toString() === e.key;
     })[0];
-    console.log(moduleClicked);
     dispatch(currentModule(moduleClicked));
     push('/module-text');
   };
 
   const AddStudent = (e, newStudente) => {
     e.preventDefault();
-    console.log(currentCourse);
     axiosWithAuth()
       .post(
         `https://reach-team-a-be.herokuapp.com/students/${currentCourse.courseid}`,
         { studentname: newStudente }
       )
       .then(res => {
-        console.log(res);
         const addedStudent = {
           student: {
             studentid: res.data.studentid,
@@ -166,15 +157,12 @@ const ModuleList = props => {
 
   function addStudentHandler(e) {
     e.preventDefault();
-    console.log(currentCourse);
-    console.log(newStudent);
     axiosWithAuth()
       .post(
         `https://reach-team-a-be.herokuapp.com/students/${currentCourse.courseid}`,
         newStudent
       )
       .then(res => {
-        console.log(res);
         const addedStudent = {
           student: {
             studentid: res.data.studentid,
@@ -195,15 +183,12 @@ const ModuleList = props => {
 
   function addTeacherHandler(e) {
     e.preventDefault();
-    console.log(currentCourse);
-    console.log(newTeacher);
     axiosWithAuth()
       .post(
         `https://reach-team-a-be.herokuapp.com/teachers/${currentCourse.courseid}`,
         newTeacher
       )
       .then(res => {
-        console.log(res);
         const addedTeacher = {
           teacher: {
             teacherid: res.data.teacherid,
@@ -223,14 +208,11 @@ const ModuleList = props => {
   }
 
   const deleteStudentHandler = studentId => {
-    console.log(studentId);
-    console.log(currentCourse.courseid);
     axiosWithAuth()
       .delete(
         `https://reach-team-a-be.herokuapp.com/students/${currentCourse.courseid}/${studentId}`
       )
       .then(res => {
-        console.log(res);
         const newStudentList = [];
         for (let i = 0; i < res.data.length; i++) {
           let newStudent = {
@@ -252,14 +234,11 @@ const ModuleList = props => {
   };
 
   const deleteTeacherHandler = teacherId => {
-    console.log(teacherId);
-    console.log(currentCourse.courseid);
     axiosWithAuth()
       .delete(
         `https://reach-team-a-be.herokuapp.com/teachers/${currentCourse.courseid}/${teacherId}`
       )
       .then(res => {
-        console.log(res);
         const newTeacherList = [];
         for (let i = 0; i < res.data.length; i++) {
           let newTeacher = {
@@ -346,9 +325,7 @@ const ModuleList = props => {
             {user.role === 'ADMIN' && (
               <div>
                 <Menu
-                  // onClick={handleClick}
                   style={{ width: '80%' }}
-                  // defaultSelectedKeys={['1']}
                   defaultOpenKeys={['sub3']}
                   mode="inline"
                 >

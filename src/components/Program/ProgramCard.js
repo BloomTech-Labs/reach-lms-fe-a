@@ -1,7 +1,9 @@
 import React from 'react';
 import 'antd/dist/antd.css';
-import { Card } from 'antd';
-import { Button, Dropdown, Menu } from 'antd';
+import Card from 'antd/lib/card';
+import Button from 'antd/lib/button';
+import Menu from 'antd/lib/menu';
+import Dropdown from 'antd/lib/dropdown';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { axiosWithAuth } from '../../utils/axiosWithAuth';
@@ -24,15 +26,12 @@ export default function ProgramCard(props) {
       dispatch(setEdit(program));
       push('/edit-program');
     } else {
-      console.log(program);
       axiosWithAuth()
         .delete(
           `https://reach-team-a-be.herokuapp.com/programs/program/${program.programid}`
         )
         .then(res => {
-          console.log(program.programid);
           dispatch(deleteProgram(program.programid));
-          console.log(res);
         })
         .catch(err => console.log(err));
     }
@@ -51,7 +50,6 @@ export default function ProgramCard(props) {
     axiosWithAuth()
       .get(`https://reach-team-a-be.herokuapp.com/courses/${program.programid}`)
       .then(res => {
-        console.log(res);
         dispatch(setCourseList(res.data));
         dispatch(currentProgram(program));
       })

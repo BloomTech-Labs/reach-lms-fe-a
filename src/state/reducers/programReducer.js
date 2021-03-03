@@ -21,7 +21,6 @@ const initialState = {
 const programReducer = (state = initialState, action) => {
   switch (action.type) {
     case ADD_PROGRAM:
-      console.log(action.payload);
       if (state.programs_list === false) {
         return { ...state, programs_list: [action.payload] };
       } else {
@@ -56,12 +55,6 @@ const programReducer = (state = initialState, action) => {
     case SET_EDIT:
       return { ...state, edit_program: action.payload };
     case DELETE_PROGRAM:
-      // let newProgramList = [...state.programs_list];
-      // console.log('programs list', newProgramList);
-      // let index = newProgramList.findIndex(el => el.id === action.payload);
-      // console.log('index of program to delete', index);
-      // newProgramList.splice(index, 1);
-      // return { ...state, programs_list: newProgramList };
       let newProgramList = [...state.programs_list].filter(item => {
         return item.programid !== action.payload;
       });
@@ -76,7 +69,6 @@ const programReducer = (state = initialState, action) => {
     case SET_PROGRAM_LIST:
       return { ...state, programs_list: action.payload };
     case FILTER_STATE:
-      console.log('action.payload', action.payload);
       return { ...state, filtered_program_list: action.payload };
     case CURRENT_PROGRAM:
       return { ...state, currentProgram: action.payload };

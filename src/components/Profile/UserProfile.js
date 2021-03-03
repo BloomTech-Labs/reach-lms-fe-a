@@ -14,10 +14,11 @@ import MenuItem from '@material-ui/core/MenuItem';
 
 //ant d
 import 'antd/dist/antd.css';
-import { Card } from 'antd';
-import { Button } from 'antd';
-import { Layout } from 'antd';
-import { Avatar, Image } from 'antd';
+import Card from 'antd/lib/card';
+import Button from 'antd/lib/button';
+import Layout from 'antd/lib/layout';
+import Avatar from 'antd/lib/avatar';
+import Image from 'antd/lib/image';
 
 // css
 import '../../styles/Profile.css';

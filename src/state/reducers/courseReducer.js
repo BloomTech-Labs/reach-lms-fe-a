@@ -26,7 +26,6 @@ const initialState = {
 const courseReducer = (state = initialState, action) => {
   switch (action.type) {
     case ADD_COURSE:
-      console.log(action.payload);
       if (state.courses_list === false) {
         return { ...state, courses_list: [action.payload] };
       } else {
@@ -75,10 +74,8 @@ const courseReducer = (state = initialState, action) => {
     case SET_COURSE_LIST:
       return { ...state, courses_list: action.payload };
     case SET_TEACHER_COURSE_LIST:
-      console.log(action.payload);
       return { ...state, courses_list: action.payload };
     case FILTER_STATE:
-      console.log('action.payload', action.payload);
       return { ...state, filtered_course_list: action.payload };
     case CURRENT_COURSE:
       return { ...state, currentCourse: action.payload };

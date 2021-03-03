@@ -5,10 +5,7 @@ import { axiosWithAuth } from '../../utils/axiosWithAuth';
 import { saveUser } from '../../state/actions/userActions';
 import { useDispatch } from 'react-redux';
 import { setProgramList } from '../../state/actions/programActions';
-import {
-  setCourseList,
-  setTeacherCourseList,
-} from '../../state/actions/courseActions';
+import { setCourseList } from '../../state/actions/courseActions';
 
 function HomeContainer({ LoadingComponent }) {
   const { authState, authService } = useOktaAuth();
@@ -44,7 +41,6 @@ function HomeContainer({ LoadingComponent }) {
     axiosWithAuth()
       .get('https://reach-team-a-be.herokuapp.com/users/getuserinfo')
       .then(res => {
-        console.log('userinfo', res);
         let incoming_user = {
           userid: res.data.userid,
           firstname: res.data.firstname,
@@ -74,7 +70,6 @@ function HomeContainer({ LoadingComponent }) {
               `https://reach-team-a-be.herokuapp.com/teachers/${incoming_user.username}`
             )
             .then(res => {
-              console.log(res);
               const courseList = [];
               for (let i = 0; i < res.data.courses.length; i++) {
                 let newCourse = res.data.courses[i].course;
@@ -91,7 +86,6 @@ function HomeContainer({ LoadingComponent }) {
               `https://reach-team-a-be.herokuapp.com/students/${incoming_user.username}`
             )
             .then(res => {
-              console.log(res);
               const courseList = [];
               for (let i = 0; i < res.data.courses.length; i++) {
                 let newCourse = res.data.courses[i].course;
@@ -109,7 +103,7 @@ function HomeContainer({ LoadingComponent }) {
       });
 
     return () => (isSubscribed = false);
-  }, [memoAuthService]);
+  }, [memoAuthService, dispatch]);
 
   return (
     <>

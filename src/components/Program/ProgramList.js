@@ -2,7 +2,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import ProgramCard from './ProgramCard';
 import styled from 'styled-components';
-import { Button } from 'antd';
+import Button from 'antd/lib/button';
 import { Link } from 'react-router-dom';
 
 //styled components

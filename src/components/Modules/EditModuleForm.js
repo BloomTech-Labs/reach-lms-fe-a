@@ -20,7 +20,7 @@ import Input from 'antd/lib/input';
 import Select from 'antd/lib/select';
 import Form from 'antd/lib/form/Form';
 import FormItem from 'antd/lib/form/FormItem';
-import { Layout } from 'antd';
+import Layout from 'antd/lib/layout';
 const { TextArea } = Input;
 const { Header, Footer, Content } = Layout;
 
@@ -72,8 +72,6 @@ export default function EditModuleForm() {
 
   function submitForm(e) {
     e.preventDefault();
-    console.log(values);
-    console.log(moduleToEdit);
     const newModule = {
       modulename: values.modulename,
       moduledescription: values.moduledescription,
@@ -85,7 +83,6 @@ export default function EditModuleForm() {
         newModule
       )
       .then(res => {
-        console.log(res);
         dispatch(editModuleAction(values));
         dispatch(currentModule(values));
         push('/module-text');

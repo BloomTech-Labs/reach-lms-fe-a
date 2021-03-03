@@ -10,9 +10,12 @@ import styled from 'styled-components';
 import 'antd/dist/antd.css';
 
 //ant design
+import 'antd/dist/antd.css';
 import Button from 'antd/lib/button';
-import { Card, Menu, Dropdown } from 'antd';
-import { Layout } from 'antd';
+import Card from 'antd/lib/card';
+import Menu from 'antd/lib/menu';
+import Dropdown from 'antd/lib/dropdown';
+import Layout from 'antd/lib/layout';
 const { Header, Footer, Content } = Layout;
 
 //styled components
@@ -39,9 +42,7 @@ export default function ModuleText() {
           `https://reach-team-a-be.herokuapp.com/modules/${module.moduleid}`
         )
         .then(res => {
-          console.log(module.moduleid);
           dispatch(deleteModule(module.moduleid));
-          console.log(res);
           push('/modules');
         })
         .catch(err => console.log(err));
@@ -58,24 +59,6 @@ export default function ModuleText() {
   const goBack = () => {
     push('/modules');
   };
-
-  function clickOnEdit(e, id) {
-    console.log('module', module);
-    dispatch(setEditModule(module));
-    push('/edit-module');
-  }
-
-  function deletingModule(id) {
-    console.log(module);
-    axiosWithAuth()
-      .delete(
-        `https://reach-team-a-be.herokuapp.com/modules/module/${module.moduleId}`
-      )
-      .then(res => console.log(res))
-      .catch(err => console.log(err));
-
-    dispatch(deleteModule(id));
-  }
 
   return (
     <Layout>

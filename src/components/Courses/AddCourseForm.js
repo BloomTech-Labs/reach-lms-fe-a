@@ -17,7 +17,7 @@ import Input from 'antd/lib/input';
 import Select from 'antd/lib/select';
 import Form from 'antd/lib/form/Form';
 import FormItem from 'antd/lib/form/FormItem';
-import { Layout } from 'antd';
+import Layout from 'antd/lib/layout';
 const { TextArea } = Input;
 const { Header, Footer, Content } = Layout;
 
@@ -77,14 +77,12 @@ export default function AddCourse() {
 
   function submitForm(e) {
     e.preventDefault();
-    console.log(values);
     axiosWithAuth()
       .post(
         `https://reach-team-a-be.herokuapp.com/courses/${currentProgram.programid}/course`,
         values
       )
       .then(res => {
-        console.log('Newly made course', res);
         dispatch(addCourse(res.data));
         setValues(initialValues);
         push('/courses');
