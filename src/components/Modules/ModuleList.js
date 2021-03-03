@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import { useOktaAuth } from '@okta/okta-react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { currentModule } from '../../state/actions/moduleActions';
@@ -67,6 +68,7 @@ const StyledFormItem = styled(FormItem)`
 `;
 
 const ModuleList = props => {
+  const { authService } = useOktaAuth();
   const dispatch = useDispatch();
   const { push } = useHistory();
   const modules = useSelector(state => state.moduleReducer.modules_list);
@@ -165,7 +167,17 @@ const ModuleList = props => {
       )
       .then(res => {
         console.log(res);
-        dispatch(deleteStudent(studentId));
+        const newStudentList = [];
+        for (let i = 0; i < res.data.length; i++) {
+          let newStudent = {
+            student: {
+              studentid: res.data[i].studentid,
+              studentname: res.data[i].studentname,
+            },
+          };
+          newStudentList.push(newStudent);
+        }
+        dispatch(deleteStudent(newStudentList));
       })
       .then(err => {
         dispatch(editCourseAction(currentCourse));
@@ -184,13 +196,17 @@ const ModuleList = props => {
       )
       .then(res => {
         console.log(res);
-        dispatch(
-          deleteTeacher({
-            teacherid: teacherId,
-            courseid: currentCourse.courseid,
-          })
-        );
-        return res;
+        const newTeacherList = [];
+        for (let i = 0; i < res.data.length; i++) {
+          let newTeacher = {
+            teacher: {
+              teacherid: res.data[i].teacherid,
+              teachername: res.data[i].teachername,
+            },
+          };
+          newTeacherList.push(newTeacher);
+        }
+        dispatch(deleteTeacher(newTeacherList));
       })
       .then(res => {
         dispatch(editCourseAction(currentCourse));
@@ -203,7 +219,7 @@ const ModuleList = props => {
   return (
     <Layout>
       <Header>
-        <Navigation />
+        <Navigation authService={authService} />
       </Header>
       <Content>
         <StyledContainer>
@@ -263,42 +279,41 @@ const ModuleList = props => {
                 </StyledSubmit>
               </StyledForm>
             )}
-            {(user.role === 'ADMIN' || user.role === 'TEACHER') && (
-              <div>
-                <Menu
-                  // onClick={handleClick}
-                  style={{ width: '80%' }}
-                  // defaultSelectedKeys={['1']}
-                  defaultOpenKeys={['sub3']}
-                  mode="inline"
-                >
-                  <SubMenu key="sub3" title="Teachers">
-                    {currentCourse.teachers.map((teacher, index) => {
-                      return (
-                        <StyledMenuRow>
-                          <Menu.Item
-                            key={teacher.teacher.teacherid}
-                            style={{ marginTop: '2.5%' }}
+            <div>
+              <Menu
+                // onClick={handleClick}
+                style={{ width: '80%' }}
+                // defaultSelectedKeys={['1']}
+                defaultOpenKeys={['sub3']}
+                mode="inline"
+              >
+                <SubMenu key="sub3" title="Teachers">
+                  {currentCourse.teachers.map((teacher, index) => {
+                    return (
+                      <StyledMenuRow>
+                        <Menu.Item
+                          key={teacher.teacher.teacherid}
+                          style={{ marginTop: '2.5%' }}
+                        >
+                          {teacher.teacher.teachername}
+                        </Menu.Item>
+                        <Tooltip title="Delete">
+                          <IconButton
+                            aria-label="delete"
+                            onClick={() => {
+                              user.role === 'ADMIN' &&
+                                deleteTeacherHandler(teacher.teacher.teacherid);
+                            }}
                           >
-                            {teacher.teacher.teachername}
-                          </Menu.Item>
-                          <Tooltip title="Delete">
-                            <IconButton
-                              aria-label="delete"
-                              onClick={() =>
-                                deleteTeacherHandler(teacher.teacher.teacherid)
-                              }
-                            >
-                              <DeleteIcon></DeleteIcon>
-                            </IconButton>
-                          </Tooltip>
-                        </StyledMenuRow>
-                      );
-                    })}
-                  </SubMenu>
-                </Menu>
-              </div>
-            )}
+                            <DeleteIcon></DeleteIcon>
+                          </IconButton>
+                        </Tooltip>
+                      </StyledMenuRow>
+                    );
+                  })}
+                </SubMenu>
+              </Menu>
+            </div>
           </div>
           {/* {ADD STUDENT form and STUDENT LIST} */}
           <div>

@@ -2,6 +2,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { useHistory } from 'react-router-dom';
+import { useOktaAuth } from '@okta/okta-react';
 import styled from 'styled-components';
 import CourseCard from './CourseCard';
 
@@ -69,6 +70,7 @@ const StyledH2 = styled.h2`
 `;
 
 const CourseList = props => {
+  const { authService } = useOktaAuth();
   const { course } = props;
   const { push } = useHistory();
   const { Header, Footer, Content } = Layout;
@@ -80,7 +82,11 @@ const CourseList = props => {
 
   return (
     <Layout>
-      <Header></Header>
+      {user.role === 'ADMIN' && (
+        <Header>
+          <Navigation authService={authService} />
+        </Header>
+      )}
       <Layout>
         <Content>
           <StyledWrapper>
