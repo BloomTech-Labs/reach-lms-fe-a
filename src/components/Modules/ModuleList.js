@@ -94,8 +94,12 @@ const ModuleList = props => {
         console.log('studentslist', res);
         const filteredStudentsList = res.data;
         for (let i = 0; i < currentCourse.students.length; i++) {
-          let studentIndex = filteredStudentsList.find(student => {
-            return student.studentid === currentCourse.students[i].studentid;
+          let studentIndex = filteredStudentsList.findIndex(student => {
+            console.log(student.studentid);
+            console.log(currentCourse.students[i].student.studentid);
+            return (
+              student.studentid === currentCourse.students[i].student.studentid
+            );
           });
           console.log(studentIndex);
           filteredStudentsList.splice(studentIndex, 1);
@@ -108,7 +112,7 @@ const ModuleList = props => {
         console.log(err);
       });
     return () => (mounted = false);
-  }, []);
+  }, [currentCourse.students]);
 
   const changeStudentValues = e => {
     console.log(e.target);
@@ -153,7 +157,6 @@ const ModuleList = props => {
         const updatedCourse = currentCourse;
         updatedCourse.students.push(addedStudent);
         dispatch(editCourseAction(updatedCourse));
-        setNewStudent('');
       })
       .catch(err => {
         console.log(err);
