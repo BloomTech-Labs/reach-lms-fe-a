@@ -83,29 +83,4 @@ describe('<courseList /> test suite', () => {
     );
     expect(getByText(/my courses/i).innerHTML).toBe('My Courses');
   });
-
-  test('delete button working', async () => {
-    // when spyOn detects dispatch/selector call, mock dispatch and selector
-    // return values
-    useDispatchMock.mockReturnValue(jest.fn());
-    useSelectorMock.mockReturnValue(mockCourses.courses);
-
-    //render component
-    const { getByText } = render(
-      <Router>
-        <CourseList />
-      </Router>
-    );
-
-    // await for mockThunk to dispatch and assert that expected data is
-    // rendered to the page
-    await waitFor(() => {
-      let name = getByText(/name1/i);
-      expect(name).toBeInTheDocument();
-      let type = getByText(/1st/i);
-      expect(type).toBeInTheDocument();
-      let description = getByText(/description1/i);
-      expect(description).toBeInTheDocument();
-    });
-  });
 });

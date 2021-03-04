@@ -9,7 +9,7 @@ import {
 import EditProgramForm from '../components/Program/EditProgramForm';
 import * as reactRedux from 'react-redux';
 import { BrowserRouter as Router } from 'react-router-dom';
-import mockedAxios from 'axios';
+import mockedAxios from '../__mocks__/put';
 
 const programMock = {
   programname: 'program1',

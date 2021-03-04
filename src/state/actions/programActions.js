@@ -1,31 +1,13 @@
-import { axiosWithAuth } from '../../utils/axiosWithAuth';
-
 export const ADD_PROGRAM = 'ADD_PROGRAM';
 export const DELETE_PROGRAM = 'DELETE_PROGRAM';
-export const SEARCH_PROGRAM = 'SEARCH_PROGRAM';
 export const SET_EDIT = 'SET_EDIT';
 export const EDIT_PROGRAM = 'EDIT_PROGRAM';
 export const SET_PROGRAM_LIST = 'SET_PROGRAM_LIST';
-export const FILTER_STATE = 'FILTER_STATE';
 export const CLEAR_PROGRAMS = 'CLEAR_PROGRAMS';
 export const CURRENT_PROGRAM = 'CURRENT_PROGRAM';
-export const SET_PROGRAM_ID = 'SET_PROGRAM_ID';
 
 export const addProgram = value => {
   return { type: ADD_PROGRAM, payload: value };
-};
-
-export const searchProgram = value => dispatch => {
-  return axiosWithAuth()
-    .get(``)
-    .then(res => {
-      let payload = {
-        results: res.data.data,
-        search_input: value,
-      };
-      dispatch({ type: SEARCH_PROGRAM, payload: payload });
-    })
-    .catch(err => console.log(err));
 };
 
 export const setEdit = value => {
@@ -46,13 +28,6 @@ export const setProgramList = value => {
 
 export const currentProgram = value => {
   return { type: CURRENT_PROGRAM, payload: value };
-};
-
-export const setProgramId = value => {
-  return { type: SET_PROGRAM_ID, payload: value };
-};
-export const filterState = value => {
-  return { type: FILTER_STATE, payload: value };
 };
 
 export const clearPrograms = () => {

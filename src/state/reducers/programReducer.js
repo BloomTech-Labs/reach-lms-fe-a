@@ -1,20 +1,16 @@
 import {
   ADD_PROGRAM,
-  SEARCH_PROGRAM,
   SET_EDIT,
   DELETE_PROGRAM,
   EDIT_PROGRAM,
   SET_PROGRAM_LIST,
-  FILTER_STATE,
   CLEAR_PROGRAMS,
   CURRENT_PROGRAM,
 } from '../actions/programActions';
 
 const initialState = {
-  search_programs: [],
   programs_list: [],
   edit_program: {},
-  filtered_program_list: [],
   currentProgram: {},
 };
 
@@ -29,29 +25,6 @@ const programReducer = (state = initialState, action) => {
           programs_list: [...state.programs_list, action.payload],
         };
       }
-    case SEARCH_PROGRAM:
-      function filterResults() {
-        const inputCopy = { ...action.payload.search_input };
-        let results = action.payload.results;
-        for (let i in inputCopy) {
-          //deletes keys in fields that were left empty
-          if (!inputCopy[i]) {
-            delete inputCopy[i];
-          }
-        }
-        let filteredResults = results.filter(el => {
-          const keys = Object.keys(inputCopy);
-          for (let i in keys) {
-            if (el[keys[i]] !== inputCopy[keys[i]]) {
-              return false;
-            }
-          }
-          return true;
-        });
-        return filteredResults ? filteredResults : results;
-      }
-      let results = filterResults();
-      return { ...state, search_programs: results };
     case SET_EDIT:
       return { ...state, edit_program: action.payload };
     case DELETE_PROGRAM:
@@ -68,8 +41,6 @@ const programReducer = (state = initialState, action) => {
       return { ...state, programs_list: updatedPrograms };
     case SET_PROGRAM_LIST:
       return { ...state, programs_list: action.payload };
-    case FILTER_STATE:
-      return { ...state, filtered_program_list: action.payload };
     case CURRENT_PROGRAM:
       return { ...state, currentProgram: action.payload };
     case CLEAR_PROGRAMS:

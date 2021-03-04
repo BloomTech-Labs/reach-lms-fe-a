@@ -46,11 +46,12 @@ const persistConfig = {
   storage,
 };
 
+// redux-persist used to keep state from wiping after refreshes
 const persistedCourseReducer = persistReducer(persistConfig, rootReducer);
 
 const store = createStore(
   persistedCourseReducer,
-  applyMiddleware(thunk, logger)
+  applyMiddleware(thunk, logger) // redux-logger extremely useful for debugging
 );
 let persistor = persistStore(store);
 
