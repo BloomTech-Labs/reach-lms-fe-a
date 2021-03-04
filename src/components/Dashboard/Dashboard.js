@@ -7,17 +7,15 @@ import CourseList from '../Courses/CourseList';
 
 //ant d
 import Layout from 'antd/lib/layout';
-
 // css
 import '../../styles/Dashboard.css';
 
-//styled components
+//styled-components
 const StyledWrapper = styled.div`
   display: flex;
   margin-left: 10%;
 `;
-
-// ant Design
+// Ant Design Layout Structure
 const { Header, Footer, Content } = Layout;
 
 const Dashboard = props => {
