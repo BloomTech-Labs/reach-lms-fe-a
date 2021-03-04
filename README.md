@@ -33,7 +33,7 @@ Deployed link: a.reachlms.dev
 - User Profiles: Each user can view and update their own user profile once inside the app.
 - Program Management: Admins can create a program once inside the app and can update and delete that program as well.
 - Curriculum Management: Admins can create, update, and delete courses per program, as well as modules per course.
-- Dropdown menus in UI for students to more easily manage their modules
+- Dropdown menus in UI for students to more easily manage their modules.
 
 #### Front end deployed to `AWS`
 
