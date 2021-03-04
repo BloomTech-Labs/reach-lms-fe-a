@@ -10,8 +10,6 @@ Deployed link: a.reachlms.dev
 |                                                      [Simone Ballard](https://github.com/simonesquad)                                                       |
 |  :-----------------------------------------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------------------------------------: |
 | [<img src="https://avatars.githubusercontent.com/u/69052933?s=460&u=a59bb1fd41bac4f91b8460f06ec34592fece103e&v=4" width = "200" />](https://github.com/aldenho52) | [<img src="https://avatars.githubusercontent.com/u/47793349?s=400&u=42e3944e42e56779451351208ff7eb4fffb27ba7&v=4" width = "200" />](https://github.com/ashtoturn) | [<img src="https://avatars.githubusercontent.com/u/55416868?s=400&u=a8a7d1cc124b68e9c38dd4b9bc39cc42e31a9572&v=4" width = "200" />](https://github.com/mrbhawnish) | [<img src="https://avatars.githubusercontent.com/u/70392706?s=400&u=2e5a31261597a86c31eba71d4546912a16e236f3&v=4" width = "200" />](https://github.com/dav1dchang) | [<img src="https://avatars.githubusercontent.com/u/67379632?s=400&u=3f34b76d111fb330e93fbb0133cb200addc326cf&v=4" width = "200" />](https://github.com/JoelVega97) | [<img src="https://avatars.githubusercontent.com/u/50623822?s=400&u=ba6af6a7e826fa735e142f23a76c947ffed3e55f&v=4" width = "200" />](https://github.com/simonesquad) |
-<!-- |                                [<img src="https://github.com/favicon.ico" width="15"> ](https://github.com/)                                |                            [<img src="https://github.com/favicon.ico" width="15"> ](https://github.com/honda0306)                             |                          [<img src="https://github.com/favicon.ico" width="15"> ](https://github.com/Mister-Corn)                           |                          [<img src="https://github.com/favicon.ico" width="15"> ](https://github.com/NandoTheessen)                           |                           [<img src="https://github.com/favicon.ico" width="15"> ](https://github.com/wvandolah)                            |
-|                [ <img src="https://static.licdn.com/sc/h/al2o9zrvru7aqj8e1x2rzsrca" width="15"> ](https://www.linkedin.com/)                |                 [ <img src="https://static.licdn.com/sc/h/al2o9zrvru7aqj8e1x2rzsrca" width="15"> ](https://www.linkedin.com/)                 |                [ <img src="https://static.licdn.com/sc/h/al2o9zrvru7aqj8e1x2rzsrca" width="15"> ](https://www.linkedin.com/)                |                 [ <img src="https://static.licdn.com/sc/h/al2o9zrvru7aqj8e1x2rzsrca" width="15"> ](https://www.linkedin.com/)                 |                [ <img src="https://static.licdn.com/sc/h/al2o9zrvru7aqj8e1x2rzsrca" width="15"> ](https://www.linkedin.com/)                | -->
 
 <br>
 <br>
@@ -52,18 +50,13 @@ https://reach-team-a-be.herokuapp.com/swagger-ui.html#/
 
 ## Authentication API here
 
-🚫Replace text below with a description of the API
-
 Authentication system built with Okta...
 
 # Installation Instructions
 
-
 Run npm i and npm start in the main folder to run on localhost:3000. Project is already deployed with AWS here: a.reachlms.dev 
 
 ## Other Scripts
-
-🚫replace these examples with your own
 
     * build - creates a build of the application
     * start - starts the production server after a build is created
