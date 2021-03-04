@@ -10,18 +10,14 @@ Deployed link: a.reachlms.dev
 |                                                      [Simone Ballard](https://github.com/simonesquad)                                                       |
 |  :-----------------------------------------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------------------------------------: |
 | [<img src="https://avatars.githubusercontent.com/u/69052933?s=460&u=a59bb1fd41bac4f91b8460f06ec34592fece103e&v=4" width = "200" />](https://github.com/aldenho52) | [<img src="https://avatars.githubusercontent.com/u/47793349?s=400&u=42e3944e42e56779451351208ff7eb4fffb27ba7&v=4" width = "200" />](https://github.com/ashtoturn) | [<img src="https://avatars.githubusercontent.com/u/55416868?s=400&u=a8a7d1cc124b68e9c38dd4b9bc39cc42e31a9572&v=4" width = "200" />](https://github.com/mrbhawnish) | [<img src="https://avatars.githubusercontent.com/u/70392706?s=400&u=2e5a31261597a86c31eba71d4546912a16e236f3&v=4" width = "200" />](https://github.com/dav1dchang) | [<img src="https://avatars.githubusercontent.com/u/67379632?s=400&u=3f34b76d111fb330e93fbb0133cb200addc326cf&v=4" width = "200" />](https://github.com/JoelVega97) | [<img src="https://avatars.githubusercontent.com/u/50623822?s=400&u=ba6af6a7e826fa735e142f23a76c947ffed3e55f&v=4" width = "200" />](https://github.com/simonesquad) |
-<!-- |                                [<img src="https://github.com/favicon.ico" width="15"> ](https://github.com/)                                |                            [<img src="https://github.com/favicon.ico" width="15"> ](https://github.com/honda0306)                             |                          [<img src="https://github.com/favicon.ico" width="15"> ](https://github.com/Mister-Corn)                           |                          [<img src="https://github.com/favicon.ico" width="15"> ](https://github.com/NandoTheessen)                           |                           [<img src="https://github.com/favicon.ico" width="15"> ](https://github.com/wvandolah)                            |
-|                [ <img src="https://static.licdn.com/sc/h/al2o9zrvru7aqj8e1x2rzsrca" width="15"> ](https://www.linkedin.com/)                |                 [ <img src="https://static.licdn.com/sc/h/al2o9zrvru7aqj8e1x2rzsrca" width="15"> ](https://www.linkedin.com/)                 |                [ <img src="https://static.licdn.com/sc/h/al2o9zrvru7aqj8e1x2rzsrca" width="15"> ](https://www.linkedin.com/)                |                 [ <img src="https://static.licdn.com/sc/h/al2o9zrvru7aqj8e1x2rzsrca" width="15"> ](https://www.linkedin.com/)                 |                [ <img src="https://static.licdn.com/sc/h/al2o9zrvru7aqj8e1x2rzsrca" width="15"> ](https://www.linkedin.com/)                | -->
 
 <br>
 <br>
-
-🚫 Optional examples of using images with links for your tech stack, make sure to change these to fit your project
 
 ![MIT](https://img.shields.io/packagist/l/doctrine/orm.svg)
 ![React](https://img.shields.io/badge/react-v16.7.0--alpha.2-blue.svg)
-
-🚫 more info on using badges [here](https://github.com/badges/shields)
+![Redux](https://img.shields.io/badge/react-redux-brightgreen)
+![Java](https://img.shields.io/badge/java-spring-red)
 
 - Fork and clone the repo to install it as your own remote.
   - **note** please [be sure to set your remote](https://help.github.jp/enterprise/2.11/user/articles/changing-a-remote-s-url/) for this repo to point to your Labs Team Front End Repository.
@@ -32,17 +28,16 @@ Deployed link: a.reachlms.dev
 
 ### Key Features
 
-- feature one
-- feature two
-- feature three
-- feature four
-- feature five
+- Mobile First: the application is highly responsive to different screen sizes and also supports larger sceens.
+- User Roles: Each user has one of three roles: admin, teachers, and students. Each role has a specific set of features available once inside the app.
+- User Profiles: Each user can view and update their own user profile once inside the app.
+- Program Management: Admins can create a program once inside the app and can update and delete that program as well.
+- Curriculum Management: Admins can create, update, and delete courses per program, as well as modules per course.
+- Dropdown menus in UI for students to more easily manage their modules
 
 #### Front end deployed to `AWS`
 
 #### [Back end](https://reach-team-a-be.herokuapp.com) built using: Heroku
-
-#### 🚫 back end framework goes here
 
 - point one
 - point two
@@ -56,19 +51,13 @@ https://reach-team-a-be.herokuapp.com/swagger-ui.html#/
 
 ## Authentication API here
 
-🚫Replace text below with a description of the API
-
 Authentication system built with Okta...
 
 # Installation Instructions
 
-🚫explain how to install the required dependencies to get this project up and running with yarn and NPM
-
 Run npm i and npm start in the main folder to run on localhost:3000. Project is already deployed with AWS here: a.reachlms.dev 
 
 ## Other Scripts
-
-🚫replace these examples with your own
 
     * build - creates a build of the application
     * start - starts the production server after a build is created
