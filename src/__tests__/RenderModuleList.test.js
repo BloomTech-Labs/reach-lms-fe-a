@@ -3,10 +3,11 @@ import React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { render, waitFor, cleanup } from '@testing-library/react';
 import * as reactRedux from 'react-redux';
+import { act } from 'react-dom/test-utils';
 import expect from 'expect';
-import mockedAxios from 'axios';
-import axios from '../__mocks__/axios';
-import { axiosWithAuth } from '../utils/axiosWithAuth';
+import * as axios from 'axios';
+import mockedAxios from '../__mocks__/get';
+import CourseList from '../components/Courses/CourseList';
 
 const mockModulesList = {
   modules: [
@@ -61,12 +62,12 @@ jest.mock('@okta/okta-react', () => ({
   },
 }));
 
+jest.mock('axios');
+
 describe('<moduleList /> test suite', () => {
   // listen for redux's dispatch and selector calls
   const useSelectorMock = jest.spyOn(reactRedux, 'useSelector');
   const useDispatchMock = jest.spyOn(reactRedux, 'useDispatch');
-  const axiosWithAuthMock = jest.spyOn(axiosWithAuth(), 'axiosWithAuth');
-  const axiosWithAuth = jest.fn(axiosWithAuth);
   // Setup before each test; clear previous test's mock return
   beforeEach(() => {
     useSelectorMock.mockClear();
@@ -74,39 +75,47 @@ describe('<moduleList /> test suite', () => {
 
   afterEach(cleanup);
 
-  test('it handles a loading state', async () => {
-    // when spyOn detects dispatch/selector call, mock dispatch and selector
-    // return values
+  // test('it handles a loading state', async () => {
+  //   // when spyOn detects dispatch/selector call, mock dispatch and selector
+  //   // return values
+  //   useDispatchMock.mockReturnValue(jest.fn());
+  //   useSelectorMock.mockReturnValue(mockModulesList.modules);
+  //   //render component
+  //   const { getByText } = render(
+  //     <Router>
+  //       <ModuleList />
+  //     </Router>
+  //   );
+
+  //   // await for mockThunk to dispatch and assert that expected data is
+  //   // rendered to the page
+  //   await waitFor(() => {
+  //     let name = getByText(/name1/i);
+  //     expect(name).toBeInTheDocument();
+  //     let type = getByText(/1st/i);
+  //     expect(type).toBeInTheDocument();
+  //     let description = getByText(/description1/i);
+  //     expect(description).toBeInTheDocument();
+  //     expect(getByText('name1'));
+  //   });
+  // });
+
+  test('Component renders properly, title showing', async () => {
     useDispatchMock.mockReturnValue(jest.fn());
     useSelectorMock.mockReturnValue(mockModulesList.modules);
-    axiosWithAuthMock.mockReturnValue(studentsMock.students);
-
-    //render component
-    const { getByText } = render(
-      <Router>
-        <ModuleList />
-      </Router>
-    );
-
-    // await for mockThunk to dispatch and assert that expected data is
-    // rendered to the page
-    await waitFor(() => {
-      let name = getByText(/name1/i);
-      expect(name).toBeInTheDocument();
-      let type = getByText(/1st/i);
-      expect(type).toBeInTheDocument();
-      let description = getByText(/description1/i);
-      expect(description).toBeInTheDocument();
-      expect(getByText('name1'));
+    act(async () => {
+      await axios.get.mockImplementationOnce(() =>
+        Promise.resolve(mockModulesList.modules)
+      );
     });
-  });
 
-  test('Component renders properly, title showing', () => {
     const { getByText } = render(
       <Router>
         <ModuleList />
       </Router>
     );
-    expect(getByText(/my modules/i).innerHTML).toBe('My Courses');
+    // rendered to the page
+    let name = getByText(/name1/i);
+    expect(name).toBeInTheDocument();
   });
 });
