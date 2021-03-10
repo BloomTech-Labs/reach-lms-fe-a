@@ -58,10 +58,27 @@ const userReducer = (state = initialState, action) => {
         user: action.payload,
       };
     case GET_USER_INFO_SUCCESS:
+      const {
+        userid,
+        firstname,
+        lastname,
+        email,
+        phonenumber,
+        role,
+        username,
+      } = action.payload;
       return {
         ...state,
         status: 'get-user-info/success',
-        user: action.payload,
+        user: {
+          userid,
+          firstname,
+          lastname,
+          email,
+          phonenumber,
+          role,
+          username,
+        },
       };
     default:
       return state;

@@ -1,9 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { axiosWithAuth } from '../../utils/axiosWithAuth';
+import React, { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import Navigation from '../Navigation';
-import * as yup from 'yup';
 import schema from '../../validation/CourseSchema';
 import { useFormWithErrors } from '../../hooks';
 import { courseActions } from '../../state/ducks';
@@ -16,7 +14,7 @@ import 'antd/dist/antd.css';
 import Button from 'antd/lib/button';
 import Input from 'antd/lib/input';
 import Select from 'antd/lib/select';
-import Form, { useForm } from 'antd/lib/form/Form';
+import Form from 'antd/lib/form/Form';
 import FormItem from 'antd/lib/form/FormItem';
 import Layout from 'antd/lib/layout';
 const { TextArea } = Input;
@@ -41,12 +39,6 @@ const initialValues = {
   coursedescription: '',
 };
 
-const initialFormErrors = {
-  coursename: '',
-  coursecode: '',
-  coursedescription: '',
-};
-
 export default function AddCourse() {
   const { push } = useHistory();
   const dispatch = useDispatch();
@@ -56,34 +48,21 @@ export default function AddCourse() {
     initialValues
   );
 
-  // const [values, setValues] = useState(initialValues);
-  // const [errors, setErrors] = useState(initialFormErrors);
-  // const [disabled, setDisabled] = useState(true);
-
   const currentProgramId = useSelector(
     state => state.programReducer.currentProgram?.programid
   );
 
   const { status, error } = useSelector(state => state.courseReducer);
 
-  // const setFormErrors = (name, value) => {
-  //   yup
-  //     .reach(schema, name)
-  //     .validate(value)
-  //     .then(() => setErrors({ ...errors, [name]: '' }))
-  //     .catch(err => setErrors({ ...errors, [name]: err.errors[0] }));
-  // };
-
   const changeValues = e => {
     const { name, value, type } = e.target;
     const valueToUse = type === 'select' ? Select : value;
     onChange(name, valueToUse);
-    // setFormErrors(name, valueToUse);
-    // setValues({ ...values, [name]: valueToUse });
   };
 
   useEffect(() => {
     if (status === 'post/fail') {
+      // probably should show this error to the user
       console.log(error);
     }
     if (status === 'post/success') {

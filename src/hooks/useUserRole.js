@@ -20,7 +20,7 @@ export const useUserRole = () => {
   const dispatch = useDispatch();
 
   /** the role of the user logged in */
-  const role = useSelector(state => state.userReducer?.user?.role);
+  const { role } = useSelector(state => state.userReducer.user);
 
   /**
    * this useEffect fires on component render.
