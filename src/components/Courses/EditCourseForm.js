@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { axiosWithAuth } from '../../utils/axiosWithAuth';
+import React, { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import Navigation from '../Navigation';
-import * as yup from 'yup';
 import schema from '../../validation/CourseSchema';
-import { editCourseAction } from '../../state/actions/courseActions';
+import { courseActions } from '../../state/ducks';
+import { useFormWithErrors } from '../../hooks';
 import styled from 'styled-components';
 
 // css
@@ -41,51 +40,47 @@ const initialFormErrors = {
 };
 
 export default function EditCourseForm() {
-  const courseToEdit = useSelector(state => state.courseReducer.edit_course);
   const { push } = useHistory();
   const dispatch = useDispatch();
-  const [values, setValues] = useState(courseToEdit);
-  const [errors, setErrors] = useState(initialFormErrors);
-  const [disabled, setDisabled] = useState(false);
+  const { status, error } = useSelector(state => state.courseReducer);
+  const courseToEdit = useSelector(state => state.courseReducer.editCourse);
 
-  const setFormErrors = (name, value) => {
-    yup
-      .reach(schema, name)
-      .validate(value)
-      .then(() => setErrors({ ...errors, [name]: '' }))
-      .catch(err => setErrors({ ...errors, [name]: err.errors[0] }));
-  };
+  const { values, errors, disabled, onChange, resetValues } = useFormWithErrors(
+    schema,
+    courseToEdit,
+    initialFormErrors,
+    false
+  );
 
   const changeValues = e => {
     const { name, value, type } = e.target;
     const valueToUse = type === 'select' ? Select : value;
-    setFormErrors(name, valueToUse);
-    setValues({ ...values, [e.target.name]: valueToUse });
+    onChange(name, valueToUse);
   };
 
   useEffect(() => {
-    schema.isValid(values).then(valid => setDisabled(!valid));
-  }, [values]);
+    if (status === 'edit/success') {
+      resetValues();
+      push('/courses');
+    }
+    if (status === 'edit/error') {
+      console.log(error);
+    }
+  }, [status, error, push, resetValues]);
 
   function submitForm(e) {
     e.preventDefault();
+
     const editedCourse = {
+      courseid: courseToEdit.courseid,
       coursename: values.coursename,
       coursecode: values.coursecode,
       coursedescription: values.coursedescription,
     };
-    axiosWithAuth()
-      .patch(
-        `https://reach-team-a-be.herokuapp.com/courses/${courseToEdit.courseid}`,
-        editedCourse
-      )
-      .then(res => {
-        dispatch(editCourseAction(values));
-        push('/courses');
-      })
-      .catch(err => {
-        console.log(err);
-      });
+
+    dispatch(
+      courseActions.editCourseThunk(courseToEdit.courseid, editedCourse)
+    );
   }
 
   const goBack = () => {

@@ -4,7 +4,8 @@ import * as yup from 'yup';
 export const useFormWithErrors = (
   schema,
   initialValues,
-  initialFormErrors = undefined
+  initialFormErrors = undefined,
+  initialDisabled = true
 ) => {
   if (!initialFormErrors) {
     initialFormErrors = initialValues;
@@ -12,7 +13,7 @@ export const useFormWithErrors = (
 
   const [values, setValues] = useState(initialValues);
   const [errors, setErrors] = useState(initialFormErrors);
-  const [disabled, setDisabled] = useState(true);
+  const [disabled, setDisabled] = useState(initialDisabled);
 
   const setFormErrors = (name, value) => {
     yup
