@@ -172,9 +172,7 @@ const ModuleList = props => {
           </div>
           {/* 
           {ADD TEACHER FORM and TEACHER LIST} 
-
           Maybe we could split some of this component out into separate components?? There's a LOT going on.
-
           */}
 
           <div>
@@ -210,7 +208,7 @@ const ModuleList = props => {
                     mode="inline"
                   >
                     <SubMenu key="sub3" title="Teachers">
-                      {currentCourse.teachers.map((teacher, index) => (
+                      {currentCourse.teachers?.map((teacher, index) => (
                         <React.Fragment key={teacher.teacher.teacherid}>
                           <StyledMenuRow>
                             <Menu.Item
@@ -277,7 +275,7 @@ const ModuleList = props => {
                     mode="inline"
                   >
                     <SubMenu key="sub2" title="Registered Students">
-                      {currentCourse.students.map(student => {
+                      {currentCourse?.students?.map(student => {
                         return (
                           <StyledMenuRow>
                             <Menu.Item

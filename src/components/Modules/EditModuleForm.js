@@ -17,7 +17,6 @@ import '../../styles/Form.css';
 import 'antd/dist/antd.css';
 import Button from 'antd/lib/button';
 import Input from 'antd/lib/input';
-import Select from 'antd/lib/select';
 import Form from 'antd/lib/form/Form';
 import FormItem from 'antd/lib/form/FormItem';
 import Layout from 'antd/lib/layout';
@@ -60,10 +59,9 @@ export default function EditModuleForm() {
   };
 
   const changeValues = e => {
-    const { name, value, type } = e.target;
-    const valueToUse = type === 'select' ? Select : value;
-    setFormErrors(name, valueToUse);
-    setValues({ ...values, [e.target.name]: valueToUse });
+    const { name, value } = e.target;
+    setFormErrors(name, value);
+    setValues({ ...values, [e.target.name]: value });
   };
 
   useEffect(() => {

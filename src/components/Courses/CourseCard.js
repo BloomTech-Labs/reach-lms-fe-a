@@ -37,7 +37,8 @@ export default function CourseCard(props) {
   );
 
   const viewCourseHandler = id => {
-    // this should be refactored into a `moduleActions.getModulesByCourseId(courseId)` thunk
+    // TODO: this should be refactored into a
+    // `moduleActions.getModulesByCourseId(courseId)` thunk
     axiosWithAuth()
       .get(`https://reach-team-a-be.herokuapp.com/modules/${id}`)
       .then(res => {

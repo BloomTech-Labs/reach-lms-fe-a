@@ -36,7 +36,7 @@ export const asyncThunkUtils = slicePrefix => {
           result: {
             ...state,
             status: `${action.payload.prefix}/error`,
-            error: action.payload.message,
+            error: action.payload,
           },
         };
 
