@@ -13,8 +13,7 @@ import '../../styles/ProgramCard.css';
 export default function ProgramCard(props) {
   const { program } = props;
   const dispatch = useDispatch();
-  // const { status, error } = useSelector(state => state.programReducer);
-  const { status, error } = useSelector(state => state.courseReducer.status);
+  const { status, error } = useSelector(state => state.courseReducer);
   const { push } = useHistory();
 
   useEffect(() => {
@@ -22,7 +21,7 @@ export default function ProgramCard(props) {
       push('/courses');
     }
     if (status === 'get-by-program-id/error') {
-      // we'll probably want to display an error to our user
+      // we'll probably want to display an error to our user instead of sending it to console
       console.error(error);
     }
   }, [status, push, error]);
