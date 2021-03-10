@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom';
 import {
   currentModule,
   editModuleAction,
-} from '../../state/actions/moduleActions';
+} from '../../___reference___/moduleActions';
 import Navigation from '../Navigation';
 import { axiosWithAuth } from '../../utils/axiosWithAuth';
 import * as yup from 'yup';

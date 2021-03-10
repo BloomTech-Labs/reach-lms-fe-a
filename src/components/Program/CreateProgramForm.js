@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import Navigation from '../Navigation';
 import * as yup from 'yup';
 import schema from '../../validation/ProgramSchema';
-import { addProgram } from '../../state/actions/programActions';
+import { addProgram } from '../../___reference___/actions/programActions';
 import styled from 'styled-components';
 
 // css

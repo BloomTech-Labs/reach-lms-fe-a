@@ -1,11 +1,7 @@
-const makeAsyncThunk_START = slice => `${slice}_START`;
-const makeAsyncThunk_RESOLVE = slice => `${slice}_RESOLVE`;
-const makeAsyncThunk_FAIL = slice => `${slice}`;
-
 export const asyncThunkUtils = slicePrefix => {
-  const ASYNC_THUNK_START = makeAsyncThunk_START(slicePrefix);
-  const ASYNC_THUNK_RESOLVE = makeAsyncThunk_RESOLVE(slicePrefix);
-  const ASYNC_THUNK_FAIL = makeAsyncThunk_FAIL(slicePrefix);
+  const ASYNC_THUNK_START = `${slicePrefix}_START`;
+  const ASYNC_THUNK_FAIL = `${slicePrefix}_FAIL`;
+  const ASYNC_THUNK_RESOLVE = `${slicePrefix}_RESOLVE`;
 
   const triggerThunkStart = prefix => ({
     type: ASYNC_THUNK_START,

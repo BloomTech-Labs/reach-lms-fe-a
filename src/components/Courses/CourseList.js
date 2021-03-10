@@ -2,6 +2,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { useOktaAuth } from '@okta/okta-react';
+import { useUserRole } from '../../hooks';
 import styled from 'styled-components';
 import CourseCard from './CourseCard';
 
@@ -68,18 +69,19 @@ const StyledH2 = styled.h2`
   font-size: 1.75rem;
 `;
 
+const { Header, Footer, Content } = Layout;
+
 const CourseList = () => {
   const { authService } = useOktaAuth();
-  const { Header, Footer, Content } = Layout;
   const courseList = useSelector(state => state.courseReducer.coursesList);
-  const user = useSelector(state => state.userReducer);
+  const { userIsAdmin } = useUserRole();
   const currentProgram = useSelector(
     state => state.programReducer.currentProgram
   );
 
   return (
     <Layout>
-      {user.role === 'ADMIN' && (
+      {userIsAdmin() && (
         <Header>
           <Navigation authService={authService} />
         </Header>
@@ -89,14 +91,14 @@ const CourseList = () => {
           <StyledWrapper>
             <StyledContent>
               <div>
-                {user.role === 'ADMIN' && (
+                {userIsAdmin() && (
                   <h1>Program: {currentProgram.programname}</h1>
                 )}
               </div>
               <HeaderDiv>
                 <StyledH2>My Courses</StyledH2>
                 <StyledTitle>
-                  {user.role === 'ADMIN' && (
+                  {userIsAdmin() && (
                     <Link to="/add-course">
                       <Button size="large" style={{ background: '#01fe87' }}>
                         Add Course

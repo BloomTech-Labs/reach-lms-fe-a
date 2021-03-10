@@ -44,7 +44,7 @@ const StyledH2 = styled.h2`
 `;
 
 const ProgramList = () => {
-  const programs = useSelector(state => state.programReducer.programs_list);
+  const programs = useSelector(state => state.programReducer.programsList);
 
   return (
     <StyledContent>

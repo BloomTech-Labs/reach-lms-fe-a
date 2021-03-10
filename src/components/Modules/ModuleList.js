@@ -4,15 +4,16 @@ import { useHistory } from 'react-router-dom';
 import { useOktaAuth } from '@okta/okta-react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { currentModule } from '../../state/actions/moduleActions';
+import { currentModule } from '../../___reference___/moduleActions';
 import { axiosWithAuth } from '../../utils/axiosWithAuth';
-import {
-  addStudent,
-  addTeacher,
-  editCourseAction,
-  deleteStudent,
-  deleteTeacher,
-} from '../../state/actions/courseActions';
+import { courseActions } from '../../state/ducks';
+// import {
+//   addStudent,
+//   addTeacher,
+//   editCourseAction,
+//   deleteStudent,
+//   deleteTeacher,
+// } from '../../state/actions/courseActions';
 import Navigation from '../Navigation';
 
 // material ui
@@ -26,6 +27,15 @@ import Form from 'antd/lib/form/Form';
 import FormItem from 'antd/lib/form/FormItem';
 import Input from 'antd/lib/input';
 import Button from 'antd/lib/button';
+
+const {
+  addStudent,
+  addTeacher,
+  editCourseAction,
+  deleteStudent,
+  deleteTeacher,
+} = courseActions;
+
 const { SubMenu } = Menu;
 //ant Design
 const { Header, Footer, Content } = Layout;

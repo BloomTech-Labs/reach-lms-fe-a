@@ -4,15 +4,12 @@ import Card from 'antd/lib/card';
 import Button from 'antd/lib/button';
 import Menu from 'antd/lib/menu';
 import Dropdown from 'antd/lib/dropdown';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import { useUserRole } from '../../hooks';
 import { axiosWithAuth } from '../../utils/axiosWithAuth';
-import {
-  setEditCourse,
-  currentCourse,
-  deleteCourse,
-} from '../../state/actions/courseActions';
-import { setModuleList } from '../../state/actions/moduleActions';
+import { courseActions } from '../../state/ducks';
+import { setModuleList } from '../../___reference___/moduleActions';
 // css
 import '../../styles/CourseCard.css';
 
@@ -20,41 +17,32 @@ export default function CourseCard(props) {
   const { course } = props;
   const dispatch = useDispatch();
   const { push } = useHistory();
-  const user = useSelector(state => state.userReducer);
+
+  const { userIsAdmin, userIsTeacher } = useUserRole();
 
   const handleMenuClick = e => {
     if (e.key === 'edit') {
-      dispatch(setEditCourse(course));
+      dispatch(courseActions.setEditCourse(course));
       push('/edit-course');
     } else {
-      axiosWithAuth()
-        .delete(
-          `https://reach-team-a-be.herokuapp.com/courses/${course.courseid}`
-        )
-        .then(res => {
-          dispatch(deleteCourse(course.courseid));
-        })
-        .catch(err => console.log(err));
+      courseActions.deleteCourseThunk(course.courseid);
     }
   };
 
   const menu = (
     <Menu onClick={handleMenuClick}>
       <Menu.Item key="edit">Edit Course</Menu.Item>
-      {user.role === 'ADMIN' && (
-        <Menu.Item key="delete">Delete Course</Menu.Item>
-      )}
+      {userIsAdmin() && <Menu.Item key="delete">Delete Course</Menu.Item>}
     </Menu>
   );
 
   const viewCourseHandler = id => {
+    // this should be refactored into a `moduleActions.getModulesByCourseId(courseId)` thunk
     axiosWithAuth()
       .get(`https://reach-team-a-be.herokuapp.com/modules/${id}`)
       .then(res => {
-        dispatch(currentCourse(course));
+        dispatch(courseActions.currentCourse(course));
         dispatch(setModuleList(res.data));
-      })
-      .then(err => {
         push('/modules');
       })
       .catch(err => console.log(err));
@@ -65,7 +53,7 @@ export default function CourseCard(props) {
       <Card
         title={course.coursename}
         extra={
-          (user.role === 'ADMIN' || user.role === 'TEACHER') && (
+          (userIsAdmin() || userIsTeacher()) && (
             <Dropdown.Button overlay={menu}></Dropdown.Button>
           )
         }

@@ -91,7 +91,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function UserProfile() {
-  const user = useSelector(state => state.userReducer);
+  const { user } = useSelector(state => state.userReducer);
   const { push } = useHistory();
   const { Header, Footer, Content } = Layout;
   const { authService } = useOktaAuth();

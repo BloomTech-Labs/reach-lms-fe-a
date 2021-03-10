@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { editProgramAction } from '../../state/actions/programActions';
+import { editProgramAction } from '../../___reference___/actions/programActions';
 import Navigation from '../Navigation';
 import { axiosWithAuth } from '../../utils/axiosWithAuth';
 import * as yup from 'yup';

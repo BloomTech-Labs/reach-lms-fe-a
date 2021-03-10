@@ -30,6 +30,20 @@ export const userActions = {
       )
       .finally(() => dispatch(userThunkUtils.triggerThunkResolve()));
   },
+  editUserThunk: user => dispatch => {
+    dispatch(userThunkUtils.triggerThunkStart('edit'));
+    const { userid } = user;
+    if (!userid) {
+      throw new Error('No userid attached to user');
+    }
+    axiosAuth()
+      .patch(`/users/user/${parseInt(userid)}`, user)
+      .then(res => dispatch(userActions.editUser(res.data)))
+      .catch(err =>
+        dispatch(userThunkUtils.triggerThunkFail('edit', err.message))
+      )
+      .finally(() => userThunkUtils.triggerThunkResolve());
+  },
 };
 
 const initialState = {
@@ -55,7 +69,7 @@ const userReducer = (state = initialState, action) => {
     case EDIT_USER:
       return {
         ...state,
-        user: action.payload,
+        status: 'edit/success',
       };
     case GET_USER_INFO_SUCCESS:
       const {
@@ -64,8 +78,8 @@ const userReducer = (state = initialState, action) => {
         lastname,
         email,
         phonenumber,
-        role,
         username,
+        roles,
       } = action.payload;
       return {
         ...state,
@@ -76,8 +90,8 @@ const userReducer = (state = initialState, action) => {
           lastname,
           email,
           phonenumber,
-          role,
           username,
+          role: roles[0].role.name,
         },
       };
     default:

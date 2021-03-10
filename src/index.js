@@ -16,57 +16,42 @@ import { NotFoundPage } from './components/NotFound';
 import { LoginPage } from './components/Login';
 import { HomePage } from './components/Dashboard/';
 import { config } from './utils/oktaConfig';
+
 import LoadingComponent from './components/LoadingComponent';
+
 import UserProfile from '../src/components/Profile/UserProfile';
 import EditUserForm from '../src/components/Profile/EditUserForm';
+
 import CreateProgram from '../src/components/Program/CreateProgramForm';
 import EditProgram from '../src/components/Program/EditProgramForm';
+
 import CourseList from './components/Courses/CourseList';
 import AddCourseForm from './components/Courses/AddCourseForm';
 import EditCourseForm from './components/Courses/EditCourseForm';
+
 import ModuleList from './components/Modules/ModuleList';
 import ModuleText from './components/Modules/ModuleText';
 import AddModuleForm from './components/Modules/AddModuleForm';
 import EditModuleForm from './components/Modules/EditModuleForm';
 
 // redux
-import { createStore, applyMiddleware } from 'redux';
-import { persistStore, persistReducer } from 'redux-persist';
-import { PersistGate } from 'redux-persist/integration/react';
-import storage from 'redux-persist/lib/storage'; // defaults to localStorage for web
+// import { persistStore } from 'redux-persist';
+// import { PersistGate } from 'redux-persist/integration/react';
 import { Provider } from 'react-redux';
-import thunk from 'redux-thunk';
 
-import rootReducer from './state/reducers/rootReducer';
+import store from './state/store';
 import HomeContainer from './components/Dashboard/HomeContainer';
 import FooterApp from '../src/components/FooterApp';
 
-const persistConfig = {
-  key: 'coursesList',
-  storage,
-};
-
-// redux-persist used to keep state from wiping after refreshes
-const persistedCourseReducer = persistReducer(persistConfig, rootReducer);
-
-const middleware = [thunk];
-const createStoreWithMiddleware = applyMiddleware(...middleware)(createStore);
-
-const store = createStoreWithMiddleware(
-  persistedCourseReducer,
-  // Download this Chrome Extension: https://chrome.google.com/webstore/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd
-  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
-);
-
-let persistor = persistStore(store);
+// const persistor = persistStore(store);
 
 ReactDOM.render(
   <Router>
     <React.StrictMode>
       <Provider store={store}>
-        <PersistGate loading={null} persistor={persistor}>
-          <App />
-        </PersistGate>
+        <App />
+        {/* <PersistGate loading={null} persistor={persistor}>
+        </PersistGate> */}
       </Provider>
     </React.StrictMode>
   </Router>,

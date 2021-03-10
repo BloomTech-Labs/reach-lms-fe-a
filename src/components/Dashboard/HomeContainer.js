@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { useOktaAuth } from '@okta/okta-react';
 import { useUserRole } from '../../hooks';
+import { programActions, courseActions } from '../../state/ducks';
 import Dashboard from './Dashboard';
 
 function HomeContainer({ LoadingComponent }) {
@@ -9,7 +11,22 @@ function HomeContainer({ LoadingComponent }) {
   // eslint-disable-next-line
   const [memoAuthService] = useMemo(() => [authService], []);
 
-  useUserRole();
+  const { userIsAdmin, userIsTeacher } = useUserRole();
+  const { user, status } = useSelector(state => state.userReducer);
+  const { username, userid } = user;
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (status === 'get-user-info/success') {
+      if (userIsAdmin()) {
+        dispatch(programActions.getProgramsByUserIdThunk(userid));
+      } else if (userIsTeacher()) {
+        dispatch(courseActions.getCoursesByTeacherNameThunk(username));
+      } else {
+        dispatch(courseActions.getCoursesByStudentNameThunk(username));
+      }
+    }
+  }, [status, dispatch, userIsAdmin, userIsTeacher, username, userid]);
 
   useEffect(() => {
     let isSubscribed = true;

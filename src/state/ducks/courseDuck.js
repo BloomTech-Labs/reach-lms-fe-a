@@ -10,6 +10,7 @@ const courseThunkUtils = asyncThunkUtils('COURSE');
 const ADD_COURSE_SUCCESS = 'ADD_COURSE_SUCCESS';
 const EDIT_COURSE_SUCCESS = 'EDIT_COURSE_SUCCESS';
 const DELETE_COURSE_SUCCESS = 'DELETE_COURSE_SUCCESS';
+const GET_COURSES_BY_PROGRAM_ID_SUCCESS = 'GET_COURSES_BY_PROGRAM_ID_SUCCESS';
 
 const SET_EDIT_COURSE = 'SET_EDIT_COURSE';
 const SET_COURSE_LIST = 'SET_COURSE_LIST';
@@ -30,6 +31,25 @@ const DELETE_TEACHER = 'DELETE_TEACHER';
  * an action creator or thunk that relates to our courses slice of state
  */
 export const courseActions = {
+  setCurrentCourse: course => ({ type: CURRENT_COURSE, payload: course }),
+  setEditCourse: course => ({ type: SET_EDIT_COURSE, payload: course }),
+
+  // GET ALL COURSES ASSOCIATED WITH THE GIVEN PROGRAMID
+  getCoursesByProgramId: programId => dispatch => {
+    dispatch(courseThunkUtils.triggerThunkStart('get-by-program-id'));
+
+    axiosAuth()
+      .get(`/courses/${programId}`)
+      .then(res =>
+        dispatch({ type: GET_COURSES_BY_PROGRAM_ID_SUCCESS, payload: res.data })
+      )
+      .catch(err =>
+        dispatch(
+          courseThunkUtils.triggerThunkFail('get-by-program-id', err.message)
+        )
+      )
+      .finally(() => dispatch(courseThunkUtils.triggerThunkResolve()));
+  },
   // CREATE A NEW COURSE
   addCourseThunk: (programId, newCourse) => dispatch => {
     dispatch(courseThunkUtils.triggerThunkStart('add'));
@@ -87,6 +107,14 @@ const courseReducer = (state = initialState, action) => {
   }
 
   switch (action.type) {
+    /*------- GET COURSES BY PROGRAM ID -------*/
+    case GET_COURSES_BY_PROGRAM_ID_SUCCESS:
+      return {
+        ...state,
+        status: 'get-by-program-id/success',
+        coursesList: action.payload,
+      };
+
     /*------- ADD/POST NEW COURSE -------*/
     case ADD_COURSE_SUCCESS:
       return {

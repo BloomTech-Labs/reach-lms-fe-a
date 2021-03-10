@@ -1,39 +1,38 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import 'antd/dist/antd.css';
 import Card from 'antd/lib/card';
 import Button from 'antd/lib/button';
 import Menu from 'antd/lib/menu';
 import Dropdown from 'antd/lib/dropdown';
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { axiosWithAuth } from '../../utils/axiosWithAuth';
-import {
-  setEdit,
-  deleteProgram,
-  currentProgram,
-} from '../../state/actions/programActions';
-import { setCourseList } from '../../state/actions/courseActions';
+import { programActions, courseActions } from '../../state/ducks';
 // css
 import '../../styles/ProgramCard.css';
 
 export default function ProgramCard(props) {
   const { program } = props;
   const dispatch = useDispatch();
+  // const { status, error } = useSelector(state => state.programReducer);
+  const { status, error } = useSelector(state => state.courseReducer.status);
   const { push } = useHistory();
+
+  useEffect(() => {
+    if (status === 'get-by-program-id/success') {
+      push('/courses');
+    }
+    if (status === 'get-by-program-id/error') {
+      // we'll probably want to display an error to our user
+      console.error(error);
+    }
+  }, [status, push, error]);
 
   const handleMenuClick = e => {
     if (e.key === 'edit') {
-      dispatch(setEdit(program));
+      dispatch(programActions.setEdit(program));
       push('/edit-program');
     } else {
-      axiosWithAuth()
-        .delete(
-          `https://reach-team-a-be.herokuapp.com/programs/program/${program.programid}`
-        )
-        .then(res => {
-          dispatch(deleteProgram(program.programid));
-        })
-        .catch(err => console.log(err));
+      dispatch(programActions.deleteProgramByIdThunk(program.programid));
     }
   };
 
@@ -47,14 +46,9 @@ export default function ProgramCard(props) {
   );
 
   const viewProgramHandler = program => {
-    axiosWithAuth()
-      .get(`https://reach-team-a-be.herokuapp.com/courses/${program.programid}`)
-      .then(res => {
-        dispatch(setCourseList(res.data));
-        dispatch(currentProgram(program));
-      })
-      .catch(err => console.log(err));
-    push('/courses');
+    // this should be refactored into a `courseActions.getCoursesByProgramId` thunk
+    dispatch(courseActions.getCoursesByProgramId(program.programid));
+    dispatch(programActions.currentProgram(program));
   };
 
   return (
