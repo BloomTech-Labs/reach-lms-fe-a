@@ -71,7 +71,7 @@ const StyledH2 = styled.h2`
 const CourseList = () => {
   const { authService } = useOktaAuth();
   const { Header, Footer, Content } = Layout;
-  const courseList = useSelector(state => state.courseReducer.courses_list);
+  const courseList = useSelector(state => state.courseReducer.coursesList);
   const user = useSelector(state => state.userReducer);
   const currentProgram = useSelector(
     state => state.programReducer.currentProgram

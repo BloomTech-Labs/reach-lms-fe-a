@@ -2,7 +2,7 @@ import { combineReducers } from 'redux';
 
 import programReducer from './programReducer';
 import userReducer from './userReducer';
-import courseReducer from './courseReducer';
+import { courseReducer } from '../ducks/';
 import moduleReducer from './moduleReducer';
 
 const rootReducer = combineReducers({

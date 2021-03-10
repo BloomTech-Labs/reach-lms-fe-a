@@ -34,25 +34,30 @@ import { createStore, applyMiddleware } from 'redux';
 import { persistStore, persistReducer } from 'redux-persist';
 import { PersistGate } from 'redux-persist/integration/react';
 import storage from 'redux-persist/lib/storage'; // defaults to localStorage for web
-import rootReducer from './state/reducers/rootReducer';
 import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
-import logger from 'redux-logger';
+
+import rootReducer from './state/reducers/rootReducer';
 import HomeContainer from './components/Dashboard/HomeContainer';
 import FooterApp from '../src/components/FooterApp';
 
 const persistConfig = {
-  key: 'courses_list',
+  key: 'coursesList',
   storage,
 };
 
 // redux-persist used to keep state from wiping after refreshes
 const persistedCourseReducer = persistReducer(persistConfig, rootReducer);
 
-const store = createStore(
+const middleware = [thunk];
+const createStoreWithMiddleware = applyMiddleware(...middleware)(createStore);
+
+const store = createStoreWithMiddleware(
   persistedCourseReducer,
-  applyMiddleware(thunk, logger) // redux-logger extremely useful for debugging
+  // Download this Chrome Extension: https://chrome.google.com/webstore/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd
+  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 );
+
 let persistor = persistStore(store);
 
 ReactDOM.render(
