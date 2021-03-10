@@ -1,4 +1,8 @@
 import { axiosAuth } from '../../utils/axiosWithAuth';
+import { asyncThunkUtils } from '../util';
+
+/** Object full of helper functions to deal with status updates and async thunks */
+const courseThunkUtils = asyncThunkUtils('COURSE');
 
 /******************************************************
  * COURSE ACTION TYPES
@@ -18,22 +22,6 @@ const DELETE_STUDENT = 'DELETE_STUDENT';
 const ADD_TEACHER = 'ADD_TEACHER';
 const DELETE_TEACHER = 'DELETE_TEACHER';
 
-const ASYNC_THUNK_START = 'COURSE_START';
-const ASYNC_THUNK_RESOLVE = 'COURSE_RESOLVE';
-const ASYNC_THUNK_FAIL = 'COURSE_FAIL';
-
-const triggerThunkStart = prefix => ({
-  type: ASYNC_THUNK_START,
-  payload: { prefix },
-});
-
-const triggerThunkFail = (prefix, message) => ({
-  type: ASYNC_THUNK_FAIL,
-  payload: { prefix, message },
-});
-
-const triggerThunkResolve = () => ({ type: ASYNC_THUNK_RESOLVE });
-
 /******************************************************
  * COURSE ACTIONS
  ******************************************************
@@ -44,17 +32,19 @@ const triggerThunkResolve = () => ({ type: ASYNC_THUNK_RESOLVE });
 export const courseActions = {
   // CREATE A NEW COURSE
   addCourseThunk: (programId, newCourse) => dispatch => {
-    dispatch(triggerThunkStart('add'));
+    dispatch(courseThunkUtils.triggerThunkStart('add'));
     axiosAuth()
       .post(`/courses/${programId}/course`, newCourse)
       .then(res => dispatch({ type: ADD_COURSE_SUCCESS, payload: res.data }))
-      .catch(err => dispatch(triggerThunkFail('add', err.message)))
-      .finally(() => dispatch(triggerThunkResolve()));
+      .catch(err =>
+        dispatch(courseThunkUtils.triggerThunkFail('add', err.message))
+      )
+      .finally(() => dispatch(courseThunkUtils.triggerThunkResolve()));
   },
 
   // EDIT AN EXISTING COURSE
   editCourseThunk: (courseId, editedCourse) => dispatch => {
-    dispatch(triggerThunkStart('edit'));
+    dispatch(courseThunkUtils.triggerThunkStart('edit'));
     axiosAuth()
       .patch(`courses/${courseId}`, editedCourse)
       .then(res =>
@@ -63,18 +53,22 @@ export const courseActions = {
           payload: { courseId, editedCourse, data: res.data },
         })
       )
-      .catch(err => dispatch(triggerThunkFail('edit', err.message)))
-      .finally(() => dispatch(triggerThunkResolve()));
+      .catch(err =>
+        dispatch(courseThunkUtils.triggerThunkFail('edit', err.message))
+      )
+      .finally(() => dispatch(courseThunkUtils.triggerThunkResolve()));
   },
 
   // DELETE AN EXISTING COURSE
   deleteCourseThunk: courseId => dispatch => {
-    dispatch(triggerThunkStart('delete'));
+    dispatch(courseThunkUtils.triggerThunkStart('delete'));
     axiosAuth()
       .delete(`/courses/${courseId}`)
       .then(res => dispatch({ type: DELETE_COURSE_SUCCESS, payload: courseId }))
-      .catch(err => dispatch(triggerThunkFail('delete', err.message)))
-      .finally(() => dispatch(triggerThunkResolve()));
+      .catch(err =>
+        dispatch(courseThunkUtils.triggerThunkFail('delete', err.message))
+      )
+      .finally(() => dispatch(courseThunkUtils.triggerThunkResolve()));
   },
 };
 
@@ -87,31 +81,12 @@ const initialState = {
 };
 
 const courseReducer = (state = initialState, action) => {
+  const { success, result } = courseThunkUtils.thunkReducer(state, action);
+  if (success) {
+    return result;
+  }
+
   switch (action.type) {
-    /*------- GENERAL ASYNC THUNK HANDLERS -------*/
-
-    // should run every time we start a thunk
-    case ASYNC_THUNK_START:
-      return {
-        ...state,
-        status: `${action.payload.prefix}/pending`,
-      };
-
-    // should run any time we hit a  `.catch()` clause in a thunk
-    case ASYNC_THUNK_FAIL:
-      return {
-        ...state,
-        status: `${action.payload.prefix}/error`,
-        error: action.payload.message,
-      };
-
-    // should run any time we hit a `.finally()` clause in a thunk
-    case ASYNC_THUNK_RESOLVE:
-      return {
-        ...state,
-        status: 'idle',
-      };
-
     /*------- ADD/POST NEW COURSE -------*/
     case ADD_COURSE_SUCCESS:
       return {

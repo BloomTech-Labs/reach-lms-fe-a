@@ -1,8 +1,7 @@
 import { combineReducers } from 'redux';
 
 import programReducer from './programReducer';
-import userReducer from './userReducer';
-import { courseReducer } from '../ducks/';
+import { userReducer, courseReducer } from '../ducks';
 import moduleReducer from './moduleReducer';
 
 const rootReducer = combineReducers({
