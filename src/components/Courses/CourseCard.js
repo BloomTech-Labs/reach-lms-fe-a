@@ -47,7 +47,8 @@ export default function CourseCard(props) {
   );
 
   const viewCourseHandler = () => {
-    dispatch(moduleActions.getModulesByCourseIdThunk(course.courseid));
+    // Delete lines below besides pusn(...)
+    // dispatch(moduleActions.getModulesByCourseIdThunk(course.courseid));
     console.log({ VIEW_MODULES });
     push(VIEW_MODULES);
   };
