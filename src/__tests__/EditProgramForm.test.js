@@ -47,7 +47,9 @@ describe('<EditProgramForm /> test suite', () => {
     // when spyOn detects dispatch/selector call, mock dispatch and selector
     // return values
     useDispatchMock.mockReturnValue(jest.fn());
-    useSelectorMock.mockReturnValue(programMock);
+    useSelectorMock.mockReturnValue({
+      editProgram: programMock,
+    });
 
     //render component
     render(
