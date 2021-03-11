@@ -1,16 +1,21 @@
-import React, { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+// REACT, HOOKS,
+import React, { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import { editProgramAction } from '../../___reference___/actions/programActions';
-import Navigation from '../Navigation';
-import { axiosWithAuth } from '../../utils/axiosWithAuth';
-import * as yup from 'yup';
+import { useFormWithErrors } from '../../hooks';
+
+// REDUX
+import { useSelector, useDispatch } from 'react-redux';
+import { programActions } from '../../state/ducks';
+
+// MISC
 import schema from '../../validation/ProgramSchema';
 import styled from 'styled-components';
+import Navigation from '../Navigation';
 
-// css
+// CSS
 import '../../styles/Form.css';
-// ant design
+
+// ANT DESIGN
 import 'antd/dist/antd.css';
 import Button from 'antd/lib/button';
 import Input from 'antd/lib/input';
@@ -22,7 +27,7 @@ const { Option } = Select;
 const { TextArea } = Input;
 const { Header, Footer, Content } = Layout;
 
-//styled components
+// STYLED COMPONENTS
 const StyledContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -41,53 +46,55 @@ const initialFormErrors = {
   programdescription: '',
 };
 
-export default function EditProgramAntDesign() {
-  const programToEdit = useSelector(state => state.programReducer.edit_program);
-  const dispatch = useDispatch();
-  const { push } = useHistory();
-  const [input, setInput] = useState({
-    programname: programToEdit.programname,
-    programtype: programToEdit.programtype,
-    programdescription: programToEdit.programdescription,
-  });
-  const [disabled, setDisabled] = useState(false);
-  const [errors, setErrors] = useState(initialFormErrors);
+const getInitialFormValues = program => {
+  const { programname, programtype, programdescription } = program;
+  return { programname, programtype, programdescription };
+};
 
-  const setFormErrors = (name, value) => {
-    yup
-      .reach(schema, name)
-      .validate(value)
-      .then(() => setErrors({ ...errors, [name]: '' }))
-      .catch(err => setErrors({ ...errors, [name]: err.errors[0] }));
-  };
+export default function EditProgramAntDesign() {
+  const { push } = useHistory();
+
+  const dispatch = useDispatch();
+  const { editProgram: programToEdit, status, error } = useSelector(
+    state => state.programReducer
+  );
+
+  const {
+    values: input,
+    errors,
+    disabled,
+    onChange,
+    resetValues,
+  } = useFormWithErrors(
+    schema,
+    getInitialFormValues(programToEdit),
+    initialFormErrors,
+    false
+  );
 
   const changeValues = e => {
     const { name, value } = e.target;
-    const valueToUse = value;
-    setFormErrors(name, valueToUse);
-    setInput({ ...input, [e.target.name]: valueToUse });
+    onChange(name, value);
   };
-
-  const changeSelect = (value, event) => {
-    setFormErrors('programtype', value);
-    setInput({ ...input, programtype: value });
+  const changeSelect = value => {
+    onChange('programtype', value);
   };
 
   useEffect(() => {
-    schema.isValid(input).then(valid => setDisabled(!valid));
-  }, [input]);
+    if (status === 'edit/success') {
+      resetValues();
+      push('/');
+    }
+    if (status === 'edit/error') {
+      // we may want to display an error to the user instead of console.logging
+      console.log(error);
+    }
+  }, [status, error, push, resetValues]);
 
-  function editProgram(e) {
+  function submitEditProgram(e) {
     e.preventDefault();
-    axiosWithAuth()
-      .put(
-        `https://reach-team-a-be.herokuapp.com/programs/program/${programToEdit.programid}`,
-        input
-      )
-      .then(res => {})
-      .catch(err => console.log(err));
-    dispatch(editProgramAction(input));
-    push('/');
+    console.log({ programToEdit });
+    dispatch(programActions.editProgramThunk(programToEdit.programid, input));
   }
 
   const goBack = () => {
@@ -105,7 +112,7 @@ export default function EditProgramAntDesign() {
           <Form
             {...layout}
             name="basic"
-            onFinish={editProgram}
+            onFinish={submitEditProgram}
             initialValues={{
               programname: programToEdit.programname,
               programtype: programToEdit.programtype,
@@ -175,7 +182,7 @@ export default function EditProgramAntDesign() {
                 Cancel
               </Button>
               <Button
-                onClick={editProgram}
+                onClick={submitEditProgram}
                 type="primary"
                 disabled={disabled}
                 className="button"

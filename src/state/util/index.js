@@ -3,6 +3,28 @@ export const asyncThunkUtils = slicePrefix => {
   const ASYNC_THUNK_FAIL = `${slicePrefix}_FAIL`;
   const ASYNC_THUNK_RESOLVE = `${slicePrefix}_RESOLVE`;
 
+  const getTriggersFromPrefix = (dispatch, prefix) => {
+    return {
+      thunkStart: () => {
+        dispatch({
+          type: ASYNC_THUNK_START,
+          payload: { prefix },
+        });
+      },
+      thunkFail: errorMessage => {
+        dispatch({
+          type: ASYNC_THUNK_FAIL,
+          payload: { prefix, message: errorMessage },
+        });
+      },
+      thunkResolve: () => {
+        dispatch({
+          type: ASYNC_THUNK_RESOLVE,
+        });
+      },
+    };
+  };
+
   const triggerThunkStart = prefix => ({
     type: ASYNC_THUNK_START,
     payload: { prefix },
@@ -56,6 +78,7 @@ export const asyncThunkUtils = slicePrefix => {
   };
 
   return {
+    getTriggersFromPrefix,
     triggerThunkStart,
     triggerThunkFail,
     triggerThunkResolve,

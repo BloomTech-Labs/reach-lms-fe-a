@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+// REACT, HOOKS, UTILS
+import React, { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import {
-  currentModule,
-  editModuleAction,
-} from '../../___reference___/moduleActions';
+import { useFormWithErrors } from '../../hooks';
+
+// REDUX
+import { useSelector, useDispatch } from 'react-redux';
+import { moduleActions } from '../../state/ducks';
+
 import Navigation from '../Navigation';
-import { axiosWithAuth } from '../../utils/axiosWithAuth';
-import * as yup from 'yup';
-import schema from '../../validation/ModuleSchema';
 import styled from 'styled-components';
+import schema from '../../validation/ModuleSchema';
 
 // css
 import '../../styles/Form.css';
@@ -43,58 +43,51 @@ const initialFormErrors = {
 };
 
 export default function EditModuleForm() {
-  const moduleToEdit = useSelector(state => state.moduleReducer.edit_module);
+  const { editModule, status, error } = useSelector(
+    state => state.moduleReducer
+  );
   const dispatch = useDispatch();
   const { push } = useHistory();
-  const [values, setValues] = useState(moduleToEdit);
-  const [errors, setErrors] = useState(initialFormErrors);
-  const [disabled, setDisabled] = useState(false);
+  const { values, errors, disabled, onChange, resetForm } = useFormWithErrors(
+    schema,
+    editModule,
+    initialFormErrors,
+    false
+  );
 
-  const setFormErrors = (name, value) => {
-    yup
-      .reach(schema, name)
-      .validate(value)
-      .then(() => setErrors({ ...errors, [name]: '' }))
-      .catch(err => setErrors({ ...errors, [name]: err.errors[0] }));
-  };
+  useEffect(() => {
+    if (status === 'edit/success') {
+      dispatch(moduleActions.editModuleAction(values));
+      dispatch(moduleActions.currentModule(values));
+      resetForm();
+      push('/module-text');
+    }
+    if (status === 'edit/error') {
+      console.log(error);
+    }
+  }, [status, dispatch, push, values, error, resetForm]);
 
   const changeValues = e => {
     const { name, value } = e.target;
-    setFormErrors(name, value);
-    setValues({ ...values, [e.target.name]: value });
+    onChange(name, value);
   };
-
-  useEffect(() => {
-    schema.isValid(values).then(valid => setDisabled(!valid));
-  }, [values]);
 
   function submitForm(e) {
     e.preventDefault();
+    const { modulename, moduledescription, modulecontent } = values;
     const newModule = {
-      modulename: values.modulename,
-      moduledescription: values.moduledescription,
-      modulecontent: values.modulecontent,
+      modulename,
+      moduledescription,
+      modulecontent,
     };
-    axiosWithAuth()
-      .put(
-        `https://reach-team-a-be.herokuapp.com/modules/${moduleToEdit.moduleid}`,
-        newModule
-      )
-      .then(res => {
-        dispatch(editModuleAction(values));
-        dispatch(currentModule(values));
-        push('/module-text');
-      })
-      .catch(err => {
-        console.log(err);
-      });
+    moduleActions.editModuleThunk(editModule.moduleid, newModule);
   }
-  // this goes back to the module-text card, which is the third iteration that we are editing
 
+  // this goes back to the module-text card, which is the third iteration that we are editing
   const goBack = () => {
     push('/module-text');
   };
-  // htmal updated for Form Item values
+  // html updated for FormItem values
   return (
     <Layout>
       <Header>
@@ -108,9 +101,9 @@ export default function EditModuleForm() {
             name="basic"
             onFinish={submitForm}
             initialValues={{
-              modulename: moduleToEdit.modulename,
-              moduledescription: moduleToEdit.moduledescription,
-              modulecontent: moduleToEdit.modulecontent,
+              modulename: editModule.modulename,
+              moduledescription: editModule.moduledescription,
+              modulecontent: editModule.modulecontent,
             }}
             className="form"
           >

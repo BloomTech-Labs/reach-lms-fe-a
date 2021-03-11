@@ -81,9 +81,10 @@ const ModuleList = props => {
   };
 
   const handleClick = e => {
-    // eslint-disable-next-line eqeqeq
+    // this seems like a very weird handleClick to me... maybe just AntD being AntD?
     const moduleClicked = modules.filter(
-      ({ moduleid }) => moduleid == e.key
+      // eslint-disable-next-line eqeqeq
+      module => module.moduleid == e.key
     )[0];
     dispatch(moduleActions.currentModule(moduleClicked));
     push('/module-text');

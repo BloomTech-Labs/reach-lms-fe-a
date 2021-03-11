@@ -10,6 +10,8 @@ const CLEAR_PROGRAMS = 'CLEAR_PROGRAMS';
 const CURRENT_PROGRAM = 'CURRENT_PROGRAM';
 
 const GET_PROGRAMS_BY_USER_ID_SUCCESS = 'GET_PROGRAMS_BY_USER_ID_SUCCESS';
+const ADD_PROGRAM_SUCCESS = 'ADD_PROGRAM_SUCCESS';
+const EDIT_PROGRAM_SUCCESS = 'EDIT_PROGRAM_SUCCESS';
 
 const programThunkUtils = asyncThunkUtils('PROGRAM');
 
@@ -35,30 +37,71 @@ export const programActions = {
   clearPrograms: () => {
     return { type: CLEAR_PROGRAMS };
   },
+
+  /*--------- GET PROGRAMS BY USER ID ---------*/
   getProgramsByUserIdThunk: userId => dispatch => {
-    programThunkUtils.triggerThunkStart('get-programs');
+    const {
+      thunkStart,
+      thunkFail,
+      thunkResolve,
+    } = programThunkUtils.getTriggersFromPrefix(dispatch, 'get-programs');
+
+    thunkStart();
 
     axiosAuth()
       .get(`/programs/${userId}`)
       .then(res =>
         dispatch({ type: GET_PROGRAMS_BY_USER_ID_SUCCESS, payload: res.data })
       )
-      .catch(err =>
-        dispatch(
-          programThunkUtils.triggerThunkFail('get-programs', err.message)
-        )
-      )
-      .finally(() => dispatch(programThunkUtils.triggerThunkResolve()));
+      .catch(err => thunkFail(err.message))
+      .finally(() => thunkResolve());
   },
+
+  /*--------- ADD NEW PROGRAM ---------*/
+  addProgramThunk: (userId, newProgram) => dispatch => {
+    const {
+      thunkStart,
+      thunkFail,
+      thunkResolve,
+    } = programThunkUtils.getTriggersFromPrefix(dispatch, 'add');
+    thunkStart();
+    axiosAuth()
+      .post(`/programs/${userId}/program`, newProgram)
+      .then(res => dispatch({ type: ADD_PROGRAM_SUCCESS, payload: res.data }))
+      .catch(err => thunkFail(err.message))
+      .finally(() => thunkResolve());
+  },
+
+  /*--------- EDIT EXISTING PROGRAM ---------*/
+  editProgramThunk: (programId, editedProgram) => dispatch => {
+    const {
+      thunkStart,
+      thunkFail,
+      thunkResolve,
+    } = programThunkUtils.getTriggersFromPrefix(dispatch, 'edit');
+    thunkStart();
+    axiosAuth()
+      .put(`/programs/program/${programId}`, editedProgram)
+      .then(res => {
+        dispatch({ type: EDIT_PROGRAM_SUCCESS });
+      })
+      .catch(err => thunkFail(err.message))
+      .finally(() => thunkResolve());
+  },
+
+  /*--------- DELETE PROGRAM BY PROGRAM ID ---------*/
   deleteProgramByProgramId: programId => dispatch => {
-    programThunkUtils.triggerThunkStart('delete');
+    const {
+      thunkStart,
+      thunkFail,
+      thunkResolve,
+    } = programThunkUtils.getTriggersFromPrefix(dispatch, 'delete');
+    thunkStart();
     axiosAuth()
       .delete(`programs/program/${programId}`)
       .then(res => dispatch(programActions.deleteProgram(programId)))
-      .catch(err =>
-        dispatch(programThunkUtils.triggerThunkFail('delete', err.message))
-      )
-      .finally(() => dispatch(programThunkUtils.triggerThunkResolve()));
+      .catch(err => thunkFail(err.message))
+      .finally(() => thunkResolve());
   },
 };
 
@@ -77,6 +120,19 @@ const programReducer = (state = initialState, action) => {
   }
 
   switch (action.type) {
+    case ADD_PROGRAM_SUCCESS:
+      return {
+        ...state,
+        status: 'add/success',
+      };
+
+    case EDIT_PROGRAM_SUCCESS:
+      return {
+        ...state,
+        status: 'edit/success',
+        editProgram: {},
+      };
+
     case GET_PROGRAMS_BY_USER_ID_SUCCESS:
       return {
         ...state,

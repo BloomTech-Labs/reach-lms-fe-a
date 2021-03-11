@@ -20,7 +20,7 @@ export const useUserRole = () => {
   const dispatch = useDispatch();
 
   /** the role of the user logged in */
-  const { role } = useSelector(state => state.userReducer.user);
+  const { userid, role } = useSelector(state => state.userReducer.user);
 
   /**
    * this useEffect fires on component render.
@@ -29,10 +29,12 @@ export const useUserRole = () => {
    * `loginThunk` to get user info.
    */
   useEffect(() => {
-    if (!role || role === '') {
+    if (!role || role === '' || !userid) {
       dispatch(getUserInfoThunk());
     }
-  }, [role, dispatch]); // dispatch will never change, role should only change from [`undefined` | `""`] to [`"ADMIN" | "TEACHER" | "STUDENT"`]
+    // role should only change from[`undefined` | `""`] to[`"ADMIN" | "TEACHER" | "STUDENT"`]
+    // userid may be undefined
+  }, [role, userid]);
 
   /** returns boolean indicating whether our user is an ADMIN */
   const userIsAdmin = () => role === 'ADMIN';
@@ -44,5 +46,5 @@ export const useUserRole = () => {
   const userIsStudent = () => role === 'STUDENT';
 
   // provide the above helper functions to any component which calls this hook
-  return { userIsAdmin, userIsTeacher, userIsStudent };
+  return { userIsAdmin, userIsTeacher, userIsStudent, userid };
 };

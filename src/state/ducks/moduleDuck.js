@@ -1,3 +1,5 @@
+import { axiosAuth } from '../../utils';
+import { asyncThunkUtils } from '../util';
 export const ADD_MODULE = 'ADD_MODULE';
 export const DELETE_MODULE = 'DELETE_MODULE';
 export const SET_EDIT_MODULE = 'SET_EDIT_MODULE';
@@ -5,6 +7,9 @@ export const EDIT_MODULE = 'EDIT_MODULE';
 export const SET_MODULE_LIST = 'SET_MODULE_LIST';
 export const CLEAR_MODULES = 'CLEAR_MODULES';
 export const CURRENT_MODULE = 'CURRENT_MODULE';
+const EDIT_MODULE_SUCCESS = 'EDIT_MODULE_SUCCESS';
+
+const moduleThunkUtils = asyncThunkUtils('MODULE');
 
 export const moduleActions = {
   addModule: value => {
@@ -28,6 +33,22 @@ export const moduleActions = {
   clearCourses: () => {
     return { type: CLEAR_MODULES };
   },
+  editModuleThunk: (moduleId, editedModule) => dispatch => {
+    const {
+      thunkStart,
+      thunkFail,
+      thunkResolve,
+    } = moduleThunkUtils.getTriggersFromPrefix('edit');
+    thunkStart();
+    axiosAuth()
+      .put(`/modules/${moduleId}`, editedModule)
+      .then(res => {
+        console.log('EDIT_MODULE_SUCCESS res.data:', res.data);
+        dispatch({ type: EDIT_MODULE_SUCCESS, payload: res.data });
+      })
+      .catch(err => thunkFail(err.message))
+      .finally(() => thunkResolve());
+  },
 };
 
 const initialState = {
@@ -40,6 +61,13 @@ const initialState = {
 
 const moduleReducer = (state = initialState, action) => {
   switch (action.type) {
+    // TODO: TEST THIS
+    case EDIT_MODULE_SUCCESS:
+      return {
+        ...state,
+        status: 'edit/success',
+      };
+
     case ADD_MODULE:
       if (state.modulesList === false) {
         return { ...state, modulesList: [action.payload] };
