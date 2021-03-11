@@ -88,8 +88,8 @@ const CourseList = () => {
   useMountEffect(() => {
     dispatch(courseActions.getCoursesByProgramId(programId));
     dispatch(programActions.getProgramByProgramIdThunk(programId));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [programId]);
+    // no dep array
+  });
 
   return (
     <>

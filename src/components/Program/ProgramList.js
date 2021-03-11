@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import ProgramCard from './ProgramCard';
 import Button from 'antd/lib/button';
+import { CREATE_PROGRAM_PATH } from '../../routes';
 
 //styled components
 const StyledPrograms = styled.div`
@@ -60,7 +61,7 @@ const ProgramList = () => {
       <HeaderDiv>
         <StyledH2>My Programs</StyledH2>
         <StyledTitle>
-          <Link to="/create-program">
+          <Link to={CREATE_PROGRAM_PATH}>
             <Button size="large" style={{ background: '#01fe87' }}>
               Create Program
             </Button>

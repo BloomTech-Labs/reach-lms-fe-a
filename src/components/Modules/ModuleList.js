@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { useOktaAuth } from '@okta/okta-react';
-import { useUserRole } from '../../hooks';
+import { useUserRole, useMountEffect } from '../../hooks';
 
 // REDUX
 import { useSelector, useDispatch } from 'react-redux';
@@ -52,6 +52,10 @@ const ModuleList = props => {
       dispatch(courseActions.mapifyStudentTeachersPowerThunk(courseId));
     }
   }, [courseId, dispatch, status]);
+
+  useMountEffect(() => {
+    dispatch(moduleActions.getModulesByCourseIdThunk(courseId));
+  });
 
   const changeStudentValues = e => {
     const { name, value } = e.target;

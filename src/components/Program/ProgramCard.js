@@ -1,59 +1,39 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import 'antd/dist/antd.css';
 import Card from 'antd/lib/card';
-import Button from 'antd/lib/button';
 import Menu from 'antd/lib/menu';
 import Dropdown from 'antd/lib/dropdown';
-import { useSelector, useDispatch } from 'react-redux';
-import { useHistory } from 'react-router-dom';
-import { programActions, courseActions } from '../../state/ducks';
+import { useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { programActions } from '../../state/ducks';
 import { pathUtils } from '../../routes';
+import { MenuItemLink } from '../_common';
 // css
 import '../../styles/ProgramCard.css';
 
 export default function ProgramCard(props) {
   const { program } = props;
   const dispatch = useDispatch();
-  const { status, error } = useSelector(state => state.courseReducer);
-  const { push } = useHistory();
-
-  const RELATED_COURSES = pathUtils.makeViewAllCoursesPath(program.programid);
-
-  useEffect(() => {
-    if (status === 'get-by-program-id/success') {
-      // push('/courses');
-      push(RELATED_COURSES);
-    }
-    if (status === 'get-by-program-id/error') {
-      // we'll probably want to display an error to our user instead of sending it to console
-      console.error(error);
-    }
-  }, [status, push, error, RELATED_COURSES]);
-
-  const handleMenuClick = e => {
-    if (e.key === 'edit') {
-      // dispatch(programActions.setEdit(program));
-      // push('/edit-program');
-      push(pathUtils.makeEditProgramPath(program.programid));
-    } else {
-      dispatch(programActions.deleteProgramThunk(program.programid));
-    }
-  };
 
   const menu = (
-    <Menu onClick={handleMenuClick}>
-      <Menu.Item key="edit" extra="">
+    <Menu>
+      <MenuItemLink
+        to={pathUtils.makeEditProgramPath(program.programid)}
+        key="edit"
+        extra=""
+      >
         Edit Program
-      </Menu.Item>
-      <Menu.Item key="delete">Delete Program</Menu.Item>
+      </MenuItemLink>
+      <MenuItemLink
+        handleClick={dispatch(
+          programActions.deleteProgramThunk(program.programid)
+        )}
+        key="delete"
+      >
+        Delete Program
+      </MenuItemLink>
     </Menu>
   );
-
-  const viewProgramHandler = program => {
-    // this should be refactored into a `courseActions.getCoursesByProgramId` thunk
-    dispatch(courseActions.getCoursesByProgramId(program.programid));
-    dispatch(programActions.currentProgram(program));
-  };
 
   return (
     <div className="program-card-container">
@@ -64,9 +44,9 @@ export default function ProgramCard(props) {
       >
         <h3>{program.programtype}</h3>
         <p>{program.programdescription}</p>
-        <Button onClick={() => viewProgramHandler(program)} type="primary">
-          View Program
-        </Button>
+        <Link to={pathUtils.makeViewAllCoursesPath(program.programid)}>
+          View
+        </Link>
       </Card>
     </div>
   );
