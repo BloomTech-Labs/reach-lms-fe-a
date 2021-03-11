@@ -47,8 +47,19 @@ const initialFormErrors = {
 };
 
 const getInitialFormValues = program => {
-  const { programname, programtype, programdescription } = program;
-  return { programname, programtype, programdescription };
+  if (!program) {
+    return {
+      programname: '',
+      programtype: '',
+      programdescription: '',
+    };
+  } else {
+    return {
+      programname: program?.programname ?? '',
+      programtype: program?.programtype ?? '',
+      programdescription: program?.programdescription ?? '',
+    };
+  }
 };
 
 export default function EditProgramAntDesign() {
