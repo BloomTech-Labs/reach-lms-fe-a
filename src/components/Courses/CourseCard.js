@@ -1,13 +1,12 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import 'antd/dist/antd.css';
 import Card from 'antd/lib/card';
 import Button from 'antd/lib/button';
 import Menu from 'antd/lib/menu';
 import Dropdown from 'antd/lib/dropdown';
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { useUserRole } from '../../hooks';
-import { axiosWithAuth } from '../../utils/axiosWithAuth';
 import { courseActions, moduleActions } from '../../state/ducks';
 
 // css
@@ -15,17 +14,27 @@ import '../../styles/CourseCard.css';
 
 export default function CourseCard(props) {
   const { course } = props;
+  const { status, error } = useSelector(state => state.moduleReducer);
   const dispatch = useDispatch();
   const { push } = useHistory();
 
   const { userIsAdmin, userIsTeacher } = useUserRole();
+
+  useEffect(() => {
+    if (status === 'get-modules-by-course-id/success') {
+      push('/modules');
+    }
+    if (status === 'get-modules-by-course-id/error') {
+      console.error(error);
+    }
+  }, [error, push, status]);
 
   const handleMenuClick = e => {
     if (e.key === 'edit') {
       dispatch(courseActions.setEditCourse(course));
       push('/edit-course');
     } else {
-      courseActions.deleteCourseThunk(course.courseid);
+      dispatch(courseActions.deleteCourseThunk(course.courseid));
     }
   };
 
@@ -36,18 +45,8 @@ export default function CourseCard(props) {
     </Menu>
   );
 
-  const viewCourseHandler = id => {
-    // TODO: this should be refactored into a `moduleActions.getModulesByCourseId(courseId)` thunk
-    dispatch(moduleActions.getModulesByCourseId(course.courseid));
-
-    // axiosWithAuth()
-    //   .get(`https://reach-team-a-be.herokuapp.com/modules/${id}`)
-    //   .then(res => {
-    //     dispatch(courseActions.setCurrentCourse(course));
-    //     dispatch(moduleActions.setModuleList(res.data));
-    //     push('/modules');
-    //   })
-    //   .catch(err => console.log(err));
+  const viewCourseHandler = () => {
+    dispatch(moduleActions.getModulesByCourseIdThunk(course.courseid));
   };
 
   return (
@@ -64,10 +63,7 @@ export default function CourseCard(props) {
         <h3>Program: {course.program.programname}</h3>
         <h4>Course Code: {course.coursecode}</h4>
         <p>Description: {course.coursedescription}</p>
-        <Button
-          onClick={() => viewCourseHandler(course.courseid)}
-          type="primary"
-        >
+        <Button onClick={viewCourseHandler} type="primary">
           View Course
         </Button>
       </Card>

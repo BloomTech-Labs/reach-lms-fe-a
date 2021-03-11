@@ -93,7 +93,6 @@ export default function EditProgramAntDesign() {
 
   function submitEditProgram(e) {
     e.preventDefault();
-    console.log({ programToEdit });
     dispatch(programActions.editProgramThunk(programToEdit.programid, input));
   }
 

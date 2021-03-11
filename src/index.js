@@ -6,39 +6,52 @@ import {
   useHistory,
   Switch,
 } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import store from './state/store';
+
 import { Security, LoginCallback, SecureRoute } from '@okta/okta-react';
 
 // Styling
 import 'antd/dist/antd.less';
 import './styles/App.css';
 
+// COMPONENTS & PAGES
 import { NotFoundPage } from './components/NotFound';
-import { LoginPage } from './components/Login';
+import { LoginPage } from './components';
 import { HomePage } from './components/Dashboard/';
 import { config } from './utils/oktaConfig';
 
-import LoadingComponent from './components/LoadingComponent';
+import {
+  UserProfile,
+  EditUserForm,
+  LoadingComponent,
+  CreateProgramForm,
+  EditProgramForm,
+  CourseList,
+  AddCourseForm,
+  EditCourseForm,
+  ModuleList,
+  ModuleText,
+  AddModuleForm,
+  EditModuleForm,
+  HomeContainer,
+  Footer,
+} from './components';
 
-import UserProfile from '../src/components/Profile/UserProfile';
-import EditUserForm from '../src/components/Profile/EditUserForm';
-
-import CreateProgram from '../src/components/Program/CreateProgramForm';
-import EditProgram from '../src/components/Program/EditProgramForm';
-
-import CourseList from './components/Courses/CourseList';
-import AddCourseForm from './components/Courses/AddCourseForm';
-import EditCourseForm from './components/Courses/EditCourseForm';
-
-import ModuleList from './components/Modules/ModuleList';
-import ModuleText from './components/Modules/ModuleText';
-import AddModuleForm from './components/Modules/AddModuleForm';
-import EditModuleForm from './components/Modules/EditModuleForm';
-
-import { Provider } from 'react-redux';
-
-import store from './state/store';
-import HomeContainer from './components/Dashboard/HomeContainer';
-import FooterApp from '../src/components/FooterApp';
+// import UserProfile from './components/Profile/UserProfile';
+// import EditUserForm from './components/Profile/EditUserForm';
+// import LoadingComponent from './components/LoadingComponent';
+// import CreateProgram from './components/Program/CreateProgramForm';
+// import EditProgram from './components/Program/EditProgramForm';
+// import CourseList from './components/Courses/CourseList';
+// import AddCourseForm from './components/Courses/AddCourseForm';
+// import EditCourseForm from './components/Courses/EditCourseForm';
+// import ModuleList from './components/Modules/ModuleList';
+// import ModuleText from './components/Modules/ModuleText';
+// import AddModuleForm from './components/Modules/AddModuleForm';
+// import EditModuleForm from './components/Modules/EditModuleForm';
+// import HomeContainer from './components/Dashboard/HomeContainer';
+// import FooterApp from './components/FooterApp';
 
 ReactDOM.render(
   <Router>
@@ -76,8 +89,8 @@ function App() {
           />
           <SecureRoute path="/profile" component={UserProfile} />
           <SecureRoute path="/edit-profile" component={EditUserForm} />
-          <SecureRoute path="/create-program" component={CreateProgram} />
-          <SecureRoute path="/edit-program" component={EditProgram} />
+          <SecureRoute path="/create-program" component={CreateProgramForm} />
+          <SecureRoute path="/edit-program" component={EditProgramForm} />
           <SecureRoute path="/courses" component={CourseList} />
           <SecureRoute path="/add-course" component={AddCourseForm} />
           <SecureRoute path="/edit-course" component={EditCourseForm} />
@@ -88,7 +101,7 @@ function App() {
           <SecureRoute path="/" component={HomeContainer} />
           <Route component={NotFoundPage} />
         </Switch>
-        <FooterApp />
+        <Footer />
       </div>
     </Security>
   );

@@ -31,7 +31,7 @@ export default function ProgramCard(props) {
       dispatch(programActions.setEdit(program));
       push('/edit-program');
     } else {
-      dispatch(programActions.deleteProgramByIdThunk(program.programid));
+      dispatch(programActions.deleteProgramThunk(program.programid));
     }
   };
 

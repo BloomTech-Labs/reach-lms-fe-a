@@ -80,47 +80,46 @@ const CourseList = () => {
   );
 
   return (
-    <Layout>
-      {userIsAdmin() && (
-        <Header>
-          <Navigation authService={authService} />
-        </Header>
-      )}
+    <>
       <Layout>
-        <Content>
-          <StyledWrapper>
-            <StyledContent>
-              <div>
-                {userIsAdmin() && (
-                  <h1>Program: {currentProgram.programname}</h1>
-                )}
-              </div>
-              <HeaderDiv>
-                <StyledH2>My Courses</StyledH2>
-                <StyledTitle>
+        {userIsAdmin() && (
+          <Header>
+            <Navigation authService={authService} />
+          </Header>
+        )}
+        <Layout>
+          <Content>
+            <StyledWrapper>
+              <StyledContent>
+                <div>
                   {userIsAdmin() && (
-                    <Link to="/add-course">
-                      <Button size="large" style={{ background: '#01fe87' }}>
-                        Add Course
-                      </Button>
-                    </Link>
+                    <h1>Program: {currentProgram.programname}</h1>
                   )}
-                </StyledTitle>
-              </HeaderDiv>
-              <StyledCourses>
-                {courseList.map(course => {
-                  return <CourseCard key={course.id} course={course} />;
-                })}
-              </StyledCourses>
-            </StyledContent>
-          </StyledWrapper>
-        </Content>
-        {/* <Sider>
-          {(user.role === 'ADMIN' || user.role === 'TEACHER') && <SearchPage />}
-        </Sider> */}
+                </div>
+                <HeaderDiv>
+                  <StyledH2>My Courses</StyledH2>
+                  <StyledTitle>
+                    {userIsAdmin() && (
+                      <Link to="/add-course">
+                        <Button size="large" style={{ background: '#01fe87' }}>
+                          Add Course
+                        </Button>
+                      </Link>
+                    )}
+                  </StyledTitle>
+                </HeaderDiv>
+                <StyledCourses>
+                  {courseList.map(course => {
+                    return <CourseCard key={course.id} course={course} />;
+                  })}
+                </StyledCourses>
+              </StyledContent>
+            </StyledWrapper>
+          </Content>
+        </Layout>
       </Layout>
       <Footer></Footer>
-    </Layout>
+    </>
   );
 };
 

@@ -2,7 +2,7 @@ import { axiosAuth } from '../../utils';
 import { asyncThunkUtils } from '../util';
 
 const ADD_PROGRAM = 'ADD_PROGRAM';
-const DELETE_PROGRAM = 'DELETE_PROGRAM';
+const DELETE_PROGRAM = 'DELETE_PROGRAM_SUCCESS';
 const SET_EDIT = 'SET_EDIT';
 const EDIT_PROGRAM = 'EDIT_PROGRAM';
 const SET_PROGRAM_LIST = 'SET_PROGRAM_LIST';
@@ -89,8 +89,8 @@ export const programActions = {
       .finally(() => thunkResolve());
   },
 
-  /*--------- DELETE PROGRAM BY PROGRAM ID ---------*/
-  deleteProgramByProgramId: programId => dispatch => {
+  /*--------- DELETE PROGRAM (BY PROGRAM ID) ---------*/
+  deleteProgramThunk: programId => dispatch => {
     const {
       thunkStart,
       thunkFail,

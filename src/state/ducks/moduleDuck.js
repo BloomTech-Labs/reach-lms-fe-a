@@ -1,12 +1,15 @@
 import { axiosAuth } from '../../utils';
 import { asyncThunkUtils } from '../util';
-export const ADD_MODULE = 'ADD_MODULE';
-export const DELETE_MODULE = 'DELETE_MODULE';
-export const SET_EDIT_MODULE = 'SET_EDIT_MODULE';
-export const EDIT_MODULE = 'EDIT_MODULE';
-export const SET_MODULE_LIST = 'SET_MODULE_LIST';
-export const CLEAR_MODULES = 'CLEAR_MODULES';
-export const CURRENT_MODULE = 'CURRENT_MODULE';
+
+const ADD_MODULE = 'ADD_MODULE';
+const DELETE_MODULE = 'DELETE_MODULE';
+const SET_EDIT_MODULE = 'SET_EDIT_MODULE';
+const EDIT_MODULE = 'EDIT_MODULE';
+const SET_MODULE_LIST = 'SET_MODULE_LIST';
+const CLEAR_MODULES = 'CLEAR_MODULES';
+const CURRENT_MODULE = 'CURRENT_MODULE';
+
+const GET_MODULES_BY_COURSE_ID_SUCCESS = 'GET_MODULES_BY_COURSE_ID_SUCCESS';
 const EDIT_MODULE_SUCCESS = 'EDIT_MODULE_SUCCESS';
 
 const moduleThunkUtils = asyncThunkUtils('MODULE');
@@ -33,6 +36,27 @@ export const moduleActions = {
   clearCourses: () => {
     return { type: CLEAR_MODULES };
   },
+  getModulesByCourseIdThunk: courseId => dispatch => {
+    const {
+      thunkStart,
+      thunkFail,
+      thunkResolve,
+    } = moduleThunkUtils.getTriggersFromPrefix(
+      dispatch,
+      'get-modules-by-course-id'
+    );
+
+    thunkStart();
+
+    axiosAuth()
+      .get(`/modules/${courseId}`)
+      .then(res =>
+        dispatch({ type: GET_MODULES_BY_COURSE_ID_SUCCESS, payload: res.data })
+      )
+      .catch(err => thunkFail(err.message))
+      .finally(() => thunkResolve());
+  },
+  // EDIT MODULE
   editModuleThunk: (moduleId, editedModule) => dispatch => {
     const {
       thunkStart,
@@ -42,10 +66,7 @@ export const moduleActions = {
     thunkStart();
     axiosAuth()
       .put(`/modules/${moduleId}`, editedModule)
-      .then(res => {
-        console.log('EDIT_MODULE_SUCCESS res.data:', res.data);
-        dispatch({ type: EDIT_MODULE_SUCCESS, payload: res.data });
-      })
+      .then(res => dispatch({ type: EDIT_MODULE_SUCCESS, payload: res.data }))
       .catch(err => thunkFail(err.message))
       .finally(() => thunkResolve());
   },
@@ -61,6 +82,14 @@ const initialState = {
 
 const moduleReducer = (state = initialState, action) => {
   switch (action.type) {
+    // TODO: TEST THIS
+    case GET_MODULES_BY_COURSE_ID_SUCCESS:
+      return {
+        ...state,
+        status: 'get-modules-by-course-id/success',
+        modulesList: action.payload,
+      };
+
     // TODO: TEST THIS
     case EDIT_MODULE_SUCCESS:
       return {
