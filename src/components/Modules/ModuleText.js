@@ -1,8 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { setEditModule, deleteModule } from '../../___archive___/moduleActions';
-import { axiosWithAuth } from '../../utils/axiosWithAuth';
+import { moduleActions } from '../../state/ducks';
 import Navigation from '../Navigation';
 import styled from 'styled-components';
 
@@ -27,25 +26,30 @@ const StyledContainer = styled.div`
 `;
 
 export default function ModuleText() {
-  const module = useSelector(state => state.moduleReducer.currentModule);
+  const { currentModule, status } = useSelector(
+    state => state.moduleReducer.currentModule
+  );
   const user = useSelector(state => state.userReducer);
   const dispatch = useDispatch();
   const { push } = useHistory();
 
+  useEffect(() => {
+    if (status === 'delete/success') {
+      // TODO needs support for new modules path
+      // import {pathUtils} from "../../routes";
+      // use pathUtils.makeViewAllModulesPath function
+      push('/modules');
+    }
+  }, [push, status]);
+
   const handleMenuClick = e => {
     if (e.key === 'edit') {
-      dispatch(setEditModule(module));
+      dispatch(moduleActions.setEditModule(currentModule));
+      // TODO needs support for new edit-module path — import {pathUtils} from "../../routes";
+      // use pathUtils.makeEditModulePath(moduleId)
       push('/edit-module');
     } else {
-      axiosWithAuth()
-        .delete(
-          `https://reach-team-a-be.herokuapp.com/modules/${module.moduleid}`
-        )
-        .then(res => {
-          dispatch(deleteModule(module.moduleid));
-          push('/modules');
-        })
-        .catch(err => console.log(err));
+      dispatch(moduleActions.deleteModuleThunk(currentModule.moduleid));
     }
   };
 
@@ -68,7 +72,7 @@ export default function ModuleText() {
       <StyledContainer>
         <Content>
           <Card
-            title={module.modulename}
+            title={currentModule.modulename}
             extra={
               user.role === 'ADMIN' ? (
                 <Dropdown.Button overlay={menu}></Dropdown.Button>
@@ -80,8 +84,8 @@ export default function ModuleText() {
             }
             style={{ width: 800 }}
           >
-            <h3>{module.moduledescription}</h3>
-            <p>{module.modulecontent}</p>
+            <h3>{currentModule.moduledescription}</h3>
+            <p>{currentModule.modulecontent}</p>
             <Button onClick={goBack} type="secondary" className="button">
               Return to Modules
             </Button>

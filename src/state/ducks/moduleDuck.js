@@ -11,6 +11,7 @@ const CURRENT_MODULE = 'CURRENT_MODULE';
 
 const GET_MODULES_BY_COURSE_ID_SUCCESS = 'GET_MODULES_BY_COURSE_ID_SUCCESS';
 const EDIT_MODULE_SUCCESS = 'EDIT_MODULE_SUCCESS';
+const DELETE_MODULE_SUCCESS = 'DELETE_MODULE_SUCCESS';
 
 const moduleThunkUtils = asyncThunkUtils('MODULE');
 
@@ -70,6 +71,23 @@ export const moduleActions = {
       .catch(err => thunkFail(err.message))
       .finally(() => thunkResolve());
   },
+  deleteModuleThunk: moduleId => dispatch => {
+    const {
+      thunkStart,
+      thunkFail,
+      thunkResolve,
+    } = moduleThunkUtils.getTriggersFromPrefix('delete');
+
+    thunkStart();
+
+    axiosAuth()
+      .delete(`/modules/${moduleId}`)
+      .then(res => {
+        dispatch({ status: DELETE_MODULE_SUCCESS, payload: moduleId });
+      })
+      .catch(err => thunkFail(err.message))
+      .finally(() => thunkResolve());
+  },
 };
 
 const initialState = {
@@ -86,6 +104,14 @@ const moduleReducer = (state = initialState, action) => {
     return result;
   }
   switch (action.type) {
+    case DELETE_MODULE_SUCCESS:
+      return {
+        ...state,
+        modulesList: state.modulesList.filter(
+          ({ moduleid }) => moduleid !== action.payload
+        ),
+      };
+
     // TODO: TEST THIS
     case GET_MODULES_BY_COURSE_ID_SUCCESS:
       return {
