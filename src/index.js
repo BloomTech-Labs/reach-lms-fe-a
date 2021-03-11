@@ -34,24 +34,17 @@ import ModuleText from './components/Modules/ModuleText';
 import AddModuleForm from './components/Modules/AddModuleForm';
 import EditModuleForm from './components/Modules/EditModuleForm';
 
-// redux
-// import { persistStore } from 'redux-persist';
-// import { PersistGate } from 'redux-persist/integration/react';
 import { Provider } from 'react-redux';
 
 import store from './state/store';
 import HomeContainer from './components/Dashboard/HomeContainer';
 import FooterApp from '../src/components/FooterApp';
 
-// const persistor = persistStore(store);
-
 ReactDOM.render(
   <Router>
     <React.StrictMode>
       <Provider store={store}>
         <App />
-        {/* <PersistGate loading={null} persistor={persistor}>
-        </PersistGate> */}
       </Provider>
     </React.StrictMode>
   </Router>,

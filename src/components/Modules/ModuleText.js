@@ -1,10 +1,7 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import {
-  setEditModule,
-  deleteModule,
-} from '../../___reference___/moduleActions';
+import { setEditModule, deleteModule } from '../../___archive___/moduleActions';
 import { axiosWithAuth } from '../../utils/axiosWithAuth';
 import Navigation from '../Navigation';
 import styled from 'styled-components';

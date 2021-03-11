@@ -1,11 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { axiosWithAuth } from '../../utils/axiosWithAuth';
+import React, { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import Navigation from '../Navigation';
-import * as yup from 'yup';
 import schema from '../../validation/ModuleSchema';
-import { addModule } from '../../___reference___/moduleActions';
+import { moduleActions } from '../../state/ducks';
 import styled from 'styled-components';
 
 // css
@@ -15,10 +13,10 @@ import '../../styles/Form.css';
 import 'antd/dist/antd.css';
 import Button from 'antd/lib/button';
 import Input from 'antd/lib/input';
-import Select from 'antd/lib/select';
 import Form from 'antd/lib/form/Form';
 import FormItem from 'antd/lib/form/FormItem';
 import Layout from 'antd/lib/layout';
+import { useFormWithErrors } from '../../hooks';
 const { TextArea } = Input;
 const { Header, Footer, Content } = Layout;
 
@@ -41,54 +39,40 @@ const initialValues = {
   modulecontent: '',
 };
 
-const initialFormErrors = {
-  modulename: '',
-  moduledescription: '',
-  modulecontent: '',
-};
-
 export default function AddModule() {
   const { push } = useHistory();
   const dispatch = useDispatch();
-  const [values, setValues] = useState(initialValues);
-  const [errors, setErrors] = useState(initialFormErrors);
-  const [disabled, setDisabled] = useState(true);
-  const currentCourse = useSelector(state => state.courseReducer.currentCourse);
 
-  const setFormErrors = (name, value) => {
-    yup
-      .reach(schema, name)
-      .validate(value)
-      .then(() => setErrors({ ...errors, [name]: '' }))
-      .catch(err => setErrors({ ...errors, [name]: err.errors[0] }));
-  };
+  const { values, errors, disabled, onChange, resetValues } = useFormWithErrors(
+    schema,
+    initialValues
+  );
+
+  const courseid = useSelector(
+    state => state.courseReducer.currentCourse.courseid
+  );
+  const { status, error } = useSelector(state => state.moduleReducer);
 
   const changeValues = e => {
-    const { name, value, type } = e.target;
-    const valueToUse = type === 'select' ? Select : value;
-    setFormErrors(name, valueToUse);
-    setValues({ ...values, [e.target.name]: valueToUse });
+    const { name, value } = e.target;
+    onChange(name, value);
   };
 
   useEffect(() => {
-    schema.isValid(values).then(valid => setDisabled(!valid));
-  }, [values]);
+    if (status === 'add/success') {
+      resetValues();
+      push('/modules');
+    }
+    if (status === 'add/error') {
+      // we may want to display an error message to user
+      console.error(error);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [status]);
 
   function submitForm(e) {
     e.preventDefault();
-    axiosWithAuth()
-      .post(
-        `https://reach-team-a-be.herokuapp.com/modules/${currentCourse.courseid}/module`,
-        values
-      )
-      .then(res => {
-        dispatch(addModule(res.data));
-        setValues(initialValues);
-        push('/modules');
-      })
-      .catch(err => {
-        console.log(err);
-      });
+    dispatch(moduleActions.addModuleThunk(courseid, values));
   }
 
   const goBack = () => {

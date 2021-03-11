@@ -8,8 +8,8 @@ import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { useUserRole } from '../../hooks';
 import { axiosWithAuth } from '../../utils/axiosWithAuth';
-import { courseActions } from '../../state/ducks';
-import { setModuleList } from '../../___reference___/moduleActions';
+import { courseActions, moduleActions } from '../../state/ducks';
+
 // css
 import '../../styles/CourseCard.css';
 
@@ -37,16 +37,17 @@ export default function CourseCard(props) {
   );
 
   const viewCourseHandler = id => {
-    // TODO: this should be refactored into a
-    // `moduleActions.getModulesByCourseId(courseId)` thunk
-    axiosWithAuth()
-      .get(`https://reach-team-a-be.herokuapp.com/modules/${id}`)
-      .then(res => {
-        dispatch(courseActions.currentCourse(course));
-        dispatch(setModuleList(res.data));
-        push('/modules');
-      })
-      .catch(err => console.log(err));
+    // TODO: this should be refactored into a `moduleActions.getModulesByCourseId(courseId)` thunk
+    dispatch(moduleActions.getModulesByCourseId(course.courseid));
+
+    // axiosWithAuth()
+    //   .get(`https://reach-team-a-be.herokuapp.com/modules/${id}`)
+    //   .then(res => {
+    //     dispatch(courseActions.setCurrentCourse(course));
+    //     dispatch(moduleActions.setModuleList(res.data));
+    //     push('/modules');
+    //   })
+    //   .catch(err => console.log(err));
   };
 
   return (
