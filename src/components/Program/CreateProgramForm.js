@@ -1,9 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { axiosWithAuth } from '../../utils/axiosWithAuth';
+import React, { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import Navigation from '../Navigation';
-import * as yup from 'yup';
 import schema from '../../validation/ProgramSchema';
 import { useFormWithErrors, useUserRole } from '../../hooks';
 import { programActions } from '../../state/ducks';

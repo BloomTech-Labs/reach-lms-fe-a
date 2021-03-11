@@ -34,6 +34,7 @@ export const useUserRole = () => {
     }
     // role should only change from[`undefined` | `""`] to[`"ADMIN" | "TEACHER" | "STUDENT"`]
     // userid may be undefined
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [role, userid]);
 
   /** returns boolean indicating whether our user is an ADMIN */
