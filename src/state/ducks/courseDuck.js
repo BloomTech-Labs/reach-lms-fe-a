@@ -7,12 +7,16 @@ const courseThunkUtils = asyncThunkUtils('COURSE');
 /******************************************************
  * COURSE ACTION TYPES
  ******************************************************/
+const GET_COURSE_SUCCESS = 'GET_COURSE_SUCCESS';
 const ADD_COURSE_SUCCESS = 'ADD_COURSE_SUCCESS';
 const EDIT_COURSE_SUCCESS = 'EDIT_COURSE_SUCCESS';
 const DELETE_COURSE_SUCCESS = 'DELETE_COURSE_SUCCESS';
+
 const GET_COURSES_BY_PROGRAM_ID_SUCCESS = 'GET_COURSES_BY_PROGRAM_ID_SUCCESS';
+
 const DELETE_TEACHER_FROM_COURSE_SUCCESS = 'DELETE_TEACHER_FROM_COURSE_SUCCESS';
 const DELETE_STUDENT_FROM_COURSE_SUCCESS = 'DELETE_STUDENT_FROM_COURSE_SUCCESS';
+
 const ADD_STUDENT_TO_COURSE_SUCCESS = 'ADD_STUDENT_TO_COURSE_SUCCESS';
 const ADD_TEACHER_TO_COURSE_SUCCESS = 'ADD_TEACHER_TO_COURSE_SUCCESS';
 
@@ -27,6 +31,9 @@ const DELETE_STUDENT = 'DELETE_STUDENT';
 const ADD_TEACHER = 'ADD_TEACHER';
 const DELETE_TEACHER = 'DELETE_TEACHER';
 
+const GET_STUDENTS_SUCCESS = 'GET_STUDENTS_SUCCESS';
+const GET_TEACHERS_SUCCESS = 'GET_TEACHERS_SUCCESS';
+
 /******************************************************
  * COURSE ACTIONS
  ******************************************************
@@ -38,37 +45,115 @@ export const courseActions = {
   setCurrentCourse: course => ({ type: CURRENT_COURSE, payload: course }),
   setEditCourse: course => ({ type: SET_EDIT_COURSE, payload: course }),
 
+  getCourseThunk: courseId => dispatch => {
+    const {
+      thunkStart,
+      thunkFail,
+      thunkResolve,
+    } = courseThunkUtils.getTriggersFromPrefix(dispatch, 'get');
+
+    thunkStart();
+
+    axiosAuth()
+      .get(`/courses/course/${courseId}`)
+      .then(res => dispatch({ type: GET_COURSE_SUCCESS, payload: res.data }))
+      .catch(err => thunkFail(err.message))
+      .finally(() => thunkResolve());
+  },
+
+  mapifyStudentTeachersPowerThunk: courseId => dispatch => {
+    const getStudentsUtil = courseThunkUtils.getTriggersFromPrefix(
+      dispatch,
+      'get-students'
+    );
+    getStudentsUtil.thunkStart();
+    axiosAuth()
+      .get('/students')
+      .then(res => {
+        const studentMap = {
+          enrolled: {},
+          available: {},
+        };
+        for (const student of res.data) {
+          const { studentid, studentname, courses } = student;
+          // eslint-disable-next-line eqeqeq
+          if (courses.some(course => course.course.courseid == courseId)) {
+            studentMap.enrolled[studentid] = { studentid, studentname };
+          } else {
+            studentMap.available[studentid] = { studentid, studentname };
+          }
+        }
+
+        dispatch({ type: GET_STUDENTS_SUCCESS, payload: studentMap });
+      })
+      .catch(err => getStudentsUtil.thunkFail())
+      .finally(() => getStudentsUtil.thunkResolve());
+
+    const getTeachersUtil = courseThunkUtils.getTriggersFromPrefix(
+      dispatch,
+      'get-teachers'
+    );
+    getTeachersUtil.thunkStart();
+    axiosAuth()
+      .get('/teachers')
+      .then(res => {
+        const teacherMap = {
+          enrolled: {},
+          available: {},
+        };
+        for (const teacher of res.data) {
+          const { teacherid, teachername, courses } = teacher;
+          // eslint-disable-next-line eqeqeq
+          if (courses.some(course => course.course.courseid == courseId)) {
+            teacherMap.enrolled[teacherid] = { teacherid, teachername };
+          } else {
+            teacherMap.available[teacherid] = { teacherid, teachername };
+          }
+        }
+        dispatch({ type: GET_TEACHERS_SUCCESS, payload: teacherMap });
+      })
+      .catch(err => getTeachersUtil.thunkFail(err.message))
+      .finally(() => getTeachersUtil.thunkResolve());
+  },
+
   // GET ALL COURSES ASSOCIATED WITH THE GIVEN PROGRAMID
   getCoursesByProgramId: programId => dispatch => {
-    dispatch(courseThunkUtils.triggerThunkStart('get-by-program-id'));
-
+    const {
+      thunkStart,
+      thunkFail,
+      thunkResolve,
+    } = courseThunkUtils.getTriggersFromPrefix(dispatch, 'get-by-program-id');
+    thunkStart();
     axiosAuth()
       .get(`/courses/${programId}`)
       .then(res =>
         dispatch({ type: GET_COURSES_BY_PROGRAM_ID_SUCCESS, payload: res.data })
       )
-      .catch(err =>
-        dispatch(
-          courseThunkUtils.triggerThunkFail('get-by-program-id', err.message)
-        )
-      )
-      .finally(() => dispatch(courseThunkUtils.triggerThunkResolve()));
+      .catch(err => thunkFail(err.message))
+      .finally(() => thunkResolve());
   },
   // CREATE A NEW COURSE
   addCourseThunk: (programId, newCourse) => dispatch => {
-    dispatch(courseThunkUtils.triggerThunkStart('add'));
+    const {
+      thunkStart,
+      thunkFail,
+      thunkResolve,
+    } = courseThunkUtils.getTriggersFromPrefix(dispatch, 'add');
+    thunkStart();
     axiosAuth()
       .post(`/courses/${programId}/course`, newCourse)
       .then(res => dispatch({ type: ADD_COURSE_SUCCESS, payload: res.data }))
-      .catch(err =>
-        dispatch(courseThunkUtils.triggerThunkFail('add', err.message))
-      )
-      .finally(() => dispatch(courseThunkUtils.triggerThunkResolve()));
+      .catch(err => thunkFail(err.message))
+      .finally(() => thunkResolve());
   },
-
   // EDIT AN EXISTING COURSE
   editCourseThunk: (courseId, editedCourse) => dispatch => {
-    dispatch(courseThunkUtils.triggerThunkStart('edit'));
+    const {
+      thunkStart,
+      thunkFail,
+      thunkResolve,
+    } = courseThunkUtils.getTriggersFromPrefix(dispatch, 'edit');
+    thunkStart();
     axiosAuth()
       .patch(`courses/${courseId}`, editedCourse)
       .then(res =>
@@ -77,27 +162,33 @@ export const courseActions = {
           payload: { courseId, editedCourse, data: res.data },
         })
       )
-      .catch(err =>
-        dispatch(courseThunkUtils.triggerThunkFail('edit', err.message))
-      )
-      .finally(() => dispatch(courseThunkUtils.triggerThunkResolve()));
+      .catch(err => thunkFail(err.mesage))
+      .finally(() => thunkResolve());
   },
-
   // DELETE AN EXISTING COURSE
   deleteCourseThunk: courseId => dispatch => {
-    dispatch(courseThunkUtils.triggerThunkStart('delete'));
+    const {
+      thunkStart,
+      thunkFail,
+      thunkResolve,
+    } = courseThunkUtils.getTriggersFromPrefix(dispatch, 'edit');
+    thunkStart();
     axiosAuth()
       .delete(`/courses/${courseId}`)
       .then(res => dispatch({ type: DELETE_COURSE_SUCCESS, payload: courseId }))
-      .catch(err =>
-        dispatch(courseThunkUtils.triggerThunkFail('delete', err.message))
-      )
-      .finally(() => dispatch(courseThunkUtils.triggerThunkResolve()));
+      .catch(err => thunkFail(err.message))
+      .finally(() => thunkResolve());
   },
-
   // DELETE an existing teacher from an existing course that they are currently attached to
   deleteTeacherFromCourseThunk: (courseId, teacherId) => dispatch => {
-    dispatch(courseThunkUtils.triggerThunkStart('delete-teacher'));
+    const {
+      thunkStart,
+      thunkFail,
+      thunkResolve,
+    } = courseThunkUtils.getTriggersFromPrefix(dispatch, 'delete-teacher');
+
+    thunkStart();
+
     axiosAuth()
       .delete(`/teachers/${courseId}/${teacherId}`)
       .then(res => {
@@ -111,16 +202,17 @@ export const courseActions = {
           payload: newTeachers,
         });
       })
-      .catch(err =>
-        dispatch(
-          courseThunkUtils.triggerThunkFail('delete-teacher', err.message)
-        )
-      )
-      .finally(() => dispatch(courseThunkUtils.triggerThunkResolve()));
+      .catch(err => thunkFail(err.message))
+      .finally(() => thunkResolve());
   },
 
   deleteStudentFromCourseThunk: (courseId, studentId) => dispatch => {
-    dispatch(courseThunkUtils.triggerThunkStart('delete-student'));
+    const {
+      thunkStart,
+      thunkFail,
+      thunkResolve,
+    } = courseThunkUtils.getTriggersFromPrefix(dispatch, 'delete-student');
+    thunkStart();
     axiosAuth()
       .delete(`/students/${courseId}/${studentId}`)
       .then(res => {
@@ -128,43 +220,44 @@ export const courseActions = {
           const { studentid, studentname } = student;
           return { student: { studentid, studentname } };
         });
-
         dispatch({
           type: DELETE_STUDENT_FROM_COURSE_SUCCESS,
           payload: newStudents,
         });
       })
-      .catch(err =>
-        dispatch(
-          courseThunkUtils.triggerThunkFail('delete-student', err.message)
-        )
-      )
-      .finally(() => dispatch(courseThunkUtils.triggerThunkResolve()));
+      .catch(err => thunkFail(err.message))
+      .finally(() => thunkResolve());
   },
 
   addStudentToCourseThunk: (courseId, newStudent) => dispatch => {
-    dispatch(courseThunkUtils.triggerThunkStart('add-student'));
-
+    const {
+      thunkStart,
+      thunkFail,
+      thunkResolve,
+    } = courseThunkUtils.getTriggersFromPrefix(dispatch, 'add-student');
+    thunkStart();
     axiosAuth()
       .post(`/students/${courseId}`, newStudent)
       .then(res => {
         const { studentid, studentname } = res.data;
-
         const addedStudent = { student: { studentid, studentname } };
-
         dispatch({
           type: ADD_STUDENT_TO_COURSE_SUCCESS,
           payload: addedStudent,
         });
       })
-      .catch(err =>
-        dispatch(courseThunkUtils.triggerThunkFail('add-student', err.message))
-      )
-      .finally(() => dispatch(courseThunkUtils.triggerThunkResolve()));
+      .catch(err => thunkFail(err.message))
+      .finally(thunkResolve());
   },
 
   addTeacherToCourseThunk: (courseId, newTeacher) => dispatch => {
-    dispatch(courseThunkUtils.triggerThunkStart('add-teacher'));
+    const {
+      thunkStart,
+      thunkFail,
+      thunkResolve,
+    } = courseThunkUtils.getTriggersFromPrefix(dispatch, 'add-student');
+
+    thunkStart();
 
     axiosAuth()
       .post(`/teachers/${courseId}`, newTeacher)
@@ -176,10 +269,8 @@ export const courseActions = {
           payload: addedTeacher,
         });
       })
-      .catch(err =>
-        dispatch(courseThunkUtils.triggerThunkFail('add-teacher', err.message))
-      )
-      .finally(() => dispatch(courseThunkUtils.triggerThunkResolve()));
+      .catch(err => thunkFail(err.message))
+      .finally(() => thunkResolve());
   },
 };
 
@@ -189,6 +280,8 @@ const initialState = {
   coursesList: [],
   editCourse: {},
   currentCourse: {},
+  teacherMap: {},
+  studentMap: {},
 };
 
 const courseReducer = (state = initialState, action) => {
@@ -198,28 +291,49 @@ const courseReducer = (state = initialState, action) => {
   }
 
   switch (action.type) {
-    case ADD_TEACHER_TO_COURSE_SUCCESS:
-      // TODO — IMPLEMENT
-      return state;
-
-    case ADD_STUDENT_TO_COURSE_SUCCESS:
-      // TODO — IMPLEMENT
-      return state;
-
-    case DELETE_STUDENT_FROM_COURSE_SUCCESS:
-      // TODO — DOES THIS WORK?
+    case GET_STUDENTS_SUCCESS:
       return {
         ...state,
-        status: 'delete-student/success',
-        currentCourse: { ...state.currentCourse, students: action.payload },
+        status: 'get-students/success',
+        studentsMap: action.payload,
+      };
+
+    case GET_TEACHERS_SUCCESS:
+      return {
+        ...state,
+        status: 'get-teachers/success',
+        teachersMap: action.payload,
+      };
+
+    case GET_COURSE_SUCCESS:
+      return {
+        ...state,
+        status: 'get/success',
+        currentCourse: action.payload,
+      };
+
+    case ADD_TEACHER_TO_COURSE_SUCCESS:
+      return {
+        ...state,
+        status: 'add-enrolled/success',
+      };
+
+    case ADD_STUDENT_TO_COURSE_SUCCESS:
+      return {
+        ...state,
+        status: 'add-enrolled/success',
+      };
+
+    case DELETE_STUDENT_FROM_COURSE_SUCCESS:
+      return {
+        ...state,
+        status: 'remove-enrolled/success',
       };
 
     case DELETE_TEACHER_FROM_COURSE_SUCCESS:
-      // TODO — DOES THIS WORK?
       return {
         ...state,
-        status: 'delete-teacher/success',
-        currentCourse: { ...state.currentCourse, teachers: action.payload },
+        status: 'remove-enrolled/success',
       };
 
     /*------- GET COURSES BY PROGRAM ID -------*/

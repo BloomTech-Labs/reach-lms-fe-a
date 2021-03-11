@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useOktaAuth } from '@okta/okta-react';
 import { useUserRole } from '../../hooks';
 import { programActions, courseActions } from '../../state/ducks';
-import Dashboard from './Dashboard';
+import { Dashboard } from './';
 
 function HomeContainer({ LoadingComponent }) {
   const { authState, authService } = useOktaAuth();
@@ -26,7 +26,9 @@ function HomeContainer({ LoadingComponent }) {
         dispatch(courseActions.getCoursesByStudentNameThunk(username));
       }
     }
-  }, [status, dispatch, userIsAdmin, userIsTeacher, username, userid]);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [status]);
 
   useEffect(() => {
     let isSubscribed = true;
@@ -61,9 +63,7 @@ function HomeContainer({ LoadingComponent }) {
         <LoadingComponent message="Fetching user profile..." />
       )}
       {authState.isAuthenticated && userInfo && (
-        <>
-          <Dashboard authService={authService} />
-        </>
+        <Dashboard authService={authService} />
       )}
     </>
   );

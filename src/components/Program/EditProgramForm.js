@@ -55,10 +55,9 @@ export default function EditProgramAntDesign() {
   const { push } = useHistory();
 
   const dispatch = useDispatch();
-  const { editProgram: programToEdit, status, error } = useSelector(
+  const { editProgram, status, error } = useSelector(
     state => state.programReducer
   );
-
   const {
     values: input,
     errors,
@@ -67,7 +66,7 @@ export default function EditProgramAntDesign() {
     resetValues,
   } = useFormWithErrors(
     schema,
-    getInitialFormValues(programToEdit),
+    getInitialFormValues(editProgram),
     initialFormErrors,
     false
   );
@@ -87,13 +86,13 @@ export default function EditProgramAntDesign() {
     }
     if (status === 'edit/error') {
       // we may want to display an error to the user instead of console.logging
-      console.log(error);
+      console.error(error);
     }
   }, [status, error, push, resetValues]);
 
   function submitEditProgram(e) {
     e.preventDefault();
-    dispatch(programActions.editProgramThunk(programToEdit.programid, input));
+    dispatch(programActions.editProgramThunk(editProgram.programid, input));
   }
 
   const goBack = () => {
@@ -112,11 +111,11 @@ export default function EditProgramAntDesign() {
             {...layout}
             name="basic"
             onFinish={submitEditProgram}
-            initialValues={{
-              programname: programToEdit.programname,
-              programtype: programToEdit.programtype,
-              programdescription: programToEdit.programdescription,
-            }}
+            // initialValues={{
+            //   programname: editProgram.programname,
+            //   programtype: editProgram.programtype,
+            //   programdescription: editProgram.programdescription,
+            // }}
             className="form"
           >
             <FormItem htmlFor="programname" label="Program Name:">

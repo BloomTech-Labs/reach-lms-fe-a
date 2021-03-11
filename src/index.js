@@ -16,12 +16,12 @@ import 'antd/dist/antd.less';
 import './styles/App.css';
 
 // COMPONENTS & PAGES
-import { NotFoundPage } from './components/NotFound';
-import { LoginPage } from './components';
-import { HomePage } from './components/Dashboard/';
 import { config } from './utils/oktaConfig';
 
 import {
+  HomeContainer as HomePage,
+  NotFoundPage,
+  LoginPage,
   UserProfile,
   EditUserForm,
   LoadingComponent,
@@ -37,6 +37,21 @@ import {
   HomeContainer,
   Footer,
 } from './components';
+
+import {
+  VIEW_PROFILE_PATH,
+  EDIT_PROFILE_PATH,
+  CREATE_PROGRAM_PATH,
+  EDIT_PROGRAM_PATH,
+  // VIEW_PROGRAM_PATH,
+  CREATE_COURSE_PATH,
+  VIEW_ALL_COURSES_PATH,
+  EDIT_COURSE_PATH,
+  CREATE_MODULE_PATH,
+  EDIT_MODULE_PATH,
+  VIEW_ALL_MODULES_PATH,
+  VIEW_MODULE_TEXT_PATH,
+} from './routes';
 
 // import UserProfile from './components/Profile/UserProfile';
 // import EditUserForm from './components/Profile/EditUserForm';
@@ -87,7 +102,7 @@ function App() {
             exact
             component={() => <HomePage LoadingComponent={LoadingComponent} />}
           />
-          <SecureRoute path="/profile" component={UserProfile} />
+          {/* <SecureRoute path="/profile" component={UserProfile} />
           <SecureRoute path="/edit-profile" component={EditUserForm} />
           <SecureRoute path="/create-program" component={CreateProgramForm} />
           <SecureRoute path="/edit-program" component={EditProgramForm} />
@@ -98,6 +113,21 @@ function App() {
           <SecureRoute path="/module-text" component={ModuleText} />
           <SecureRoute path="/add-module" component={AddModuleForm} />
           <SecureRoute path="/edit-module" component={EditModuleForm} />
+          <SecureRoute path="/" component={HomeContainer} /> */}
+          <SecureRoute path={VIEW_PROFILE_PATH} component={UserProfile} />
+          <SecureRoute path={EDIT_PROFILE_PATH} component={EditUserForm} />
+          <SecureRoute
+            path={CREATE_PROGRAM_PATH}
+            component={CreateProgramForm}
+          />
+          <SecureRoute path={EDIT_PROGRAM_PATH} component={EditProgramForm} />
+          <SecureRoute path={VIEW_ALL_COURSES_PATH} component={CourseList} />
+          <SecureRoute path={CREATE_COURSE_PATH} component={AddCourseForm} />
+          <SecureRoute path={EDIT_COURSE_PATH} component={EditCourseForm} />
+          <SecureRoute path={VIEW_ALL_MODULES_PATH} component={ModuleList} />
+          <SecureRoute path={VIEW_MODULE_TEXT_PATH} component={ModuleText} />
+          <SecureRoute path={CREATE_MODULE_PATH} component={AddModuleForm} />
+          <SecureRoute path={EDIT_MODULE_PATH} component={EditModuleForm} />
           <SecureRoute path="/" component={HomeContainer} />
           <Route component={NotFoundPage} />
         </Switch>

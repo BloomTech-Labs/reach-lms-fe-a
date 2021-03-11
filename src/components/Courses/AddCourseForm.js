@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import Navigation from '../Navigation';
 import schema from '../../validation/CourseSchema';
 import { useFormWithErrors } from '../../hooks';
 import { courseActions } from '../../state/ducks';
+import { pathUtils } from '../../routes';
 import styled from 'styled-components';
 
 // css
@@ -40,6 +41,8 @@ const initialValues = {
 };
 
 export default function AddCourse() {
+  const { programId } = useParams();
+  const BACK_PATH = pathUtils.makeViewAllCoursesPath(programId);
   const { push } = useHistory();
   const dispatch = useDispatch();
 
@@ -67,9 +70,10 @@ export default function AddCourse() {
     }
     if (status === 'post/success') {
       resetValues();
-      push('/courses');
+      // push('/courses');
+      push(BACK_PATH);
     }
-  }, [status, error, resetValues, push]);
+  }, [status, error, resetValues, push, BACK_PATH]);
 
   function submitForm(e) {
     e.preventDefault();
@@ -77,7 +81,8 @@ export default function AddCourse() {
   }
 
   const goBack = () => {
-    push('/courses');
+    // push('/courses');
+    push(BACK_PATH);
   };
 
   return (

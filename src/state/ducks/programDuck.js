@@ -10,6 +10,7 @@ const CLEAR_PROGRAMS = 'CLEAR_PROGRAMS';
 const CURRENT_PROGRAM = 'CURRENT_PROGRAM';
 
 const GET_PROGRAMS_BY_USER_ID_SUCCESS = 'GET_PROGRAMS_BY_USER_ID_SUCCESS';
+const GET_PROGRAM_SUCCESS = 'GET_PROGRAM_SUCCESS';
 const ADD_PROGRAM_SUCCESS = 'ADD_PROGRAM_SUCCESS';
 const EDIT_PROGRAM_SUCCESS = 'EDIT_PROGRAM_SUCCESS';
 
@@ -36,6 +37,23 @@ export const programActions = {
   },
   clearPrograms: () => {
     return { type: CLEAR_PROGRAMS };
+  },
+
+  /*--------- GET PROGRAM BY PROGRAM ID ---------*/
+  getProgramByProgramIdThunk: programId => dispatch => {
+    const {
+      thunkStart,
+      thunkFail,
+      thunkResolve,
+    } = programThunkUtils.getTriggersFromPrefix(dispatch, 'get-program');
+
+    thunkStart();
+
+    axiosAuth()
+      .get(`/programs/program/${programId}`)
+      .then(res => dispatch({ type: GET_PROGRAM_SUCCESS, payload: res.data }))
+      .catch(err => thunkFail(err.message))
+      .finally(() => thunkResolve());
   },
 
   /*--------- GET PROGRAMS BY USER ID ---------*/
@@ -131,6 +149,13 @@ const programReducer = (state = initialState, action) => {
         ...state,
         status: 'edit/success',
         editProgram: {},
+      };
+
+    case GET_PROGRAM_SUCCESS:
+      return {
+        ...state,
+        status: 'get-program/success',
+        currentProgram: action.payload,
       };
 
     case GET_PROGRAMS_BY_USER_ID_SUCCESS:

@@ -1,13 +1,12 @@
 // REACT & HOOKS
 import React, { useState, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { useOktaAuth } from '@okta/okta-react';
 import { useUserRole } from '../../hooks';
 
 // REDUX
 import { useSelector, useDispatch } from 'react-redux';
 import { courseActions, moduleActions } from '../../state/ducks';
-import { axiosWithAuth } from '../../utils';
 
 // MISC
 import styled from 'styled-components';
@@ -30,45 +29,29 @@ const { SubMenu } = Menu;
 const { Header, Footer, Content } = Layout;
 
 const ModuleList = props => {
+  let { courseId } = useParams();
+  courseId = parseInt(courseId);
   const { authService } = useOktaAuth();
   const dispatch = useDispatch();
   const { push } = useHistory();
   const modules = useSelector(state => state.moduleReducer.modulesList);
-  const currentCourse = useSelector(state => state.courseReducer.currentCourse);
+  const { status, studentsMap, teachersMap, currentCourse } = useSelector(
+    state => state.courseReducer
+  );
   const { userIsAdmin, userIsTeacher } = useUserRole();
 
   const [newStudent, setNewStudent] = useState({ studentname: '' });
   const [newTeacher, setNewTeacher] = useState({ teachername: '' });
-  const [studentList, setStudentList] = useState([]);
 
   useEffect(() => {
-    // this mounted with boolean really isn't the cleanest pattern in the world
-    // could we `useRef` instead?
-    let mounted = true;
-    // this needs to be refactored into an actual thunk and
-    // completely managed in Redux
-    // userActions.getAllStudentsThunk()
-    axiosWithAuth()
-      .get('https://reach-team-a-be.herokuapp.com/students/')
-      .then(res => {
-        const filteredStudentsList = res.data;
-        for (let i = 0; i < currentCourse.students.length; i++) {
-          let studentIndex = filteredStudentsList.findIndex(student => {
-            return (
-              student.studentid === currentCourse.students[i].student.studentid
-            );
-          });
-          filteredStudentsList.splice(studentIndex, 1);
-        }
-        if (mounted) {
-          setStudentList(filteredStudentsList);
-        }
-      })
-      .catch(err => {
-        console.log(err);
-      });
-    return () => (mounted = false);
-  }, [currentCourse.students]);
+    if (
+      status === 'add-enrolled/success' ||
+      status === 'remove-enrolled/success'
+    ) {
+      dispatch(courseActions.getCourseThunk(courseId));
+      dispatch(courseActions.mapifyStudentTeachersPowerThunk(courseId));
+    }
+  }, [courseId, dispatch, status]);
 
   const changeStudentValues = e => {
     const { name, value } = e.target;
@@ -102,7 +85,7 @@ const ModuleList = props => {
 
   function addStudentHandler(e) {
     e.preventDefault();
-    // this needs to be refactored into an actual thunk and  completely managed in Redux
+    // TODO: this needs to be refactored into an actual thunk and  completely managed in Redux
     dispatch(
       courseActions.addStudentToCourseThunk(currentCourse.courseid, newStudent)
     );
@@ -110,14 +93,14 @@ const ModuleList = props => {
 
   function addTeacherHandler(e) {
     e.preventDefault();
-    // this needs to be refactored into an actual thunk and  completely managed in Redux
+    // TODO: this needs to be refactored into an actual thunk and  completely managed in Redux
     dispatch(
       courseActions.addTeacherToCourseThunk(currentCourse.courseid, newTeacher)
     );
   }
 
   const deleteStudentHandler = studentId => {
-    // this needs to be refactored into an actual thunk and  completely managed in Redux
+    // TODO: this needs to be refactored into an actual thunk and  completely managed in Redux
     dispatch(
       courseActions.deleteStudentFromCourseThunk(
         currentCourse.courseid,
@@ -127,7 +110,7 @@ const ModuleList = props => {
   };
 
   const deleteTeacherHandler = teacherId => {
-    // this needs to be refactored into an actual thunk and  completely managed in Redux
+    // TODO: this needs to be refactored into an actual thunk and  completely managed in Redux
     dispatch(
       courseActions.deleteTeacherFromCourseThunk(
         currentCourse.courseid,
@@ -209,31 +192,32 @@ const ModuleList = props => {
                     mode="inline"
                   >
                     <SubMenu key="sub3" title="Teachers">
-                      {currentCourse.teachers?.map((teacher, index) => (
-                        <React.Fragment key={teacher.teacher.teacherid}>
-                          <StyledMenuRow>
-                            <Menu.Item
-                              key={teacher.teacher.teacherid}
-                              style={{ marginTop: '2.5%' }}
-                            >
-                              {teacher.teacher.teachername}
-                            </Menu.Item>
-                            <Tooltip title="Delete">
-                              <IconButton
-                                aria-label="delete"
-                                onClick={() => {
-                                  userIsAdmin() &&
-                                    deleteTeacherHandler(
-                                      teacher.teacher.teacherid
-                                    );
-                                }}
-                              >
-                                <DeleteIcon></DeleteIcon>
-                              </IconButton>
-                            </Tooltip>
-                          </StyledMenuRow>
-                        </React.Fragment>
-                      ))}
+                      {teachersMap?.enrolled &&
+                        Object.entries(teachersMap.enrolled).map(
+                          ([teacherid, { teachername }]) => (
+                            <React.Fragment key={teacherid}>
+                              <StyledMenuRow>
+                                <Menu.Item
+                                  key={teacherid}
+                                  style={{ marginTop: '2.5%' }}
+                                >
+                                  {teachername}
+                                </Menu.Item>
+                                <Tooltip title="Delete">
+                                  <IconButton
+                                    aria-label="delete"
+                                    onClick={() => {
+                                      userIsAdmin() &&
+                                        deleteTeacherHandler(teacherid);
+                                    }}
+                                  >
+                                    <DeleteIcon></DeleteIcon>
+                                  </IconButton>
+                                </Tooltip>
+                              </StyledMenuRow>
+                            </React.Fragment>
+                          )
+                        )}
                     </SubMenu>
                   </Menu>
                 </div>
@@ -276,30 +260,33 @@ const ModuleList = props => {
                     mode="inline"
                   >
                     <SubMenu key="sub2" title="Registered Students">
-                      {currentCourse?.students?.map(student => {
-                        return (
-                          <StyledMenuRow>
-                            <Menu.Item
-                              key={student.student.studentid}
-                              style={{ marginTop: '2.5%' }}
-                            >
-                              {student.student.studentname}
-                            </Menu.Item>
-                            <Tooltip title="Delete">
-                              <IconButton
-                                aria-label="delete"
-                                onClick={() =>
-                                  deleteStudentHandler(
-                                    student.student.studentid
-                                  )
-                                }
-                              >
-                                <DeleteIcon></DeleteIcon>
-                              </IconButton>
-                            </Tooltip>
-                          </StyledMenuRow>
-                        );
-                      })}
+                      {studentsMap?.enrolled &&
+                        Object.entries(studentsMap.enrolled).map(
+                          ([studentid, { studentname }]) => {
+                            return (
+                              <React.Fragment key={studentid}>
+                                <StyledMenuRow>
+                                  <Menu.Item
+                                    key={studentid}
+                                    style={{ marginTop: '2.5%' }}
+                                  >
+                                    {studentname}
+                                  </Menu.Item>
+                                  <Tooltip title="Delete">
+                                    <IconButton
+                                      aria-label="delete"
+                                      onClick={() =>
+                                        deleteStudentHandler(studentid)
+                                      }
+                                    >
+                                      <DeleteIcon></DeleteIcon>
+                                    </IconButton>
+                                  </Tooltip>
+                                </StyledMenuRow>
+                              </React.Fragment>
+                            );
+                          }
+                        )}
                     </SubMenu>
                   </Menu>
                   <div style={{ marginTop: '10px' }}>
@@ -309,22 +296,23 @@ const ModuleList = props => {
                       mode="inline"
                     >
                       <SubMenu key="sub6" title="Students">
-                        {studentList.map(student => {
-                          return (
-                            <Menu.Item key={student.studentid}>
-                              <StyledMenuRow>
-                                {student.studentname}
-                                <StyledSpan
-                                  onClick={e => {
-                                    addStudent(e, student.studentname);
-                                  }}
-                                >
-                                  +
-                                </StyledSpan>
-                              </StyledMenuRow>
-                            </Menu.Item>
-                          );
-                        })}
+                        {studentsMap?.available &&
+                          Object.entries(studentsMap.available).map(
+                            ([studentid, { studentname }]) => {
+                              return (
+                                <Menu.Item key={studentid}>
+                                  <StyledMenuRow>
+                                    {studentname}
+                                    <StyledSpan
+                                      onClick={e => addStudent(e, studentname)}
+                                    >
+                                      +
+                                    </StyledSpan>
+                                  </StyledMenuRow>
+                                </Menu.Item>
+                              );
+                            }
+                          )}
                       </SubMenu>
                     </Menu>
                   </div>

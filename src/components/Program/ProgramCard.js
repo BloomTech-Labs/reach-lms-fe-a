@@ -7,6 +7,7 @@ import Dropdown from 'antd/lib/dropdown';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { programActions, courseActions } from '../../state/ducks';
+import { pathUtils } from '../../routes';
 // css
 import '../../styles/ProgramCard.css';
 
@@ -16,20 +17,24 @@ export default function ProgramCard(props) {
   const { status, error } = useSelector(state => state.courseReducer);
   const { push } = useHistory();
 
+  const RELATED_COURSES = pathUtils.makeViewAllCoursesPath(program.programid);
+
   useEffect(() => {
     if (status === 'get-by-program-id/success') {
-      push('/courses');
+      // push('/courses');
+      push(RELATED_COURSES);
     }
     if (status === 'get-by-program-id/error') {
       // we'll probably want to display an error to our user instead of sending it to console
       console.error(error);
     }
-  }, [status, push, error]);
+  }, [status, push, error, RELATED_COURSES]);
 
   const handleMenuClick = e => {
     if (e.key === 'edit') {
-      dispatch(programActions.setEdit(program));
-      push('/edit-program');
+      // dispatch(programActions.setEdit(program));
+      // push('/edit-program');
+      push(pathUtils.makeEditProgramPath(program.programid));
     } else {
       dispatch(programActions.deleteProgramThunk(program.programid));
     }

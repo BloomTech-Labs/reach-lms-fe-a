@@ -81,6 +81,10 @@ const initialState = {
 };
 
 const moduleReducer = (state = initialState, action) => {
+  const { success, result } = moduleThunkUtils.thunkReducer(state, action);
+  if (success) {
+    return result;
+  }
   switch (action.type) {
     // TODO: TEST THIS
     case GET_MODULES_BY_COURSE_ID_SUCCESS:

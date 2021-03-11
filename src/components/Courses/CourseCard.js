@@ -5,34 +5,35 @@ import Button from 'antd/lib/button';
 import Menu from 'antd/lib/menu';
 import Dropdown from 'antd/lib/dropdown';
 import { useSelector, useDispatch } from 'react-redux';
-import { useHistory } from 'react-router-dom';
 import { useUserRole } from '../../hooks';
 import { courseActions, moduleActions } from '../../state/ducks';
 
 // css
 import '../../styles/CourseCard.css';
+import { pathUtils } from '../../routes';
 
 export default function CourseCard(props) {
-  const { course } = props;
+  const { course, programId, push } = props;
   const { status, error } = useSelector(state => state.moduleReducer);
   const dispatch = useDispatch();
-  const { push } = useHistory();
 
   const { userIsAdmin, userIsTeacher } = useUserRole();
 
+  const VIEW_MODULES = pathUtils.makeViewAllModulesPath(course.courseid);
+
   useEffect(() => {
-    if (status === 'get-modules-by-course-id/success') {
-      push('/modules');
-    }
+    // if (status === 'get-modules-by-course-id/success') {
+    //   push(VIEW_MODULES);
+    // }
     if (status === 'get-modules-by-course-id/error') {
       console.error(error);
     }
-  }, [error, push, status]);
+  }, [error, status]);
 
   const handleMenuClick = e => {
     if (e.key === 'edit') {
       dispatch(courseActions.setEditCourse(course));
-      push('/edit-course');
+      push(pathUtils.makeEditCoursePath(programId, course.courseid));
     } else {
       dispatch(courseActions.deleteCourseThunk(course.courseid));
     }
@@ -47,6 +48,8 @@ export default function CourseCard(props) {
 
   const viewCourseHandler = () => {
     dispatch(moduleActions.getModulesByCourseIdThunk(course.courseid));
+    console.log({ VIEW_MODULES });
+    push(VIEW_MODULES);
   };
 
   return (
