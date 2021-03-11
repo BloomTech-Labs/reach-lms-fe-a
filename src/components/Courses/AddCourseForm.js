@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { axiosWithAuth } from '../../utils/axiosWithAuth';
-import { useHistory } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { useHistory, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import Navigation from '../Navigation';
-import * as yup from 'yup';
 import schema from '../../validation/CourseSchema';
-import { addCourse } from '../../state/actions/courseActions';
+import { useFormWithErrors } from '../../hooks';
+import { courseActions } from '../../state/ducks';
+import { pathUtils } from '../../routes';
 import styled from 'styled-components';
 
 // css
@@ -40,60 +40,49 @@ const initialValues = {
   coursedescription: '',
 };
 
-const initialFormErrors = {
-  coursename: '',
-  coursecode: '',
-  coursedescription: '',
-};
-
 export default function AddCourse() {
+  const { programId } = useParams();
+  const BACK_PATH = pathUtils.makeViewAllCoursesPath(programId);
   const { push } = useHistory();
   const dispatch = useDispatch();
-  const [values, setValues] = useState(initialValues);
-  const [errors, setErrors] = useState(initialFormErrors);
-  const [disabled, setDisabled] = useState(true);
-  const currentProgram = useSelector(
-    state => state.programReducer.currentProgram
+
+  const { values, errors, disabled, onChange, resetValues } = useFormWithErrors(
+    schema,
+    initialValues
   );
 
-  const setFormErrors = (name, value) => {
-    yup
-      .reach(schema, name)
-      .validate(value)
-      .then(() => setErrors({ ...errors, [name]: '' }))
-      .catch(err => setErrors({ ...errors, [name]: err.errors[0] }));
-  };
+  const currentProgramId = useSelector(
+    state => state.programReducer.currentProgram?.programid
+  );
+
+  const { status, error } = useSelector(state => state.courseReducer);
 
   const changeValues = e => {
     const { name, value, type } = e.target;
     const valueToUse = type === 'select' ? Select : value;
-    setFormErrors(name, valueToUse);
-    setValues({ ...values, [e.target.name]: valueToUse });
+    onChange(name, valueToUse);
   };
 
   useEffect(() => {
-    schema.isValid(values).then(valid => setDisabled(!valid));
-  }, [values]);
+    if (status === 'post/fail') {
+      // probably should show this error to the user
+      console.log(error);
+    }
+    if (status === 'post/success') {
+      resetValues();
+      // push('/courses');
+      push(BACK_PATH);
+    }
+  }, [status, error, resetValues, push, BACK_PATH]);
 
   function submitForm(e) {
     e.preventDefault();
-    axiosWithAuth()
-      .post(
-        `https://reach-team-a-be.herokuapp.com/courses/${currentProgram.programid}/course`,
-        values
-      )
-      .then(res => {
-        dispatch(addCourse(res.data));
-        setValues(initialValues);
-        push('/courses');
-      })
-      .catch(err => {
-        console.log(err);
-      });
+    dispatch(courseActions.addCourseThunk(currentProgramId, values));
   }
 
   const goBack = () => {
-    push('/courses');
+    // push('/courses');
+    push(BACK_PATH);
   };
 
   return (

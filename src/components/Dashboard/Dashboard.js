@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useSelector } from 'react-redux';
+import { useUserRole } from '../../hooks';
 import Navigation from '../Navigation';
 import ProgramList from '../Program/ProgramList';
 import CourseList from '../Courses/CourseList';
@@ -20,7 +20,7 @@ const { Header, Footer, Content } = Layout;
 
 const Dashboard = props => {
   const { authService } = props;
-  const user = useSelector(state => state.userReducer);
+  const { userIsAdmin } = useUserRole();
 
   return (
     <Layout>
@@ -29,7 +29,7 @@ const Dashboard = props => {
       </Header>
       <Content>
         <StyledWrapper>
-          <div>{user.role === 'ADMIN' ? <ProgramList /> : <CourseList />}</div>
+          <div>{userIsAdmin() ? <ProgramList /> : <CourseList />}</div>
         </StyledWrapper>
       </Content>
       <Footer></Footer>

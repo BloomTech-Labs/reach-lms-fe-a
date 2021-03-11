@@ -1,7 +1,8 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { useHistory, useParams, Link } from 'react-router-dom';
 import { useOktaAuth } from '@okta/okta-react';
+import { useMountEffect, useUserRole } from '../../hooks';
 import styled from 'styled-components';
 import CourseCard from './CourseCard';
 
@@ -10,6 +11,8 @@ import 'antd/dist/antd.css';
 import Layout from 'antd/lib/layout';
 import Button from 'antd/lib/button';
 import Navigation from '../Navigation';
+import { courseActions, programActions } from '../../state/ducks';
+import { pathUtils } from '../../routes';
 
 // styled components
 const StyledCourses = styled.div`
@@ -68,57 +71,74 @@ const StyledH2 = styled.h2`
   font-size: 1.75rem;
 `;
 
+const { Header, Footer, Content } = Layout;
+
 const CourseList = () => {
+  const { programId } = useParams();
+  const { push } = useHistory();
+  const dispatch = useDispatch();
   const { authService } = useOktaAuth();
-  const { Header, Footer, Content } = Layout;
-  const courseList = useSelector(state => state.courseReducer.courses_list);
-  const user = useSelector(state => state.userReducer);
+  const courseList = useSelector(state => state.courseReducer.coursesList);
+  const { userIsAdmin } = useUserRole();
+
   const currentProgram = useSelector(
     state => state.programReducer.currentProgram
   );
 
+  useMountEffect(() => {
+    dispatch(courseActions.getCoursesByProgramId(programId));
+    dispatch(programActions.getProgramByProgramIdThunk(programId));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [programId]);
+
   return (
-    <Layout>
-      {user.role === 'ADMIN' && (
-        <Header>
-          <Navigation authService={authService} />
-        </Header>
-      )}
+    <>
       <Layout>
-        <Content>
-          <StyledWrapper>
-            <StyledContent>
-              <div>
-                {user.role === 'ADMIN' && (
-                  <h1>Program: {currentProgram.programname}</h1>
+        {userIsAdmin() && (
+          <Header>
+            <Navigation authService={authService} />
+          </Header>
+        )}
+        <Layout>
+          <Content>
+            <StyledWrapper>
+              <StyledContent>
+                {userIsAdmin() && (
+                  <div>
+                    <h1>Program: {currentProgram.programname}</h1>
+                  </div>
                 )}
-              </div>
-              <HeaderDiv>
-                <StyledH2>My Courses</StyledH2>
-                <StyledTitle>
-                  {user.role === 'ADMIN' && (
-                    <Link to="/add-course">
-                      <Button size="large" style={{ background: '#01fe87' }}>
-                        Add Course
-                      </Button>
-                    </Link>
-                  )}
-                </StyledTitle>
-              </HeaderDiv>
-              <StyledCourses>
-                {courseList.map(course => {
-                  return <CourseCard key={course.id} course={course} />;
-                })}
-              </StyledCourses>
-            </StyledContent>
-          </StyledWrapper>
-        </Content>
-        {/* <Sider>
-          {(user.role === 'ADMIN' || user.role === 'TEACHER') && <SearchPage />}
-        </Sider> */}
+                <HeaderDiv>
+                  <StyledH2>My Courses</StyledH2>
+                  <StyledTitle>
+                    {userIsAdmin() && (
+                      <Link to={pathUtils.makeCreateCoursePath(programId)}>
+                        <Button size="large" style={{ background: '#01fe87' }}>
+                          Add Course
+                        </Button>
+                      </Link>
+                    )}
+                  </StyledTitle>
+                </HeaderDiv>
+                <StyledCourses>
+                  {courseList.map(course => {
+                    return (
+                      <CourseCard
+                        key={course.courseid}
+                        course={course}
+                        programId={programId}
+                        push={push}
+                      />
+                    );
+                  })}
+                </StyledCourses>
+              </StyledContent>
+            </StyledWrapper>
+          </Content>
+        </Layout>
       </Layout>
       <Footer></Footer>
-    </Layout>
+    </>
   );
 };
 

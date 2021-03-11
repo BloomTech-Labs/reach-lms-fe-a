@@ -1,12 +1,23 @@
 import axios from 'axios';
 
-export const axiosWithAuth = () => {
+const getBaseParams = () => {
   const token = localStorage.getItem('okta-token-storage');
   const parsed_token = JSON.parse(token);
   const access_token = parsed_token['accessToken']['value'];
-  return axios.create({
+  return {
     headers: {
-      Authorization: `Bearer ${access_token}`, //OR Authorization: `Bearer ${token}`, // have to check api
+      Authorization: `Bearer ${access_token}`,
     },
+  };
+};
+
+export const axiosWithAuth = () => {
+  return axios.create(getBaseParams());
+};
+
+export const axiosAuth = () => {
+  return axios.create({
+    ...getBaseParams(),
+    baseURL: 'https://reach-team-a-be.herokuapp.com',
   });
 };

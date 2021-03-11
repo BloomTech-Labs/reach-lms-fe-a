@@ -1,18 +1,34 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { useOktaAuth } from '@okta/okta-react';
-import Dashboard from './Dashboard';
-import { axiosWithAuth } from '../../utils/axiosWithAuth';
-import { saveUser } from '../../state/actions/userActions';
-import { useDispatch } from 'react-redux';
-import { setProgramList } from '../../state/actions/programActions';
-import { setCourseList } from '../../state/actions/courseActions';
+import { useUserRole } from '../../hooks';
+import { programActions, courseActions } from '../../state/ducks';
+import { Dashboard } from './';
 
 function HomeContainer({ LoadingComponent }) {
   const { authState, authService } = useOktaAuth();
   const [userInfo, setUserInfo] = useState(null);
   // eslint-disable-next-line
   const [memoAuthService] = useMemo(() => [authService], []);
+
+  const { userIsAdmin, userIsTeacher } = useUserRole();
+  const { user, status } = useSelector(state => state.userReducer);
+  const { username, userid } = user;
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (status === 'get-user-info/success') {
+      if (userIsAdmin()) {
+        dispatch(programActions.getProgramsByUserIdThunk(userid));
+      } else if (userIsTeacher()) {
+        dispatch(courseActions.getCoursesByTeacherNameThunk(username));
+      } else {
+        dispatch(courseActions.getCoursesByStudentNameThunk(username));
+      }
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [status]);
 
   useEffect(() => {
     let isSubscribed = true;
@@ -38,72 +54,8 @@ function HomeContainer({ LoadingComponent }) {
         return setUserInfo(null);
       });
 
-    axiosWithAuth()
-      .get('https://reach-team-a-be.herokuapp.com/users/getuserinfo')
-      .then(res => {
-        let incoming_user = {
-          userid: res.data.userid,
-          firstname: res.data.firstname,
-          lastname: res.data.lastname,
-          email: res.data.email,
-          phonenumber: res.data.phonenumber,
-          role: res.data.roles[0].role.name,
-          username: res.data.username,
-        };
-        setUserInfo(incoming_user);
-        dispatch(saveUser(incoming_user));
-        return incoming_user;
-      })
-      .then(incoming_user => {
-        // add a ternary: if user is admin, get programs, if teacher/student get courses
-        if (incoming_user.role === 'ADMIN') {
-          axiosWithAuth()
-            .get(
-              `https://reach-team-a-be.herokuapp.com/programs/${incoming_user.userid}`
-            )
-            .then(res => {
-              dispatch(setProgramList(res.data));
-            });
-        } else if (incoming_user.role === 'TEACHER') {
-          axiosWithAuth()
-            .get(
-              `https://reach-team-a-be.herokuapp.com/teachers/${incoming_user.username}`
-            )
-            .then(res => {
-              const courseList = [];
-              for (let i = 0; i < res.data.courses.length; i++) {
-                let newCourse = res.data.courses[i].course;
-                courseList.push(newCourse);
-              }
-              dispatch(setCourseList(courseList));
-            })
-            .catch(err => {
-              console.log('get courses by teacherid did not work', err);
-            });
-        } else {
-          axiosWithAuth()
-            .get(
-              `https://reach-team-a-be.herokuapp.com/students/${incoming_user.username}`
-            )
-            .then(res => {
-              const courseList = [];
-              for (let i = 0; i < res.data.courses.length; i++) {
-                let newCourse = res.data.courses[i].course;
-                courseList.push(newCourse);
-              }
-              dispatch(setCourseList(courseList));
-            })
-            .catch(err => {
-              console.log('get courses by studentid did not work', err);
-            });
-        }
-      })
-      .catch(err => {
-        console.log(err);
-      });
-
     return () => (isSubscribed = false);
-  }, [memoAuthService, dispatch]);
+  }, [memoAuthService]);
 
   return (
     <>
@@ -111,9 +63,7 @@ function HomeContainer({ LoadingComponent }) {
         <LoadingComponent message="Fetching user profile..." />
       )}
       {authState.isAuthenticated && userInfo && (
-        <>
-          <Dashboard authService={authService} />
-        </>
+        <Dashboard authService={authService} />
       )}
     </>
   );

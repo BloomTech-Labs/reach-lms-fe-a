@@ -1,9 +1,12 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
-import ProgramCard from './ProgramCard';
-import styled from 'styled-components';
-import Button from 'antd/lib/button';
+import { useSelector, useDispatch } from 'react-redux';
+import { programActions } from '../../state/ducks';
+import { useMountEffect } from '../../hooks';
+
 import { Link } from 'react-router-dom';
+import styled from 'styled-components';
+import ProgramCard from './ProgramCard';
+import Button from 'antd/lib/button';
 
 //styled components
 const StyledPrograms = styled.div`
@@ -44,7 +47,13 @@ const StyledH2 = styled.h2`
 `;
 
 const ProgramList = () => {
-  const programs = useSelector(state => state.programReducer.programs_list);
+  const programs = useSelector(state => state.programReducer.programsList);
+  const { userid } = useSelector(state => state.userReducer.user);
+  const dispatch = useDispatch();
+
+  useMountEffect(() =>
+    dispatch(programActions.getProgramsByUserIdThunk(userid))
+  );
 
   return (
     <StyledContent>

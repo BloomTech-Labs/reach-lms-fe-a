@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { axiosWithAuth } from '../../utils/axiosWithAuth';
+import React, { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import Navigation from '../Navigation';
-import * as yup from 'yup';
 import schema from '../../validation/ProgramSchema';
-import { addProgram } from '../../state/actions/programActions';
+import { useFormWithErrors, useUserRole } from '../../hooks';
+import { programActions } from '../../state/ducks';
 import styled from 'styled-components';
 
 // css
@@ -41,59 +40,42 @@ const initialValues = {
   programdescription: '',
 };
 
-const initialFormErrors = {
-  programname: '',
-  programtype: '',
-  programdescription: '',
-};
-
 export default function CreateProgram() {
   const { push } = useHistory();
   const dispatch = useDispatch();
-  const [values, setValues] = useState(initialValues);
-  const [errors, setErrors] = useState(initialFormErrors);
-  const [disabled, setDisabled] = useState(true);
-  const user = useSelector(state => state.userReducer);
+  const { status, error } = useSelector(state => state.programReducer);
+  const { userid } = useUserRole();
 
-  const setFormErrors = (name, value) => {
-    yup
-      .reach(schema, name)
-      .validate(value)
-      .then(() => setErrors({ ...errors, [name]: '' }))
-      .catch(err => setErrors({ ...errors, [name]: err.errors[0] }));
-  };
+  const { values, errors, disabled, onChange, resetValues } = useFormWithErrors(
+    schema,
+    initialValues
+  );
 
   const changeValues = e => {
     const { name, value, type } = e.target;
     const valueToUse = type === 'select' ? Select : value;
-    setFormErrors(name, valueToUse);
-    setValues({ ...values, [e.target.name]: valueToUse });
+    onChange(name, valueToUse);
   };
 
-  const changeSelect = (value, event) => {
-    setFormErrors('programtype', value);
-    setValues({ ...values, programtype: value });
+  const changeSelect = value => {
+    onChange('programtype', value);
   };
 
   useEffect(() => {
-    schema.isValid(values).then(valid => setDisabled(!valid));
-  }, [values]);
+    if (status === 'add/success') {
+      resetValues();
+      push('/');
+    }
+    if (status === 'add/error') {
+      // probably want to display an error message to our user
+      console.log('POST NEW PROGRAM ERROR: ', error);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [status]);
 
   function submitForm(e) {
     e.preventDefault();
-    dispatch(addProgram(values));
-    axiosWithAuth()
-      .post(
-        `https://reach-team-a-be.herokuapp.com/programs/${user.userid}/program`,
-        values
-      )
-      .then(res => {
-        setValues(initialValues);
-        push('/');
-      })
-      .catch(err => {
-        console.log(err);
-      });
+    dispatch(programActions.addProgramThunk(userid, values));
   }
 
   const goBack = () => {

@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { axiosWithAuth } from '../../utils/axiosWithAuth';
 import Navigation from '../Navigation';
 import schema from '../../validation/ProfileSchema';
-import * as yup from 'yup';
-import { editUser } from '../../state/actions/userActions';
+import { userActions } from '../../state/ducks';
+import { useFormWithErrors, useUserRole } from '../../hooks';
+
+// STYLING
 import styled from 'styled-components';
 // css
 import '../../styles/Form.css';
@@ -32,6 +33,15 @@ const layout = {
   wrapperCol: { span: 16 },
 };
 
+const initialUser = user => ({
+  userid: user.userid,
+  firstname: user.firstname,
+  lastname: user.lastname,
+  phonenumber: user.phonenumber,
+  email: user.email,
+  role: user.role,
+});
+
 const initialFormErrors = {
   firstname: '',
   lastname: '',
@@ -40,52 +50,37 @@ const initialFormErrors = {
 };
 
 export default function EditUserForm() {
-  // const userToEdit = useSelector(state => state.userReducer.edit_user);
   const dispatch = useDispatch();
   const { push } = useHistory();
-  const user = useSelector(state => state.userReducer);
-  const [disabled, setDisabled] = useState(false);
-  const [input, setInput] = useState({
-    userid: user.id,
-    firstname: user.firstname,
-    lastname: user.lastname,
-    phonenumber: user.phonenumber,
-    email: user.email,
-    role: user.role,
-  });
-  const [errors, setErrors] = useState(initialFormErrors);
-
-  const setFormErrors = (name, value) => {
-    yup
-      .reach(schema, name)
-      .validate(value)
-      .then(() => setErrors({ ...errors, [name]: '' }))
-      .catch(err => setErrors({ ...errors, [name]: err.errors[0] }));
-  };
+  useUserRole();
+  const { user, status, error } = useSelector(state => state.userReducer);
+  const { values, errors, disabled, onChange, resetValues } = useFormWithErrors(
+    schema,
+    initialUser(user),
+    initialFormErrors,
+    false
+  );
 
   const changeValues = e => {
     const { name, value, type, select } = e.target;
     const valueToUse = type === 'select' ? select : value;
-    setFormErrors(name, valueToUse);
-    setInput({ ...input, [e.target.name]: valueToUse });
+    onChange(name, valueToUse);
   };
 
   useEffect(() => {
-    schema.isValid(input).then(valid => setDisabled(!valid));
-  }, [input]);
+    if (status === 'edit/error') {
+      console.error(error);
+    }
+    if (status === 'edit/success') {
+      push('/profile');
+      resetValues();
+    }
+  }, [status, error, push, resetValues]);
 
   function editUserSubmit(e) {
     e.preventDefault();
-    axiosWithAuth()
-      .patch(
-        `https://reach-team-a-be.herokuapp.com/users/user/${user.userid}`,
-        input
-      )
-      .then(res => {
-        dispatch(editUser(input));
-      })
-      .catch(err => console.log(err));
-    push('/profile');
+    const editedUser = { ...values, userid: user.userid };
+    dispatch(userActions.editUserThunk(editedUser));
   }
 
   const goBack = () => {
@@ -104,19 +99,13 @@ export default function EditUserForm() {
             {...layout}
             name="basic"
             onFinish={editUserSubmit}
-            initialValues={{
-              firstname: user.firstname,
-              lastname: user.lastname,
-              phonenumber: user.phonenumber,
-              email: user.email,
-            }}
             className="form"
           >
             <FormItem htmlFor="firstname" label="First Name:">
               <Input
                 id="firstname"
                 name="firstname"
-                value={input.firstname}
+                value={values.firstname}
                 onChange={changeValues}
               />
               <div style={{ color: 'red' }}>
@@ -127,7 +116,7 @@ export default function EditUserForm() {
               <Input
                 id="lastname"
                 name="lastname"
-                value={input.lastname}
+                value={values.lastname}
                 onChange={changeValues}
               />
               <div style={{ color: 'red' }}>
@@ -138,7 +127,7 @@ export default function EditUserForm() {
               <Input
                 id="email"
                 name="email"
-                value={input.email}
+                value={values.email}
                 onChange={changeValues}
               />
               <div style={{ color: 'red' }}>
@@ -149,7 +138,7 @@ export default function EditUserForm() {
               <Input
                 id="phonenumber"
                 name="phonenumber"
-                value={input.phonenumber}
+                value={values.phonenumber}
                 onChange={changeValues}
               />
               <div style={{ color: 'red' }}>
