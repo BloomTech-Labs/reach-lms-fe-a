@@ -20,29 +20,38 @@ export const userActions = {
     return { type: CLEAR_USER };
   },
   getUserInfoThunk: () => dispatch => {
-    dispatch(userThunkUtils.triggerThunkStart('get-user-info'));
+    const {
+      thunkStart,
+      thunkFail,
+      thunkResolve,
+    } = userThunkUtils.getTriggersFromPrefix(dispatch, 'get-user-info');
+
+    thunkStart();
 
     axiosAuth()
       .get('/users/getuserinfo')
-      .then(res => dispatch({ type: GET_USER_INFO_SUCCESS, payload: res.data }))
-      .catch(err =>
-        dispatch(userThunkUtils.triggerThunkFail('get-user-info', err.message))
-      )
-      .finally(() => dispatch(userThunkUtils.triggerThunkResolve()));
+      .then(res => {
+        dispatch({ type: GET_USER_INFO_SUCCESS, payload: res.data });
+      })
+      .catch(err => thunkFail(err.message))
+      .finally(() => thunkResolve());
   },
   editUserThunk: user => dispatch => {
-    dispatch(userThunkUtils.triggerThunkStart('edit'));
+    const {
+      thunkStart,
+      thunkFail,
+      thunkResolve,
+    } = userThunkUtils.getTriggersFromPrefix(dispatch, 'edit');
+
+    thunkStart();
+
     const { userid } = user;
-    if (!userid) {
-      throw new Error('No userid attached to user');
-    }
+
     axiosAuth()
       .patch(`/users/user/${parseInt(userid)}`, user)
       .then(res => dispatch(userActions.editUser(res.data)))
-      .catch(err =>
-        dispatch(userThunkUtils.triggerThunkFail('edit', err.message))
-      )
-      .finally(() => userThunkUtils.triggerThunkResolve());
+      .catch(err => thunkFail(err.message))
+      .finally(() => thunkResolve());
   },
 };
 

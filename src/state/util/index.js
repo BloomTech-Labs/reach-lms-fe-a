@@ -1,8 +1,20 @@
+/**
+ * A multi-faceted closure that returns a collection of utility functions to be used in asynchronous thunks
+ * @param {string} slicePrefix The prefix of the duck or slice of state. (i.e., userDuck would pass in USER as a slicePrefix)
+ * @returns An object full of utility functions.
+ */
 export const asyncThunkUtils = slicePrefix => {
+  // Dynamic action types for reusability
   const ASYNC_THUNK_START = `${slicePrefix}_START`;
   const ASYNC_THUNK_FAIL = `${slicePrefix}_FAIL`;
   const ASYNC_THUNK_RESOLVE = `${slicePrefix}_RESOLVE`;
 
+  /**
+   *
+   * @param {dispatch} dispatch The dispatch object that one would use inside of an async thunk
+   * @param {*} prefix The ACTION TYPE prefix you'd like to use for status updates. (i.e., GET_USER_INFO could pass in "get" or "get-user")
+   * @returns An object of callable functions where each function will dispatch according to the slicePrefix & actionTypePrefix you've set.
+   */
   const getTriggersFromPrefix = (dispatch, prefix) => {
     return {
       thunkStart: () => {
