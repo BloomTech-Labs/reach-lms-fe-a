@@ -25,9 +25,9 @@ export default function ProgramCard(props) {
         Edit Program
       </MenuItemLink>
       <MenuItemLink
-        handleClick={dispatch(
-          programActions.deleteProgramThunk(program.programid)
-        )}
+        handleClick={() =>
+          dispatch(programActions.deleteProgramThunk(program.programid))
+        }
         key="delete"
       >
         Delete Program
