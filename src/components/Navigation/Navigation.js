@@ -13,7 +13,7 @@ const StyledNav = styled.nav`
   flex-direction: row;
   justify-content: space-between;
   width: 100%;
-  background-color: #4f4f4f;
+  background-color: lightgrey;
   margin-bottom: 10%;
 `;
 const StyledLogo = styled.h1`

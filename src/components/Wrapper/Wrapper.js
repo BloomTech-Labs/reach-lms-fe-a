@@ -4,7 +4,6 @@ import React from 'react';
 import { Layout } from 'antd';
 import { Navigation } from '../Navigation';
 import { useLocation } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 import { useOktaAuth } from '@okta/okta-react';
 import styled from 'styled-components';
 
@@ -29,7 +28,8 @@ export default ({ children, ...restProps }) => {
           <LocationInfo>
             {
               {
-                '/': <h1>Dashboard</h1>,
+                //for now I removed titles since we are passing role in through the state
+                // '/': <h1>Dashboard</h1>,
                 '/program/create': <h1>Create Program</h1>,
                 '/course/create': <h1>Create Course</h1>,
                 '/settings': <h1>Settings</h1>,
