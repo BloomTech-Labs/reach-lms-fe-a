@@ -18,7 +18,7 @@ export default ({ children, ...restProps }) => {
   const { Content, Footer } = Layout;
   const { authService } = useOktaAuth();
   const { pathname } = useLocation();
-  const { role } = useSelector(state => state.user);
+  //   const { role } = useSelector(state => state.user);
 
   return (
     <Layout>
@@ -26,7 +26,16 @@ export default ({ children, ...restProps }) => {
         <Navigation authService={authService} />
         <Content>
           {/* should render the role and path on the main content rendering area */}
-          <LocationInfo>{{}}</LocationInfo>
+          <LocationInfo>
+            {
+              {
+                '/': <h1>Dashboard</h1>,
+                '/program/create': <h1>Create Program</h1>,
+                '/course/create': <h1>Create Course</h1>,
+                '/settings': <h1>Settings</h1>,
+              }[pathname]
+            }
+          </LocationInfo>
 
           {/*main content rendering area*/}
           {children}
