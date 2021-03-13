@@ -131,7 +131,6 @@ function App() {
           <SecureRoute path="/" component={HomeContainer} />
           <Route component={NotFoundPage} />
         </Switch>
-        <Footer />
       </div>
     </Security>
   );
