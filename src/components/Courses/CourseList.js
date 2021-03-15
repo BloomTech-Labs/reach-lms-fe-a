@@ -8,9 +8,7 @@ import CourseCard from './CourseCard';
 
 //ant d
 import 'antd/dist/antd.css';
-import Layout from 'antd/lib/layout';
 import Button from 'antd/lib/button';
-import Navigation from '../Navigation';
 import { courseActions, programActions } from '../../state/ducks';
 import { pathUtils } from '../../routes';
 
@@ -71,8 +69,6 @@ const StyledH2 = styled.h2`
   font-size: 1.75rem;
 `;
 
-const { Header, Footer, Content } = Layout;
-
 const CourseList = () => {
   const { programId } = useParams();
   const { push } = useHistory();
@@ -92,53 +88,39 @@ const CourseList = () => {
   });
 
   return (
-    <>
-      <Layout>
+    <StyledWrapper>
+      <StyledContent>
         {userIsAdmin() && (
-          <Header>
-            <Navigation authService={authService} />
-          </Header>
+          <div>
+            <h1>Program: {currentProgram.programname}</h1>
+          </div>
         )}
-        <Layout>
-          <Content>
-            <StyledWrapper>
-              <StyledContent>
-                {userIsAdmin() && (
-                  <div>
-                    <h1>Program: {currentProgram.programname}</h1>
-                  </div>
-                )}
-                <HeaderDiv>
-                  <StyledH2>My Courses</StyledH2>
-                  <StyledTitle>
-                    {userIsAdmin() && (
-                      <Link to={pathUtils.makeCreateCoursePath(programId)}>
-                        <Button size="large" style={{ background: '#01fe87' }}>
-                          Add Course
-                        </Button>
-                      </Link>
-                    )}
-                  </StyledTitle>
-                </HeaderDiv>
-                <StyledCourses>
-                  {courseList.map(course => {
-                    return (
-                      <CourseCard
-                        key={course.courseid}
-                        course={course}
-                        programId={programId}
-                        push={push}
-                      />
-                    );
-                  })}
-                </StyledCourses>
-              </StyledContent>
-            </StyledWrapper>
-          </Content>
-        </Layout>
-      </Layout>
-      <Footer></Footer>
-    </>
+        <HeaderDiv>
+          <StyledH2>My Courses</StyledH2>
+          <StyledTitle>
+            {userIsAdmin() && (
+              <Link to={pathUtils.makeCreateCoursePath(programId)}>
+                <Button size="large" style={{ background: '#01fe87' }}>
+                  Add Course
+                </Button>
+              </Link>
+            )}
+          </StyledTitle>
+        </HeaderDiv>
+        <StyledCourses>
+          {courseList.map(course => {
+            return (
+              <CourseCard
+                key={course.courseid}
+                course={course}
+                programId={programId}
+                push={push}
+              />
+            );
+          })}
+        </StyledCourses>
+      </StyledContent>
+    </StyledWrapper>
   );
 };
 

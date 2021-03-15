@@ -13,12 +13,12 @@ const StyledNav = styled.nav`
   flex-direction: row;
   justify-content: space-between;
   width: 100%;
-  background: none;
+  background-color: lightgrey;
   margin-bottom: 10%;
 `;
 const StyledLogo = styled.h1`
   position: relative;
-  font-size: 4vw;
+  font-size: 2vw;
   color: #252839;
   -webkit-text-stroke: 0.3vw #383d52;
   text-transform: uppercase;
