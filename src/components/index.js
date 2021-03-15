@@ -7,8 +7,6 @@ export {
 
 export { HomePage as HomeContainer, Dashboard } from './Dashboard';
 
-export { Footer } from './FooterApp';
-
 export { LoginPage } from './Login';
 
 export {
@@ -34,3 +32,5 @@ export {
 export { SearchBar, SearchPage, UserList } from './Search';
 
 export { default as LoadingComponent } from './LoadingComponent';
+
+export { Wrapper } from './Wrapper';

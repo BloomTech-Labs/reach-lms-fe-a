@@ -35,7 +35,7 @@ import {
   AddModuleForm,
   EditModuleForm,
   HomeContainer,
-  Footer,
+  Wrapper,
 } from './components';
 
 import {
@@ -87,24 +87,104 @@ function App() {
             exact
             component={() => <HomePage LoadingComponent={LoadingComponent} />}
           />
-          <SecureRoute path={VIEW_PROFILE_PATH} component={UserProfile} />
-          <SecureRoute path={EDIT_PROFILE_PATH} component={EditUserForm} />
+          <SecureRoute
+            path={VIEW_PROFILE_PATH}
+            component={() => (
+              <Wrapper>
+                <UserProfile />
+              </Wrapper>
+            )}
+          />
+          <SecureRoute
+            path={EDIT_PROFILE_PATH}
+            component={() => (
+              <Wrapper>
+                <EditUserForm />
+              </Wrapper>
+            )}
+          />
           <SecureRoute
             path={CREATE_PROGRAM_PATH}
-            component={CreateProgramForm}
+            component={() => (
+              <Wrapper>
+                <CreateProgramForm />
+              </Wrapper>
+            )}
           />
-          <SecureRoute path={EDIT_PROGRAM_PATH} component={EditProgramForm} />
-          <SecureRoute path={VIEW_ALL_COURSES_PATH} component={CourseList} />
-          <SecureRoute path={CREATE_COURSE_PATH} component={AddCourseForm} />
-          <SecureRoute path={EDIT_COURSE_PATH} component={EditCourseForm} />
-          <SecureRoute path={VIEW_ALL_MODULES_PATH} component={ModuleList} />
-          <SecureRoute path={VIEW_MODULE_TEXT_PATH} component={ModuleText} />
-          <SecureRoute path={CREATE_MODULE_PATH} component={AddModuleForm} />
-          <SecureRoute path={EDIT_MODULE_PATH} component={EditModuleForm} />
-          <SecureRoute path="/" component={HomeContainer} />
+          <SecureRoute
+            path={EDIT_PROGRAM_PATH}
+            component={() => (
+              <Wrapper>
+                <EditProgramForm />
+              </Wrapper>
+            )}
+          />
+          <SecureRoute
+            path={VIEW_ALL_COURSES_PATH}
+            component={() => (
+              <Wrapper>
+                <CourseList />
+              </Wrapper>
+            )}
+          />
+          <SecureRoute
+            path={CREATE_COURSE_PATH}
+            component={() => (
+              <Wrapper>
+                <AddCourseForm />
+              </Wrapper>
+            )}
+          />
+          <SecureRoute
+            path={EDIT_COURSE_PATH}
+            component={() => (
+              <Wrapper>
+                <EditCourseForm />
+              </Wrapper>
+            )}
+          />
+          <SecureRoute
+            path={VIEW_ALL_MODULES_PATH}
+            component={() => (
+              <Wrapper>
+                <ModuleList />
+              </Wrapper>
+            )}
+          />
+          <SecureRoute
+            path={VIEW_MODULE_TEXT_PATH}
+            component={() => (
+              <Wrapper>
+                <ModuleText />
+              </Wrapper>
+            )}
+          />
+          <SecureRoute
+            path={CREATE_MODULE_PATH}
+            component={() => (
+              <Wrapper>
+                <AddModuleForm />
+              </Wrapper>
+            )}
+          />
+          <SecureRoute
+            path={EDIT_MODULE_PATH}
+            component={() => (
+              <Wrapper>
+                <EditModuleForm />
+              </Wrapper>
+            )}
+          />
+          <SecureRoute
+            path="/"
+            component={() => (
+              <Wrapper>
+                <HomeContainer />
+              </Wrapper>
+            )}
+          />
           <Route component={NotFoundPage} />
         </Switch>
-        <Footer />
       </div>
     </Security>
   );

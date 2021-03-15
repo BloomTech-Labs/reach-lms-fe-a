@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import Navigation from '../Navigation';
 import schema from '../../validation/ModuleSchema';
 import { moduleActions } from '../../state/ducks';
 import styled from 'styled-components';
@@ -15,10 +14,8 @@ import Button from 'antd/lib/button';
 import Input from 'antd/lib/input';
 import Form from 'antd/lib/form/Form';
 import FormItem from 'antd/lib/form/FormItem';
-import Layout from 'antd/lib/layout';
 import { useFormWithErrors } from '../../hooks';
 const { TextArea } = Input;
-const { Header, Footer, Content } = Layout;
 
 //styled components
 const StyledContainer = styled.div`
@@ -39,7 +36,7 @@ const initialValues = {
   modulecontent: '',
 };
 
-export default function AddModule() {
+export default function AddModuleForm() {
   const { push } = useHistory();
   const dispatch = useDispatch();
 
@@ -80,71 +77,63 @@ export default function AddModule() {
   };
 
   return (
-    <Layout>
-      <Header>
-        <Navigation />
-      </Header>
-      <StyledContainer>
-        <Content>
-          <h1 className="edit-form-h1">Add Module</h1>
-          <Form {...layout} name="basic" onFinish={submitForm} className="form">
-            <FormItem label="Module Name:" name="modulename" validateStatus>
-              <Input
-                id="modulename"
-                name="modulename"
-                value={values.modulename}
-                onChange={changeValues}
-              />
-              <div style={{ color: 'red' }}>
-                {errors.modulename ? `${errors.modulename}` : ''}
-              </div>
-            </FormItem>
+    <StyledContainer>
+      <h1 className="edit-form-h1">Add Module</h1>
+      <Form {...layout} name="basic" onFinish={submitForm} className="form">
+        <FormItem label="Module Name:" name="modulename" validateStatus>
+          <Input
+            id="modulename"
+            name="modulename"
+            value={values.modulename}
+            onChange={changeValues}
+          />
+          <div style={{ color: 'red' }}>
+            {errors.modulename ? `${errors.modulename}` : ''}
+          </div>
+        </FormItem>
 
-            <FormItem label="Module Description:" name="moduledescription">
-              <TextArea
-                showCount
-                maxLength={250}
-                id="moduledescription"
-                name="moduledescription"
-                value={values.moduledescription}
-                onChange={changeValues}
-              />
-              <div style={{ color: 'red' }}>
-                {errors.moduledescription ? `${errors.moduledescription}` : ''}
-              </div>
-            </FormItem>
+        <FormItem label="Module Description:" name="moduledescription">
+          <TextArea
+            showCount
+            maxLength={250}
+            id="moduledescription"
+            name="moduledescription"
+            value={values.moduledescription}
+            onChange={changeValues}
+          />
+          <div style={{ color: 'red' }}>
+            {errors.moduledescription ? `${errors.moduledescription}` : ''}
+          </div>
+        </FormItem>
 
-            <FormItem label="Module Content:" name="modulecontent">
-              <TextArea
-                showCount
-                maxLength={250}
-                id="modulecontent"
-                name="modulecontent"
-                value={values.modulecontent}
-                onChange={changeValues}
-              />
-              <div style={{ color: 'red' }}>
-                {errors.modulecontent ? `${errors.modulecontent}` : ''}
-              </div>
-            </FormItem>
+        <FormItem label="Module Content:" name="modulecontent">
+          <TextArea
+            showCount
+            maxLength={250}
+            id="modulecontent"
+            name="modulecontent"
+            value={values.modulecontent}
+            onChange={changeValues}
+          />
+          <div style={{ color: 'red' }}>
+            {errors.modulecontent ? `${errors.modulecontent}` : ''}
+          </div>
+        </FormItem>
 
-            <div className="button-container">
-              <Button onClick={goBack} type="secondary" className="button">
-                Cancel
-              </Button>
-              <Button
-                onClick={submitForm}
-                type="primary"
-                disabled={disabled}
-                className="button"
-              >
-                Submit
-              </Button>
-            </div>
-          </Form>
-        </Content>
-      </StyledContainer>
-      <Footer></Footer>
-    </Layout>
+        <div className="button-container">
+          <Button onClick={goBack} type="secondary" className="button">
+            Cancel
+          </Button>
+          <Button
+            onClick={submitForm}
+            type="primary"
+            disabled={disabled}
+            className="button"
+          >
+            Submit
+          </Button>
+        </div>
+      </Form>
+    </StyledContainer>
   );
 }
