@@ -86,68 +86,62 @@ export default function AddCourse() {
   };
 
   return (
-    <Layout>
-      <Header>
-        <Navigation />
-      </Header>
-      <StyledContainer>
-        <Content>
-          <h1 className="edit-form-h1">Add Course</h1>
-          <Form {...layout} name="basic" onFinish={submitForm} className="form">
-            <FormItem htmlFor="coursename" label="Course Name:" validateStatus>
-              <Input
-                id="coursename"
-                name="coursename"
-                value={values.coursename}
-                onChange={changeValues}
-              />
-              <div style={{ color: 'red' }}>
-                {errors.coursename ? `${errors.coursename}` : ''}
-              </div>
-            </FormItem>
-
-            <FormItem htmlFor="coursecode" label="Course Code:">
-              <Input
-                id="coursecode"
-                name="coursecode"
-                value={values.coursecode}
-                onChange={changeValues}
-              />
-              <div style={{ color: 'red' }}>
-                {errors.coursecode ? `${errors.coursecode}` : ''}
-              </div>
-            </FormItem>
-
-            <FormItem htmlFor="coursedescription" label="Course Description:">
-              <TextArea
-                showCount
-                maxLength={250}
-                id="coursedescription"
-                name="coursedescription"
-                value={values.coursedescription}
-                onChange={changeValues}
-              />
-              <div style={{ color: 'red' }}>
-                {errors.coursedescription ? `${errors.coursedescription}` : ''}
-              </div>
-            </FormItem>
-            <div className="button-container">
-              <Button onClick={goBack} type="secondary" className="button">
-                Cancel
-              </Button>
-              <Button
-                onClick={submitForm}
-                type="primary"
-                disabled={disabled}
-                className="button"
-              >
-                Submit
-              </Button>
+    <StyledContainer>
+      <Content>
+        <h1 className="edit-form-h1">Add Course</h1>
+        <Form {...layout} name="basic" onFinish={submitForm} className="form">
+          <FormItem htmlFor="coursename" label="Course Name:" validateStatus>
+            <Input
+              id="coursename"
+              name="coursename"
+              value={values.coursename}
+              onChange={changeValues}
+            />
+            <div style={{ color: 'red' }}>
+              {errors.coursename ? `${errors.coursename}` : ''}
             </div>
-          </Form>
-        </Content>
-      </StyledContainer>
-      <Footer></Footer>
-    </Layout>
+          </FormItem>
+
+          <FormItem htmlFor="coursecode" label="Course Code:">
+            <Input
+              id="coursecode"
+              name="coursecode"
+              value={values.coursecode}
+              onChange={changeValues}
+            />
+            <div style={{ color: 'red' }}>
+              {errors.coursecode ? `${errors.coursecode}` : ''}
+            </div>
+          </FormItem>
+
+          <FormItem htmlFor="coursedescription" label="Course Description:">
+            <TextArea
+              showCount
+              maxLength={250}
+              id="coursedescription"
+              name="coursedescription"
+              value={values.coursedescription}
+              onChange={changeValues}
+            />
+            <div style={{ color: 'red' }}>
+              {errors.coursedescription ? `${errors.coursedescription}` : ''}
+            </div>
+          </FormItem>
+          <div className="button-container">
+            <Button onClick={goBack} type="secondary" className="button">
+              Cancel
+            </Button>
+            <Button
+              onClick={submitForm}
+              type="primary"
+              disabled={disabled}
+              className="button"
+            >
+              Submit
+            </Button>
+          </div>
+        </Form>
+      </Content>
+    </StyledContainer>
   );
 }
