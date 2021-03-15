@@ -5,7 +5,6 @@ import { useOktaAuth } from '@okta/okta-react';
 import { useMountEffect, useUserRole } from '../../hooks';
 import styled from 'styled-components';
 import CourseCard from './CourseCard';
-import { Wrapper } from '../Wrapper';
 
 //ant d
 import 'antd/dist/antd.css';
@@ -89,41 +88,39 @@ const CourseList = () => {
   });
 
   return (
-    <Wrapper>
-      <StyledWrapper>
-        <StyledContent>
-          {userIsAdmin() && (
-            <div>
-              <h1>Program: {currentProgram.programname}</h1>
-            </div>
-          )}
-          <HeaderDiv>
-            <StyledH2>My Courses</StyledH2>
-            <StyledTitle>
-              {userIsAdmin() && (
-                <Link to={pathUtils.makeCreateCoursePath(programId)}>
-                  <Button size="large" style={{ background: '#01fe87' }}>
-                    Add Course
-                  </Button>
-                </Link>
-              )}
-            </StyledTitle>
-          </HeaderDiv>
-          <StyledCourses>
-            {courseList.map(course => {
-              return (
-                <CourseCard
-                  key={course.courseid}
-                  course={course}
-                  programId={programId}
-                  push={push}
-                />
-              );
-            })}
-          </StyledCourses>
-        </StyledContent>
-      </StyledWrapper>
-    </Wrapper>
+    <StyledWrapper>
+      <StyledContent>
+        {userIsAdmin() && (
+          <div>
+            <h1>Program: {currentProgram.programname}</h1>
+          </div>
+        )}
+        <HeaderDiv>
+          <StyledH2>My Courses</StyledH2>
+          <StyledTitle>
+            {userIsAdmin() && (
+              <Link to={pathUtils.makeCreateCoursePath(programId)}>
+                <Button size="large" style={{ background: '#01fe87' }}>
+                  Add Course
+                </Button>
+              </Link>
+            )}
+          </StyledTitle>
+        </HeaderDiv>
+        <StyledCourses>
+          {courseList.map(course => {
+            return (
+              <CourseCard
+                key={course.courseid}
+                course={course}
+                programId={programId}
+                push={push}
+              />
+            );
+          })}
+        </StyledCourses>
+      </StyledContent>
+    </StyledWrapper>
   );
 };
 

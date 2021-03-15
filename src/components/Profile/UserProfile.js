@@ -1,7 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { Wrapper } from '../Wrapper';
 
 //ant d
 import 'antd/dist/antd.css';
@@ -21,18 +20,13 @@ export default function UserProfile() {
   }
 
   return (
-    <Wrapper>
-      <Card
-        title={user.firstname + ' ' + user.lastname}
-        className="profile-card"
-      >
-        <h3>Role: {user.role}</h3>
-        <p>Phone: {user.phonenumber}</p>
-        <p>Email: {user.email}</p>
-        <Button type="primary" onClick={e => clickOnEdit(e)}>
-          Edit Profile
-        </Button>
-      </Card>
-    </Wrapper>
+    <Card title={user.firstname + ' ' + user.lastname} className="profile-card">
+      <h3>Role: {user.role}</h3>
+      <p>Phone: {user.phonenumber}</p>
+      <p>Email: {user.email}</p>
+      <Button type="primary" onClick={e => clickOnEdit(e)}>
+        Edit Profile
+      </Button>
+    </Card>
   );
 }

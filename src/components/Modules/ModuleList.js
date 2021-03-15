@@ -11,7 +11,6 @@ import { courseActions, moduleActions } from '../../state/ducks';
 // MISC
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import { Wrapper } from '../Wrapper';
 
 // MATERIAL UI
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -122,60 +121,124 @@ const ModuleList = props => {
   };
 
   return (
-    <Wrapper>
-      <StyledContainer>
-        <HeaderDiv>
-          <h1>{currentCourse.coursename}</h1>
-          {(userIsAdmin() || userIsTeacher()) && (
-            <Link to="/add-module">
-              <Button size="large" style={{ background: '#01fe87' }}>
-                Add Module
-              </Button>
-            </Link>
-          )}
-        </HeaderDiv>
-        <div>
-          <Menu
-            onClick={handleClick}
-            style={{ width: '80%' }}
-            defaultOpenKeys={['sub1']}
-            mode="inline"
-          >
-            <SubMenu key="sub1" title="Modules">
-              {modules.map(module => {
-                return (
-                  <Menu.Item key={module.moduleid}>
-                    {module.modulename}
-                  </Menu.Item>
-                );
-              })}
-            </SubMenu>
-          </Menu>
-        </div>
-        {/* 
+    <StyledContainer>
+      <HeaderDiv>
+        <h1>{currentCourse.coursename}</h1>
+        {(userIsAdmin() || userIsTeacher()) && (
+          <Link to="/add-module">
+            <Button size="large" style={{ background: '#01fe87' }}>
+              Add Module
+            </Button>
+          </Link>
+        )}
+      </HeaderDiv>
+      <div>
+        <Menu
+          onClick={handleClick}
+          style={{ width: '80%' }}
+          defaultOpenKeys={['sub1']}
+          mode="inline"
+        >
+          <SubMenu key="sub1" title="Modules">
+            {modules.map(module => {
+              return (
+                <Menu.Item key={module.moduleid}>{module.modulename}</Menu.Item>
+              );
+            })}
+          </SubMenu>
+        </Menu>
+      </div>
+      {/* 
           {ADD TEACHER FORM and TEACHER LIST} 
           Maybe we could split some of this component out into separate components?? There's a LOT going on.
           */}
 
-        <div>
-          {userIsAdmin() && (
-            <>
+      <div>
+        {userIsAdmin() && (
+          <>
+            <StyledForm>
+              <StyledFormItem
+                htmlFor="teachername"
+                label="Add Teacher:"
+                validateStatus
+              >
+                <Input
+                  id="teachername"
+                  name="teachername"
+                  value={newTeacher.teachername}
+                  onChange={changeTeacherValues}
+                />
+              </StyledFormItem>
+              <StyledSubmit>
+                <Button
+                  onClick={addTeacherHandler}
+                  type="primary"
+                  className="button"
+                >
+                  Submit
+                </Button>
+              </StyledSubmit>
+            </StyledForm>
+            <div>
+              <Menu
+                style={{ width: '80%' }}
+                defaultOpenKeys={['sub3']}
+                mode="inline"
+              >
+                <SubMenu key="sub3" title="Teachers">
+                  {teachersMap?.enrolled &&
+                    Object.entries(teachersMap.enrolled).map(
+                      ([teacherid, { teachername }]) => (
+                        <React.Fragment key={teacherid}>
+                          <StyledMenuRow>
+                            <Menu.Item
+                              key={teacherid}
+                              style={{ marginTop: '2.5%' }}
+                            >
+                              {teachername}
+                            </Menu.Item>
+                            <Tooltip title="Delete">
+                              <IconButton
+                                aria-label="delete"
+                                onClick={() => {
+                                  userIsAdmin() &&
+                                    deleteTeacherHandler(teacherid);
+                                }}
+                              >
+                                <DeleteIcon></DeleteIcon>
+                              </IconButton>
+                            </Tooltip>
+                          </StyledMenuRow>
+                        </React.Fragment>
+                      )
+                    )}
+                </SubMenu>
+              </Menu>
+            </div>
+          </>
+        )}
+      </div>
+      {/* {ADD STUDENT form and STUDENT LIST} */}
+      <div>
+        {(userIsAdmin() || userIsTeacher()) && (
+          <>
+            <div>
               <StyledForm>
                 <StyledFormItem
-                  htmlFor="teachername"
-                  label="Add Teacher:"
+                  htmlFor="studentname"
+                  label="Add Student:"
                   validateStatus
                 >
                   <Input
-                    id="teachername"
-                    name="teachername"
-                    value={newTeacher.teachername}
-                    onChange={changeTeacherValues}
+                    id="studentname"
+                    name="studentname"
+                    value={newStudent.studentname}
+                    onChange={changeStudentValues}
                   />
                 </StyledFormItem>
                 <StyledSubmit>
                   <Button
-                    onClick={addTeacherHandler}
+                    onClick={addStudentHandler}
                     type="primary"
                     className="button"
                   >
@@ -183,143 +246,75 @@ const ModuleList = props => {
                   </Button>
                 </StyledSubmit>
               </StyledForm>
-              <div>
-                <Menu
-                  style={{ width: '80%' }}
-                  defaultOpenKeys={['sub3']}
-                  mode="inline"
-                >
-                  <SubMenu key="sub3" title="Teachers">
-                    {teachersMap?.enrolled &&
-                      Object.entries(teachersMap.enrolled).map(
-                        ([teacherid, { teachername }]) => (
-                          <React.Fragment key={teacherid}>
+            </div>
+            <div>
+              <Menu
+                style={{ width: '80%' }}
+                defaultOpenKeys={['sub2']}
+                mode="inline"
+              >
+                <SubMenu key="sub2" title="Registered Students">
+                  {studentsMap?.enrolled &&
+                    Object.entries(studentsMap.enrolled).map(
+                      ([studentid, { studentname }]) => {
+                        return (
+                          <React.Fragment key={studentid}>
                             <StyledMenuRow>
                               <Menu.Item
-                                key={teacherid}
+                                key={studentid}
                                 style={{ marginTop: '2.5%' }}
                               >
-                                {teachername}
+                                {studentname}
                               </Menu.Item>
                               <Tooltip title="Delete">
                                 <IconButton
                                   aria-label="delete"
-                                  onClick={() => {
-                                    userIsAdmin() &&
-                                      deleteTeacherHandler(teacherid);
-                                  }}
+                                  onClick={() =>
+                                    deleteStudentHandler(studentid)
+                                  }
                                 >
                                   <DeleteIcon></DeleteIcon>
                                 </IconButton>
                               </Tooltip>
                             </StyledMenuRow>
                           </React.Fragment>
-                        )
-                      )}
-                  </SubMenu>
-                </Menu>
-              </div>
-            </>
-          )}
-        </div>
-        {/* {ADD STUDENT form and STUDENT LIST} */}
-        <div>
-          {(userIsAdmin() || userIsTeacher()) && (
-            <>
-              <div>
-                <StyledForm>
-                  <StyledFormItem
-                    htmlFor="studentname"
-                    label="Add Student:"
-                    validateStatus
-                  >
-                    <Input
-                      id="studentname"
-                      name="studentname"
-                      value={newStudent.studentname}
-                      onChange={changeStudentValues}
-                    />
-                  </StyledFormItem>
-                  <StyledSubmit>
-                    <Button
-                      onClick={addStudentHandler}
-                      type="primary"
-                      className="button"
-                    >
-                      Submit
-                    </Button>
-                  </StyledSubmit>
-                </StyledForm>
-              </div>
-              <div>
+                        );
+                      }
+                    )}
+                </SubMenu>
+              </Menu>
+              <div style={{ marginTop: '10px' }}>
                 <Menu
                   style={{ width: '80%' }}
-                  defaultOpenKeys={['sub2']}
+                  defaultOpenKeys={['sub1']}
                   mode="inline"
                 >
-                  <SubMenu key="sub2" title="Registered Students">
-                    {studentsMap?.enrolled &&
-                      Object.entries(studentsMap.enrolled).map(
+                  <SubMenu key="sub6" title="Students">
+                    {studentsMap?.available &&
+                      Object.entries(studentsMap.available).map(
                         ([studentid, { studentname }]) => {
                           return (
-                            <React.Fragment key={studentid}>
+                            <Menu.Item key={studentid}>
                               <StyledMenuRow>
-                                <Menu.Item
-                                  key={studentid}
-                                  style={{ marginTop: '2.5%' }}
+                                {studentname}
+                                <StyledSpan
+                                  onClick={e => addStudent(e, studentname)}
                                 >
-                                  {studentname}
-                                </Menu.Item>
-                                <Tooltip title="Delete">
-                                  <IconButton
-                                    aria-label="delete"
-                                    onClick={() =>
-                                      deleteStudentHandler(studentid)
-                                    }
-                                  >
-                                    <DeleteIcon></DeleteIcon>
-                                  </IconButton>
-                                </Tooltip>
+                                  +
+                                </StyledSpan>
                               </StyledMenuRow>
-                            </React.Fragment>
+                            </Menu.Item>
                           );
                         }
                       )}
                   </SubMenu>
                 </Menu>
-                <div style={{ marginTop: '10px' }}>
-                  <Menu
-                    style={{ width: '80%' }}
-                    defaultOpenKeys={['sub1']}
-                    mode="inline"
-                  >
-                    <SubMenu key="sub6" title="Students">
-                      {studentsMap?.available &&
-                        Object.entries(studentsMap.available).map(
-                          ([studentid, { studentname }]) => {
-                            return (
-                              <Menu.Item key={studentid}>
-                                <StyledMenuRow>
-                                  {studentname}
-                                  <StyledSpan
-                                    onClick={e => addStudent(e, studentname)}
-                                  >
-                                    +
-                                  </StyledSpan>
-                                </StyledMenuRow>
-                              </Menu.Item>
-                            );
-                          }
-                        )}
-                    </SubMenu>
-                  </Menu>
-                </div>
               </div>
-            </>
-          )}
-        </div>
-      </StyledContainer>
-    </Wrapper>
+            </div>
+          </>
+        )}
+      </div>
+    </StyledContainer>
   );
 };
 

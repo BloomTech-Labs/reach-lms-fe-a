@@ -4,7 +4,6 @@ import { useOktaAuth } from '@okta/okta-react';
 import { useUserRole } from '../../hooks';
 import { programActions, courseActions } from '../../state/ducks';
 import { Dashboard } from './';
-import { Wrapper } from '../Wrapper';
 
 function HomeContainer({ LoadingComponent }) {
   const { authState, authService } = useOktaAuth();
@@ -59,14 +58,14 @@ function HomeContainer({ LoadingComponent }) {
   }, [memoAuthService]);
 
   return (
-    <Wrapper>
+    <>
       {authState.isAuthenticated && !userInfo && (
         <LoadingComponent message="Fetching user profile..." />
       )}
       {authState.isAuthenticated && userInfo && (
         <Dashboard authService={authService} />
       )}
-    </Wrapper>
+    </>
   );
 }
 

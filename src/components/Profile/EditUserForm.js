@@ -4,7 +4,6 @@ import { useHistory } from 'react-router-dom';
 import schema from '../../validation/ProfileSchema';
 import { userActions } from '../../state/ducks';
 import { useFormWithErrors, useUserRole } from '../../hooks';
-import { Wrapper } from '../Wrapper';
 
 // STYLING
 import styled from 'styled-components';
@@ -86,74 +85,67 @@ export default function EditUserForm() {
   };
 
   return (
-    <Wrapper>
-      <StyledContainer>
-        <h1 className="edit-form-h1">Edit User</h1>
-        <Form
-          {...layout}
-          name="basic"
-          onFinish={editUserSubmit}
-          className="form"
-        >
-          <FormItem htmlFor="firstname" label="First Name:">
-            <Input
-              id="firstname"
-              name="firstname"
-              value={values.firstname}
-              onChange={changeValues}
-            />
-            <div style={{ color: 'red' }}>
-              {errors.firstname ? `${errors.firstname}` : ''}
-            </div>
-          </FormItem>
-          <FormItem htmlFor="lastname" label="Last Name:">
-            <Input
-              id="lastname"
-              name="lastname"
-              value={values.lastname}
-              onChange={changeValues}
-            />
-            <div style={{ color: 'red' }}>
-              {errors.lastname ? `${errors.lastname}` : ''}
-            </div>
-          </FormItem>
-          <FormItem htmlFor="email" label="Email:" name="email">
-            <Input
-              id="email"
-              name="email"
-              value={values.email}
-              onChange={changeValues}
-            />
-            <div style={{ color: 'red' }}>
-              {errors.email ? `${errors.email}` : ''}
-            </div>
-          </FormItem>
-          <FormItem htmlFor="phonenumber" label="Phone Number:">
-            <Input
-              id="phonenumber"
-              name="phonenumber"
-              value={values.phonenumber}
-              onChange={changeValues}
-            />
-            <div style={{ color: 'red' }}>
-              {errors.phonenumber ? `${errors.phonenumber}` : ''}
-            </div>
-          </FormItem>
-          <div className="button-container">
-            <Button onClick={goBack} type="secondary" className="button">
-              Cancel
-            </Button>
-            <Button
-              onClick={editUserSubmit}
-              type="primary"
-              disabled={disabled}
-              className="button"
-            >
-              Submit
-            </Button>
+    <StyledContainer>
+      <h1 className="edit-form-h1">Edit User</h1>
+      <Form {...layout} name="basic" onFinish={editUserSubmit} className="form">
+        <FormItem htmlFor="firstname" label="First Name:">
+          <Input
+            id="firstname"
+            name="firstname"
+            value={values.firstname}
+            onChange={changeValues}
+          />
+          <div style={{ color: 'red' }}>
+            {errors.firstname ? `${errors.firstname}` : ''}
           </div>
-        </Form>
-      </StyledContainer>
-    </Wrapper>
+        </FormItem>
+        <FormItem htmlFor="lastname" label="Last Name:">
+          <Input
+            id="lastname"
+            name="lastname"
+            value={values.lastname}
+            onChange={changeValues}
+          />
+          <div style={{ color: 'red' }}>
+            {errors.lastname ? `${errors.lastname}` : ''}
+          </div>
+        </FormItem>
+        <FormItem htmlFor="email" label="Email:" name="email">
+          <Input
+            id="email"
+            name="email"
+            value={values.email}
+            onChange={changeValues}
+          />
+          <div style={{ color: 'red' }}>
+            {errors.email ? `${errors.email}` : ''}
+          </div>
+        </FormItem>
+        <FormItem htmlFor="phonenumber" label="Phone Number:">
+          <Input
+            id="phonenumber"
+            name="phonenumber"
+            value={values.phonenumber}
+            onChange={changeValues}
+          />
+          <div style={{ color: 'red' }}>
+            {errors.phonenumber ? `${errors.phonenumber}` : ''}
+          </div>
+        </FormItem>
+        <div className="button-container">
+          <Button onClick={goBack} type="secondary" className="button">
+            Cancel
+          </Button>
+          <Button
+            onClick={editUserSubmit}
+            type="primary"
+            disabled={disabled}
+            className="button"
+          >
+            Submit
+          </Button>
+        </div>
+      </Form>
+    </StyledContainer>
   );
 }

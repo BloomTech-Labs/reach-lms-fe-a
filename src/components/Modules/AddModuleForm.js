@@ -4,7 +4,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import schema from '../../validation/ModuleSchema';
 import { moduleActions } from '../../state/ducks';
 import styled from 'styled-components';
-import { Wrapper } from '../Wrapper';
 
 // css
 import '../../styles/Form.css';
@@ -78,65 +77,63 @@ export default function AddModuleForm() {
   };
 
   return (
-    <Wrapper>
-      <StyledContainer>
-        <h1 className="edit-form-h1">Add Module</h1>
-        <Form {...layout} name="basic" onFinish={submitForm} className="form">
-          <FormItem label="Module Name:" name="modulename" validateStatus>
-            <Input
-              id="modulename"
-              name="modulename"
-              value={values.modulename}
-              onChange={changeValues}
-            />
-            <div style={{ color: 'red' }}>
-              {errors.modulename ? `${errors.modulename}` : ''}
-            </div>
-          </FormItem>
-
-          <FormItem label="Module Description:" name="moduledescription">
-            <TextArea
-              showCount
-              maxLength={250}
-              id="moduledescription"
-              name="moduledescription"
-              value={values.moduledescription}
-              onChange={changeValues}
-            />
-            <div style={{ color: 'red' }}>
-              {errors.moduledescription ? `${errors.moduledescription}` : ''}
-            </div>
-          </FormItem>
-
-          <FormItem label="Module Content:" name="modulecontent">
-            <TextArea
-              showCount
-              maxLength={250}
-              id="modulecontent"
-              name="modulecontent"
-              value={values.modulecontent}
-              onChange={changeValues}
-            />
-            <div style={{ color: 'red' }}>
-              {errors.modulecontent ? `${errors.modulecontent}` : ''}
-            </div>
-          </FormItem>
-
-          <div className="button-container">
-            <Button onClick={goBack} type="secondary" className="button">
-              Cancel
-            </Button>
-            <Button
-              onClick={submitForm}
-              type="primary"
-              disabled={disabled}
-              className="button"
-            >
-              Submit
-            </Button>
+    <StyledContainer>
+      <h1 className="edit-form-h1">Add Module</h1>
+      <Form {...layout} name="basic" onFinish={submitForm} className="form">
+        <FormItem label="Module Name:" name="modulename" validateStatus>
+          <Input
+            id="modulename"
+            name="modulename"
+            value={values.modulename}
+            onChange={changeValues}
+          />
+          <div style={{ color: 'red' }}>
+            {errors.modulename ? `${errors.modulename}` : ''}
           </div>
-        </Form>
-      </StyledContainer>
-    </Wrapper>
+        </FormItem>
+
+        <FormItem label="Module Description:" name="moduledescription">
+          <TextArea
+            showCount
+            maxLength={250}
+            id="moduledescription"
+            name="moduledescription"
+            value={values.moduledescription}
+            onChange={changeValues}
+          />
+          <div style={{ color: 'red' }}>
+            {errors.moduledescription ? `${errors.moduledescription}` : ''}
+          </div>
+        </FormItem>
+
+        <FormItem label="Module Content:" name="modulecontent">
+          <TextArea
+            showCount
+            maxLength={250}
+            id="modulecontent"
+            name="modulecontent"
+            value={values.modulecontent}
+            onChange={changeValues}
+          />
+          <div style={{ color: 'red' }}>
+            {errors.modulecontent ? `${errors.modulecontent}` : ''}
+          </div>
+        </FormItem>
+
+        <div className="button-container">
+          <Button onClick={goBack} type="secondary" className="button">
+            Cancel
+          </Button>
+          <Button
+            onClick={submitForm}
+            type="primary"
+            disabled={disabled}
+            className="button"
+          >
+            Submit
+          </Button>
+        </div>
+      </Form>
+    </StyledContainer>
   );
 }
