@@ -52,21 +52,7 @@ import {
   VIEW_ALL_MODULES_PATH,
   VIEW_MODULE_TEXT_PATH,
 } from './routes';
-
-// import UserProfile from './components/Profile/UserProfile';
-// import EditUserForm from './components/Profile/EditUserForm';
-// import LoadingComponent from './components/LoadingComponent';
-// import CreateProgram from './components/Program/CreateProgramForm';
-// import EditProgram from './components/Program/EditProgramForm';
-// import CourseList from './components/Courses/CourseList';
-// import AddCourseForm from './components/Courses/AddCourseForm';
-// import EditCourseForm from './components/Courses/EditCourseForm';
-// import ModuleList from './components/Modules/ModuleList';
-// import ModuleText from './components/Modules/ModuleText';
-// import AddModuleForm from './components/Modules/AddModuleForm';
-// import EditModuleForm from './components/Modules/EditModuleForm';
-// import HomeContainer from './components/Dashboard/HomeContainer';
-// import FooterApp from './components/FooterApp';
+import SignupPage from './components/Registration/RegistrationContainer';
 
 ReactDOM.render(
   <Router>
@@ -95,6 +81,7 @@ function App() {
       <div className="App">
         <Switch>
           <Route path="/login" component={LoginPage} />
+          <Route path="/signup" component={SignupPage} />
           <Route path="/implicit/callback" component={LoginCallback} />
           {/* any of the routes you need secured should be registered as SecureRoutes */}
           <SecureRoute
@@ -102,18 +89,6 @@ function App() {
             exact
             component={() => <HomePage LoadingComponent={LoadingComponent} />}
           />
-          {/* <SecureRoute path="/profile" component={UserProfile} />
-          <SecureRoute path="/edit-profile" component={EditUserForm} />
-          <SecureRoute path="/create-program" component={CreateProgramForm} />
-          <SecureRoute path="/edit-program" component={EditProgramForm} />
-          <SecureRoute path="/courses" component={CourseList} />
-          <SecureRoute path="/add-course" component={AddCourseForm} />
-          <SecureRoute path="/edit-course" component={EditCourseForm} />
-          <SecureRoute path="/modules" component={ModuleList} />
-          <SecureRoute path="/module-text" component={ModuleText} />
-          <SecureRoute path="/add-module" component={AddModuleForm} />
-          <SecureRoute path="/edit-module" component={EditModuleForm} />
-          <SecureRoute path="/" component={HomeContainer} /> */}
           <SecureRoute path={VIEW_PROFILE_PATH} component={UserProfile} />
           <SecureRoute path={EDIT_PROFILE_PATH} component={EditUserForm} />
           <SecureRoute
