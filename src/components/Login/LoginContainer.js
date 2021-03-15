@@ -4,6 +4,15 @@ import '@okta/okta-signin-widget/dist/css/okta-sign-in.min.css';
 
 import { config } from '../../utils/oktaConfig';
 
+/*
+// username: test001@lambdaschooluser.com
+// pass: TestUser001
+
+user: testuser002@lambdaschooluser.com
+pass: Test002Test
+
+*/
+
 const LoginContainer = () => {
   useEffect(() => {
     const { pkce, issuer, clientId, redirectUri, scopes } = config;
@@ -13,10 +22,26 @@ const LoginContainer = () => {
       clientId,
       redirectUri,
       registration: {
-        // there is more we can do to handle some errors here.
+        parseSchema: function(schema, onSuccess, onFailure) {
+          // handle parseSchema callback
+          console.log({ schema, onSuccess, onFailure });
+          onSuccess(schema);
+        },
+        preSubmit: function(postData, onSuccess, onFailure) {
+          // handle preSubmit callback
+          console.log({ postData, onSuccess, onFailure });
+          onSuccess(postData);
+        },
+        postSubmit: function(response, onSuccess, onFailure) {
+          // handle postSubmit callback
+          console.log({ response, onSuccess, onFailure });
+          onSuccess(response);
+        },
       },
-      features: { registration: false },
-      // turning this feature on allows your widget to use Okta for user registration
+      features: {
+        // turning this feature on allows your widget to use Okta for user registration
+        registration: true,
+      },
       logo: 'path-to-your-logo',
       // add your custom logo to your signing/register widget here.
       i18n: {
