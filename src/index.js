@@ -52,7 +52,6 @@ import {
   VIEW_ALL_MODULES_PATH,
   VIEW_MODULE_TEXT_PATH,
 } from './routes';
-import SignupPage from './components/Registration/RegistrationContainer';
 
 ReactDOM.render(
   <Router>
@@ -81,7 +80,6 @@ function App() {
       <div className="App">
         <Switch>
           <Route path="/login" component={LoginPage} />
-          <Route path="/signup" component={SignupPage} />
           <Route path="/implicit/callback" component={LoginCallback} />
           {/* any of the routes you need secured should be registered as SecureRoutes */}
           <SecureRoute
