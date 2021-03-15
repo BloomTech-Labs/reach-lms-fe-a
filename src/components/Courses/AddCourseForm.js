@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
+import Navigation from '../Navigation';
 import schema from '../../validation/CourseSchema';
 import { useFormWithErrors } from '../../hooks';
 import { courseActions } from '../../state/ducks';
 import { pathUtils } from '../../routes';
 import styled from 'styled-components';
-import { Wrapper } from '../Wrapper';
 
 // css
 import '../../styles/Form.css';
@@ -17,7 +17,9 @@ import Input from 'antd/lib/input';
 import Select from 'antd/lib/select';
 import Form from 'antd/lib/form/Form';
 import FormItem from 'antd/lib/form/FormItem';
+import Layout from 'antd/lib/layout';
 const { TextArea } = Input;
+const { Header, Footer, Content } = Layout;
 
 //styled components
 const StyledContainer = styled.div`
@@ -85,59 +87,61 @@ export default function AddCourse() {
 
   return (
     <StyledContainer>
-      <h1 className="edit-form-h1">Add Course</h1>
-      <Form {...layout} name="basic" onFinish={submitForm} className="form">
-        <FormItem htmlFor="coursename" label="Course Name:" validateStatus>
-          <Input
-            id="coursename"
-            name="coursename"
-            value={values.coursename}
-            onChange={changeValues}
-          />
-          <div style={{ color: 'red' }}>
-            {errors.coursename ? `${errors.coursename}` : ''}
-          </div>
-        </FormItem>
+      <Content>
+        <h1 className="edit-form-h1">Add Course</h1>
+        <Form {...layout} name="basic" onFinish={submitForm} className="form">
+          <FormItem htmlFor="coursename" label="Course Name:" validateStatus>
+            <Input
+              id="coursename"
+              name="coursename"
+              value={values.coursename}
+              onChange={changeValues}
+            />
+            <div style={{ color: 'red' }}>
+              {errors.coursename ? `${errors.coursename}` : ''}
+            </div>
+          </FormItem>
 
-        <FormItem htmlFor="coursecode" label="Course Code:">
-          <Input
-            id="coursecode"
-            name="coursecode"
-            value={values.coursecode}
-            onChange={changeValues}
-          />
-          <div style={{ color: 'red' }}>
-            {errors.coursecode ? `${errors.coursecode}` : ''}
-          </div>
-        </FormItem>
+          <FormItem htmlFor="coursecode" label="Course Code:">
+            <Input
+              id="coursecode"
+              name="coursecode"
+              value={values.coursecode}
+              onChange={changeValues}
+            />
+            <div style={{ color: 'red' }}>
+              {errors.coursecode ? `${errors.coursecode}` : ''}
+            </div>
+          </FormItem>
 
-        <FormItem htmlFor="coursedescription" label="Course Description:">
-          <TextArea
-            showCount
-            maxLength={250}
-            id="coursedescription"
-            name="coursedescription"
-            value={values.coursedescription}
-            onChange={changeValues}
-          />
-          <div style={{ color: 'red' }}>
-            {errors.coursedescription ? `${errors.coursedescription}` : ''}
+          <FormItem htmlFor="coursedescription" label="Course Description:">
+            <TextArea
+              showCount
+              maxLength={250}
+              id="coursedescription"
+              name="coursedescription"
+              value={values.coursedescription}
+              onChange={changeValues}
+            />
+            <div style={{ color: 'red' }}>
+              {errors.coursedescription ? `${errors.coursedescription}` : ''}
+            </div>
+          </FormItem>
+          <div className="button-container">
+            <Button onClick={goBack} type="secondary" className="button">
+              Cancel
+            </Button>
+            <Button
+              onClick={submitForm}
+              type="primary"
+              disabled={disabled}
+              className="button"
+            >
+              Submit
+            </Button>
           </div>
-        </FormItem>
-        <div className="button-container">
-          <Button onClick={goBack} type="secondary" className="button">
-            Cancel
-          </Button>
-          <Button
-            onClick={submitForm}
-            type="primary"
-            disabled={disabled}
-            className="button"
-          >
-            Submit
-          </Button>
-        </div>
-      </Form>
+        </Form>
+      </Content>
     </StyledContainer>
   );
 }
