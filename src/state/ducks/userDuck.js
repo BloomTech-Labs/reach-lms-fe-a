@@ -8,6 +8,7 @@ const CLEAR_USER = 'CLEAR_USER';
 const EDIT_USER = 'EDIT_USER';
 
 const GET_USER_INFO_SUCCESS = 'GET_USER_INFO_SUCCESS';
+const GET_ALL_USERS_SUCCESS = 'GET_ALL_USERS_SUCCESS';
 
 export const userActions = {
   saveUser: value => {
@@ -50,6 +51,24 @@ export const userActions = {
     axiosAuth()
       .patch(`/users/user/${parseInt(userid)}`, user)
       .then(res => dispatch(userActions.editUser(res.data)))
+      .catch(err => thunkFail(err.message))
+      .finally(() => thunkResolve());
+  },
+
+  getAllUsersThunk: () => dispatch => {
+    const {
+      thunkStart,
+      thunkFail,
+      thunkResolve,
+    } = userThunkUtils.getTriggersFromPrefix(dispatch, 'get-all-users');
+
+    thunkStart();
+
+    axiosAuth()
+      .get('/users/users')
+      .then(res => {
+        dispatch({ type: GET_ALL_USERS_SUCCESS, payload: res.data });
+      })
       .catch(err => thunkFail(err.message))
       .finally(() => thunkResolve());
   },
@@ -103,6 +122,14 @@ const userReducer = (state = initialState, action) => {
           role: roles[0].role.name,
         },
       };
+
+    case GET_ALL_USERS_SUCCESS:
+      return {
+        ...state,
+        status: 'get-all-users/success',
+        allUsers: action.payload,
+      };
+
     default:
       return state;
   }
