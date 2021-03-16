@@ -22,21 +22,13 @@ export default function ProgramCard(props) {
     if (e.key === 'edit') {
       dispatch(programActions.setEdit(program.programid));
       // push(pathUtils.makeEditProgramPath(program.programId));
+      //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ FIX PUSH ^^^^^^^^^^^^^^^^^^^^^^^^^//
     } else {
       dispatch(programActions.deleteProgramThunk(program.programid));
     }
   };
 
   // PREVIOUS LOGIC //
-  {
-    /* <MenuItemLink
-        to={pathUtils.makeEditProgramPath(program.programid)}
-        key="edit"
-        extra=""
-      >
-        Edit Program
-      </MenuItemLink> */
-  }
   {
     /* <MenuItemLink
         handleClick={() =>
@@ -50,7 +42,16 @@ export default function ProgramCard(props) {
 
   const menu = (
     <Menu onClick={handleMenuClick}>
-      <Menu.Item key="edit">Edit Program</Menu.Item>
+      <MenuItemLink
+        to={pathUtils.makeEditProgramPath(program.programid)}
+        key="edit"
+        extra=""
+      >
+        Editify
+      </MenuItemLink>
+
+      {/* <Menu.Item key="edit">Edit Program</Menu.Item> */}
+
       {userIsAdmin() && <Menu.Item key="delete">Delete Program</Menu.Item>}
     </Menu>
   );
