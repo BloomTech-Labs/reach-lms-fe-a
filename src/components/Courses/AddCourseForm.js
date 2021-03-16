@@ -77,6 +77,14 @@ export default function AddCourse() {
     dispatch(courseActions.addCourseThunk(currentProgramId, values));
   }
 
+  function handleKeyPress(e) {
+    if (e.key === 'Enter') {
+      console.log('hello');
+      e.preventDefault();
+      dispatch(courseActions.addCourseThunk(currentProgramId, values));
+    }
+  }
+
   const goBack = () => {
     // push('/courses');
     push(BACK_PATH);
@@ -112,6 +120,7 @@ export default function AddCourse() {
 
         <FormItem htmlFor="coursedescription" label="Course Description:">
           <TextArea
+            onKeyPress={handleKeyPress}
             showCount
             maxLength={250}
             id="coursedescription"
