@@ -1,33 +1,33 @@
 .course-card {
-    width: 800px;
-    margin: 3% 0;
+  width: 800px;
+  margin: 3% 0;
 }
 
 /* media queries */
 @media (max-width: 885px) {
-    .course-card {
-        width: 600px;
-    }
+  .course-card {
+    width: 600px;
+  }
 }
 
 @media (max-width: 665px) {
-    .course-card {
-        width: 400px;
-    }
+  .course-card {
+    width: 400px;
+  }
 }
 
 @media (max-width: 450px) {
-    .course-card {
-        width: 325px;
-        margin: 10% 0;
-    }
+  .course-card {
+    width: 325px;
+    margin: 10% 0;
+  }
 }
 
 @media (max-width: 350px) {
-    .course-card {
-        width: 275px;
-    }
-    .ant-btn-icon-only {
-        width: 24px;
-    }
+  .course-card {
+    width: 275px;
+  }
+  .ant-btn-icon-only {
+    width: 24px;
+  }
 }

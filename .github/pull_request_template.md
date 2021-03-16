@@ -26,5 +26,5 @@
 - [ ] I have performed a self-review of my own code
 - [ ] My code has been reviewed by at least 2 peers
 - [ ] My changes generate no new warnings
-- [ ] New and existing unit tests pass locally with my changes 
-- [ ] There are no merge conflicts 
+- [ ] New and existing unit tests pass locally with my changes
+- [ ] There are no merge conflicts

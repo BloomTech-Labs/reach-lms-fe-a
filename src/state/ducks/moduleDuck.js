@@ -12,6 +12,7 @@ const CURRENT_MODULE = 'CURRENT_MODULE';
 const GET_MODULES_BY_COURSE_ID_SUCCESS = 'GET_MODULES_BY_COURSE_ID_SUCCESS';
 const EDIT_MODULE_SUCCESS = 'EDIT_MODULE_SUCCESS';
 const DELETE_MODULE_SUCCESS = 'DELETE_MODULE_SUCCESS';
+const CREATE_MODULE_SUCCESS = 'CREATE_MODULE_SUCCESS';
 
 const moduleThunkUtils = asyncThunkUtils('MODULE');
 
@@ -94,14 +95,14 @@ export const moduleActions = {
       thunkStart,
       thunkFail,
       thunkResolve,
-    } = moduleThunkUtils.getTriggersFromPrefix('create');
+    } = moduleThunkUtils.getTriggersFromPrefix(dispatch, 'create');
 
     thunkStart();
 
     axiosAuth()
       .post('/modules', newModule)
       .then(res => {
-        // dispatch({ status: CREATE_MODULE_SUCCESS, payload: res.data})
+        dispatch({ status: CREATE_MODULE_SUCCESS, payload: res.data });
         console.log(res.data);
       })
       .catch(err => {
