@@ -1,5 +1,10 @@
 import React from 'react';
-
-export default function UserCard(id, firstname, lastname, role, email) {
-  return <div>User Card</div>;
+// id, firstname, lastname, role, email
+export default function UserCard(user) {
+  return (
+    <div>
+      {user.userid}, {user.username}, {user.firstname}, {user.lastname},{' '}
+      {user.roles[0].role.name}
+    </div>
+  );
 }

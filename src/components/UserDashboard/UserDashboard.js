@@ -9,15 +9,20 @@ import UserCard from './UserCard';
 import { userActions } from '../../state/ducks';
 
 const UserDashboard = () => {
-  // const {user} = useSelector(state => state.userReducer)
-  // const { userReducer } = useSelector(state => state.userReducer);
+  const selected = useSelector(state => state.userReducer);
   const dispatch = useDispatch();
 
   useMountEffect(() => {
     dispatch(userActions.getAllUsersThunk());
   });
 
-  return <div>User Dashboard goes here</div>;
+  return (
+    <div>
+      {selected.allUsers == undefined && <div>Loading...</div>}
+      {selected.allUsers != undefined &&
+        selected.allUsers.map(item => <UserCard user={item}></UserCard>)}
+    </div>
+  );
 };
 
 export default UserDashboard;

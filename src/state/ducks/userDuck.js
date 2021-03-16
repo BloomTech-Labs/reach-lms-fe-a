@@ -125,12 +125,12 @@ const userReducer = (state = initialState, action) => {
       };
 
     case GET_ALL_USERS_SUCCESS:
-      const users = action.payload;
-      // console.log(users);
+      // console.log(action.payload)
+      // console.log(state)
       return {
         ...state,
         status: 'get-all-users/success',
-        allUsers: users,
+        allUsers: action.payload,
       };
 
     default:
