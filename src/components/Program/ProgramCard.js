@@ -13,7 +13,7 @@ import { MenuItemLink } from '../_common';
 import '../../styles/ProgramCard.css';
 
 export default function ProgramCard(props) {
-  const { program, push } = props;
+  const { program } = props;
   const dispatch = useDispatch();
 
   const { userIsAdmin } = useUserRole();
@@ -21,24 +21,10 @@ export default function ProgramCard(props) {
   const handleMenuClick = e => {
     if (e.key === 'edit') {
       dispatch(programActions.setEdit(program.programid));
-      // push(pathUtils.makeEditProgramPath(program.programId));
-      //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ FIX PUSH ^^^^^^^^^^^^^^^^^^^^^^^^^//
     } else {
       dispatch(programActions.deleteProgramThunk(program.programid));
     }
   };
-
-  // PREVIOUS LOGIC //
-  {
-    /* <MenuItemLink
-        handleClick={() =>
-          dispatch(programActions.deleteProgramThunk(program.programid))
-        }
-        key="delete"
-      >
-        Delete Program
-      </MenuItemLink> */
-  }
 
   const menu = (
     <Menu onClick={handleMenuClick}>
@@ -47,11 +33,8 @@ export default function ProgramCard(props) {
         key="edit"
         extra=""
       >
-        Editify
+        Edit Program
       </MenuItemLink>
-
-      {/* <Menu.Item key="edit">Edit Program</Menu.Item> */}
-
       {userIsAdmin() && <Menu.Item key="delete">Delete Program</Menu.Item>}
     </Menu>
   );
