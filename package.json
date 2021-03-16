@@ -17,7 +17,6 @@
     "plotly.js": "^1.54.6",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "react-logger": "^1.1.0",
     "react-media": "^1.10.0",
     "react-plotly.js": "^2.4.0",
     "react-redux": "^7.2.2",

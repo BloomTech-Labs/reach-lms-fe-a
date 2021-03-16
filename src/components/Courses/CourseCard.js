@@ -6,7 +6,7 @@ import Menu from 'antd/lib/menu';
 import Dropdown from 'antd/lib/dropdown';
 import { useSelector, useDispatch } from 'react-redux';
 import { useUserRole } from '../../hooks';
-import { courseActions, moduleActions } from '../../state/ducks';
+import { courseActions } from '../../state/ducks';
 
 // css
 import '../../styles/CourseCard.css';
