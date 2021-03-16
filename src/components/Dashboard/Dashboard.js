@@ -11,7 +11,8 @@ import '../../styles/Dashboard.css';
 //styled-components
 const StyledWrapper = styled.div`
   display: flex;
-  margin-left: 10%;
+  margin-left: 5%;
+  margin-bottom: 40%;
 `;
 
 const Dashboard = props => {
