@@ -6,6 +6,7 @@ import Dropdown from 'antd/lib/dropdown';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { programActions } from '../../state/ducks';
+import { useUserRole } from '../../hooks';
 import { pathUtils } from '../../routes';
 import { MenuItemLink } from '../_common';
 // css
@@ -15,8 +16,18 @@ export default function ProgramCard(props) {
   const { program } = props;
   const dispatch = useDispatch();
 
+  const { userIsAdmin } = useUserRole();
+
+  const handleMenuClick = e => {
+    if (e.key === 'edit') {
+      dispatch(programActions.setEdit(program.programid));
+    } else {
+      dispatch(programActions.deleteProgramThunk(program.programid));
+    }
+  };
+
   const menu = (
-    <Menu>
+    <Menu onClick={handleMenuClick}>
       <MenuItemLink
         to={pathUtils.makeEditProgramPath(program.programid)}
         key="edit"
@@ -24,14 +35,7 @@ export default function ProgramCard(props) {
       >
         Edit Program
       </MenuItemLink>
-      <MenuItemLink
-        handleClick={() =>
-          dispatch(programActions.deleteProgramThunk(program.programid))
-        }
-        key="delete"
-      >
-        Delete Program
-      </MenuItemLink>
+      {userIsAdmin() && <Menu.Item key="delete">Delete Program</Menu.Item>}
     </Menu>
   );
 
