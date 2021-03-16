@@ -18,6 +18,7 @@ const UserDashboard = () => {
 
   return (
     <div>
+      <h2>ID, Username, First Name, Last Name, Role </h2>
       {selected.allUsers == undefined && <div>Loading...</div>}
       {selected.allUsers != undefined &&
         selected.allUsers.map(item => (
