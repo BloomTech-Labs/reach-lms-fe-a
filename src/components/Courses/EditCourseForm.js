@@ -80,6 +80,21 @@ export default function EditCourseForm() {
     );
   }
 
+  function handleKeyPress(e) {
+    const editedCourse = {
+      courseid: courseToEdit.courseid,
+      coursename: values.coursename,
+      coursecode: values.coursecode,
+      coursedescription: values.coursedescription,
+    };
+    if (e.key === 'key') {
+      e.preventDefault();
+      dispatch(
+        courseActions.editCourseThunk(courseToEdit.courseid, editedCourse)
+      );
+    }
+  }
+
   const goBack = () => {
     push('/courses');
   };
@@ -124,6 +139,7 @@ export default function EditCourseForm() {
 
         <FormItem htmlFor="coursedescription" label="Course Description:">
           <TextArea
+            // onKeyPress={handleKeyPress}
             showCount
             maxLength={250}
             id="coursedescription"

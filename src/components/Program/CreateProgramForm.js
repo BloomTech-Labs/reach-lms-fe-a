@@ -74,6 +74,13 @@ export default function CreateProgram() {
     dispatch(programActions.addProgramThunk(userid, values));
   }
 
+  function handleKeyPress(e) {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      dispatch(programActions.addProgramThunk(userid, values));
+    }
+  }
+
   const goBack = () => {
     push('/');
   };
@@ -159,6 +166,7 @@ export default function CreateProgram() {
 
         <FormItem htmlFor="programdescription" label="Program Description:">
           <TextArea
+            onKeyPress={handleKeyPress}
             showCount
             maxLength={500}
             id="programdescription"

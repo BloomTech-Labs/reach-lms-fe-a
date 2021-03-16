@@ -15,7 +15,11 @@ const StyledPrograms = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+  :hover {
+    cursor: pointer;
+  }
 `;
+
 const StyledContent = styled.div`
   width: 100%;
   display: flex;
@@ -44,7 +48,7 @@ const HeaderDiv = styled.div`
 `;
 
 const StyledH2 = styled.h2`
-  font-size: 1.75rem;
+  font-size: 1.95rem;
 `;
 
 const ProgramList = () => {
