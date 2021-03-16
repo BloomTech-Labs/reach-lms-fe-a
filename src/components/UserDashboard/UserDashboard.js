@@ -20,7 +20,9 @@ const UserDashboard = () => {
     <div>
       {selected.allUsers == undefined && <div>Loading...</div>}
       {selected.allUsers != undefined &&
-        selected.allUsers.map(item => <UserCard user={item}></UserCard>)}
+        selected.allUsers.map(item => (
+          <UserCard key={item.userid} user={item}></UserCard>
+        ))}
     </div>
   );
 };
