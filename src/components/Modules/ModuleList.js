@@ -1,7 +1,6 @@
 // REACT & HOOKS
 import React, { useState, useEffect } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
-import { useOktaAuth } from '@okta/okta-react';
 import { useUserRole, useMountEffect } from '../../hooks';
 
 // REDUX
@@ -28,7 +27,6 @@ const { SubMenu } = Menu;
 const ModuleList = props => {
   let { courseId } = useParams();
   courseId = parseInt(courseId);
-  const { authService } = useOktaAuth();
   const dispatch = useDispatch();
   const { push } = useHistory();
   const modules = useSelector(state => state.moduleReducer.modulesList);

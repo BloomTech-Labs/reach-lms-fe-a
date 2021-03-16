@@ -1,6 +1,6 @@
 // REACT, HOOKS,
 import React, { useEffect } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { useFormWithErrors } from '../../hooks';
 
 // REDUX
@@ -61,7 +61,6 @@ const getInitialFormValues = program => {
 
 export default function EditProgramAntDesign() {
   const { push } = useHistory();
-  const { programId } = useParams();
 
   const dispatch = useDispatch();
   const { editProgram, status, error } = useSelector(

@@ -1,7 +1,6 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory, useParams, Link } from 'react-router-dom';
-import { useOktaAuth } from '@okta/okta-react';
 import { useMountEffect, useUserRole } from '../../hooks';
 import styled from 'styled-components';
 import CourseCard from './CourseCard';
@@ -73,7 +72,6 @@ const CourseList = () => {
   const { programId } = useParams();
   const { push } = useHistory();
   const dispatch = useDispatch();
-  const { authService } = useOktaAuth();
   const courseList = useSelector(state => state.courseReducer.coursesList);
   const { userIsAdmin } = useUserRole();
 
