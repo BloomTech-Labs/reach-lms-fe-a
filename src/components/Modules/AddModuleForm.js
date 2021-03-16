@@ -49,10 +49,8 @@ export default function AddModuleForm() {
     initialValues
   );
 
-  const courseid = useSelector(
-    state => state.courseReducer.currentCourse.courseid
-  );
-  const { status, error } = useSelector(state => state.moduleReducer);
+  const status = useSelector(state => state.moduleReducer.status);
+  const error = useSelector(state => state.moduleReducer.error);
 
   const changeValues = e => {
     const { name, value } = e.target;
@@ -60,6 +58,8 @@ export default function AddModuleForm() {
   };
 
   useEffect(() => {
+    console.log(status);
+    console.log(resetValues);
     if (status === 'add/success') {
       resetValues();
       push('/modules');
@@ -68,8 +68,7 @@ export default function AddModuleForm() {
       // we may want to display an error message to user
       console.error(error);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [status]);
+  }, [status, resetValues, push, error]);
 
   function submitForm(e) {
     e.preventDefault();
