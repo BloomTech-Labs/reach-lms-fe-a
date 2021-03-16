@@ -19,7 +19,6 @@ import './styles/App.css';
 import { config } from './utils/oktaConfig';
 
 import {
-  HomeContainer as HomePage,
   NotFoundPage,
   LoginPage,
   UserProfile,
@@ -85,7 +84,11 @@ function App() {
           <SecureRoute
             path="/"
             exact
-            component={() => <HomePage LoadingComponent={LoadingComponent} />}
+            component={() => (
+              <Wrapper>
+                <HomeContainer LoadingComponent={LoadingComponent} />
+              </Wrapper>
+            )}
           />
           <SecureRoute
             path={VIEW_PROFILE_PATH}
@@ -172,14 +175,6 @@ function App() {
             component={() => (
               <Wrapper>
                 <EditModuleForm />
-              </Wrapper>
-            )}
-          />
-          <SecureRoute
-            path="/"
-            component={() => (
-              <Wrapper>
-                <HomeContainer />
               </Wrapper>
             )}
           />
