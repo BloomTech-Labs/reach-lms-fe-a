@@ -79,14 +79,12 @@ export default function AddCourse() {
 
   function handleKeyPress(e) {
     if (e.key === 'Enter') {
-      console.log('hello');
       e.preventDefault();
       dispatch(courseActions.addCourseThunk(currentProgramId, values));
     }
   }
 
   const goBack = () => {
-    // push('/courses');
     push(BACK_PATH);
   };
 
