@@ -67,7 +67,7 @@ export const userActions = {
     axiosAuth()
       .get('/users/users')
       .then(res => {
-        console.log(res.data);
+        // console.log(res.data);
         dispatch({ type: GET_ALL_USERS_SUCCESS, payload: res.data });
       })
       .catch(err => thunkFail(err.message))
@@ -126,14 +126,13 @@ const userReducer = (state = initialState, action) => {
 
     case GET_ALL_USERS_SUCCESS:
       const users = action.payload;
-      console.log(users);
+      // console.log(users);
       return {
         ...state,
         status: 'get-all-users/success',
         allUsers: users,
       };
 
-    // case GET_ALL_USERS_SUCCESS:
     default:
       return state;
   }
