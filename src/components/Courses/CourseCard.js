@@ -22,9 +22,6 @@ export default function CourseCard(props) {
   const VIEW_MODULES = pathUtils.makeViewAllModulesPath(course.courseid);
 
   useEffect(() => {
-    // if (status === 'get-modules-by-course-id/success') {
-    //   push(VIEW_MODULES);
-    // }
     if (status === 'get-modules-by-course-id/error') {
       console.error(error);
     }
@@ -47,9 +44,6 @@ export default function CourseCard(props) {
   );
 
   const viewCourseHandler = () => {
-    // Delete lines below besides pusn(...)
-    // dispatch(moduleActions.getModulesByCourseIdThunk(course.courseid));
-    console.log({ VIEW_MODULES });
     push(VIEW_MODULES);
   };
 
