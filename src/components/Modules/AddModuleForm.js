@@ -1,9 +1,12 @@
 import React, { useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import schema from '../../validation/ModuleSchema';
 import { moduleActions } from '../../state/ducks';
 import styled from 'styled-components';
+
+// Routing
+import { pathUtils } from '../../routes';
 
 // css
 import '../../styles/Form.css';
@@ -39,6 +42,7 @@ const initialValues = {
 export default function AddModuleForm() {
   const { push } = useHistory();
   const dispatch = useDispatch();
+  const { courseId } = useParams();
 
   const { values, errors, disabled, onChange, resetValues } = useFormWithErrors(
     schema,
@@ -69,11 +73,12 @@ export default function AddModuleForm() {
 
   function submitForm(e) {
     e.preventDefault();
-    dispatch(moduleActions.addModuleThunk(courseid, values));
+    dispatch(moduleActions.createModuleThunk(courseId, values));
+    // goBack();
   }
 
   const goBack = () => {
-    push('/modules');
+    push(pathUtils.makeViewAllModulesPath(courseId));
   };
 
   return (

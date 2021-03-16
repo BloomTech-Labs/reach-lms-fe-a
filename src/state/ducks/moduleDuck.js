@@ -88,6 +88,27 @@ export const moduleActions = {
       .catch(err => thunkFail(err.message))
       .finally(() => thunkResolve());
   },
+  // Create module
+  createModuleThunk: newModule => dispatch => {
+    const {
+      thunkStart,
+      thunkFail,
+      thunkResolve,
+    } = moduleThunkUtils.getTriggersFromPrefix('create');
+
+    thunkStart();
+
+    axiosAuth()
+      .post('/modules', newModule)
+      .then(res => {
+        // dispatch({ status: CREATE_MODULE_SUCCESS, payload: res.data})
+        console.log(res.data);
+      })
+      .catch(err => {
+        thunkFail(err.message);
+      })
+      .finally(() => thunkResolve());
+  },
 };
 
 const initialState = {
