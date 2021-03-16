@@ -1,6 +1,6 @@
 // REACT, HOOKS,
 import React, { useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { useFormWithErrors } from '../../hooks';
 
 // REDUX
@@ -61,6 +61,7 @@ const getInitialFormValues = program => {
 
 export default function EditProgramAntDesign() {
   const { push } = useHistory();
+  const { programId } = useParams();
 
   const dispatch = useDispatch();
   const { editProgram, status, error } = useSelector(
@@ -86,21 +87,33 @@ export default function EditProgramAntDesign() {
   const changeSelect = value => {
     onChange('programtype', value);
   };
-
   useEffect(() => {
     if (status === 'edit/success') {
       resetValues();
       push('/');
     }
+    // if (status === '')
     if (status === 'edit/error') {
       // we may want to display an error to the user instead of console.logging
       console.error(error);
     }
   }, [status, error, push, resetValues]);
 
+  useEffect(() => {
+    if (programId) {
+      dispatch(programActions.getProgramByProgramIdThunk(programId));
+    }
+  }, [programId, dispatch]);
+
+  function handleKeyPress(e) {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      dispatch(programActions.editProgramThunk(programId, input));
+    }
+  }
   function submitEditProgram(e) {
     e.preventDefault();
-    dispatch(programActions.editProgramThunk(editProgram.programid, input));
+    dispatch(programActions.editProgramThunk(programId, input));
   }
 
   const goBack = () => {
@@ -164,6 +177,7 @@ export default function EditProgramAntDesign() {
         </FormItem>
         <FormItem htmlFor="programdescription" label="Program Description:">
           <TextArea
+            onKeyPress={handleKeyPress}
             showCount
             maxLength={1000}
             id="programdescription"
