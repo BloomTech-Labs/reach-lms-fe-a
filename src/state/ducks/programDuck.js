@@ -1,6 +1,7 @@
-import { axiosAuth } from '../../utils';
+import { axiosAuth, axiosWithAuth } from '../../utils';
 import { asyncThunkUtils } from '../util';
 
+const GET_ALL_PROGRAMS_SUCCESS = 'GET_ALL_PROGRAMS_SUCCESS';
 const ADD_PROGRAM = 'ADD_PROGRAM';
 const DELETE_PROGRAM = 'DELETE_PROGRAM_SUCCESS';
 const SET_EDIT = 'SET_EDIT';
@@ -40,6 +41,28 @@ export const programActions = {
   },
 
   /*--------- GET PROGRAM BY PROGRAM ID ---------*/
+
+  // getAllProgramsThunk: () => dispatch => {
+  //   const {
+  //     thunkStart,
+  //     thunkFail,
+  //     thunkResolve,
+  //   } = programThunkUtils.getTriggersFromPrefix(dispatch, 'get-all-programs');
+  //   thunkStart();
+  //   axiosAuth()
+  //     .get('https://reach-team-a-be.herokuapp.com/programs/5')
+  //     .then(res => {
+  //       dispatch({
+  //         type: GET_ALL_PROGRAMS_SUCCESS,
+  //         payload: res.data._embedded.programsList,
+  //       });
+  //     })
+  //     .catch(err => {
+  //       thunkFail(err.message);
+  //     })
+  //     .finally(() => thunkResolve());
+  // },
+
   getProgramByProgramIdThunk: programId => dispatch => {
     const {
       thunkStart,
@@ -69,7 +92,10 @@ export const programActions = {
     axiosAuth()
       .get(`/programs/${userId}`)
       .then(res =>
-        dispatch({ type: GET_PROGRAMS_BY_USER_ID_SUCCESS, payload: res.data })
+        dispatch({
+          type: GET_PROGRAMS_BY_USER_ID_SUCCESS,
+          payload: res.data._embedded.programList,
+        })
       )
       .catch(err => thunkFail(err.message))
       .finally(() => thunkResolve());

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { programActions } from '../../state/ducks';
 import { useMountEffect } from '../../hooks';
@@ -8,6 +8,7 @@ import styled from 'styled-components';
 import ProgramCard from './ProgramCard';
 import Button from 'antd/lib/button';
 import { CREATE_PROGRAM_PATH } from '../../routes';
+import {axiosWithAuth} from '../../utils/axiosWithAuth';
 
 //styled components
 const StyledPrograms = styled.div`
@@ -57,8 +58,15 @@ const ProgramList = () => {
   const dispatch = useDispatch();
 
   useMountEffect(() =>
-    dispatch(programActions.getProgramsByUserIdThunk(userid))
+    dispatch(programActions.getProgramsByUserIdThunk(userid)),
   );
+
+  useEffect(()=>{
+    axiosWithAuth()
+    .get('https://reach-team-a-be.herokuapp.com/programs/5')
+    .then(res =>{
+      console.log(res)
+  })},[])
 
   return (
     <StyledContent>
@@ -73,6 +81,7 @@ const ProgramList = () => {
         </StyledTitle>
       </HeaderDiv>
       <StyledPrograms>
+        {console.log(programs)}
         {programs.map(program => {
           return <ProgramCard key={program.programid} program={program} />;
         })}
