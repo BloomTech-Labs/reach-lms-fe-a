@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { programActions } from '../../state/ducks';
 import { useMountEffect } from '../../hooks';
@@ -8,6 +8,7 @@ import styled from 'styled-components';
 import ProgramCard from './ProgramCard';
 import Button from 'antd/lib/button';
 import { CREATE_PROGRAM_PATH } from '../../routes';
+import { axiosWithAuth } from '../../utils/axiosWithAuth';
 
 //styled components
 const StyledPrograms = styled.div`
@@ -59,7 +60,6 @@ const ProgramList = () => {
   useMountEffect(() =>
     dispatch(programActions.getProgramsByUserIdThunk(userid))
   );
-
   return (
     <StyledContent>
       <HeaderDiv>
