@@ -103,7 +103,6 @@ export const moduleActions = {
       .post('/modules', newModule)
       .then(res => {
         dispatch({ status: CREATE_MODULE_SUCCESS, payload: res.data });
-        console.log(res.data);
       })
       .catch(err => {
         thunkFail(err.message);
