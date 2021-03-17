@@ -16,7 +16,7 @@ const LocationInfo = styled.div`
 export default ({ children, ...restProps }) => {
   const { Content, Footer } = Layout;
   const { authService } = useOktaAuth();
-  // const { pathname } = useLocation();
+  const { pathname } = useLocation();
   //   const { role } = useSelector(state => state.user);
 
   return (
