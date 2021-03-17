@@ -25,7 +25,7 @@ export default ({ children, ...restProps }) => {
         <Navigation authService={authService} />
         <Content>
           {/* should render the role and path on the main content rendering area */}
-          {/* <LocationInfo>
+          <LocationInfo>
             {
               {
                 //for now I removed titles since we are passing role in through the state
@@ -35,7 +35,7 @@ export default ({ children, ...restProps }) => {
                 '/settings': <h1>Settings</h1>,
               }[pathname]
             }
-          </LocationInfo> */}
+          </LocationInfo>
 
           {/*main content rendering area*/}
           {children}

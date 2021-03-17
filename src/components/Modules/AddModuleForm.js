@@ -58,8 +58,6 @@ export default function AddModuleForm() {
   };
 
   useEffect(() => {
-    console.log(status);
-    console.log(resetValues);
     if (status === 'add/success') {
       resetValues();
       push('/modules');
@@ -139,6 +137,5 @@ export default function AddModuleForm() {
         </div>
       </Form>
     </StyledContainer>
-    // this is a test
   );
 }

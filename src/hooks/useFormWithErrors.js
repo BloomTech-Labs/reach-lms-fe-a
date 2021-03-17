@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import * as yup from 'yup';
 
 export const useFormWithErrors = (
@@ -13,8 +13,7 @@ export const useFormWithErrors = (
 
   const [values, setValues] = useState(initialValues);
   const [errors, setErrors] = useState(initialFormErrors);
-  // const [disabled, setDisabled] = useState(initialDisabled);
-  let disabled = initialDisabled;
+  const [disabled, setDisabled] = useState(initialDisabled);
 
   const setFormErrors = (name, value) => {
     yup
@@ -32,14 +31,11 @@ export const useFormWithErrors = (
   const resetValues = () => {
     setValues(initialValues);
     setErrors(initialFormErrors || initialValues);
-    // setDisabled(true);
-    disabled = initialDisabled;
+    setDisabled(true);
   };
 
   useEffect(() => {
-    // schema.isValid(values).then(valid => setDisabled(!valid));
-    schema.isValid(values).then(valid => (disabled = !valid));
-    console.log(schema, values);
+    schema.isValid(values).then(valid => setDisabled(!valid));
   }, [schema, values]);
 
   return {
