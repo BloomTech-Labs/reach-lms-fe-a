@@ -40,6 +40,7 @@ export const programActions = {
   },
 
   /*--------- GET PROGRAM BY PROGRAM ID ---------*/
+
   getProgramByProgramIdThunk: programId => dispatch => {
     const {
       thunkStart,
@@ -69,7 +70,10 @@ export const programActions = {
     axiosAuth()
       .get(`/programs/${userId}`)
       .then(res =>
-        dispatch({ type: GET_PROGRAMS_BY_USER_ID_SUCCESS, payload: res.data })
+        dispatch({
+          type: GET_PROGRAMS_BY_USER_ID_SUCCESS,
+          payload: res.data._embedded.programList,
+        })
       )
       .catch(err => thunkFail(err.message))
       .finally(() => thunkResolve());

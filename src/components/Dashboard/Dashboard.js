@@ -23,7 +23,8 @@ const Dashboard = props => {
       <StyledWrapper>
         <div>{userIsAdmin() ? <ProgramList /> : <CourseList />}</div>
       </StyledWrapper>
-      <div>{userIsAdmin() ? <UserDashboard></UserDashboard> : null}</div>
+      {/* FIX DUCKS */}
+      {/* <div>{userIsAdmin() ? <UserDashboard></UserDashboard> : null}</div> */}
     </>
   );
 };

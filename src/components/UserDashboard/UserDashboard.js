@@ -7,6 +7,7 @@ import { axiosWithAuth } from '../../utils/axiosWithAuth';
 import UserCard from './UserCard';
 
 import { userActions } from '../../state/ducks';
+import { ContactSupportOutlined } from '@material-ui/icons';
 
 const UserDashboard = () => {
   const selected = useSelector(state => state.userReducer);
