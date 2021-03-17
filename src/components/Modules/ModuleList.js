@@ -69,8 +69,8 @@ const ModuleList = props => {
       // eslint-disable-next-line eqeqeq
       module => module.moduleid == e.key
     )[0];
-    dispatch(moduleActions.currentModule(moduleClicked));
-    push('/module-text');
+    // dispatch(moduleActions.currentModule(moduleClicked));
+    push(pathUtils.makeViewProgramPath(moduleClicked));
   };
 
   // why do we have two functions doing almost the same thing??

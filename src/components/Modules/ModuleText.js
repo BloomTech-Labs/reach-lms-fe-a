@@ -4,6 +4,7 @@ import { useHistory } from 'react-router-dom';
 import { moduleActions } from '../../state/ducks';
 import Navigation from '../Navigation';
 import styled from 'styled-components';
+import { pathUtils } from '../../routes';
 
 // css
 import 'antd/dist/antd.css';
@@ -38,6 +39,7 @@ export default function ModuleText() {
       // TODO needs support for new modules path
       // import {pathUtils} from "../../routes";
       // use pathUtils.makeViewAllModulesPath function
+      push(pathUtils.makeViewAllModulesPath());
       push('/modules');
     }
   }, [push, status]);

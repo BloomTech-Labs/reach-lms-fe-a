@@ -53,7 +53,10 @@ export const moduleActions = {
     axiosAuth()
       .get(`/modules/${courseId}`)
       .then(res =>
-        dispatch({ type: GET_MODULES_BY_COURSE_ID_SUCCESS, payload: res.data })
+        dispatch({
+          type: GET_MODULES_BY_COURSE_ID_SUCCESS,
+          payload: res.data._embedded.moduleList,
+        })
       )
       .catch(err => thunkFail(err.message))
       .finally(() => thunkResolve());
@@ -90,7 +93,7 @@ export const moduleActions = {
       .finally(() => thunkResolve());
   },
   // Create module
-  createModuleThunk: newModule => dispatch => {
+  createModuleThunk: (newModule, courseId) => dispatch => {
     const {
       thunkStart,
       thunkFail,
@@ -100,7 +103,7 @@ export const moduleActions = {
     thunkStart();
 
     axiosAuth()
-      .post('/modules', newModule)
+      .post(`/modules/${courseId}/module`, newModule)
       .then(res => {
         dispatch({ status: CREATE_MODULE_SUCCESS, payload: res.data });
       })
