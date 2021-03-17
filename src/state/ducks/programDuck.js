@@ -41,27 +41,6 @@ export const programActions = {
 
   /*--------- GET PROGRAM BY PROGRAM ID ---------*/
 
-  // getAllProgramsThunk: () => dispatch => {
-  //   const {
-  //     thunkStart,
-  //     thunkFail,
-  //     thunkResolve,
-  //   } = programThunkUtils.getTriggersFromPrefix(dispatch, 'get-all-programs');
-  //   thunkStart();
-  //   axiosAuth()
-  //     .get('https://reach-team-a-be.herokuapp.com/programs/5')
-  //     .then(res => {
-  //       dispatch({
-  //         type: GET_ALL_PROGRAMS_SUCCESS,
-  //         payload: res.data._embedded.programsList,
-  //       });
-  //     })
-  //     .catch(err => {
-  //       thunkFail(err.message);
-  //     })
-  //     .finally(() => thunkResolve());
-  // },
-
   getProgramByProgramIdThunk: programId => dispatch => {
     const {
       thunkStart,
