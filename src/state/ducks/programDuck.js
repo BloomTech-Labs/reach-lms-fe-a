@@ -51,7 +51,9 @@ export const programActions = {
 
     axiosAuth()
       .get(`/programs/program/${programId}`)
-      .then(res => dispatch({ type: GET_PROGRAM_SUCCESS, payload: res.data }))
+      .then(res =>
+        dispatch({ type: GET_PROGRAM_SUCCESS, payload: res.data.embedded })
+      )
       .catch(err => thunkFail(err.message))
       .finally(() => thunkResolve());
   },
@@ -69,7 +71,10 @@ export const programActions = {
     axiosAuth()
       .get(`/programs/${userId}`)
       .then(res =>
-        dispatch({ type: GET_PROGRAMS_BY_USER_ID_SUCCESS, payload: res.data })
+        dispatch({
+          type: GET_PROGRAMS_BY_USER_ID_SUCCESS,
+          payload: res.data.embedded,
+        })
       )
       .catch(err => thunkFail(err.message))
       .finally(() => thunkResolve());
@@ -85,7 +90,9 @@ export const programActions = {
     thunkStart();
     axiosAuth()
       .post(`/programs/${userId}/program`, newProgram)
-      .then(res => dispatch({ type: ADD_PROGRAM_SUCCESS, payload: res.data }))
+      .then(res =>
+        dispatch({ type: ADD_PROGRAM_SUCCESS, payload: res.data.embedded })
+      )
       .catch(err => thunkFail(err.message))
       .finally(() => thunkResolve());
   },
