@@ -1,9 +1,12 @@
 import React, { useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import schema from '../../validation/ModuleSchema';
 import { moduleActions } from '../../state/ducks';
 import styled from 'styled-components';
+
+// Routing
+import { pathUtils } from '../../routes';
 
 // css
 import '../../styles/Form.css';
@@ -39,16 +42,15 @@ const initialValues = {
 export default function AddModuleForm() {
   const { push } = useHistory();
   const dispatch = useDispatch();
+  const { courseId } = useParams();
 
   const { values, errors, disabled, onChange, resetValues } = useFormWithErrors(
     schema,
     initialValues
   );
 
-  const courseid = useSelector(
-    state => state.courseReducer.currentCourse.courseid
-  );
-  const { status, error } = useSelector(state => state.moduleReducer);
+  const status = useSelector(state => state.moduleReducer.status);
+  const error = useSelector(state => state.moduleReducer.error);
 
   const changeValues = e => {
     const { name, value } = e.target;
@@ -64,16 +66,16 @@ export default function AddModuleForm() {
       // we may want to display an error message to user
       console.error(error);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [status]);
+  }, [status, resetValues, push, error]);
 
   function submitForm(e) {
     e.preventDefault();
-    dispatch(moduleActions.addModuleThunk(courseid, values));
+    dispatch(moduleActions.createModuleThunk(courseId, values));
+    // goBack();
   }
 
   const goBack = () => {
-    push('/modules');
+    push(pathUtils.makeViewAllModulesPath(courseId));
   };
 
   return (

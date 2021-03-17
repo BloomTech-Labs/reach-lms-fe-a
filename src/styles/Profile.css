@@ -1,34 +1,33 @@
 .profile-card {
-    width: 800px;
-    margin: 3% 0;
+  width: 800px;
+  margin: 3% 0;
 }
 
 /* media queries */
 @media (max-width: 885px) {
-    .profile-card {
-        width: 600px;
-    }
+  .profile-card {
+    width: 600px;
+  }
 }
 
 @media (max-width: 665px) {
-    .profile-card {
-        width: 400px;
-    }
+  .profile-card {
+    width: 400px;
+  }
 }
 
 @media (max-width: 450px) {
-    .profile-card {
-        width: 325px;
-        margin: 10% 0;
-    }
+  .profile-card {
+    width: 325px;
+    margin: 10% 0;
+  }
 }
 
 @media (max-width: 350px) {
-    .profile-card {
-        width: 275px;
-    }
-    .ant-btn-icon-only {
-        width: 24px;
-    }
+  .profile-card {
+    width: 275px;
+  }
+  .ant-btn-icon-only {
+    width: 24px;
+  }
 }
-

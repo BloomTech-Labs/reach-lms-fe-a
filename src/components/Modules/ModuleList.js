@@ -10,6 +10,7 @@ import { courseActions, moduleActions } from '../../state/ducks';
 // MISC
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import { pathUtils } from '../../routes';
 
 // MATERIAL UI
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -123,7 +124,7 @@ const ModuleList = props => {
       <HeaderDiv>
         <h1>{currentCourse.coursename}</h1>
         {(userIsAdmin() || userIsTeacher()) && (
-          <Link to="/add-module">
+          <Link to={pathUtils.makeCreateModulePath(courseId)}>
             <Button size="large" style={{ background: '#01fe87' }}>
               Add Module
             </Button>

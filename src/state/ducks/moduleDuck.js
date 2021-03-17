@@ -12,6 +12,7 @@ const CURRENT_MODULE = 'CURRENT_MODULE';
 const GET_MODULES_BY_COURSE_ID_SUCCESS = 'GET_MODULES_BY_COURSE_ID_SUCCESS';
 const EDIT_MODULE_SUCCESS = 'EDIT_MODULE_SUCCESS';
 const DELETE_MODULE_SUCCESS = 'DELETE_MODULE_SUCCESS';
+const CREATE_MODULE_SUCCESS = 'CREATE_MODULE_SUCCESS';
 
 const moduleThunkUtils = asyncThunkUtils('MODULE');
 
@@ -63,7 +64,7 @@ export const moduleActions = {
       thunkStart,
       thunkFail,
       thunkResolve,
-    } = moduleThunkUtils.getTriggersFromPrefix('edit');
+    } = moduleThunkUtils.getTriggersFromPrefix(dispatch, 'edit');
     thunkStart();
     axiosAuth()
       .put(`/modules/${moduleId}`, editedModule)
@@ -76,7 +77,7 @@ export const moduleActions = {
       thunkStart,
       thunkFail,
       thunkResolve,
-    } = moduleThunkUtils.getTriggersFromPrefix('delete');
+    } = moduleThunkUtils.getTriggersFromPrefix(dispatch, 'delete');
 
     thunkStart();
 
@@ -86,6 +87,26 @@ export const moduleActions = {
         dispatch({ status: DELETE_MODULE_SUCCESS, payload: moduleId });
       })
       .catch(err => thunkFail(err.message))
+      .finally(() => thunkResolve());
+  },
+  // Create module
+  createModuleThunk: newModule => dispatch => {
+    const {
+      thunkStart,
+      thunkFail,
+      thunkResolve,
+    } = moduleThunkUtils.getTriggersFromPrefix(dispatch, 'create');
+
+    thunkStart();
+
+    axiosAuth()
+      .post('/modules', newModule)
+      .then(res => {
+        dispatch({ status: CREATE_MODULE_SUCCESS, payload: res.data });
+      })
+      .catch(err => {
+        thunkFail(err.message);
+      })
       .finally(() => thunkResolve());
   },
 };

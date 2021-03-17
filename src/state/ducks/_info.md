@@ -11,12 +11,12 @@ Requirements for a Redux Duck:
 - MUST have action types in the form of `npm-module-or-app/reducer/ACTION_TYPE`
 - MAY export its action types as `UPPER_SNAKE_CASE`, if an external reducer needs to listen for them (or if it is a published reusable library)
 
-Okay... so what's the point? To __modularize__ redux. The clunky folder structure that most Lambda students are familiar with involves splitting action creators and reducers into two `/state/actions/` and `/state/reducers/` folders. This requires exporting in and out a million-bajillion `ACTION_TYPES` from one to the next and before you know it your JS is looking a bit too much like SQL. Ducks strive to amend that by tightening up code, removing boilerplate, and improving readability and scalability.
+Okay... so what's the point? To **modularize** redux. The clunky folder structure that most Lambda students are familiar with involves splitting action creators and reducers into two `/state/actions/` and `/state/reducers/` folders. This requires exporting in and out a million-bajillion `ACTION_TYPES` from one to the next and before you know it your JS is looking a bit too much like SQL. Ducks strive to amend that by tightening up code, removing boilerplate, and improving readability and scalability.
 
-<!-- 
+<!--
 Each file inside of `src/state/ducks` is responsible for an over-arching slice of state in the Redux store. In each file, we're going to have our A
 
-What this means is if we have the following four files: 
+What this means is if we have the following four files:
 
 - `courseDuck.js`
 - `moduleDuck.js`
@@ -24,7 +24,7 @@ What this means is if we have the following four files:
 - `userDuck.js`
 --->
 
-The people who *MADE* Redux liked the pattern so much they released a whole new version of Redux based upon it!: [Redux Toolkit](https://redux-toolkit.js.org/). RTK is "the official, opinionated, batteries-included toolset for efficient Redux Development." Anyone who wants to write Redux how the creators prefer should check it out.
+The people who _MADE_ Redux liked the pattern so much they released a whole new version of Redux based upon it!: [Redux Toolkit](https://redux-toolkit.js.org/). RTK is "the official, opinionated, batteries-included toolset for efficient Redux Development." Anyone who wants to write Redux how the creators prefer should check it out.
 
 I won't give you the whole history behind ducks and why they're worth using, but I will link to some additional resources for anyone who wants to explore more on their own.
 
@@ -41,16 +41,15 @@ First, let's compare it to something you know. If I were splitting my `actions` 
 ```javascript
 // state/actions/index.js
 
-import { axiosAuth } from "../../utils";
+import { axiosAuth } from '../../utils';
 
-export const SIMPLE_ACTION_ONE = "SIMPLE_ACTION_ONE";
-export const SIMPLE_ACTION_TWO = "SIMPLE_ACTION_TWO";
+export const SIMPLE_ACTION_ONE = 'SIMPLE_ACTION_ONE';
+export const SIMPLE_ACTION_TWO = 'SIMPLE_ACTION_TWO';
 
-export const FETCH_CURRENT_USER_START = "FETCH_CURRENT_USER_START";
-export const FETCH_CURRENT_USER_SUCCESS = "FETCH_CURRENT_USER_SUCCESS";
-export const FETCH_CURRENT_USER_FAILURE = "FETCH_CURRENT_USER_FAILURE";
-export const FETCH_CURRENT_USER_RESOLVE = "FETCH_CURRENT_USER_RESOLVE";
-
+export const FETCH_CURRENT_USER_START = 'FETCH_CURRENT_USER_START';
+export const FETCH_CURRENT_USER_SUCCESS = 'FETCH_CURRENT_USER_SUCCESS';
+export const FETCH_CURRENT_USER_FAILURE = 'FETCH_CURRENT_USER_FAILURE';
+export const FETCH_CURRENT_USER_RESOLVE = 'FETCH_CURRENT_USER_RESOLVE';
 
 const triggerActionOne = value => {
   return { type: ACTION_ONE, payload: value };
@@ -60,15 +59,14 @@ const triggerActionTwo = value => {
   return { type: ACTION_TWO, payload: value };
 };
 
-// an asynchronous thunk that interacts with an 
+// an asynchronous thunk that interacts with an
 // endpoint and dispatches actions accordingly
 export const fetchCurrentUserThunk = () => {
   return dispatch => {
-    
     dispatch({ type: FETCH_CURRENT_USER_START });
 
     axiosAuth()
-      .get("/users/current")
+      .get('/users/current')
       .then(res => {
         dispatch({ type: FETCH_CURRENT_USER_SUCCESS, payload: res.data });
       })
@@ -77,7 +75,7 @@ export const fetchCurrentUserThunk = () => {
       })
       .finally(() => {
         dispatch({ type: FETCH_CURRENT_USER_RESOLVE });
-      })
+      });
   };
 };
 ```
@@ -95,35 +93,34 @@ import {
   FETCH_CURRENT_USER_SUCCESS,
   FETCH_CURRENT_USER_FAILURE,
   FETCH_CURRENT_USER_RESOLVE,
-} from "./actions";
+} from './actions';
 
 // The initial state of our store
 const initialState = {
-  isLoading: false, // PLEASE never use booleans like this 
+  isLoading: false, // PLEASE never use booleans like this
   isLoggedIn: true, //  ^ esp. for isLoggedIn!!
   data: [],
   user: {},
-  error: ''
+  error: '',
 };
 
-const vanillaReducer = (state=initialState, action ) => {
+const vanillaReducer = (state = initialState, action) => {
   switch (action.type) {
-    
     case SIMPLE_ACTION_ONE:
       return {
         ...state,
         data: [...state.data, action.payload],
-      }
+      };
 
     case SIMPLE_ACTION_TWO:
       return {
         ...state,
         data: state.data.filter(el => el !== action.payload),
-      }
+      };
 
     case FETCH_CURRENT_USER_START:
       return {
-        ...state, 
+        ...state,
         isLoading: true,
       };
 
@@ -131,24 +128,23 @@ const vanillaReducer = (state=initialState, action ) => {
       return {
         ...state,
         user: action.payload,
-      }
+      };
 
     case FETCH_CURRENT_USER_FAILURE:
       return {
         ...state,
         error: action.payload,
-      }
-    
+      };
+
     case FETCH_CURRENT_USER_RESOLVE:
       return {
         ...state,
-        isLoading: false
-      }
+        isLoading: false,
+      };
   }
 };
 
 export default vanillaReducer;
-
 ```
 
 Now, ducks just takes those two files and SMASHES them together. If we made the above example into Duck, it would look like so:
@@ -157,18 +153,18 @@ Now, ducks just takes those two files and SMASHES them together. If we made the 
 
 ```javascript
 // import dependencies
-import { axiosAuth } from "../../utils";
+import { axiosAuth } from '../../utils';
 
 // declare action types
-const SIMPLE_ACTION_ONE = "SIMPLE_ACTION_ONE";
-const SIMPLE_ACTION_TWO = "SIMPLE_ACTION_TWO";
+const SIMPLE_ACTION_ONE = 'SIMPLE_ACTION_ONE';
+const SIMPLE_ACTION_TWO = 'SIMPLE_ACTION_TWO';
 
-const FETCH_CURRENT_USER_START = "FETCH_CURRENT_USER_START";
-const FETCH_CURRENT_USER_SUCCESS = "FETCH_CURRENT_USER_SUCCESS";
-const FETCH_CURRENT_USER_FAILURE = "FETCH_CURRENT_USER_FAILURE";
-const FETCH_CURRENT_USER_RESOLVE = "FETCH_CURRENT_USER_RESOLVE";
+const FETCH_CURRENT_USER_START = 'FETCH_CURRENT_USER_START';
+const FETCH_CURRENT_USER_SUCCESS = 'FETCH_CURRENT_USER_SUCCESS';
+const FETCH_CURRENT_USER_FAILURE = 'FETCH_CURRENT_USER_FAILURE';
+const FETCH_CURRENT_USER_RESOLVE = 'FETCH_CURRENT_USER_RESOLVE';
 
-// declare action creators 
+// declare action creators
 export const triggerActionOne = value => {
   return { type: ACTION_ONE, payload: value };
 };
@@ -177,15 +173,14 @@ export const triggerActionTwo = value => {
   return { type: ACTION_TWO, payload: value };
 };
 
-// an asynchronous thunk that interacts with an 
+// an asynchronous thunk that interacts with an
 // endpoint and dispatches actions accordingly
 export const fetchCurrentUserThunk = () => {
   return dispatch => {
-    
     dispatch({ type: FETCH_CURRENT_USER_START });
 
     axiosAuth()
-      .get("/users/current")
+      .get('/users/current')
       .then(res => {
         dispatch({ type: FETCH_CURRENT_USER_SUCCESS, payload: res.data });
       })
@@ -194,37 +189,36 @@ export const fetchCurrentUserThunk = () => {
       })
       .finally(() => {
         dispatch({ type: FETCH_CURRENT_USER_RESOLVE });
-      })
+      });
   };
 };
 
 // The initial state of our store
 const initialState = {
-  isLoading: false, // PLEASE never use booleans like this 
+  isLoading: false, // PLEASE never use booleans like this
   isLoggedIn: true, //  ^ esp. for isLoggedIn!!
   data: [],
   user: {},
-  error: ''
+  error: '',
 };
 
-const vanillaReducer = (state=initialState, action ) => {
+const vanillaReducer = (state = initialState, action) => {
   switch (action.type) {
-    
     case SIMPLE_ACTION_ONE:
       return {
         ...state,
         data: [...state.data, action.payload],
-      }
+      };
 
     case SIMPLE_ACTION_TWO:
       return {
         ...state,
         data: state.data.filter(el => el !== action.payload),
-      }
+      };
 
     case FETCH_CURRENT_USER_START:
       return {
-        ...state, 
+        ...state,
         isLoading: true,
       };
 
@@ -232,19 +226,19 @@ const vanillaReducer = (state=initialState, action ) => {
       return {
         ...state,
         user: action.payload,
-      }
+      };
 
     case FETCH_CURRENT_USER_FAILURE:
       return {
         ...state,
         error: action.payload,
-      }
-    
+      };
+
     case FETCH_CURRENT_USER_RESOLVE:
       return {
         ...state,
-        isLoading: false
-      }
+        isLoading: false,
+      };
   }
 };
 
@@ -261,11 +255,11 @@ Not a whole lot has changed, but at least we're not exporting and importing each
 
 import { axiosAuth } from '../../utils'; // src/utils
 
-// !!!! This is one rather unique part of our Redux files. 
-import { asyncThunkUtils } from '../util'; // src/state/util 
+// !!!! This is one rather unique part of our Redux files.
+import { asyncThunkUtils } from '../util'; // src/state/util
 
-// We invoke asyncThunkUtils and pass in the PREFIX for our duck or slice of state. 
-// This returns an object full of thunk utilities that help out with asynchronous 
+// We invoke asyncThunkUtils and pass in the PREFIX for our duck or slice of state.
+// This returns an object full of thunk utilities that help out with asynchronous
 // updates to our `state.status`
 const reachExampleThunkUtils = asyncThunkUtils("REACH_EXAMPLE");
 
@@ -277,11 +271,11 @@ const SIMPLE_ACTION_TWO = "SIMPLE_ACTION_TWO";
 // action types are EXACTLY what the `asyncThunkUtils` are here for!
 const FETCH_CURRENT_USER_SUCCESS = "FETCH_CURRENT_USER_SUCCESS";
 
-// declare action creators... but this time we'll WRAP all the action creators 
+// declare action creators... but this time we'll WRAP all the action creators
 // in one big object for ease of imports, editor hints, and overall reference
 
 export const reachExampleActions = {
-  
+
   // this is a callable function inside an object!!
   triggerActionOne: value => {
     return { type: ACTION_ONE, payload: value };
@@ -292,13 +286,13 @@ export const reachExampleActions = {
   },
 
   fetchCurrentUserThunk: () => dispatch => {
-    // so this is where our app will look especially strange 
+    // so this is where our app will look especially strange
     // but it's all in the name of consistency
-    // 
-    // remember when we imported `asyncThunkUtils` and then INVOKED it? It returned an object. 
+    //
+    // remember when we imported `asyncThunkUtils` and then INVOKED it? It returned an object.
     // That object has two properties that we're especially interested in.
     // We called the object returned `reactExampleThunkUtils`.
-    // 
+    //
     // One of its properties is this little function here that returns yet another
     // object full of helper functions (which we de-structure)
     const {
@@ -306,12 +300,12 @@ export const reachExampleActions = {
       thunkFail, // dispatches an action with type REACH_EXAMPLE_FAIL...
       thunkResolve // dispatches an action with type REACH_EXAMPLE_RESOLVE...
       // all these properties are de-structured from what gets returned from the line below.
-      // the `getTriggersFromPrefix` function takes in `dispatch` and a ACTION PREFIX. 
-      // 
+      // the `getTriggersFromPrefix` function takes in `dispatch` and a ACTION PREFIX.
+      //
       // If you do not pass in `dispatch`, things will break.
       //
       // What's happening under the hood is we're using closures from all these prefixes
-      // and dispatching for START, FAIL, RESOLVE in a reusable manner. 
+      // and dispatching for START, FAIL, RESOLVE in a reusable manner.
       // You may think this clutters up the code, but I promise you you'd feel differently
       // after creating 15+ async thunks that all use a START/FAIL/SUCCESS/RESOLVE
     } = reachExampleThunkUtils.getTriggersFromPrefix(dispatch, "get-user-info");
@@ -330,7 +324,7 @@ export const reachExampleActions = {
         };
       -------------------------------------------------------------------------
     */
-    thunkStart(); 
+    thunkStart();
 
     // then we can make our async axios call
     axiosAuth()
@@ -338,17 +332,17 @@ export const reachExampleActions = {
       .then(res => {
         // if we're in the `.then()` statement, we know we succeeded so we're going to
         // dispatch the GET_USER_INFO_SUCCESS action that we defined ourselves.
-        // 
+        //
         // The reason I left the _SUCCESS case to you guys is b/c it's the most
         // dynamic and frequently changing case for async thunks
         dispatch({ type: GET_USER_INFO_SUCCESS, payload: res.data });
       })
       /*
         if we hit a .catch(), we're going to take in `err` and fire `thunkFail(err.message)`
-        thunkFail wants `err.message`, but if you wanted to customize an 
+        thunkFail wants `err.message`, but if you wanted to customize an
         error message, you could certainly pass in your own string
-        
-        under the hood, thunkFail does this dispatches an action 
+
+        under the hood, thunkFail does this dispatches an action
         AND handles it in a reducer.
         So our `reachLmsThunkUtils` are smart enough to update state like so:
         -------------------------------------------------------------------------
@@ -364,8 +358,8 @@ export const reachExampleActions = {
       */
       .catch(err => thunkFail(err.message))
       /*
-        the `.finally()` clause will run whether we FAIL or SUCCEED. 
-        So we fire our `thunkResolve()`function 
+        the `.finally()` clause will run whether we FAIL or SUCCEED.
+        So we fire our `thunkResolve()`function
 
         Under the hood, this function does like so:
         -------------------------------------------------------------------------
@@ -386,7 +380,7 @@ export const reachExampleActions = {
 const initialState = {
   // note the flexible status string instead of booleans!!
   // this gives us wicked granularity over `useEffect` calls in components
-  status: "", 
+  status: "",
   error: "",
   data: [],
   user: {},
@@ -399,15 +393,15 @@ const vanillaReducer = (state=initialState, action ) => {
   // But we still get the benefit of the flexible status property and error!
   const { success, result } = reachExampleThunkUtils.thunkReducer(state, action);
   /*
-  the thunkReducer will take in state and action just like any reducer but it 
+  the thunkReducer will take in state and action just like any reducer but it
   will wrap the state updates in another object and add a boolean success property
-  
+
   -------------------------------------------------------------------------
   case REACH_EXAMPLE_START:
     return {
       success: true,
       result: {
-        ...state, 
+        ...state,
         status: "get-user-info/start"
       }
     }
@@ -418,7 +412,7 @@ const vanillaReducer = (state=initialState, action ) => {
   }
 
   switch (action.type) {
-    
+
     case SIMPLE_ACTION_ONE:
       return {
         ...state,
@@ -430,7 +424,7 @@ const vanillaReducer = (state=initialState, action ) => {
         ...state,
         data: state.data.filter(el => el !== action.payload),
       }
-    // 
+    //
     case FETCH_CURRENT_USER_SUCCESS:
       return {
         ...state,
@@ -480,7 +474,7 @@ export const reachExampleActions = {
       thunkResolve
     } = reachExampleThunkUtils.getTriggersFromPrefix(dispatch, "get-user-info");
 
-    thunkStart(); 
+    thunkStart();
 
     axiosAuth()
       .get('/users/getuserinfo')
@@ -494,7 +488,7 @@ export const reachExampleActions = {
 
 // INITIAL STATE
 const initialState = {
-  status: "", 
+  status: "",
   error: "",
   data: [],
   user: {},
