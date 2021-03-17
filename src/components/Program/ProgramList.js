@@ -73,7 +73,6 @@ const ProgramList = () => {
         </StyledTitle>
       </HeaderDiv>
       <StyledPrograms>
-        {console.log(programs)}
         {programs.map(program => {
           return <ProgramCard key={program.programid} program={program} />;
         })}
