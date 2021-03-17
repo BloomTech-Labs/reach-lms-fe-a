@@ -1,7 +1,6 @@
-import { axiosAuth, axiosWithAuth } from '../../utils';
+import { axiosAuth } from '../../utils';
 import { asyncThunkUtils } from '../util';
 
-const GET_ALL_PROGRAMS_SUCCESS = 'GET_ALL_PROGRAMS_SUCCESS';
 const ADD_PROGRAM = 'ADD_PROGRAM';
 const DELETE_PROGRAM = 'DELETE_PROGRAM_SUCCESS';
 const SET_EDIT = 'SET_EDIT';
