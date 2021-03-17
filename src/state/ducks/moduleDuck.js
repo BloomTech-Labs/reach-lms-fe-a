@@ -64,7 +64,7 @@ export const moduleActions = {
       thunkStart,
       thunkFail,
       thunkResolve,
-    } = moduleThunkUtils.getTriggersFromPrefix('edit');
+    } = moduleThunkUtils.getTriggersFromPrefix(dispatch, 'edit');
     thunkStart();
     axiosAuth()
       .put(`/modules/${moduleId}`, editedModule)
@@ -77,7 +77,7 @@ export const moduleActions = {
       thunkStart,
       thunkFail,
       thunkResolve,
-    } = moduleThunkUtils.getTriggersFromPrefix('delete');
+    } = moduleThunkUtils.getTriggersFromPrefix(dispatch, 'delete');
 
     thunkStart();
 
