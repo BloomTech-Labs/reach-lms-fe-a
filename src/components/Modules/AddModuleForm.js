@@ -70,8 +70,8 @@ export default function AddModuleForm() {
 
   function submitForm(e) {
     e.preventDefault();
-    dispatch(moduleActions.createModuleThunk(courseId, values));
-    // goBack();
+    dispatch(moduleActions.createModuleThunk(values,courseId));
+    goBack();
   }
 
   const goBack = () => {
