@@ -8,7 +8,7 @@ import styled from 'styled-components';
 import ProgramCard from './ProgramCard';
 import Button from 'antd/lib/button';
 import { CREATE_PROGRAM_PATH } from '../../routes';
-import {axiosWithAuth} from '../../utils/axiosWithAuth';
+import { axiosWithAuth } from '../../utils/axiosWithAuth';
 
 //styled components
 const StyledPrograms = styled.div`
@@ -58,16 +58,8 @@ const ProgramList = () => {
   const dispatch = useDispatch();
 
   useMountEffect(() =>
-    dispatch(programActions.getProgramsByUserIdThunk(userid)),
+    dispatch(programActions.getProgramsByUserIdThunk(userid))
   );
-
-  useEffect(()=>{
-    axiosWithAuth()
-    .get('https://reach-team-a-be.herokuapp.com/programs/5')
-    .then(res =>{
-      console.log(res)
-  })},[])
-
   return (
     <StyledContent>
       <HeaderDiv>
