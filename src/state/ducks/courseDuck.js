@@ -127,7 +127,10 @@ export const courseActions = {
     axiosAuth()
       .get(`/courses/${programId}`)
       .then(res =>
-        dispatch({ type: GET_COURSES_BY_PROGRAM_ID_SUCCESS, payload: res.data })
+        dispatch({
+          type: GET_COURSES_BY_PROGRAM_ID_SUCCESS,
+          payload: res.data._embedded.courseList,
+        })
       )
       .catch(err => thunkFail(err.message))
       .finally(() => thunkResolve());
