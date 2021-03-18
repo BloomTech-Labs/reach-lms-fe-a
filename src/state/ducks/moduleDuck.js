@@ -105,7 +105,7 @@ export const moduleActions = {
     axiosAuth()
       .post(`/modules/${courseId}/module`, newModule)
       .then(res => {
-        dispatch({ status: CREATE_MODULE_SUCCESS, payload: res.data });
+        dispatch({ type: CREATE_MODULE_SUCCESS, payload: res.data });
       })
       .catch(err => {
         thunkFail(err.message);
@@ -134,6 +134,11 @@ const moduleReducer = (state = initialState, action) => {
         modulesList: state.modulesList.filter(
           ({ moduleid }) => moduleid !== action.payload
         ),
+      };
+    case CREATE_MODULE_SUCCESS:
+      return {
+        ...state,
+        status: 'create/success',
       };
 
     // TODO: TEST THIS
