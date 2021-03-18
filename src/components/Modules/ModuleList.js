@@ -30,6 +30,7 @@ const ModuleList = props => {
   courseId = parseInt(courseId);
   const dispatch = useDispatch();
   const { push } = useHistory();
+  const moduleStatus = useSelector(state => state.moduleReducer.status);
   const modules = useSelector(state => state.moduleReducer.modulesList);
   const { status, studentsMap, teachersMap, currentCourse } = useSelector(
     state => state.courseReducer
@@ -46,8 +47,10 @@ const ModuleList = props => {
     ) {
       dispatch(courseActions.getCourseThunk(courseId));
       dispatch(courseActions.mapifyStudentTeachersPowerThunk(courseId));
+    } else if (moduleStatus === 'create/success') {
+      dispatch(moduleActions.getModulesByCourseIdThunk(courseId));
     }
-  }, [courseId, dispatch, status]);
+  }, [courseId, dispatch, status, push, moduleStatus]);
 
   useMountEffect(() => {
     dispatch(moduleActions.getModulesByCourseIdThunk(courseId));
