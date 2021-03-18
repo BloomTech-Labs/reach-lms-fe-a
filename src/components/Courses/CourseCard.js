@@ -7,10 +7,11 @@ import Dropdown from 'antd/lib/dropdown';
 import { useSelector, useDispatch } from 'react-redux';
 import { useUserRole } from '../../hooks';
 import { courseActions } from '../../state/ducks';
+import { pathUtils } from '../../routes';
+import { MenuItemLink } from '../_common';
 
 // css
 import '../../styles/CourseCard.css';
-import { pathUtils } from '../../routes';
 
 export default function CourseCard(props) {
   const { course, programId, push } = props;
@@ -38,7 +39,13 @@ export default function CourseCard(props) {
 
   const menu = (
     <Menu onClick={handleMenuClick}>
-      <Menu.Item key="edit">Edit Course</Menu.Item>
+      <MenuItemLink
+        to={pathUtils.makeEditCoursePath(course.courseid)}
+        key="edit"
+        extra=""
+      >
+        Edit Module
+      </MenuItemLink>
       {userIsAdmin() && <Menu.Item key="delete">Delete Course</Menu.Item>}
     </Menu>
   );
