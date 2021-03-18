@@ -88,7 +88,6 @@ const ModuleList = props => {
 
   function addStudentHandler(e) {
     e.preventDefault();
-    // TODO: this needs to be refactored into an actual thunk and  completely managed in Redux
     dispatch(
       courseActions.addStudentToCourseThunk(currentCourse.courseid, newStudent)
     );
@@ -96,14 +95,12 @@ const ModuleList = props => {
 
   function addTeacherHandler(e) {
     e.preventDefault();
-    // TODO: this needs to be refactored into an actual thunk and  completely managed in Redux
     dispatch(
       courseActions.addTeacherToCourseThunk(currentCourse.courseid, newTeacher)
     );
   }
 
   const deleteStudentHandler = studentId => {
-    // TODO: this needs to be refactored into an actual thunk and  completely managed in Redux
     dispatch(
       courseActions.deleteStudentFromCourseThunk(
         currentCourse.courseid,
@@ -113,7 +110,6 @@ const ModuleList = props => {
   };
 
   const deleteTeacherHandler = teacherId => {
-    // TODO: this needs to be refactored into an actual thunk and  completely managed in Redux
     dispatch(
       courseActions.deleteTeacherFromCourseThunk(
         currentCourse.courseid,
