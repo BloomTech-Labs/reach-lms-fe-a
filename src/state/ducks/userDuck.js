@@ -107,7 +107,7 @@ const userReducer = (state = initialState, action) => {
         email,
         phonenumber,
         username,
-        roles,
+        role,
       } = action.payload;
       return {
         ...state,
@@ -119,7 +119,7 @@ const userReducer = (state = initialState, action) => {
           email,
           phonenumber,
           username,
-          role: roles[0].role.name,
+          role,
         },
       };
 
