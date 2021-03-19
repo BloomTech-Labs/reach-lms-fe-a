@@ -1,5 +1,5 @@
 import React from 'react';
-import { axiosAuth } from '../../../utils';
+import { axiosWithAuth } from '../../../utils';
 
 const useRestfulFetch = url => {
   const [data, setData] = React.useState({});
@@ -7,9 +7,10 @@ const useRestfulFetch = url => {
   const [error, setError] = React.useState({});
 
   React.useEffect(() => {
-    axiosAuth()
+    axiosWithAuth()
       .get(url)
       .then(res => {
+        console.log(res.data);
         const hasEmbedded = res.data.hasOwnProperty('_embedded');
         const hasLinks = res.data.hasOwnProperty('_links');
 

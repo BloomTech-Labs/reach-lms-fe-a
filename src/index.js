@@ -37,6 +37,8 @@ import {
   Wrapper,
 } from './components';
 
+import { Programs, Courses } from './components/_test/components';
+
 import {
   VIEW_PROFILE_PATH,
   EDIT_PROFILE_PATH,
@@ -90,6 +92,11 @@ function App() {
               </Wrapper>
             )}
           />
+          {/* test routes */}
+          <SecureRoute path="/link-programs" component={Programs} />
+          <SecureRoute path="/courses/:programid" component={Courses} />
+          <SecureRoute path="/all-courses" component={Courses} />
+
           <SecureRoute
             path={VIEW_PROFILE_PATH}
             component={() => (
