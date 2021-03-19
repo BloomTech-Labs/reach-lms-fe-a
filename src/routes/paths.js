@@ -15,6 +15,8 @@ export const EDIT_MODULE_PATH =
   '/edit/program/:programId/course/:courseId/module/:moduleId';
 export const VIEW_ALL_MODULES_PATH = '/all-modules/courseid/:courseId';
 export const VIEW_MODULE_TEXT_PATH = '/module-text';
+/*------------------ USER ------------------*/
+// TO COME
 /*------------------ PATH CREATORS ------------------*/
 export const pathUtils = {
   makeViewProgramPath: programId => `/view/program/${programId}`,
