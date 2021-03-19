@@ -40,8 +40,8 @@ export default function UserCard(props) {
   return (
     <div className="user-card">
       {<Dropdown.Button overlay={menu}></Dropdown.Button>}
-      {user.userid}, {user.username}, {user.firstname},{' '}
-      {user.roles[0].role.name}
+      {console.log(user)}
+      {user.userid}, {user.username}, {user.firstname}, {user.role}
       <Link to={pathUtils.makeViewUserPath(user.userid)}>View User</Link>
     </div>
   );

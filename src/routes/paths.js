@@ -29,4 +29,6 @@ export const pathUtils = {
     `/edit/program/${programId}/course/${courseId}/module/${moduleId}`,
   makeCreateModulePath: courseId => `/create/module/course/${courseId}`,
   makeViewAllModulesPath: courseId => `/all-modules/courseid/${courseId}`,
+  makeEditUserPath: userid => `edit/user/${userid}`,
+  makeViewUserPath: userid => `view/user/${userid}`,
 };

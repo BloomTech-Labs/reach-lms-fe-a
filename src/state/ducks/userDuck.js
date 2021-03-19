@@ -67,7 +67,11 @@ export const userActions = {
     axiosAuth()
       .get('/users/users')
       .then(res => {
-        dispatch({ type: GET_ALL_USERS_SUCCESS, payload: res.data });
+        // console.log(res.data._embedded.userList)
+        dispatch({
+          type: GET_ALL_USERS_SUCCESS,
+          payload: res.data._embedded.userList,
+        });
       })
       .catch(err => thunkFail(err.message))
       .finally(() => thunkResolve());
