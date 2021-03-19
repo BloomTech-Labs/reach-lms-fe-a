@@ -49,7 +49,7 @@ export default function ProgramCard(props) {
         <h3>{program.programtype}</h3>
         <p>{program.programdescription}</p>
         <Link to={pathUtils.makeViewAllCoursesPath(program.programid)}>
-          View
+          View Program
         </Link>
       </Card>
     </div>
