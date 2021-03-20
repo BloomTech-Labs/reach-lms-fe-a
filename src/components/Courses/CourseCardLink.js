@@ -1,10 +1,7 @@
 import React from 'react';
 import 'antd/dist/antd.css';
-import { Card, Dropdown, Menu, Button, Modal } from 'antd';
-import { Link } from 'react-router-dom';
-import { useRestfulFetch, useSubModal, useUserRole } from '../../hooks';
-import { pathUtils } from '../../routes';
-import { MenuItemLink } from '../_common';
+import { Card, Dropdown, Menu } from 'antd';
+import { useRestfulFetch, useUserRole } from '../../hooks';
 
 // css
 import '../../styles/CourseCard.css';
@@ -14,17 +11,11 @@ const CourseCardLink = props => {
   const { data: course, links, error } = useRestfulFetch(href);
   const { userIsAdmin, userIsTeacher } = useUserRole();
 
-  const handleMenuClick = () => {};
+  const handleMenuClick = menuItem => {};
 
   const menu = (
     <Menu onClick={handleMenuClick}>
-      <MenuItemLink
-        to={pathUtils.makeEditCoursePath(course.courseid)}
-        key="edit"
-        extra=""
-      >
-        Edit Module
-      </MenuItemLink>
+      <Menu.Item key="edit">Edit Module</Menu.Item>
       {userIsAdmin() && <Menu.Item key="delete">Delete Course</Menu.Item>}
     </Menu>
   );

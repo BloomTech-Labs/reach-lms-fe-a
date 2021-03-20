@@ -23,7 +23,13 @@ const Main = props => {
               <Button onClick={showModal}>See Course</Button>
             </CourseCardLink>
           )}
-        ></Collection.List>
+        />
+        <Collection.Error>
+          <div>There's been a problem!</div>
+        </Collection.Error>
+        <Collection.Loading>
+          <div>Loading Courses...</div>
+        </Collection.Loading>
       </Collection>
       <Modal visible={visible} onCancel={hideModal}>
         <CourseView />

@@ -7,10 +7,14 @@ export const useRestfulFetch = url => {
   const formedUrl = url?.includes(API_BASE_URL) ? url : `${API_BASE_URL}${url}`;
   const [data, setData] = React.useState({});
   const [links, setLinks] = React.useState({});
-  const [error, setError] = React.useState({});
+  const [error, setError] = React.useState(null);
   const [status, setStatus] = React.useState('pending');
 
   React.useEffect(() => {
+    if (!formedUrl) {
+      return;
+    }
+
     setStatus('pending');
     axiosWithAuth()
       .get(formedUrl)
