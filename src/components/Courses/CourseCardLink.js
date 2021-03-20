@@ -8,7 +8,7 @@ import '../../styles/CourseCard.css';
 
 const CourseCardLink = props => {
   const { href, children } = props;
-  const { data: course, links, error } = useRestfulFetch(href);
+  const { data: course } = useRestfulFetch(href);
   const { userIsAdmin, userIsTeacher } = useUserRole();
 
   const handleMenuClick = menuItem => {};

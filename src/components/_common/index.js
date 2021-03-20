@@ -1,2 +1,2 @@
 export { default as MenuItemLink } from './MenuItemLink';
-export { default as Collection } from './MappedList/MappedList';
+export { default as RestEntity } from './RestEntity/RestEntity';

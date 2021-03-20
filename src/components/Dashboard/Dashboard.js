@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { useUserRole } from '../../hooks';
 import ProgramList from '../Program/ProgramList';
 import CourseList from '../Courses/CourseList';
-import UserDashboard from '../UserDashboard/UserDashboard';
 
 // css
 import '../../styles/Dashboard.css';

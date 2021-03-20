@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSubModal } from '../../hooks';
-import { Collection } from '../_common';
+import { RestEntity } from '../_common';
 import CourseListLink from '../Courses/CourseListLink';
 import CourseView from '../Courses/CourseView';
 import 'antd/dist/antd.css';
@@ -8,11 +8,14 @@ import { Button, Modal } from 'antd';
 import CourseCardLink from '../Courses/CourseCardLink';
 
 const Main = props => {
+  const { href } = props;
+  const [selectedCourse, setSelectedCourse] = React.useState('');
+
   const { visible, showModal, hideModal } = useSubModal();
   return (
     <>
-      <Collection href="/courses">
-        <Collection.List
+      <RestEntity href={href ?? '/courses'}>
+        <RestEntity.List
           path={['courseList']}
           container={CourseListLink}
           component={subEntity => (
@@ -20,19 +23,26 @@ const Main = props => {
               key={subEntity._links.self.href}
               href={subEntity._links.self.href}
             >
-              <Button onClick={showModal}>See Course</Button>
+              <Button
+                onClick={() => {
+                  setSelectedCourse(subEntity._links.self.href);
+                  showModal();
+                }}
+              >
+                See Course
+              </Button>
             </CourseCardLink>
           )}
         />
-        <Collection.Error>
+        <RestEntity.Error>
           <div>There's been a problem!</div>
-        </Collection.Error>
-        <Collection.Loading>
+        </RestEntity.Error>
+        <RestEntity.Loading>
           <div>Loading Courses...</div>
-        </Collection.Loading>
-      </Collection>
+        </RestEntity.Loading>
+      </RestEntity>
       <Modal visible={visible} onCancel={hideModal}>
-        <CourseView />
+        <CourseView href={selectedCourse} />
       </Modal>
     </>
   );

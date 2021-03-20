@@ -1,13 +1,13 @@
 import React from 'react';
 import { useRestfulFetch, useEffectAfterMount } from '../../../hooks';
 
-const CollectionContext = React.createContext();
+const RestContext = React.createContext();
 
-function Collection(props) {
+function RestEntity(props) {
   const { data, links, error, status } = useRestfulFetch(props.href);
 
   useEffectAfterMount(() => {
-    // we can do anything with props.href here
+    // we can do anything with props.href here if desired
   }, [props.href]);
 
   const value = React.useMemo(() => ({ data, links, error, status }), [
@@ -18,14 +18,12 @@ function Collection(props) {
   ]);
 
   return (
-    <CollectionContext.Provider value={value}>
-      {props.children}
-    </CollectionContext.Provider>
+    <RestContext.Provider value={value}>{props.children}</RestContext.Provider>
   );
 }
 
-function useCollectionContext() {
-  const context = React.useContext(CollectionContext);
+function useRestContext() {
+  const context = React.useContext(RestContext);
   if (!context) {
     throw new Error(
       `Collection compound components cannot be rendered outside the collection component`
@@ -34,20 +32,36 @@ function useCollectionContext() {
   return context;
 }
 
+function Singleton({
+  children,
+  component: Component,
+  container: Container = React.Fragment,
+}) {
+  const { data } = useRestContext();
+  return data ? (
+    <>
+      <Container>
+        {children}
+        <Component {...data} />
+      </Container>
+    </>
+  ) : null;
+}
+
 function List({
   children,
   path,
   component: Component,
   container: Container = React.Fragment,
 }) {
-  const { data } = useCollectionContext();
+  const { data } = useRestContext();
   return data && data[path] && data[path].length > 0 ? (
     <>
       <Container>
         {children}
         {data[path].map(dat => {
-          if (Collection.Card) {
-            return <Collection.Card {...dat} />;
+          if (RestEntity.Card) {
+            return <RestEntity.Card {...dat} />;
           } else if (Component) {
             return <Component {...dat} />;
           } else {
@@ -56,21 +70,24 @@ function List({
         })}
       </Container>
     </>
-  ) : null;
+  ) : (
+    <p>No such data!</p>
+  );
 }
 
 function RestError({ children }) {
-  const { error } = useCollectionContext();
+  const { error } = useRestContext();
   return error ? children : null;
 }
 
 function Loading({ children }) {
-  const { status } = useCollectionContext();
+  const { status } = useRestContext();
   return status === 'pending' ? children : null;
 }
 
-Collection.List = List;
-Collection.Error = RestError;
-Collection.Loading = Loading;
+RestEntity.Singleton = Singleton;
+RestEntity.List = List;
+RestEntity.Error = RestError;
+RestEntity.Loading = Loading;
 
-export default Collection;
+export default RestEntity;
