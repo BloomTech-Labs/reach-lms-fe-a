@@ -44,5 +44,6 @@ export const useFormWithErrors = (
     disabled,
     onChange,
     resetValues,
+    setValues,
   };
 };

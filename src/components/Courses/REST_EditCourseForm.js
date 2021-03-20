@@ -1,29 +1,11 @@
-import React, { useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
+import React from 'react';
 import schema from '../../validation/CourseSchema';
-import { courseActions } from '../../state/ducks';
-import { useFormWithErrors } from '../../hooks';
-import styled from 'styled-components';
-
-// css
-// import '../../styles/Form.css';
+import { useFormWithErrors, useRestfulFetch } from '../../hooks';
+import '../../styles/Form.css';
 import 'antd/dist/antd.css';
 import { Button, Input, Select, Form } from 'antd';
+import { client } from '../../utils/api';
 const { TextArea } = Input;
-
-//styled components
-const StyledContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin-top: 3%;
-  margin-left: 10%;
-`;
-
-const layout = {
-  labelCol: { span: 7 },
-  wrapperCol: { span: 16 },
-};
 
 const initialFormErrors = {
   coursename: '',
@@ -31,18 +13,20 @@ const initialFormErrors = {
   coursedescription: '',
 };
 
-export default function EditCourseForm() {
-  const { push } = useHistory();
-  const dispatch = useDispatch();
-  const { status, error } = useSelector(state => state.courseReducer);
-  const courseToEdit = useSelector(state => state.courseReducer.editCourse);
-
-  const { values, errors, disabled, onChange, resetValues } = useFormWithErrors(
+function EditCourseForm(props) {
+  const { data } = useRestfulFetch(props.href);
+  const { values, errors, disabled, onChange, setValues } = useFormWithErrors(
     schema,
-    courseToEdit,
+    data,
     initialFormErrors,
     false
   );
+
+  React.useEffect(() => {
+    if (data) {
+      setValues(prevValues => ({ ...prevValues, ...data }));
+    }
+  }, [data, setValues]);
 
   const changeValues = e => {
     const { name, value, type } = e.target;
@@ -50,48 +34,32 @@ export default function EditCourseForm() {
     onChange(name, valueToUse);
   };
 
-  useEffect(() => {
-    if (status === 'edit/success') {
-      resetValues();
-      push('/courses');
-    }
-    if (status === 'edit/error') {
-      console.log(error);
-    }
-  }, [status, error, push, resetValues]);
-
   function submitForm(e) {
     e.preventDefault();
 
     const editedCourse = {
-      courseid: courseToEdit.courseid,
+      courseid: data.courseid,
       coursename: values.coursename,
       coursecode: values.coursecode,
       coursedescription: values.coursedescription,
     };
 
-    dispatch(
-      courseActions.editCourseThunk(courseToEdit.courseid, editedCourse)
-    );
+    client.patchCourse(editedCourse.courseid, editedCourse);
   }
 
-  const goBack = () => {
-    push('/courses');
-  };
-
   return (
-    <StyledContainer>
+    <>
       <h1 className="edit-form-h1">Edit Course</h1>
       <Form
-        {...layout}
         name="basic"
+        layout="vertical"
+        size="large"
         onFinish={submitForm}
         initialValues={{
-          coursename: courseToEdit.coursename,
-          coursecode: courseToEdit.coursecode,
-          coursedescription: courseToEdit.coursedescription,
+          coursename: data.coursename,
+          coursecode: data.coursecode,
+          coursedescription: data.coursedescription,
         }}
-        className="form"
       >
         <Form.Item htmlFor="coursename" label="Course Name:" validateStatus>
           <Input
@@ -133,9 +101,9 @@ export default function EditCourseForm() {
           </div>
         </Form.Item>
         <div className="button-container">
-          <Button onClick={goBack} type="secondary" className="button">
+          {/* <Button onClick={goBack} type="secondary" className="button">
             Cancel
-          </Button>
+          </Button> */}
           <Button
             onClick={submitForm}
             type="primary"
@@ -146,6 +114,8 @@ export default function EditCourseForm() {
           </Button>
         </div>
       </Form>
-    </StyledContainer>
+    </>
   );
 }
+
+export default EditCourseForm;

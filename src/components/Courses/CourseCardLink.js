@@ -1,7 +1,7 @@
 import React from 'react';
 import 'antd/dist/antd.css';
-import { Card, Dropdown, Menu } from 'antd';
-import { useRestfulFetch, useUserRole } from '../../hooks';
+import { Card } from 'antd';
+import { useRestfulFetch } from '../../hooks';
 
 // css
 import '../../styles/CourseCard.css';
@@ -9,31 +9,24 @@ import '../../styles/CourseCard.css';
 const CourseCardLink = props => {
   const { href, children } = props;
   const { data: course } = useRestfulFetch(href);
-  const { userIsAdmin, userIsTeacher } = useUserRole();
-
-  const handleMenuClick = menuItem => {};
-
-  const menu = (
-    <Menu onClick={handleMenuClick}>
-      <Menu.Item key="edit">Edit Module</Menu.Item>
-      {userIsAdmin() && <Menu.Item key="delete">Delete Course</Menu.Item>}
-    </Menu>
-  );
 
   return (
     <div>
       {course ? (
         <Card
-          title={course.coursename}
-          extra={
-            (userIsAdmin() || userIsTeacher()) && (
-              <Dropdown.Button overlay={menu}></Dropdown.Button>
-            )
+          title={
+            <h3>
+              <strong>Course —</strong> {course.coursename}
+            </h3>
           }
           className="course-card"
         >
-          <h4>Course Code: {course.coursecode}</h4>
-          <p>Description: {course.coursedescription}</p>
+          <h4>
+            <strong>Course Code:</strong> {course.coursecode}
+          </h4>
+          <p>
+            <strong>Description:</strong> {course.coursedescription}
+          </p>
           {children}
         </Card>
       ) : (
