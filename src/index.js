@@ -36,6 +36,7 @@ import {
   HomeContainer,
   Wrapper,
 } from './components';
+import { Main } from './components/Main';
 
 import {
   VIEW_PROFILE_PATH,
@@ -50,6 +51,7 @@ import {
   EDIT_MODULE_PATH,
   VIEW_ALL_MODULES_PATH,
   VIEW_MODULE_TEXT_PATH,
+  MAIN_DASH,
 } from './routes';
 
 ReactDOM.render(
@@ -87,6 +89,14 @@ function App() {
             component={() => (
               <Wrapper>
                 <HomeContainer LoadingComponent={LoadingComponent} />
+              </Wrapper>
+            )}
+          />
+          <SecureRoute
+            path={MAIN_DASH}
+            component={() => (
+              <Wrapper>
+                <Main />
               </Wrapper>
             )}
           />

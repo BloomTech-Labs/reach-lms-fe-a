@@ -68,7 +68,7 @@ const StyledH2 = styled.h2`
   font-size: 1.75rem;
 `;
 
-const CourseList = () => {
+const CourseList = props => {
   const { programId } = useParams();
   const { push } = useHistory();
   const dispatch = useDispatch();

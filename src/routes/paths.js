@@ -1,3 +1,5 @@
+/*------------------ NEW  ------------------*/
+export const MAIN_DASH = '/main';
 /*------------------ PROFILE ------------------*/
 export const VIEW_PROFILE_PATH = '/profile';
 export const EDIT_PROFILE_PATH = '/edit-profile';
