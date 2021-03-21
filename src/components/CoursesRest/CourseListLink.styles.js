@@ -11,13 +11,14 @@ const StyledCourses = styled.div`
 const StyledContent = styled.div`
   width: 100%;
   display: flex;
-  flex-direction: column;
+  flex-flow: column nowrap;
   justify-content: center;
+  align-items: center;
 `;
 
 const StyledWrapper = styled.div`
   display: flex;
-  margin-left: 10%;
+  /* margin-left: 10%; */
   width: 50%;
 `;
 

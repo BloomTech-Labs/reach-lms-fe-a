@@ -14,4 +14,8 @@ export const client = {
   patchCourse: (courseId, editedCourse) =>
     axiosAuth().patch(`/courses/${courseId}`, editedCourse),
   deleteCourse: courseId => axiosAuth().delete(`/courses/course/${courseId}`),
+  postModule: (courseId, newModule) =>
+    axiosAuth().post(`/modules/${courseId}/module`, newModule),
+  patchModule: (moduleId, editedModule) =>
+    axiosAuth().patch(`/modules/${moduleId}`, editedModule),
 };

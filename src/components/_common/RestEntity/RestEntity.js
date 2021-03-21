@@ -39,12 +39,10 @@ function Singleton({
 }) {
   const { data } = useRestContext();
   return data ? (
-    <>
-      <Container>
-        {children}
-        <Component {...data} />
-      </Container>
-    </>
+    <Container>
+      {children}
+      <Component {...data} />
+    </Container>
   ) : null;
 }
 
@@ -55,23 +53,13 @@ function List({
   container: Container = React.Fragment,
 }) {
   const { data } = useRestContext();
-  return data && data[path] && data[path].length > 0 ? (
-    <>
-      <Container>
-        {children}
-        {data[path].map(dat => {
-          if (RestEntity.Card) {
-            return <RestEntity.Card {...dat} />;
-          } else if (Component) {
-            return <Component {...dat} />;
-          } else {
-            return <pre>dat</pre>;
-          }
-        })}
-      </Container>
-    </>
+  return data?.[path]?.length > 0 ? (
+    <Container>
+      {children}
+      {data[path].map(dat => (Component ? <Component {...dat} /> : null))}
+    </Container>
   ) : (
-    <p>No such data!</p>
+    <div>No data</div>
   );
 }
 
@@ -85,9 +73,14 @@ function Loading({ children }) {
   return status === 'pending' ? children : null;
 }
 
+function Empty({ children, path }) {
+  return null;
+}
+
 RestEntity.Singleton = Singleton;
 RestEntity.List = List;
 RestEntity.Error = RestError;
 RestEntity.Loading = Loading;
+RestEntity.Empty = Empty;
 
 export default RestEntity;

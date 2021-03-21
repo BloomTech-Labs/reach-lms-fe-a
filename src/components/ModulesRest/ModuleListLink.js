@@ -1,6 +1,5 @@
 import React from 'react';
 import Styled from './ModuleListLink.styles';
-import ModuleCardLink from './ModuleCardLink';
 import { RestEntity } from '../_common';
 
 const ModuleList = props => {
@@ -10,12 +9,7 @@ const ModuleList = props => {
         <RestEntity href={props.href ?? '/modules'}>
           <RestEntity.List
             path={['moduleList']}
-            component={subEntity => (
-              <ModuleCardLink
-                key={subEntity._links.self.href}
-                href={subEntity._links.self.href}
-              />
-            )}
+            component={props.mappedChild}
           />
           <RestEntity.Error>
             <div>An error has occurred...</div>
@@ -23,6 +17,9 @@ const ModuleList = props => {
           <RestEntity.Loading>
             <div>Loading...</div>
           </RestEntity.Loading>
+          <RestEntity.Empty>
+            <div>No modules yet!</div>
+          </RestEntity.Empty>
         </RestEntity>
       </Styled.HeaderDiv>
     </Styled.Container>
