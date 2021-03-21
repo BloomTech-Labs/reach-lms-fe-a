@@ -1,12 +1,6 @@
 import React from 'react';
 import { Menu } from 'antd';
-import { Link } from 'react-router-dom';
-import styled from 'styled-components';
-
-const StyledLink = styled(Link)`
-  text-decoration: none;
-  color: inherit;
-`;
+import StyledLink from './GhostLink';
 
 // Wrap `Menu.Item` from AntD in a `Link` from react-router-dom
 // We can just toss in a "to" attribute to MenuItem

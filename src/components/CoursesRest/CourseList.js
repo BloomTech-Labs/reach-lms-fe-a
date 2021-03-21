@@ -1,6 +1,6 @@
 import React from 'react';
 import { RestEntity } from '../_common';
-import Styled from './CourseListLink.styles';
+import Styled from './CourseList.styles';
 
 export const CourseListRest = props => {
   return (

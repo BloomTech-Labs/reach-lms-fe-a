@@ -1,5 +1,7 @@
 /*------------------ NEW  ------------------*/
 export const MAIN_DASH = '/main';
+export const MAIN_DASH_BY_PROGRAM = '/main-by-program/:programId';
+export const ADMIN_LANDING = '/admin';
 /*------------------ PROFILE ------------------*/
 export const VIEW_PROFILE_PATH = '/profile';
 export const EDIT_PROFILE_PATH = '/edit-profile';
@@ -31,4 +33,5 @@ export const pathUtils = {
     `/edit/program/${programId}/course/${courseId}/module/${moduleId}`,
   makeCreateModulePath: courseId => `/create/module/course/${courseId}`,
   makeViewAllModulesPath: courseId => `/all-modules/courseid/${courseId}`,
+  makeCoursesByProgramId: programId => `/main-by-program/${programId}`,
 };
