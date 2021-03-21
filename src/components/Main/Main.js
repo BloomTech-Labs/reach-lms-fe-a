@@ -2,6 +2,8 @@ import React from 'react';
 import { useSubModal, useUserRole } from '../../hooks';
 import 'antd/dist/antd.css';
 import { Button, Modal } from 'antd';
+import { GhostLink } from '../_common';
+import { ADMIN_LANDING } from '../../routes';
 import {
   EditModuleForm,
   AddModuleForm,
@@ -29,15 +31,17 @@ const Main = props => {
   const [courseId, setCourseId] = React.useState(0);
 
   const programInfo = (
-    <ProgramSingleton
-      href={`/programs/program/${programId}`}
-      mappedChild={program => (
-        <div>
-          <h2>Program: {program.programname}</h2>
-          <p>Program Description: {program.programname}</p>
-        </div>
-      )}
-    />
+    <GhostLink to={ADMIN_LANDING}>
+      <ProgramSingleton
+        href={`/programs/program/${programId}`}
+        mappedChild={program => (
+          <div>
+            <h2>Program: {program.programname}</h2>
+            <p>Program Description: {program.programname}</p>
+          </div>
+        )}
+      />
+    </GhostLink>
   );
 
   return (

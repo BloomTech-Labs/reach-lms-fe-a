@@ -2,7 +2,7 @@ import { axiosAuth } from './axiosWithAuth';
 export const client = {
   postProgram: (userid, newProgram) => {
     newProgram = { ...newProgram, user: { userid } };
-    axiosAuth().post('/programs/program', newProgram);
+    axiosAuth().post(`/programs/${userid}/program`, newProgram);
   },
   putProgram: (programId, newProgram) =>
     axiosAuth().put(`/programs/program/${programId}`, newProgram),

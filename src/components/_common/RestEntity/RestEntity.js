@@ -56,7 +56,9 @@ function List({
   return data?.[path]?.length > 0 ? (
     <Container>
       {children}
-      {data[path].map(dat => (Component ? <Component {...dat} /> : null))}
+      {data[path].map(dat =>
+        Component ? <Component key={dat._links.self.href} {...dat} /> : null
+      )}
     </Container>
   ) : (
     <div>No data</div>
