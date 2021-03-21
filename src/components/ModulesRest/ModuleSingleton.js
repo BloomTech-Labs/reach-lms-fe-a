@@ -21,15 +21,14 @@ const ModuleCard = props => {
 //
 // This ModuleSingleton will consume a `href` from `props.href` that represents
 // an endpoint to get a single Module entity.
-// get the data
 export const ModuleSingleton = props => {
+  const defaultMapper = moduleData => (
+    <ModuleCard module={moduleData}>{props.children}</ModuleCard>
+  );
+
   return (
     <RestEntity href={props.href}>
-      <RestEntity.Singleton
-        component={moduleData => (
-          <ModuleCard module={moduleData}>{props.children}</ModuleCard>
-        )}
-      />
+      <RestEntity.Singleton component={props.mappedChild ?? defaultMapper} />
       <RestEntity.Error>
         <div>Whoops! You've hit an error</div>
       </RestEntity.Error>

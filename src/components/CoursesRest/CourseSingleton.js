@@ -28,13 +28,13 @@ const CourseCardPlain = props => {
 };
 
 export const CourseCardRest = props => {
+  const defaultMapper = course => (
+    <CourseCardPlain course={course}>{props.children}</CourseCardPlain>
+  );
+
   return (
     <RestEntity href={props.href}>
-      <RestEntity.Singleton
-        component={course => (
-          <CourseCardPlain course={course}>{props.children}</CourseCardPlain>
-        )}
-      />
+      <RestEntity.Singleton component={props.mappedChild ?? defaultMapper} />
       <RestEntity.Error>
         <div>This error would happen for this component always!</div>
       </RestEntity.Error>

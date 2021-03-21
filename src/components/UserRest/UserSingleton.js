@@ -17,16 +17,16 @@ const UserComponent = props => {
 };
 
 const UserSingleton = props => {
+  const defaultMapper = userEntity => (
+    <UserComponent key={userEntity._links.self.href}>
+      {props.children}
+    </UserComponent>
+  );
+
   return (
     <>
       <RestEntity href={props.href ?? '/users'}>
-        <RestEntity.Singleton
-          component={userEntity => (
-            <UserComponent key={userEntity._links.self.href}>
-              {props.children}
-            </UserComponent>
-          )}
-        />
+        <RestEntity.Singleton component={props.mappedChild ?? defaultMapper} />
       </RestEntity>
     </>
   );
