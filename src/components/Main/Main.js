@@ -14,11 +14,12 @@ import {
   AddCourseForm,
   EditCourseForm,
 } from '../CoursesRest';
+import { ProgramSingleton } from '../ProgramsRest';
 import Styled from './Main.styles';
 
 const Main = props => {
-  const { href } = props;
-  const { userid } = useUserRole();
+  const { href, programId } = props;
+  const { userIsAdmin } = useUserRole();
   const [selectedCourse, setSelectedCourse] = React.useState('');
   const [selectedModule, setSelectedModule] = React.useState('');
   const courseAdd = useSubModal();
@@ -27,17 +28,33 @@ const Main = props => {
   const moduleEdit = useSubModal();
   const [courseId, setCourseId] = React.useState(0);
 
+  const programInfo = (
+    <ProgramSingleton
+      href={`/programs/program/${programId}`}
+      mappedChild={program => (
+        <div>
+          <h2>Program: {program.programname}</h2>
+          <p>Program Description: {program.programname}</p>
+        </div>
+      )}
+    />
+  );
+
   return (
     <Styled.Content>
+      <div>{programId && programInfo}</div>
+
       <h2>My Courses</h2>
 
-      <Button
-        onClick={() => {
-          courseAdd.showModal();
-        }}
-      >
-        Add Course
-      </Button>
+      {userIsAdmin() && (
+        <Button
+          onClick={() => {
+            courseAdd.showModal();
+          }}
+        >
+          Add Course
+        </Button>
+      )}
 
       <CourseList
         href={href ?? '/courses'}
@@ -89,7 +106,7 @@ const Main = props => {
         visible={courseAdd.visible}
         onCancel={courseAdd.hideModal}
       >
-        <AddCourseForm href={selectedCourse} userId={userid} />
+        <AddCourseForm programId={programId} />
       </Modal>
       {/* Edit Course Model */}
       <Modal

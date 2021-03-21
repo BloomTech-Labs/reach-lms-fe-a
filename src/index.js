@@ -36,14 +36,16 @@ import {
   HomeContainer,
   Wrapper,
 } from './components';
-import { Main } from './components/Main';
+import { Main, AdminMain } from './components/Main';
+import { ProgramList } from './components/ProgramsRest';
 
 import {
+  MAIN_DASH_BY_PROGRAM,
   VIEW_PROFILE_PATH,
   EDIT_PROFILE_PATH,
   CREATE_PROGRAM_PATH,
   EDIT_PROGRAM_PATH,
-  // VIEW_PROGRAM_PATH,
+  ADMIN_LANDING,
   CREATE_COURSE_PATH,
   VIEW_ALL_COURSES_PATH,
   EDIT_COURSE_PATH,
@@ -53,6 +55,7 @@ import {
   VIEW_MODULE_TEXT_PATH,
   MAIN_DASH,
 } from './routes';
+import AdminLanding from './components/Main/AdminLanding';
 
 ReactDOM.render(
   <Router>
@@ -97,6 +100,22 @@ function App() {
             component={() => (
               <Wrapper>
                 <Main />
+              </Wrapper>
+            )}
+          />
+          <SecureRoute
+            path={MAIN_DASH_BY_PROGRAM}
+            component={() => (
+              <Wrapper>
+                <AdminMain />
+              </Wrapper>
+            )}
+          />
+          <SecureRoute
+            path={ADMIN_LANDING}
+            component={() => (
+              <Wrapper>
+                <AdminLanding />
               </Wrapper>
             )}
           />

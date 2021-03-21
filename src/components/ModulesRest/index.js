@@ -1,4 +1,4 @@
-export { default as ModuleSingleton } from './ModuleCardLink';
-export { default as ModuleList } from './ModuleListLink';
-export { default as AddModuleForm } from './REST_AddModuleForm';
-export { default as EditModuleForm } from './REST_EditModuleForm';
+export { default as ModuleSingleton } from './ModuleSingleton';
+export { default as ModuleList } from './ModuleList';
+export { default as AddModuleForm } from './AddModuleForm';
+export { default as EditModuleForm } from './EditModuleForm';
