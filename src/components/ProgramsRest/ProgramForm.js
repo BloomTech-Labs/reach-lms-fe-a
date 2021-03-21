@@ -49,6 +49,7 @@ export default function CreateProgram(props) {
     } else {
       client.patchProgram(data.programid, values);
     }
+    resetValues();
   }
 
   if (!data && href) {

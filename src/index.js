@@ -37,7 +37,6 @@ import {
   Wrapper,
 } from './components';
 import { Main, AdminMain } from './components/Main';
-import { ProgramList } from './components/ProgramsRest';
 
 import {
   MAIN_DASH_BY_PROGRAM,
