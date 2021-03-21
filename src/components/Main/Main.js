@@ -60,7 +60,6 @@ const Main = props => {
                         moduleEdit.showModal();
                       }}
                     >
-                      {' '}
                       Edit Module
                     </Button>
                   </ModuleSingleton>
