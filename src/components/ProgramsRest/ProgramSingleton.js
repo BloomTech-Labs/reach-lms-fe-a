@@ -1,28 +1,10 @@
 import React from 'react';
 import { RestEntity } from '../_common';
-import { Card, Button } from 'antd';
-import { Link } from 'react-router-dom';
-import { pathUtils } from '../../routes';
-
-const ProgramComponent = props => {
-  const { program } = props;
-  return (
-    <>
-      <Card title={program.programname}>
-        <h3>{program.programtype}</h3>
-        <p>{program.programdescription}</p>
-        <Link to={pathUtils.makeCoursesByProgramId(program.programid)}>
-          <Button primary={true}>View Program</Button>
-        </Link>
-        {props.children}
-      </Card>
-    </>
-  );
-};
+import ProgramCard from './ProgramCard';
 
 const ProgramSingleton = props => {
   const defaultMapper = programData => (
-    <ProgramComponent program={programData}>{props.children}</ProgramComponent>
+    <ProgramCard program={programData}>{props.children}</ProgramCard>
   );
 
   return (

@@ -3,7 +3,7 @@ import schema from '../../validation/ProgramSchema';
 import { useFormWithErrors, useRestfulFetch, useUserRole } from '../../hooks';
 // ant design
 import 'antd/dist/antd.css';
-import { Button, Input, Select, Form } from 'antd/lib/button';
+import { Button, Input, Select, Form } from 'antd';
 import { client } from '../../utils/api';
 
 const initialValues = {
@@ -71,7 +71,7 @@ export default function CreateProgram(props) {
           <Input
             id="programname"
             name="programname"
-            value={values.name}
+            value={values.programname}
             onChange={changeValues}
           />
           <div style={{ color: 'red' }}>
