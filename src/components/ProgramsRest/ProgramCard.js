@@ -8,7 +8,6 @@ const ProgramCard = props => {
       <Card title={program.programname}>
         <h3>{program.programtype}</h3>
         <p>{program.programdescription}</p>
-
         {props.children}
       </Card>
     </>

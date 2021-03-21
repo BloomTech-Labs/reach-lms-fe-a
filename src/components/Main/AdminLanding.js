@@ -1,10 +1,13 @@
 import React from 'react';
 import { useSubModal } from '../../hooks';
-import { ProgramList, ProgramCard, ProgramForm } from '../ProgramsRest';
+import { GhostLink } from '../_common';
+import { ProgramList, ProgramForm, ProgramSingleton } from '../ProgramsRest';
 import { Modal, Button } from 'antd';
-import { Link } from 'react-router-dom';
 import { pathUtils } from '../../routes';
 import Styled from './AdminLanding.styles';
+import { EditOutlined, DeleteOutline } from '@material-ui/icons';
+import Meta from 'antd/lib/card/Meta';
+import { client } from '../../utils/api';
 
 const AdminLanding = props => {
   const programModal = useSubModal();
@@ -14,31 +17,56 @@ const AdminLanding = props => {
     <>
       <Styled.Content>
         <Styled.HeaderDiv>
-          <Styled.H2>My Programs</Styled.H2>
+          <h2>Programs</h2>
+          <div className="options">
+            <Button size="large" onClick={programModal.showModal}>
+              Create Program
+            </Button>
+          </div>
         </Styled.HeaderDiv>
-        <Styled.Title>
-          <Button size="large" onClick={programModal.showModal}>
-            Create Program
-          </Button>
-        </Styled.Title>
 
         <Styled.Programs>
           <ProgramList
             href="/programs"
-            mappedChild={program => (
-              <ProgramCard program={program}>
-                <Link to={pathUtils.makeCoursesByProgramId(program.programid)}>
-                  <Button primary={true}>View Program</Button>
-                </Link>
-                <Button
-                  onClick={() => {
-                    setSelectedProgram(program._links.self.href);
-                    programModal.showModal();
-                  }}
-                >
-                  Edit Program
-                </Button>
-              </ProgramCard>
+            mappedChild={programEntity => (
+              <ProgramSingleton
+                key={programEntity._links.self.href}
+                href={programEntity._links.self.href}
+                mappedChild={program => (
+                  <GhostLink
+                    key={programEntity._links.self.href}
+                    to={pathUtils.makeCoursesByProgramId(program.programid)}
+                  >
+                    <Styled.Card
+                      style={{ width: 300, height: 150, margin: 20 }}
+                      actions={[
+                        <EditOutlined
+                          key="edit"
+                          onClick={e => {
+                            // stop bubbling so we don't route the user to AdminMain
+                            e.preventDefault();
+                            setSelectedProgram(programEntity._links.self.href);
+                            programModal.showModal();
+                          }}
+                        />,
+                        <DeleteOutline
+                          key="delete"
+                          onClick={e => {
+                            // stop bubbling so we don't route the user to AdminMain
+                            e.preventDefault();
+                            client.deleteProgram(program.programid);
+                          }}
+                        />,
+                      ]}
+                    >
+                      <Meta
+                        title={`${program.programname} — ${program.programtype}`}
+                        description={program.programdescription}
+                      />
+                    </Styled.Card>
+                  </GhostLink>
+                )}
+              />
             )}
           />
         </Styled.Programs>
@@ -49,11 +77,14 @@ const AdminLanding = props => {
         visible={programModal.visible}
         onCancel={programModal.hideModal}
       >
-        {selectedProgram && selectedProgram !== '' ? (
-          <ProgramForm href={selectedProgram} />
-        ) : (
-          <ProgramForm />
-        )}
+        <ProgramForm
+          href={
+            selectedProgram && selectedProgram !== ''
+              ? selectedProgram
+              : undefined
+          }
+          visible={programModal.visible}
+        />
       </Modal>
     </>
   );

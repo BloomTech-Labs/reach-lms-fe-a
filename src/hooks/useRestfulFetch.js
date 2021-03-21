@@ -27,8 +27,7 @@ export const useRestfulFetch = url => {
         if (hasEmbedded) {
           setData(res.data._embedded);
         } else {
-          const { _links, ...rest } = res.data;
-          setData({ ...rest });
+          setData({ ...res.data });
         }
       })
       .catch(err => {

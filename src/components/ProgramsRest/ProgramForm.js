@@ -43,7 +43,7 @@ export default function CreateProgram(props) {
   };
 
   function submitForm(e) {
-    e.preventDefault();
+    // e.preventDefault();
     if (!href) {
       client.postProgram(userid, values);
     } else {
