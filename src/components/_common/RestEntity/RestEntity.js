@@ -73,14 +73,9 @@ function Loading({ children }) {
   return status === 'pending' ? children : null;
 }
 
-function Empty({ children, path }) {
-  return null;
-}
-
 RestEntity.Singleton = Singleton;
 RestEntity.List = List;
 RestEntity.Error = RestError;
 RestEntity.Loading = Loading;
-RestEntity.Empty = Empty;
 
 export default RestEntity;

@@ -17,9 +17,6 @@ const ModuleList = props => {
           <RestEntity.Loading>
             <div>Loading...</div>
           </RestEntity.Loading>
-          <RestEntity.Empty>
-            <div>No modules yet!</div>
-          </RestEntity.Empty>
         </RestEntity>
       </Styled.HeaderDiv>
     </Styled.Container>
