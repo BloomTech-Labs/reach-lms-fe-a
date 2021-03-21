@@ -1,5 +1,6 @@
 import React from 'react';
 import { RestEntity } from '../_common';
+import PropTypes from 'prop-types';
 
 const UserComponent = props => {
   const { user } = props;
@@ -16,9 +17,14 @@ const UserComponent = props => {
   );
 };
 
+/**
+ *
+ * @param {{href: string, mappedChild: (data) => JSX.Element}} props
+ * @returns An independent User Component able to fetch its own data and handle its own Success, Error, and Loading state
+ */
 const UserSingleton = props => {
   const defaultMapper = userEntity => (
-    <UserComponent key={userEntity._links.self.href}>
+    <UserComponent key={userEntity.userid} user={userEntity}>
       {props.children}
     </UserComponent>
   );
@@ -31,5 +37,14 @@ const UserSingleton = props => {
     </>
   );
 };
+
+UserSingleton.propType = PropTypes.shape({
+  href: PropTypes.string,
+  mappedChild: PropTypes.func,
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node,
+  ]),
+});
 
 export default UserSingleton;
