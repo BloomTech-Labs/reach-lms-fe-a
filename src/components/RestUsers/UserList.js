@@ -1,5 +1,5 @@
 import React from 'react';
-import { RestEntity } from '../_common';
+import { RestEntity } from '../common';
 
 const UserList = props => {
   return (

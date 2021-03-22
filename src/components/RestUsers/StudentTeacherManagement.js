@@ -1,5 +1,5 @@
 import React from 'react';
-import { UserList } from '../UserRest';
+import UserList from './UserList';
 import { client } from '../../utils/api';
 import { useRestfulFetch } from '../../hooks';
 

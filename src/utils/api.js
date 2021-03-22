@@ -1,5 +1,6 @@
 import { axiosAuth } from './axiosWithAuth';
 export const client = {
+  // --------------- PROGRAM ---------------
   postProgram: (userid, newProgram) => {
     newProgram = { ...newProgram, user: { userid } };
     axiosAuth().post(`/programs/${userid}/program`, newProgram);
@@ -10,6 +11,7 @@ export const client = {
     axiosAuth().patch(`/programs/program/${programId}`, editedProgram),
   deleteProgram: programId =>
     axiosAuth().delete(`/programs/program/${programId}`),
+  // --------------- COURSE ---------------
   postCourse: (programId, newCourse) =>
     axiosAuth().post(`/courses/${programId}/course`, newCourse),
   putCourse: (courseId, newCourse) =>
@@ -17,12 +19,16 @@ export const client = {
   patchCourse: (courseId, editedCourse) =>
     axiosAuth().patch(`/courses/${courseId}`, editedCourse),
   deleteCourse: courseId => axiosAuth().delete(`/courses/course/${courseId}`),
+  // --------------- MODULE ---------------
   postModule: (courseId, newModule) =>
     axiosAuth().post(`/modules/${courseId}/module`, newModule),
   patchModule: (moduleId, editedModule) =>
     axiosAuth().patch(`/modules/${moduleId}`, editedModule),
+  // --------------- USER ---------------
   attachUserToCourse: (userId, courseId) =>
     axiosAuth().put(`/courses/course/${courseId}/user/${userId}`),
   removeUserFromCourse: (userId, courseId) =>
     axiosAuth().delete(`/courses/course/${courseId}/user/${userId}`),
+  patchUser: (userId, editedUser) =>
+    axiosAuth().patch(`/users/user/${userId}`, editedUser),
 };

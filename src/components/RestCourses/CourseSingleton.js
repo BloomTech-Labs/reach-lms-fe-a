@@ -1,6 +1,6 @@
 import React from 'react';
 import 'antd/dist/antd.css';
-import { RestEntity } from '../_common';
+import { RestEntity } from '../common';
 import CourseCard from './CourseCard';
 
 export const CourseCardRest = props => {

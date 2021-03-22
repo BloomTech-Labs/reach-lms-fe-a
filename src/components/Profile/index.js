@@ -1,2 +1,2 @@
-export { default as EditUserForm } from './EditUserForm';
+export { default as EditSelfForm } from './EditSelfForm';
 export { default as UserProfile } from './UserProfile';

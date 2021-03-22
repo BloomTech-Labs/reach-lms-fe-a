@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSubModal } from '../../hooks';
-import { GhostLink } from '../_common';
-import { ProgramList, ProgramForm, ProgramSingleton } from '../ProgramsRest';
+import { GhostLink } from '../common';
+import { ProgramList, ProgramForm, ProgramSingleton } from '../RestPrograms';
 import { Modal, Button } from 'antd';
 import { pathUtils } from '../../routes';
 import Styled from './AdminLanding.styles';
@@ -12,6 +12,11 @@ import { client } from '../../utils/api';
 const AdminLanding = props => {
   const programModal = useSubModal();
   const [selectedProgram, setSelectedProgram] = React.useState('');
+
+  const handleCloseModal = () => {
+    setSelectedProgram('');
+    programModal.hideModal();
+  };
 
   return (
     <>
@@ -35,7 +40,7 @@ const AdminLanding = props => {
                 mappedChild={program => (
                   <GhostLink
                     key={programEntity._links.self.href}
-                    to={pathUtils.makeCoursesByProgramId(program.programid)}
+                    to={pathUtils.makeMainByProgramIdPath(program.programid)}
                   >
                     <Styled.Card
                       style={{ width: 300, height: 150, margin: 20 }}
@@ -75,7 +80,8 @@ const AdminLanding = props => {
         title="Add Program"
         width="90vw"
         visible={programModal.visible}
-        onCancel={programModal.hideModal}
+        onCancel={handleCloseModal}
+        onFinish={handleCloseModal}
       >
         <ProgramForm
           href={

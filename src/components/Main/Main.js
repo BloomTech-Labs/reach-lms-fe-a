@@ -2,22 +2,22 @@ import React from 'react';
 import { useSubModal, useUserRole } from '../../hooks';
 import 'antd/dist/antd.css';
 import { Button, Modal } from 'antd';
-import { GhostLink } from '../_common';
+import { GhostLink } from '../common';
 import { ADMIN_LANDING } from '../../routes';
 import {
   EditModuleForm,
   AddModuleForm,
   ModuleList,
   ModuleSingleton,
-} from '../ModulesRest';
+} from '../RestModules';
 import {
   CourseSingleton,
   CourseList,
   AddCourseForm,
   EditCourseForm,
-} from '../CoursesRest';
-import { ProgramSingleton } from '../ProgramsRest';
-import { StudentTeacherManagement } from '../UserRest';
+} from '../RestCourses';
+import { ProgramSingleton } from '../RestPrograms';
+import { StudentTeacherManagement } from '../RestUsers';
 import Styled from './Main.styles';
 
 const Main = props => {

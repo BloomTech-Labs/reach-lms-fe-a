@@ -1,6 +1,6 @@
 import React from 'react';
 import Styled from './ModuleList.styles';
-import { RestEntity } from '../_common';
+import { RestEntity } from '../common';
 
 const ModuleList = props => {
   return (

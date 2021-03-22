@@ -1,5 +1,5 @@
 import React from 'react';
-import { RestEntity } from '../_common';
+import { RestEntity } from '../common';
 import Styled from './CourseList.styles';
 
 export const CourseListRest = props => {

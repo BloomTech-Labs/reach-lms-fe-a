@@ -1,8 +1,5 @@
-import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { userActions } from '../state/ducks';
-
-const { getUserInfoThunk } = userActions;
+import React from 'react';
+import { useRestfulFetch } from './useRestfulFetch';
 
 /**
  * this React hook allows the calling component the agency to check
@@ -12,40 +9,31 @@ const { getUserInfoThunk } = userActions;
  * Each of those properties will hold a helper function that returns a boolean value
  * to denote whether the user signed in is a certain role.
  *
- * EXAMPLE USE CASE COMMENTED OUT AT THE BOTTOM OF THIS FILE
- *
+ * Additionally, we'll include the user data itself for ease of access to user information in any component that wants it.
  */
 export const useUserRole = () => {
-  /** allows for us to dispatch actions to the store */
-  const dispatch = useDispatch();
-
-  /** the role of the user logged in */
-  const { userid, role } = useSelector(state => state.userReducer.user);
-
-  /**
-   * this useEffect fires on component render.
-   *
-   * If the role is not defined, then we will dispatch our
-   * `loginThunk` to get user info.
-   */
-  useEffect(() => {
-    if (!role || role === '' || !userid) {
-      dispatch(getUserInfoThunk());
-    }
-    // role should only change from[`undefined` | `""`] to[`"ADMIN" | "TEACHER" | "STUDENT"`]
-    // userid may be undefined
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [role, userid]);
-
+  // const { data, status } = useUserContext();
+  const { data, status } = useRestfulFetch('/users/getuserinfo');
+  const role = data?.role;
   /** returns boolean indicating whether our user is an ADMIN */
-  const userIsAdmin = () => role === 'ADMIN';
-
+  const userIsAdmin = React.useCallback(() => role === 'ADMIN', [role]);
   /** returns a boolean indicating whether our user is a TEACHER */
-  const userIsTeacher = () => role === 'TEACHER';
-
+  const userIsTeacher = React.useCallback(() => role === 'TEACHER', [role]);
   /** returns a boolean indicating whether our user is a STUDENT */
-  const userIsStudent = () => role === 'STUDENT';
+  const userIsStudent = React.useCallback(() => role === 'STUDENT', [role]);
+
+  const values = React.useMemo(
+    () => ({
+      userIsAdmin,
+      userIsTeacher,
+      userIsStudent,
+      status,
+      user: { ...data },
+      ...data,
+    }),
+    [data, userIsAdmin, userIsTeacher, userIsStudent, status]
+  );
 
   // provide the above helper functions to any component which calls this hook
-  return { userIsAdmin, userIsTeacher, userIsStudent, userid };
+  return values;
 };
