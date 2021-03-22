@@ -19,14 +19,9 @@
     "react-dom": "^16.13.1",
     "react-media": "^1.10.0",
     "react-plotly.js": "^2.4.0",
-    "react-redux": "^7.2.2",
     "react-responsive": "^8.2.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",
-    "redux": "^4.0.5",
-    "redux-logger": "^3.0.6",
-    "redux-persist": "^6.0.0",
-    "redux-thunk": "^2.3.0",
     "styled-components": "^5.2.1",
     "yup": "^0.32.8"
   },
@@ -38,9 +33,7 @@
     "prettier": "prettier --write \"**/*.+(js|jsx|json|css|md)\"",
     "coverage": "npm test -- --coverage --watchAll=false",
     "lint": "eslint 'src/**/*.{js,jsx}' --fix",
-    "format": "prettier --write 'src/**/*.{js,jsx,css,scss}'",
-    "storybook": "start-storybook",
-    "deploy-storybook": "storybook-to-ghpages"
+    "format": "prettier --write 'src/**/*.{js,jsx,css,scss}'"
   },
   "eslintConfig": {
     "extends": "react-app"
