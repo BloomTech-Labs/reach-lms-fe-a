@@ -36,15 +36,38 @@ const CourseCardPlain = props => {
         Manage Users
       </Button>
       {showUsers && (
-        <UserList
-          href={course._links.enrolled.href}
-          mappedChild={userEntity => (
-            <UserSingleton
-              key={userEntity._links.self.href}
-              href={userEntity._links.self.href}
-            />
-          )}
-        />
+        <>
+          <UserList
+            href={course._links.enrolled.href}
+            mappedChild={userEntity => (
+              // could be a plain component
+              <>
+                <br />
+                <input
+                  type="checkbox"
+                  checked={true}
+                  name={userEntity.username}
+                />
+                <div>{userEntity.username}</div>
+              </>
+            )}
+          />
+          <UserList
+            href={course._links.not_enrolled.href}
+            mappedChild={userEntity => (
+              // could be a plain component
+              <>
+                <br />
+                <input
+                  type="checkbox"
+                  checked={false}
+                  name={userEntity.username}
+                />
+                <div>{userEntity.username}</div>
+              </>
+            )}
+          />
+        </>
       )}
     </Card>
   );
