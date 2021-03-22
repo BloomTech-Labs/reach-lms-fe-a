@@ -4,8 +4,8 @@ import { axiosWithAuth } from '../utils';
 const API_BASE_URL = 'https://reach-team-a-be.herokuapp.com';
 
 export const useRestfulFetch = url => {
-  const [data, setData] = React.useState({});
-  const [links, setLinks] = React.useState({});
+  const [data, setData] = React.useState(null);
+  const [links, setLinks] = React.useState(null);
   const [error, setError] = React.useState(null);
   const [status, setStatus] = React.useState('pending');
 
@@ -27,7 +27,7 @@ export const useRestfulFetch = url => {
         if (hasEmbedded) {
           setData(res.data._embedded);
         } else {
-          setData({ ...res.data });
+          setData(res.data);
         }
       })
       .catch(err => {

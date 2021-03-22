@@ -1,5 +1,5 @@
 import React from 'react';
-import { useSubModal, useUserRole, useToggleBool } from '../../hooks';
+import { useSubModal, useUserRole } from '../../hooks';
 import 'antd/dist/antd.css';
 import { Button, Modal } from 'antd';
 import { GhostLink } from '../_common';
@@ -17,7 +17,7 @@ import {
   EditCourseForm,
 } from '../CoursesRest';
 import { ProgramSingleton } from '../ProgramsRest';
-import { UserList, UserSingleton } from '../UserRest';
+import { StudentTeacherManagement } from '../UserRest';
 import Styled from './Main.styles';
 
 const Main = props => {
@@ -29,7 +29,7 @@ const Main = props => {
   const courseEdit = useSubModal();
   const moduleAdd = useSubModal();
   const moduleEdit = useSubModal();
-  const manageUsers = useSubModal();
+  const manageStudentTeacher = useSubModal();
   const [courseId, setCourseId] = React.useState(0);
 
   const programInfo = (
@@ -103,6 +103,14 @@ const Main = props => {
             >
               Add a Module!
             </Button>
+            <Button
+              onClick={() => {
+                setSelectedCourse(courseEntity._links.self.href);
+                manageStudentTeacher.showModal();
+              }}
+            >
+              Manage Users
+            </Button>
           </CourseSingleton>
         )}
       />
@@ -142,10 +150,10 @@ const Main = props => {
       <Modal
         title="Manage Users"
         width="90vw"
-        visible={manageUsers.visible}
-        onCancel={manageUsers.hideModal}
+        visible={manageStudentTeacher.visible}
+        onCancel={manageStudentTeacher.hideModal}
       >
-        <UserList href={selectedCourse.userList} />
+        <StudentTeacherManagement href={selectedCourse} />
       </Modal>
     </Styled.Content>
   );

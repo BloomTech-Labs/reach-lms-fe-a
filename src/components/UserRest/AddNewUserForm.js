@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Input, Select } from 'antd';
+import { Form, Input } from 'antd';
 import Styled from './AddNewUserForm.styles';
 import schema from '../../validation/NewUserSchema';
 import { useFormWithErrors } from '../../hooks';
@@ -14,7 +14,7 @@ const initValues = {
 };
 
 const AddNewUserForm = props => {
-  const { values, errors, disabled, onChange, resetValues } = useFormWithErrors(
+  const { values, errors, onChange, resetValues } = useFormWithErrors(
     schema,
     initValues
   );
@@ -39,16 +39,26 @@ const AddNewUserForm = props => {
         size="large"
         onFinish={onSubmit}
       >
-        <Form.Item label="User Name" name="username" validateStatus>
-          <Input />
+        <Form.Item label="User Name" htmlFor="username">
+          <Input
+            id="username"
+            name="username"
+            value={values.username}
+            onChange={changeValues}
+          />
           <Styled.Error>{errors.username}</Styled.Error>
         </Form.Item>
         <Form.Item
-          name="email"
           label="Email"
+          htmlFor="email"
           rules={[{ required: true, message: 'Email is required' }]}
         >
-          <Input />
+          <Input
+            name="email"
+            id="email"
+            value={values.email}
+            onChange={changeValues}
+          />
           <Styled.Error>{errors.email}</Styled.Error>
         </Form.Item>
       </Form>

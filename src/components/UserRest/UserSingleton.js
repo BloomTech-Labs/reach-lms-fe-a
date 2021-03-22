@@ -1,21 +1,7 @@
 import React from 'react';
 import { RestEntity } from '../_common';
 import PropTypes from 'prop-types';
-
-const UserComponent = props => {
-  const { user } = props;
-  return (
-    <>
-      <p>
-        Name: {user.firstname} {user.lastname}
-      </p>
-      <p>Email: {user.email}</p>
-      <p>Role: {user.role}</p>
-      {/* PLEASE DO NOT REMOVE THE FOLLOWING LINE */}
-      {props.children}
-    </>
-  );
-};
+import UserCard from './UserCard';
 
 /**
  *
@@ -24,12 +10,10 @@ const UserComponent = props => {
  */
 const UserSingleton = props => {
   const defaultMapper = userEntity => (
-    <UserComponent key={userEntity.userid} user={userEntity}>
+    <UserCard key={userEntity.userid} user={userEntity}>
       {props.children}
-    </UserComponent>
+    </UserCard>
   );
-  console.log(props);
-
   return (
     <>
       <RestEntity href={props.href ?? '/users'}>

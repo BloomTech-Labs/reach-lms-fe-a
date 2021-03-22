@@ -1,20 +1,7 @@
 import React from 'react';
 import { RestEntity } from '../_common';
-import { Card } from 'antd';
 import PropTypes from 'prop-types';
-
-const ModuleCard = props => {
-  const { module } = props;
-  return (
-    <>
-      <Card title={module.modulename}>
-        <h3>Description: {module.moduledescription}</h3>
-        {/* PLEASE DO NOT REMOVE THE FOLLOWING LINE */}
-        {props.children}
-      </Card>
-    </>
-  );
-};
+import ModuleCard from './ModuleCard';
 
 // This Module Singleton creates a new instance of the
 // component <RestEntity /> component.
@@ -23,9 +10,10 @@ const ModuleCard = props => {
 // an endpoint to get a single Module entity.
 export const ModuleSingleton = props => {
   const defaultMapper = moduleData => (
-    <ModuleCard module={moduleData}>{props.children}</ModuleCard>
+    <ModuleCard key={moduleData._links.self.href} module={moduleData}>
+      {props.children}
+    </ModuleCard>
   );
-
   return (
     <RestEntity href={props.href}>
       <RestEntity.Singleton component={props.mappedChild ?? defaultMapper} />
