@@ -1,12 +1,16 @@
 import React from 'react';
 import 'antd/dist/antd.css';
-import { Card } from 'antd';
+import { Button, Card } from 'antd';
 import { RestEntity } from '../_common';
+import { useToggleBool } from '../../hooks';
 // css
 import '../../styles/CourseCard.css';
+import { UserList, UserSingleton } from '../UserRest';
 
 const CourseCardPlain = props => {
   const { course } = props;
+  const [showUsers, toggleShowUsers] = useToggleBool();
+
   return (
     <Card
       title={
@@ -23,6 +27,25 @@ const CourseCardPlain = props => {
         <strong>Description:</strong> {course.coursedescription}
       </p>
       {props.children}
+      <Button
+        onClick={() => {
+          toggleShowUsers();
+          console.log(course);
+        }}
+      >
+        Manage Users
+      </Button>
+      {showUsers && (
+        <UserList
+          href={course._links.enrolled.href}
+          mappedChild={userEntity => (
+            <UserSingleton
+              key={userEntity._links.self.href}
+              href={userEntity._links.self.href}
+            />
+          )}
+        />
+      )}
     </Card>
   );
 };

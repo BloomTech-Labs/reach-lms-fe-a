@@ -1,5 +1,5 @@
 import React from 'react';
-import { useSubModal, useUserRole } from '../../hooks';
+import { useSubModal, useUserRole, useToggleBool } from '../../hooks';
 import 'antd/dist/antd.css';
 import { Button, Modal } from 'antd';
 import { GhostLink } from '../_common';
@@ -17,6 +17,7 @@ import {
   EditCourseForm,
 } from '../CoursesRest';
 import { ProgramSingleton } from '../ProgramsRest';
+import { UserList, UserSingleton } from '../UserRest';
 import Styled from './Main.styles';
 
 const Main = props => {
@@ -28,6 +29,7 @@ const Main = props => {
   const courseEdit = useSubModal();
   const moduleAdd = useSubModal();
   const moduleEdit = useSubModal();
+  const manageUsers = useSubModal();
   const [courseId, setCourseId] = React.useState(0);
 
   const programInfo = (
@@ -136,6 +138,14 @@ const Main = props => {
         onCancel={moduleEdit.hideModal}
       >
         <EditModuleForm href={selectedModule} />
+      </Modal>
+      <Modal
+        title="Manage Users"
+        width="90vw"
+        visible={manageUsers.visible}
+        onCancel={manageUsers.hideModal}
+      >
+        <UserList href={selectedCourse.userList} />
       </Modal>
     </Styled.Content>
   );

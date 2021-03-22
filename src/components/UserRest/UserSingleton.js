@@ -28,6 +28,7 @@ const UserSingleton = props => {
       {props.children}
     </UserComponent>
   );
+  console.log(props);
 
   return (
     <>
