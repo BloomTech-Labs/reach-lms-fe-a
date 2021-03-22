@@ -6,9 +6,6 @@ import {
   useHistory,
   Switch,
 } from 'react-router-dom';
-import { Provider } from 'react-redux';
-import store from './state/store';
-
 import { Security, LoginCallback, SecureRoute } from '@okta/okta-react';
 
 // Styling
@@ -17,47 +14,25 @@ import './styles/App.css';
 
 // COMPONENTS & PAGES
 import { config } from './utils/oktaConfig';
+import { UserProfile } from './components/Profile';
+import { LoginPage } from './components/Login';
+import { NotFoundPage } from './components/NotFound';
+import { LoadingComponent } from './components/LoadingComponent';
+import { HomePage } from './components/Dashboard';
+import { Wrapper } from './components/Wrapper';
+import { Main, AdminMain, AdminLanding } from './components/Main';
 
 import {
-  NotFoundPage,
-  LoginPage,
-  UserProfile,
-  EditUserForm,
-  LoadingComponent,
-  CreateProgramForm,
-  EditProgramForm,
-  CourseList,
-  AddCourseForm,
-  EditCourseForm,
-  ModuleList,
-  ModuleText,
-  AddModuleForm,
-  EditModuleForm,
-  HomeContainer,
-  Wrapper,
-} from './components';
-
-import {
+  MAIN_DASH_BY_PROGRAM,
   VIEW_PROFILE_PATH,
-  EDIT_PROFILE_PATH,
-  CREATE_PROGRAM_PATH,
-  EDIT_PROGRAM_PATH,
-  // VIEW_PROGRAM_PATH,
-  CREATE_COURSE_PATH,
-  VIEW_ALL_COURSES_PATH,
-  EDIT_COURSE_PATH,
-  CREATE_MODULE_PATH,
-  EDIT_MODULE_PATH,
-  VIEW_ALL_MODULES_PATH,
-  VIEW_MODULE_TEXT_PATH,
+  ADMIN_LANDING,
+  MAIN_DASH,
 } from './routes';
 
 ReactDOM.render(
   <Router>
     <React.StrictMode>
-      <Provider store={store}>
-        <App />
-      </Provider>
+      <App />
     </React.StrictMode>
   </Router>,
   document.getElementById('root')
@@ -86,7 +61,31 @@ function App() {
             exact
             component={() => (
               <Wrapper>
-                <HomeContainer LoadingComponent={LoadingComponent} />
+                <HomePage LoadingComponent={LoadingComponent} />
+              </Wrapper>
+            )}
+          />
+          <SecureRoute
+            path={MAIN_DASH}
+            component={() => (
+              <Wrapper>
+                <Main />
+              </Wrapper>
+            )}
+          />
+          <SecureRoute
+            path={MAIN_DASH_BY_PROGRAM}
+            component={() => (
+              <Wrapper>
+                <AdminMain />
+              </Wrapper>
+            )}
+          />
+          <SecureRoute
+            path={ADMIN_LANDING}
+            component={() => (
+              <Wrapper>
+                <AdminLanding />
               </Wrapper>
             )}
           />
@@ -95,86 +94,6 @@ function App() {
             component={() => (
               <Wrapper>
                 <UserProfile />
-              </Wrapper>
-            )}
-          />
-          <SecureRoute
-            path={EDIT_PROFILE_PATH}
-            component={() => (
-              <Wrapper>
-                <EditUserForm />
-              </Wrapper>
-            )}
-          />
-          <SecureRoute
-            path={CREATE_PROGRAM_PATH}
-            component={() => (
-              <Wrapper>
-                <CreateProgramForm />
-              </Wrapper>
-            )}
-          />
-          <SecureRoute
-            path={EDIT_PROGRAM_PATH}
-            component={() => (
-              <Wrapper>
-                <EditProgramForm />
-              </Wrapper>
-            )}
-          />
-          <SecureRoute
-            path={VIEW_ALL_COURSES_PATH}
-            component={() => (
-              <Wrapper>
-                <CourseList />
-              </Wrapper>
-            )}
-          />
-          <SecureRoute
-            path={CREATE_COURSE_PATH}
-            component={() => (
-              <Wrapper>
-                <AddCourseForm />
-              </Wrapper>
-            )}
-          />
-          <SecureRoute
-            path={EDIT_COURSE_PATH}
-            component={() => (
-              <Wrapper>
-                <EditCourseForm />
-              </Wrapper>
-            )}
-          />
-          <SecureRoute
-            path={VIEW_ALL_MODULES_PATH}
-            component={() => (
-              <Wrapper>
-                <ModuleList />
-              </Wrapper>
-            )}
-          />
-          <SecureRoute
-            path={VIEW_MODULE_TEXT_PATH}
-            component={() => (
-              <Wrapper>
-                <ModuleText />
-              </Wrapper>
-            )}
-          />
-          <SecureRoute
-            path={CREATE_MODULE_PATH}
-            component={() => (
-              <Wrapper>
-                <AddModuleForm />
-              </Wrapper>
-            )}
-          />
-          <SecureRoute
-            path={EDIT_MODULE_PATH}
-            component={() => (
-              <Wrapper>
-                <EditModuleForm />
               </Wrapper>
             )}
           />

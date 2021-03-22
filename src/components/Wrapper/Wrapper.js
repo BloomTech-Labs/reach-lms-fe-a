@@ -7,6 +7,12 @@ import { useLocation } from 'react-router-dom';
 import { useOktaAuth } from '@okta/okta-react';
 import styled from 'styled-components';
 
+const SLayout = styled(Layout)`
+  &&& {
+    min-height: 100vh;
+  }
+`;
+
 const LocationInfo = styled.div`
   margin: 24px;
   text-align: left;
@@ -20,7 +26,7 @@ export default ({ children, ...restProps }) => {
   //   const { role } = useSelector(state => state.user);
 
   return (
-    <Layout>
+    <SLayout>
       <Layout>
         <Navigation authService={authService} />
         <Content>
@@ -42,6 +48,6 @@ export default ({ children, ...restProps }) => {
         </Content>
       </Layout>
       <Footer style={{ textAlign: 'center' }}>Reach LMS ©2021</Footer>
-    </Layout>
+    </SLayout>
   );
 };

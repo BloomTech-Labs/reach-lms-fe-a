@@ -1,32 +1,14 @@
 import React from 'react';
-import styled from 'styled-components';
+import { Redirect } from 'react-router';
 import { useUserRole } from '../../hooks';
-import ProgramList from '../Program/ProgramList';
-import CourseList from '../Courses/CourseList';
-import UserDashboard from '../UserDashboard/UserDashboard';
-
-// css
-import '../../styles/Dashboard.css';
-
-//styled-components
-const StyledWrapper = styled.div`
-  display: flex;
-  margin-left: 5%;
-  margin-bottom: 40%;
-`;
 
 const Dashboard = props => {
-  const { userIsAdmin } = useUserRole();
-
-  return (
-    <>
-      <StyledWrapper>
-        <div>{userIsAdmin() ? <ProgramList /> : <CourseList />}</div>
-      </StyledWrapper>
-      {/* FIX DUCKS */}
-      {/* <div>{userIsAdmin() ? <UserDashboard></UserDashboard> : null}</div> */}
-    </>
-  );
+  const { userIsAdmin, status } = useUserRole();
+  if (status !== 'success') {
+    return <div>Loading...</div>;
+  } else {
+    return userIsAdmin() ? <Redirect to="/admin" /> : <Redirect to="/main" />;
+  }
 };
 
 export default Dashboard;
