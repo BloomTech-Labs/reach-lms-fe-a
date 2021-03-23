@@ -10,6 +10,7 @@ const ModuleList = props => {
           <RestEntity.List
             path={['moduleList']}
             component={props.mappedChild}
+            className="listModule"
           />
           <RestEntity.Error>
             <div>An error has occurred...</div>

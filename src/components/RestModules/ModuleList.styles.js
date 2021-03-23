@@ -7,10 +7,6 @@ const MenuRow = styled.div`
   display: flex;
   justify-content: space-between;
   margin-left: 2%;
-
-  @media (max-width: 400px) {
-    flex-direction: column;
-  }
 `;
 
 const Container = styled.div`
