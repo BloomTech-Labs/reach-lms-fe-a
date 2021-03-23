@@ -3,7 +3,7 @@ import { useFormWithErrors, useRestfulFetch } from '../../hooks';
 import schema from '../../validation/ModuleSchema';
 // ant design
 import 'antd/dist/antd.css';
-import { Button, Input, Form } from 'antd';
+import { Modal, Button, Input, Form } from 'antd';
 import { client } from '../../utils/api';
 const { TextArea } = Input;
 
@@ -13,7 +13,7 @@ const initialFormErrors = {
   modulecontent: '',
 };
 
-export default function EditModuleForm(props) {
+function EditModuleForm(props) {
   const { data } = useRestfulFetch(props.href);
 
   const {
@@ -53,7 +53,7 @@ export default function EditModuleForm(props) {
     return <div>Loading module data...</div>;
   }
 
-  return (
+  const innerForm = (
     <>
       <h1 className="edit-form-h1">Edit Module</h1>
       <Form name="basic" layout="vertical" size="large" onFinish={submitForm}>
@@ -109,4 +109,34 @@ export default function EditModuleForm(props) {
       </Form>
     </>
   );
+
+  return (
+    <>
+      {props.isWrapped ? (
+        <Modal
+          visible={props.visible}
+          onCancel={props.hideModal}
+          onOk={submitForm}
+        >
+          {innerForm}
+        </Modal>
+      ) : (
+        <>
+          {innerForm}
+          <div className="button-container">
+            <Button
+              onClick={submitForm}
+              type="primary"
+              disabled={disabled}
+              className="button"
+            >
+              Submit
+            </Button>
+          </div>
+        </>
+      )}
+    </>
+  );
 }
+
+export default EditModuleForm;
