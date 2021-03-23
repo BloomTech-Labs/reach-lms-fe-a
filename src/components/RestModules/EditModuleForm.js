@@ -95,17 +95,6 @@ function EditModuleForm(props) {
             {errors.modulecontent ? `${errors.modulecontent}` : ''}
           </div>
         </Form.Item>
-
-        <div className="button-container">
-          <Button
-            onClick={submitForm}
-            type="primary"
-            disabled={disabled}
-            className="button"
-          >
-            Submit
-          </Button>
-        </div>
       </Form>
     </>
   );
