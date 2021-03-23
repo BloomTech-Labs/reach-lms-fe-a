@@ -161,16 +161,6 @@ export default function CreateProgram(props) {
             {errors.programdescription ? `${errors.programdescription} ` : ''}
           </div>
         </Form.Item>
-        <div className="button-container">
-          <Button
-            onClick={submitForm}
-            type="primary"
-            disabled={disabled}
-            className="button"
-          >
-            Submit
-          </Button>
-        </div>
       </Form>
     </>
   );
