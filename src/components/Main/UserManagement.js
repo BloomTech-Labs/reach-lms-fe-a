@@ -42,7 +42,7 @@ const UserManagement = props => {
           {/*ADMINS*/}
 
           <UserList
-            href="/admins"
+            href="/users/admins"
             mappedChild={user => (
               <Styled.Card
                 style={{ width: 500, height: 100, margin: 20 }}
@@ -75,7 +75,7 @@ const UserManagement = props => {
           {/*TEACHERS*/}
 
           <UserList
-            href="/teachers"
+            href="/users/teachers"
             mappedChild={user => (
               <Styled.Card
                 style={{ width: 500, height: 100, margin: 20 }}
@@ -108,7 +108,7 @@ const UserManagement = props => {
           {/*STUDENTS*/}
 
           <UserList
-            href="/students"
+            href="/users/students"
             mappedChild={user => (
               <Styled.Card
                 style={{ width: 500, height: 100, margin: 20 }}

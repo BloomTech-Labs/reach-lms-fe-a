@@ -80,7 +80,7 @@ const AddNewUserForm = props => {
           <Styled.Error>{errors.email}</Styled.Error>
         </Form.Item>
         <Form.Item label="User Roles">
-          <Select value={values.user.role} onChange={changeValues}>
+          <Select value={values.role} onChange={changeValues}>
             <Select.Option value="admin">Admin</Select.Option>
             <Select.Option value="teacher">Teacher</Select.Option>
             <Select.Option value="student">Student</Select.Option>
