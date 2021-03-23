@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { useSubModal } from '../../hooks';
 import { GhostLink } from '../common';
 import { ProgramList, ProgramForm, ProgramSingleton } from '../RestPrograms';
@@ -27,6 +28,9 @@ const AdminLanding = props => {
             <Button size="large" onClick={programModal.showModal}>
               Create Program
             </Button>
+            <Link to="/users">
+              <Button size="large">Manage All Users</Button>
+            </Link>
           </div>
         </Styled.HeaderDiv>
 

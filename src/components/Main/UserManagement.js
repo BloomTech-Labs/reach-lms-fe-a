@@ -5,6 +5,7 @@
 //       - [ ] Option to ADD new course to that user (once this action is hit, we should show a collection of courses we could attach to this user)
 
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { useSubModal } from '../../hooks';
 import { UserList, AddNewUserForm, EditUserForm } from '../RestUsers';
 import { client } from '../../utils/api';
@@ -35,6 +36,9 @@ const UserManagement = props => {
             <Button size="large" onClick={userAdd.showModal}>
               Add New User
             </Button>
+            <Link to="/admin">
+              <Button size="large">Manage All Programs</Button>
+            </Link>
           </div>
         </Styled.HeaderDiv>
 
