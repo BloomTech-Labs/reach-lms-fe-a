@@ -66,8 +66,8 @@ function List({
 }
 
 function RestError({ children }) {
-  const { error } = useRestContext();
-  return error ? children : null;
+  const { error, status } = useRestContext();
+  return status === 'error' && error ? children : null;
 }
 
 function Loading({ children }) {
