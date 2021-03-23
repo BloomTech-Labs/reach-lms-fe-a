@@ -5,7 +5,7 @@ import { client } from '../../utils/api';
 import '../../styles/Form.css';
 // ant design
 import 'antd/dist/antd.css';
-import { Button, Input, Form } from 'antd';
+import { Modal, Button, Input, Form } from 'antd';
 import { useFormWithErrors } from '../../hooks';
 const { TextArea } = Input;
 
@@ -32,7 +32,7 @@ function AddModuleForm(props) {
     resetValues();
   }
 
-  return (
+  const innerForm = (
     <>
       <h1 className="edit-form-h1">Add Module</h1>
       <Form name="basic" layout="vertical" size="large" onFinish={submitForm}>
@@ -75,18 +75,35 @@ function AddModuleForm(props) {
             {errors.modulecontent ? `${errors.modulecontent}` : ''}
           </div>
         </Form.Item>
-
-        <div className="button-container">
-          <Button
-            onClick={submitForm}
-            type="primary"
-            disabled={disabled}
-            className="button"
-          >
-            Submit
-          </Button>
-        </div>
       </Form>
+    </>
+  );
+
+  return (
+    <>
+      {props.isWrapped ? (
+        <Modal
+          visible={props.visible}
+          onCancel={props.hideModal}
+          onOk={submitForm}
+        >
+          {innerForm}
+        </Modal>
+      ) : (
+        <>
+          {innerForm}
+          <div className="button-container">
+            <Button
+              onClick={submitForm}
+              type="primary"
+              disabled={disabled}
+              className="button"
+            >
+              Submit
+            </Button>
+          </div>
+        </>
+      )}
     </>
   );
 }

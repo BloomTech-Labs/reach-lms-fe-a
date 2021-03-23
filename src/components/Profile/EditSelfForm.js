@@ -5,7 +5,7 @@ import { client } from '../../utils/api';
 
 // Ant Design
 import 'antd/dist/antd.css';
-import { Button, Input, Form } from 'antd';
+import { Modal, Button, Input, Form } from 'antd';
 
 const initialFormValues = {
   firstname: '',
@@ -45,7 +45,7 @@ const EditSelfForm = props => {
     resetValues();
   }
 
-  return (
+  const innerForm = (
     <>
       <h1 className="edit-form-h1">Edit User</h1>
       <Form
@@ -90,17 +90,35 @@ const EditSelfForm = props => {
           />
           <div style={{ color: 'red' }}>{errors.phonenumber ?? ''}</div>
         </Form.Item>
-        <div className="button-container">
-          <Button
-            onClick={editUserSubmit}
-            type="primary"
-            disabled={disabled}
-            className="button"
-          >
-            Submit
-          </Button>
-        </div>
       </Form>
+    </>
+  );
+
+  return (
+    <>
+      {props.isWrapped ? (
+        <Modal
+          visible={props.visible}
+          onCancel={props.hideModal}
+          onOk={editUserSubmit}
+        >
+          {innerForm}
+        </Modal>
+      ) : (
+        <>
+          {innerForm}
+          <div className="button-container">
+            <Button
+              onClick={editUserSubmit}
+              type="primary"
+              disabled={disabled}
+              className="button"
+            >
+              Submit
+            </Button>
+          </div>
+        </>
+      )}
     </>
   );
 };

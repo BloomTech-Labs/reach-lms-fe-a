@@ -1,8 +1,8 @@
 import React from 'react';
 import schema from '../../validation/CourseSchema';
-import { useFormWithErrors } from '../../hooks';
+import { useFormWithErrors, useRestfulFetch } from '../../hooks';
 import 'antd/dist/antd.css';
-import { Button, Input, Select, Form } from 'antd';
+import { Modal, Button, Input, Select, Form } from 'antd';
 import { client } from '../../utils/api';
 const { TextArea } = Input;
 
@@ -13,8 +13,8 @@ const initialFormValues = {
 };
 
 function AddCourseForm(props) {
-  // const [programId, setProgramId] = React.useState(props.programId);
-  // const { data: programs } = useRestfulFetch(`/programs/${props.userId}`);
+  const [programId, setProgramId] = React.useState(props.programId);
+  const { data: programs } = useRestfulFetch(`/programs/${props.userId}`);
   const { values, errors, disabled, onChange } = useFormWithErrors(
     schema,
     initialFormValues,
@@ -38,28 +38,37 @@ function AddCourseForm(props) {
       coursedescription,
     };
     // this programId is what will associate the new course with an existing program
-    client.postCourse(props.programId, newCourse);
+    client.postCourse(programId, newCourse);
+    if (props.onSubmit) {
+      props.onSubmit();
+    }
   }
 
-  return (
+  const innerForm = (
     <>
       <h1 className="edit-form-h1">Add Course</h1>
       <Form name="basic" layout="vertical" size="large" onFinish={submitForm}>
-        {/* 
-        <Form.Item name="programSelected" label="Associated Program" rules={[{ required: true }]}>
-          <Select
-            name="program"
-            placeholder="Select a Program"
-            defaultValue={props.programId ? parseInt(props.programId) : undefined}
+        {!props.programId && (
+          <Form.Item
+            name="programSelected"
+            label="Associated Program"
+            rules={[{ required: true }]}
           >
-            {programs?.map(programIn => (
-              <Select.Option value={programIn.programid}>
-                {programIn.programname}
-              </Select.Option>
-            ))}
-          </Select>
-
-        </Form.Item> */}
+            <Select
+              name="program"
+              placeholder="Select a Program"
+              defaultValue={
+                props.programId ? parseInt(props.programId) : undefined
+              }
+            >
+              {programs?.map(programIn => (
+                <Select.Option value={programIn.programid}>
+                  {programIn.programname}
+                </Select.Option>
+              ))}
+            </Select>
+          </Form.Item>
+        )}
         <Form.Item htmlFor="coursename" label="Course Name:" validateStatus>
           <Input
             id="coursename"
@@ -99,17 +108,36 @@ function AddCourseForm(props) {
             {errors.coursedescription ? `${errors.coursedescription}` : ''}
           </div>
         </Form.Item>
-        <div className="button-container">
-          <Button
-            onClick={submitForm}
-            type="primary"
-            disabled={disabled}
-            className="button"
-          >
-            Submit
-          </Button>
-        </div>
+        {props.children}
       </Form>
+    </>
+  );
+
+  return (
+    <>
+      {props.isWrapped ? (
+        <Modal
+          visible={props.visible}
+          onCancel={props.hideModal}
+          onOk={submitForm}
+        >
+          {innerForm}
+        </Modal>
+      ) : (
+        <>
+          {innerForm}
+          <div className="button-container">
+            <Button
+              onClick={submitForm}
+              type="primary"
+              disabled={disabled}
+              className="button"
+            >
+              Submit
+            </Button>
+          </div>
+        </>
+      )}
     </>
   );
 }

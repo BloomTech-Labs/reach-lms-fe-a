@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { useSubModal } from '../../hooks';
 import { GhostLink } from '../common';
 import { ProgramList, ProgramForm, ProgramSingleton } from '../RestPrograms';
@@ -13,10 +14,10 @@ const AdminLanding = props => {
   const programModal = useSubModal();
   const [selectedProgram, setSelectedProgram] = React.useState('');
 
-  const handleCloseModal = () => {
-    setSelectedProgram('');
-    programModal.hideModal();
-  };
+  // const handleCloseModal = () => {
+  //   setSelectedProgram('');
+  //   programModal.hideModal();
+  // };
 
   return (
     <>
@@ -27,6 +28,9 @@ const AdminLanding = props => {
             <Button size="large" onClick={programModal.showModal}>
               Create Program
             </Button>
+            <Link to="/users">
+              <Button size="large">Manage All Users</Button>
+            </Link>
           </div>
         </Styled.HeaderDiv>
 
@@ -76,7 +80,7 @@ const AdminLanding = props => {
           />
         </Styled.Programs>
       </Styled.Content>
-      <Modal
+      {/* <Modal
         title="Add Program"
         width="90vw"
         visible={programModal.visible}
@@ -89,7 +93,15 @@ const AdminLanding = props => {
           }
           visible={programModal.visible}
         />
-      </Modal>
+      </Modal> */}
+      {/*ASK CHAZ if no id is working here*/}
+      <ProgramForm
+        isWrapped={true}
+        visible={programModal.visible}
+        hideModal={programModal.hideModal}
+        href={selectedProgram}
+        onSubmit={programModal.hideModal}
+      />
     </>
   );
 };
