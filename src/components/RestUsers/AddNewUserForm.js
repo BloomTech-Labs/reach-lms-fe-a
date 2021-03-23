@@ -20,6 +20,10 @@ const AddNewUserForm = props => {
   );
 
   const changeValues = evt => {
+    if (typeof evt == 'string') {
+      onChange('role', evt);
+      return;
+    }
     const { name, value } = evt.target;
     onChange(name, value);
   };
@@ -79,6 +83,7 @@ const AddNewUserForm = props => {
           />
           <Styled.Error>{errors.email}</Styled.Error>
         </Form.Item>
+        // the evt of the Select input on our form needs to be investigated
         <Form.Item label="User Roles">
           <Select value={values.role} onChange={changeValues}>
             <Select.Option value="admin">Admin</Select.Option>

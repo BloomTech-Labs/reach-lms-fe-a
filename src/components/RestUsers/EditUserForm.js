@@ -19,10 +19,13 @@ const EditUserForm = props => {
     }
   }, [data, setValues]);
 
-  const changeValues = e => {
-    const { name, value, type } = e.target;
-    const valueToUse = type === 'select' ? Select : value;
-    onChange(name, valueToUse);
+  const changeValues = evt => {
+    if (typeof evt == 'string') {
+      onChange('role', evt);
+      return;
+    }
+    const { name, value } = evt.target;
+    onChange(name, value);
   };
 
   function submitForm(e) {
