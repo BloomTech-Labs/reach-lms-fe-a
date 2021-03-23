@@ -3,7 +3,7 @@ import { useFormWithErrors, useRestfulFetch } from '../../hooks';
 import { client } from '../../utils/api';
 import schema from '../../validation/EditUserSchema';
 import 'antd/dist/antd.css';
-import { Button, Form, Select } from 'antd';
+import { Modal, Button, Form, Select } from 'antd';
 
 const EditUserForm = props => {
   const { data } = useRestfulFetch(props.href);
@@ -43,7 +43,7 @@ const EditUserForm = props => {
     return <div>Loading...</div>;
   }
 
-  return (
+  const innerForm = (
     <>
       <h1 className="edit-user-role">Edit Existing User Role</h1>
       <Form
@@ -67,17 +67,35 @@ const EditUserForm = props => {
             <Select.Option value="student">Student</Select.Option>
           </Select>
         </Form.Item>
-        <div className="button-container">
-          <Button
-            onClick={submitForm}
-            type="primary"
-            disabled={disabled}
-            className="button"
-          >
-            Submit
-          </Button>
-        </div>
       </Form>
+    </>
+  );
+
+  return (
+    <>
+      {props.isWrapped ? (
+        <Modal
+          visible={props.visible}
+          onCancel={props.hideModal}
+          onOk={submitForm}
+        >
+          {innerForm}
+        </Modal>
+      ) : (
+        <>
+          {innerForm}
+          <div className="button-container">
+            <Button
+              onClick={submitForm}
+              type="primary"
+              disabled={disabled}
+              className="button"
+            >
+              Submit
+            </Button>
+          </div>
+        </>
+      )}
     </>
   );
 };

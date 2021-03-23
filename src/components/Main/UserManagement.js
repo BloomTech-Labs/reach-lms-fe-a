@@ -13,7 +13,7 @@ import Styled from './UserManagement.styles';
 
 //ant design + mui imports
 import Meta from 'antd/lib/card/Meta';
-import { Modal, Button } from 'antd';
+import { Button } from 'antd';
 import { EditOutlined, DeleteOutline } from '@material-ui/icons';
 
 const UserManagement = props => {
@@ -21,11 +21,11 @@ const UserManagement = props => {
   const userEdit = useSubModal();
   const [selectedUser, setSelectedUser] = React.useState('');
 
-  const handleCloseModal = () => {
-    setSelectedUser('');
-    userAdd.hideModal();
-    userEdit.hideModal();
-  };
+  // const handleCloseModal = () => {
+  //   setSelectedUser('');
+  //   userAdd.hideModal();
+  //   userEdit.hideModal();
+  // };
 
   return (
     <>
@@ -165,7 +165,14 @@ const UserManagement = props => {
         href={selectedUser}
         onSubmit={userAdd.hideModal}
       />
-      <Modal
+      <EditUserForm
+        isWrapped={true}
+        visible={userEdit.visible}
+        hideModal={userEdit.hideModal}
+        href={selectedUser}
+        onSubmit={userEdit.hideModal}
+      />
+      {/* <Modal
         title="Edit User"
         width="90vw"
         visible={userEdit.visible}
@@ -176,7 +183,7 @@ const UserManagement = props => {
           href={selectedUser && selectedUser !== '' ? selectedUser : ''}
           visible={userEdit.visible}
         />
-      </Modal>
+      </Modal> */}
     </>
   );
 };
