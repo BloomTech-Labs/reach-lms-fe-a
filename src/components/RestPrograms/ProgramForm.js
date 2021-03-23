@@ -54,7 +54,7 @@ export default function CreateProgram(props) {
 
   if (!data && href) {
     return <div>Loading data...</div>;
-  } else if (!data && !href) {
+  } else if (!values) {
     return <div>Error</div>;
   }
 
@@ -75,7 +75,7 @@ export default function CreateProgram(props) {
             onChange={changeValues}
           />
           <div style={{ color: 'red' }}>
-            {errors.programname ? `${errors.programname}` : ''}
+            {errors.programname ? `${errors.programname} ` : ''}
           </div>
         </Form.Item>
 
@@ -138,7 +138,7 @@ export default function CreateProgram(props) {
             </Select.Option>
           </Select>
           <div style={{ color: 'red' }}>
-            {errors.programtype ? `${errors.programtype}` : ''}
+            {errors.programtype ? `${errors.programtype} ` : ''}
           </div>
         </Form.Item>
 
@@ -158,7 +158,7 @@ export default function CreateProgram(props) {
             rows={4}
           />
           <div style={{ color: 'red' }}>
-            {errors.programdescription ? `${errors.programdescription}` : ''}
+            {errors.programdescription ? `${errors.programdescription} ` : ''}
           </div>
         </Form.Item>
         <div className="button-container">
