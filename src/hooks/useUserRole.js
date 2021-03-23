@@ -2,7 +2,7 @@ import React from 'react';
 import { useUserContext } from '../context/UserContext';
 
 export const useUserRole = () => {
-  const { data, status } = useUserContext();
+  const { data, loading } = useUserContext();
   // const { data, status } = useRestfulFetch('/users/getuserinfo');
   const role = data?.role;
   /** returns boolean indicating whether our user is an ADMIN */
@@ -17,7 +17,7 @@ export const useUserRole = () => {
     userIsAdmin,
     userIsTeacher,
     userIsStudent,
-    status,
+    loading,
     ...data,
   };
 };
