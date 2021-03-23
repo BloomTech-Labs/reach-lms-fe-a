@@ -15,7 +15,7 @@ const initialFormValues = {
 };
 
 const EditSelfForm = props => {
-  const { data } = useRestfulFetch(props.href);
+  const { data } = useRestfulFetch('/users/getuserinfo');
 
   const {
     values,
