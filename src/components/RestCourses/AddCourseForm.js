@@ -13,7 +13,7 @@ const initialFormValues = {
 };
 
 function AddCourseForm(props) {
-  // const [programId, setProgramId] = React.useState(props.programId);
+  const [programId, setProgramId] = React.useState(props.programId);
   const { data: programs } = useRestfulFetch(`/programs/${props.userId}`);
   const { values, errors, disabled, onChange } = useFormWithErrors(
     schema,
@@ -38,7 +38,7 @@ function AddCourseForm(props) {
       coursedescription,
     };
     // this programId is what will associate the new course with an existing program
-    client.postCourse(props.programId, newCourse);
+    client.postCourse(programId, newCourse);
     if (props.onSubmit) {
       props.onSubmit();
     }
