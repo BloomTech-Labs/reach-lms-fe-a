@@ -31,4 +31,5 @@ export const client = {
     axiosAuth().delete(`/courses/course/${courseId}/user/${userId}`),
   patchUser: (userId, editedUser) =>
     axiosAuth().patch(`/users/user/${userId}`, editedUser),
+  deleteUser: userId => axiosAuth().delete(),
 };

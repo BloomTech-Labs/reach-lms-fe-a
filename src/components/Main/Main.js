@@ -114,14 +114,21 @@ const Main = props => {
           </CourseSingleton>
         )}
       />
-      <Modal
-        title="Edit Course"
+      {/* <Modal
+        title="Add Course"
         width="90vw"
         visible={courseAdd.visible}
         onCancel={courseAdd.hideModal}
+        onOk={formSubmit}
       >
-        <AddCourseForm programId={programId} />
-      </Modal>
+      </Modal> */}
+      <AddCourseForm
+        isWrapped={true}
+        visible={courseAdd.visible}
+        hideModal={courseAdd.hideModal}
+        programId={programId}
+        onSubmit={courseAdd.hideModal}
+      />
       {/* Edit Course Model */}
       <Modal
         title="Edit Course"
