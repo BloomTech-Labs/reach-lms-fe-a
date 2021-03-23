@@ -146,7 +146,7 @@ const UserManagement = props => {
 
       {/*MODAL FORMS MGMT*/}
 
-      <Modal
+      {/* <Modal
         title="Add User"
         width="90vw"
         visible={userAdd.visible}
@@ -156,8 +156,15 @@ const UserManagement = props => {
         <AddNewUserForm
           href={selectedUser && selectedUser !== '' ? selectedUser : ''}
           visible={userAdd.visible}
-        />
-      </Modal>
+        /> */}
+      {/* </Modal> */}
+      <AddNewUserForm
+        isWrapped={true}
+        visible={userAdd.visible}
+        hideModal={userAdd.hideModal}
+        href={selectedUser}
+        onSubmit={userAdd.hideModal}
+      />
       <Modal
         title="Edit User"
         width="90vw"
