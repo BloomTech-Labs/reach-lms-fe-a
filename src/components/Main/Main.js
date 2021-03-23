@@ -128,15 +128,14 @@ const Main = props => {
         programId={programId}
         onSubmit={courseEdit.hideModal}
       />
-
-      <Modal
-        title="Add new Module"
-        width="90vw"
+      <AddModuleForm
+        isWrapped={true}
         visible={moduleAdd.visible}
-        onCancel={moduleAdd.hideModal}
-      >
-        <AddModuleForm href={selectedCourse} courseId={courseId} />
-      </Modal>
+        hideModal={moduleEdit.hideModal}
+        courseId={courseId}
+        onSubmit={moduleEdit.hideModal}
+      />
+
       <Modal
         title="Edit Module"
         width="90vw"
