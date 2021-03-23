@@ -6,7 +6,6 @@ import AntFormItem from 'antd/lib/form/FormItem';
 const MenuRow = styled.div`
   display: flex;
   justify-content: space-between;
-  margin-left: 2%;
 `;
 
 const Container = styled.div`
