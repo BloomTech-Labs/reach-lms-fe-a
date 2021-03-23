@@ -23,6 +23,10 @@ function AddCourseForm(props) {
   );
 
   const changeValues = e => {
+    if (typeof e == 'number') {
+      setProgramId(e);
+      return;
+    }
     const { name, value, type } = e.target;
     const valueToUse = type === 'select' ? Select : value;
     onChange(name, valueToUse);
@@ -57,11 +61,12 @@ function AddCourseForm(props) {
             <Select
               name="program"
               placeholder="Select a Program"
+              onChange={changeValues}
               defaultValue={
                 props.programId ? parseInt(props.programId) : undefined
               }
             >
-              {programs?.map(programIn => (
+              {programs?.programList.map(programIn => (
                 <Select.Option value={programIn.programid}>
                   {programIn.programname}
                 </Select.Option>
