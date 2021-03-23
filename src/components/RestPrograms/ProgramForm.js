@@ -3,7 +3,7 @@ import schema from '../../validation/ProgramSchema';
 import { useFormWithErrors, useRestfulFetch, useUserRole } from '../../hooks';
 // ant design
 import 'antd/dist/antd.css';
-import { Button, Input, Select, Form } from 'antd';
+import { Modal, Button, Input, Select, Form } from 'antd';
 import { client } from '../../utils/api';
 
 const initialValues = {
@@ -58,7 +58,7 @@ export default function CreateProgram(props) {
     return <div>Error</div>;
   }
 
-  return (
+  const innerForm = (
     <>
       <h1>Create Program</h1>
       <Form
@@ -172,6 +172,34 @@ export default function CreateProgram(props) {
           </Button>
         </div>
       </Form>
+    </>
+  );
+
+  return (
+    <>
+      {props.isWrapped ? (
+        <Modal
+          visible={props.visible}
+          onCancel={props.hideModal}
+          onOk={submitForm}
+        >
+          {innerForm}
+        </Modal>
+      ) : (
+        <>
+          {innerForm}
+          <div className="button-container">
+            <Button
+              onClick={submitForm}
+              type="primary"
+              disabled={disabled}
+              className="button"
+            >
+              Submit
+            </Button>
+          </div>
+        </>
+      )}
     </>
   );
 }

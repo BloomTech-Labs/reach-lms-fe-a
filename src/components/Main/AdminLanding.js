@@ -14,10 +14,10 @@ const AdminLanding = props => {
   const programModal = useSubModal();
   const [selectedProgram, setSelectedProgram] = React.useState('');
 
-  const handleCloseModal = () => {
-    setSelectedProgram('');
-    programModal.hideModal();
-  };
+  // const handleCloseModal = () => {
+  //   setSelectedProgram('');
+  //   programModal.hideModal();
+  // };
 
   return (
     <>
@@ -80,7 +80,7 @@ const AdminLanding = props => {
           />
         </Styled.Programs>
       </Styled.Content>
-      <Modal
+      {/* <Modal
         title="Add Program"
         width="90vw"
         visible={programModal.visible}
@@ -93,7 +93,15 @@ const AdminLanding = props => {
           }
           visible={programModal.visible}
         />
-      </Modal>
+      </Modal> */}
+      {/*ASK CHAZ if no id is working here*/}
+      <ProgramForm
+        isWrapped={true}
+        visible={programModal.visible}
+        hideModal={programModal.hideModal}
+        href={selectedProgram}
+        onSubmit={programModal.hideModal}
+      />
     </>
   );
 };
