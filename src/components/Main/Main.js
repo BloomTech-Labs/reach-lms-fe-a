@@ -22,7 +22,7 @@ import Styled from './Main.styles';
 
 const Main = props => {
   const { href, programId } = props;
-  const { userIsAdmin } = useUserRole();
+  const user = useUserRole();
   const [selectedCourse, setSelectedCourse] = React.useState('');
   const [selectedModule, setSelectedModule] = React.useState('');
   const courseAdd = useSubModal();
@@ -52,7 +52,7 @@ const Main = props => {
 
       <h2>My Courses</h2>
 
-      {userIsAdmin() && (
+      {user.userIsAdmin() && (
         <Button
           onClick={() => {
             courseAdd.showModal();
@@ -120,7 +120,7 @@ const Main = props => {
         visible={courseAdd.visible}
         onCancel={courseAdd.hideModal}
       >
-        <AddCourseForm programId={programId} />
+        <AddCourseForm programId={programId} userId={user.userid} />
       </Modal>
       {/* Edit Course Model */}
       <Modal
