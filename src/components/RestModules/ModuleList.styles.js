@@ -21,6 +21,10 @@ const HeaderDiv = styled.div`
   justify-content: space-between;
   align-items: center;
   margin: 5% 0;
+
+  @media (max-width: 750px) {
+    flex-direction: column;
+  }
 `;
 
 const Span = styled.span`
