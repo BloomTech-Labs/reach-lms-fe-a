@@ -85,9 +85,7 @@ const AdminLanding = props => {
       >
         <ProgramForm
           href={
-            selectedProgram && selectedProgram !== ''
-              ? selectedProgram
-              : undefined
+            selectedProgram && selectedProgram !== '' ? selectedProgram : ''
           }
           visible={programModal.visible}
         />
