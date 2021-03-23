@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Input, Select } from 'antd';
+import { Modal, Button, Form, Input, Select } from 'antd';
 import Styled from './AddNewUserForm.styles';
 import schema from '../../validation/NewUserSchema';
 import { useFormWithErrors } from '../../hooks';
@@ -14,7 +14,7 @@ const initValues = {
 };
 
 const AddNewUserForm = props => {
-  const { values, errors, onChange, resetValues } = useFormWithErrors(
+  const { values, disabled, errors, onChange, resetValues } = useFormWithErrors(
     schema,
     initValues
   );
@@ -34,7 +34,7 @@ const AddNewUserForm = props => {
     resetValues();
   };
 
-  return (
+  const innerForm = (
     <>
       <h2>Create a User!</h2>
       <Form
@@ -92,6 +92,34 @@ const AddNewUserForm = props => {
           </Select>
         </Form.Item>
       </Form>
+    </>
+  );
+
+  return (
+    <>
+      {props.isWrapped ? (
+        <Modal
+          visible={props.visible}
+          onCancel={props.hideModal}
+          onOk={onSubmit}
+        >
+          {innerForm}
+        </Modal>
+      ) : (
+        <>
+          {innerForm}
+          <div className="button-container">
+            <Button
+              onClick={onSubmit}
+              type="primary"
+              disabled={disabled}
+              className="button"
+            >
+              Submit
+            </Button>
+          </div>
+        </>
+      )}
     </>
   );
 };

@@ -121,31 +121,28 @@ const Main = props => {
         programId={programId}
         onSubmit={courseAdd.hideModal}
       />
-      {/* Edit Course Model */}
-      <Modal
-        title="Edit Course"
-        width="90vw"
+      <EditCourseForm
+        isWrapped={true}
         visible={courseEdit.visible}
-        onCancel={courseEdit.hideModal}
-      >
-        <EditCourseForm href={selectedCourse} />
-      </Modal>
-      <Modal
-        title="Add new Module"
-        width="90vw"
+        hideModal={courseEdit.hideModal}
+        href={selectedCourse}
+        onSubmit={courseEdit.hideModal}
+      />
+      <AddModuleForm
+        isWrapped={true}
         visible={moduleAdd.visible}
-        onCancel={moduleAdd.hideModal}
-      >
-        <AddModuleForm href={selectedCourse} courseId={courseId} />
-      </Modal>
-      <Modal
-        title="Edit Module"
-        width="90vw"
+        hideModal={moduleEdit.hideModal}
+        courseId={courseId}
+        onSubmit={moduleEdit.hideModal}
+      />
+      <EditModuleForm
+        isWrapped={true}
         visible={moduleEdit.visible}
-        onCancel={moduleEdit.hideModal}
-      >
-        <EditModuleForm href={selectedModule} />
-      </Modal>
+        hideModal={moduleEdit.hideModal}
+        href={selectedModule}
+        onSubmit={moduleEdit.hideModal}
+      />
+
       <Modal
         title="Manage Users"
         width="90vw"

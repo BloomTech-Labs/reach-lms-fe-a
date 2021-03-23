@@ -5,6 +5,7 @@
 //       - [ ] Option to ADD new course to that user (once this action is hit, we should show a collection of courses we could attach to this user)
 
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { useSubModal } from '../../hooks';
 import { UserList, AddNewUserForm, EditUserForm } from '../RestUsers';
 import { client } from '../../utils/api';
@@ -12,7 +13,7 @@ import Styled from './UserManagement.styles';
 
 //ant design + mui imports
 import Meta from 'antd/lib/card/Meta';
-import { Modal, Button } from 'antd';
+import { Button } from 'antd';
 import { EditOutlined, DeleteOutline } from '@material-ui/icons';
 
 const UserManagement = props => {
@@ -20,11 +21,11 @@ const UserManagement = props => {
   const userEdit = useSubModal();
   const [selectedUser, setSelectedUser] = React.useState('');
 
-  const handleCloseModal = () => {
-    setSelectedUser('');
-    userAdd.hideModal();
-    userEdit.hideModal();
-  };
+  // const handleCloseModal = () => {
+  //   setSelectedUser('');
+  //   userAdd.hideModal();
+  //   userEdit.hideModal();
+  // };
 
   return (
     <>
@@ -35,6 +36,9 @@ const UserManagement = props => {
             <Button size="large" onClick={userAdd.showModal}>
               Add New User
             </Button>
+            <Link to="/admin">
+              <Button size="large">Manage All Programs</Button>
+            </Link>
           </div>
         </Styled.HeaderDiv>
 
@@ -142,7 +146,7 @@ const UserManagement = props => {
 
       {/*MODAL FORMS MGMT*/}
 
-      <Modal
+      {/* <Modal
         title="Add User"
         width="90vw"
         visible={userAdd.visible}
@@ -152,9 +156,23 @@ const UserManagement = props => {
         <AddNewUserForm
           href={selectedUser && selectedUser !== '' ? selectedUser : ''}
           visible={userAdd.visible}
-        />
-      </Modal>
-      <Modal
+        /> */}
+      {/* </Modal> */}
+      <AddNewUserForm
+        isWrapped={true}
+        visible={userAdd.visible}
+        hideModal={userAdd.hideModal}
+        href={selectedUser}
+        onSubmit={userAdd.hideModal}
+      />
+      <EditUserForm
+        isWrapped={true}
+        visible={userEdit.visible}
+        hideModal={userEdit.hideModal}
+        href={selectedUser}
+        onSubmit={userEdit.hideModal}
+      />
+      {/* <Modal
         title="Edit User"
         width="90vw"
         visible={userEdit.visible}
@@ -165,7 +183,7 @@ const UserManagement = props => {
           href={selectedUser && selectedUser !== '' ? selectedUser : ''}
           visible={userEdit.visible}
         />
-      </Modal>
+      </Modal> */}
     </>
   );
 };
