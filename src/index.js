@@ -21,6 +21,7 @@ import { LoadingComponent } from './components/LoadingComponent';
 import { HomePage } from './components/Dashboard';
 import { Wrapper } from './components/Wrapper';
 import { Main, AdminMain, AdminLanding } from './components/Main';
+import UserContextProvider from './context/UserContext';
 
 import {
   MAIN_DASH_BY_PROGRAM,
@@ -51,55 +52,57 @@ function App() {
 
   return (
     <Security {...config} onAuthRequired={authHandler}>
-      <div className="App">
-        <Switch>
-          <Route path="/login" component={LoginPage} />
-          <Route path="/implicit/callback" component={LoginCallback} />
-          {/* any of the routes you need secured should be registered as SecureRoutes */}
-          <SecureRoute
-            path="/"
-            exact
-            component={() => (
-              <Wrapper>
-                <HomePage LoadingComponent={LoadingComponent} />
-              </Wrapper>
-            )}
-          />
-          <SecureRoute
-            path={MAIN_DASH}
-            component={() => (
-              <Wrapper>
-                <Main />
-              </Wrapper>
-            )}
-          />
-          <SecureRoute
-            path={MAIN_DASH_BY_PROGRAM}
-            component={() => (
-              <Wrapper>
-                <AdminMain />
-              </Wrapper>
-            )}
-          />
-          <SecureRoute
-            path={ADMIN_LANDING}
-            component={() => (
-              <Wrapper>
-                <AdminLanding />
-              </Wrapper>
-            )}
-          />
-          <SecureRoute
-            path={VIEW_PROFILE_PATH}
-            component={() => (
-              <Wrapper>
-                <UserProfile />
-              </Wrapper>
-            )}
-          />
-          <Route component={NotFoundPage} />
-        </Switch>
-      </div>
+      <UserContextProvider>
+        <div className="App">
+          <Switch>
+            <Route path="/login" component={LoginPage} />
+            <Route path="/implicit/callback" component={LoginCallback} />
+            {/* any of the routes you need secured should be registered as SecureRoutes */}
+            <SecureRoute
+              path="/"
+              exact
+              component={() => (
+                <Wrapper>
+                  <HomePage LoadingComponent={LoadingComponent} />
+                </Wrapper>
+              )}
+            />
+            <SecureRoute
+              path={MAIN_DASH}
+              component={() => (
+                <Wrapper>
+                  <Main />
+                </Wrapper>
+              )}
+            />
+            <SecureRoute
+              path={MAIN_DASH_BY_PROGRAM}
+              component={() => (
+                <Wrapper>
+                  <AdminMain />
+                </Wrapper>
+              )}
+            />
+            <SecureRoute
+              path={ADMIN_LANDING}
+              component={() => (
+                <Wrapper>
+                  <AdminLanding />
+                </Wrapper>
+              )}
+            />
+            <SecureRoute
+              path={VIEW_PROFILE_PATH}
+              component={() => (
+                <Wrapper>
+                  <UserProfile />
+                </Wrapper>
+              )}
+            />
+            <Route component={NotFoundPage} />
+          </Switch>
+        </div>
+      </UserContextProvider>
     </Security>
   );
 }

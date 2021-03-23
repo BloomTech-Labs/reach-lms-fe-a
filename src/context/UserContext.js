@@ -1,16 +1,27 @@
 import React from 'react';
-import { useRestfulFetch } from '../hooks';
+import { axiosAuth } from '../utils';
 
 const UserContext = React.createContext({ user: {} });
 
 function UserContextProvider(props) {
-  const { data, links, error, status } = useRestfulFetch('users/getuserinfo');
-  const value = React.useMemo(() => ({ data, links, error, status }), [
+  const [data, setData] = React.useState();
+  const [error, setError] = React.useState();
+  const [loading, setLoading] = React.useState(false);
+
+  React.useEffect(() => {
+    setLoading(true);
+    axiosAuth()
+      .get('/users/getuserinfo')
+      .then(res => setData(res.data))
+      .catch(err => setError(err.message))
+      .finally(() => setLoading(false));
+  }, []);
+  const value = React.useMemo(() => ({ data, error, loading }), [
     data,
-    links,
     error,
-    status,
+    loading,
   ]);
+
   return (
     <UserContext.Provider value={value}>{props.children}</UserContext.Provider>
   );
