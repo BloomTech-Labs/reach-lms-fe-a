@@ -20,13 +20,19 @@ import { NotFoundPage } from './components/NotFound';
 import { LoadingComponent } from './components/LoadingComponent';
 import { HomePage } from './components/Dashboard';
 import { Wrapper } from './components/Wrapper';
-import { Main, AdminMain, AdminLanding } from './components/Main';
+import {
+  Main,
+  AdminMain,
+  AdminLanding,
+  UserManagement,
+} from './components/Main';
 
 import {
   MAIN_DASH_BY_PROGRAM,
   VIEW_PROFILE_PATH,
   ADMIN_LANDING,
   MAIN_DASH,
+  USER_MANAGEMENT,
 } from './routes';
 
 ReactDOM.render(
@@ -94,6 +100,14 @@ function App() {
             component={() => (
               <Wrapper>
                 <UserProfile />
+              </Wrapper>
+            )}
+          />
+          <SecureRoute
+            path={USER_MANAGEMENT}
+            component={() => (
+              <Wrapper>
+                <UserManagement />
               </Wrapper>
             )}
           />

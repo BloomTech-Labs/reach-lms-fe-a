@@ -8,6 +8,7 @@ import { Card, Button, Modal } from 'antd';
 import { useSubModal } from '../../hooks';
 
 const UserProfile = props => {
+  const [selectedUser, setSelectedUser] = React.useState('');
   const editSelf = useSubModal();
   return (
     <>
@@ -27,13 +28,20 @@ const UserProfile = props => {
           </Card>
         )}
       />
-      <Modal
+      {/* <Modal
         visible={editSelf.visible}
         onOk={editSelf.hideModal}
         onCancel={editSelf.hideModal}
       >
         <EditSelfForm href="/users/getuserinfo" />
-      </Modal>
+      </Modal> */}
+      <EditSelfForm
+        isWrapped={true}
+        visible={editSelf.visible}
+        hideModal={editSelf.hideModal}
+        href={selectedUser}
+        onSubmit={editSelf.hideModal}
+      />
     </>
   );
 };
