@@ -5,7 +5,9 @@ import '../../styles/Form.css';
 import 'antd/dist/antd.css';
 import { Button, Input, Select, Form } from 'antd';
 import { client } from '../../utils/api';
+import { useHistory } from 'react-router-dom';
 const { TextArea } = Input;
+// let {push} = useHistory()
 
 const initialFormErrors = {
   coursename: '',
@@ -35,8 +37,6 @@ function EditCourseForm(props) {
   };
 
   function submitForm(e) {
-    e.preventDefault();
-
     const editedCourse = {
       courseid: data.courseid,
       coursename: values.coursename,
@@ -45,6 +45,7 @@ function EditCourseForm(props) {
     };
 
     client.patchCourse(editedCourse.courseid, editedCourse);
+    // push('/main')
   }
 
   if (!data || !values) {

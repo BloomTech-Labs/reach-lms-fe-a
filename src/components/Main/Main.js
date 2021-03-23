@@ -119,6 +119,7 @@ const Main = props => {
         width="90vw"
         visible={courseAdd.visible}
         onCancel={courseAdd.hideModal}
+        onOk={courseAdd.hideModal}
       >
         <AddCourseForm programId={programId} />
       </Modal>
