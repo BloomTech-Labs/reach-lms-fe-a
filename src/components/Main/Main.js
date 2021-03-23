@@ -150,7 +150,14 @@ const Main = props => {
         title="Manage Users"
         width="90vw"
         visible={manageStudentTeacher.visible}
-        onCancel={manageStudentTeacher.hideModal}
+        onCancel={() => {
+          setSelectedCourse('');
+          manageStudentTeacher.hideModal();
+        }}
+        onOk={() => {
+          setSelectedCourse('');
+          manageStudentTeacher.hideModal();
+        }}
       >
         <StudentTeacherManagement href={selectedCourse} />
       </Modal>
