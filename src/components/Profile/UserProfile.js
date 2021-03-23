@@ -1,32 +1,41 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
-import { useHistory } from 'react-router-dom';
+import EditSelfForm from './EditSelfForm';
+import { UserSingleton } from '../RestUsers';
 
-//ant d
+// Styled & CSS
 import 'antd/dist/antd.css';
-import Card from 'antd/lib/card';
-import Button from 'antd/lib/button';
+import { Card, Button, Modal } from 'antd';
+import { useSubModal } from '../../hooks';
 
-// css
-import '../../styles/Profile.css';
-
-export default function UserProfile() {
-  const { user } = useSelector(state => state.userReducer);
-  const { push } = useHistory();
-
-  function clickOnEdit(e) {
-    e.preventDefault();
-    push('/edit-profile');
-  }
-
+const UserProfile = props => {
+  const editSelf = useSubModal();
   return (
-    <Card title={user.firstname + ' ' + user.lastname} className="profile-card">
-      <h3>Role: {user.role}</h3>
-      <p>Phone: {user.phonenumber}</p>
-      <p>Email: {user.email}</p>
-      <Button type="primary" onClick={e => clickOnEdit(e)}>
-        Edit Profile
-      </Button>
-    </Card>
+    <>
+      <UserSingleton
+        href="/users/getuserinfo"
+        mappedChild={user => (
+          <Card
+            title={user.firstname + ' ' + user.lastname}
+            className="profile-card"
+          >
+            <h3>Role: {user.role}</h3>
+            <p>Phone: {user.phonenumber}</p>
+            <p>Email: {user.email}</p>
+            <Button type="primary" onClick={editSelf.showModal}>
+              Edit Profile
+            </Button>
+          </Card>
+        )}
+      />
+      <Modal
+        visible={editSelf.visible}
+        onOk={editSelf.hideModal}
+        onCancel={editSelf.hideModal}
+      >
+        <EditSelfForm href="/users/getuserinfo" />
+      </Modal>
+    </>
   );
-}
+};
+
+export default UserProfile;
