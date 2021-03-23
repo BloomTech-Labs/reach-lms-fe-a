@@ -3,7 +3,7 @@ import schema from '../../validation/CourseSchema';
 import { useFormWithErrors, useRestfulFetch } from '../../hooks';
 import '../../styles/Form.css';
 import 'antd/dist/antd.css';
-import { Button, Input, Select, Form } from 'antd';
+import { Modal, Button, Input, Select, Form } from 'antd';
 import { client } from '../../utils/api';
 const { TextArea } = Input;
 
@@ -51,7 +51,7 @@ function EditCourseForm(props) {
     return <div>Loading...</div>;
   }
 
-  return (
+  const innerForm = (
     <>
       <h1 className="edit-form-h1">Edit Course</h1>
       <Form
@@ -104,20 +104,35 @@ function EditCourseForm(props) {
             {errors.coursedescription ? `${errors.coursedescription}` : ''}
           </div>
         </Form.Item>
-        <div className="button-container">
-          {/* <Button onClick={goBack} type="secondary" className="button">
-            Cancel
-          </Button> */}
-          <Button
-            onClick={submitForm}
-            type="primary"
-            disabled={disabled}
-            className="button"
-          >
-            Submit
-          </Button>
-        </div>
       </Form>
+    </>
+  );
+
+  return (
+    <>
+      {props.isWrapped ? (
+        <Modal
+          visible={props.visible}
+          onCancel={props.hideModal}
+          onOk={submitForm}
+        >
+          {innerForm}
+        </Modal>
+      ) : (
+        <>
+          {innerForm}
+          <div className="button-container">
+            <Button
+              onClick={submitForm}
+              type="primary"
+              disabled={disabled}
+              className="button"
+            >
+              Submit
+            </Button>
+          </div>
+        </>
+      )}
     </>
   );
 }
