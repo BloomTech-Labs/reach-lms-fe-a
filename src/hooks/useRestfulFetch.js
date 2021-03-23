@@ -8,11 +8,16 @@ export const useRestfulFetch = url => {
   const [links, setLinks] = React.useState(undefined);
   const [error, setError] = React.useState(null);
   const [status, setStatus] = React.useState('pending');
+  let formedUrl;
 
-  const formedUrl = url?.includes(API_BASE_URL) ? url : `${API_BASE_URL}${url}`;
+  if (url && url !== '') {
+    formedUrl = url.includes(API_BASE_URL) ? url : `${API_BASE_URL}${url}`;
+  } else {
+    formedUrl = 'SKIPPING_THIS_CALL';
+  }
 
   React.useEffect(() => {
-    if (!formedUrl) {
+    if (!formedUrl || formedUrl === 'SKIPPING_THIS_CALL') {
       return;
     }
 
