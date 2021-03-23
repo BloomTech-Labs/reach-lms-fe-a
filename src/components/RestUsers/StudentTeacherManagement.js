@@ -2,30 +2,9 @@ import React from 'react';
 import UserList from './UserList';
 import { client } from '../../utils/api';
 import { useRestfulFetch } from '../../hooks';
-import styled from 'styled-components';
+import { SplitFrame, UserEnrollmentCheckbox } from '../common';
 
-const SSplit = styled.div`
-  display: flex;
-  flex-flow: row nowrap;
-  justify-content: space-evenly;
-  .left {
-    background-color: white;
-  }
-  .right {
-    background-color: white;
-  }
-`;
-
-const SplitFrame = props => {
-  return (
-    <SSplit>
-      <div className="left">{props.left}</div>
-      <div className="right">{props.right}</div>
-    </SSplit>
-  );
-};
-
-const Teachers = ({ data, onChange }) => {
+const Teachers = ({ data }) => {
   return (
     <>
       <h2>Teachers</h2>
@@ -34,15 +13,14 @@ const Teachers = ({ data, onChange }) => {
         <UserList
           href={data._links.enrolled_teachers.href}
           mappedChild={userEntity => (
-            <>
-              <br />
-              <input
-                type="checkbox"
-                name={userEntity.userid}
-                onChange={onChange}
-              />
-              <div>{userEntity.username}</div>
-            </>
+            <UserEnrollmentCheckbox
+              value={true}
+              attach={client.attachUserToCourse}
+              detach={client.removeUserFromCourse}
+              username={userEntity.username}
+              userid={userEntity.userid}
+              courseid={data.courseid}
+            />
           )}
         />
         <br />
@@ -50,15 +28,14 @@ const Teachers = ({ data, onChange }) => {
         <UserList
           href={data._links.available_teachers.href}
           mappedChild={userEntity => (
-            <>
-              <br />
-              <input
-                type="checkbox"
-                name={userEntity.userid}
-                onChange={onChange}
-              />
-              <div>{userEntity.username}</div>
-            </>
+            <UserEnrollmentCheckbox
+              value={false}
+              attach={client.attachUserToCourse}
+              detach={client.removeUserFromCourse}
+              username={userEntity.username}
+              userid={userEntity.userid}
+              courseid={data.courseid}
+            />
           )}
         />
       </div>
@@ -75,16 +52,14 @@ const Students = ({ data, onChange }) => {
         <UserList
           href={data._links.enrolled_students.href}
           mappedChild={userEntity => (
-            <>
-              <br />
-              <input
-                type="checkbox"
-                checked={true}
-                name={userEntity.userid}
-                onChange={onChange}
-              />
-              <div>{userEntity.username}</div>
-            </>
+            <UserEnrollmentCheckbox
+              value={true}
+              attach={client.attachUserToCourse}
+              detach={client.removeUserFromCourse}
+              username={userEntity.username}
+              userid={userEntity.userid}
+              courseid={data.courseid}
+            />
           )}
         />
       </div>
@@ -94,16 +69,14 @@ const Students = ({ data, onChange }) => {
         <UserList
           href={data._links.available_students.href}
           mappedChild={userEntity => (
-            <>
-              <br />
-              <input
-                type="checkbox"
-                checked={false}
-                name={userEntity.userid}
-                onChange={onChange}
-              />
-              <div>{userEntity.username}</div>
-            </>
+            <UserEnrollmentCheckbox
+              value={false}
+              attach={client.attachUserToCourse}
+              detach={client.removeUserFromCourse}
+              username={userEntity.username}
+              userid={userEntity.userid}
+              courseid={data.courseid}
+            />
           )}
         />
       </div>
