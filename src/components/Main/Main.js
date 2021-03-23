@@ -95,7 +95,6 @@ const Main = props => {
               )}
             />
             <Button
-              className="group2"
               onClick={() => {
                 setSelectedCourse(courseEntity._links.self.href);
                 courseEdit.showModal();
@@ -104,7 +103,6 @@ const Main = props => {
               Edit Course
             </Button>
             <Button
-              className="group2"
               onClick={() => {
                 setCourseId(courseEntity.courseid);
                 moduleAdd.showModal();
@@ -113,7 +111,6 @@ const Main = props => {
               Add Module
             </Button>
             <Button
-              className="group2"
               onClick={() => {
                 setSelectedCourse(courseEntity._links.self.href);
                 manageStudentTeacher.showModal();
