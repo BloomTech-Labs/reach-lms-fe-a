@@ -43,7 +43,7 @@ const Teachers = ({ data }) => {
   );
 };
 
-const Students = ({ data, onChange }) => {
+const Students = ({ data }) => {
   return (
     <>
       <h2>Students</h2>

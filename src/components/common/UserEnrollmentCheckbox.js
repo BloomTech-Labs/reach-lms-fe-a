@@ -1,10 +1,8 @@
 import React from 'react';
 import SplitFrame from './SplitFrame';
 import { Checkbox, Card } from 'antd';
-import { useToggleBool } from '../../hooks';
 
 const UserEnrolledCheckbox = props => {
-  // const [checked, toggleChecked] = useToggleBool(props.value);
   const [checked, setChecked] = React.useState(props.value);
 
   const onChange = e => {
