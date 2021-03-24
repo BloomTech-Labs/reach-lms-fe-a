@@ -3,12 +3,51 @@ import { useFormWithErrors, useRestfulFetch } from '../../hooks';
 import { client } from '../../utils/api';
 import schema from '../../validation/EditUserSchema';
 import 'antd/dist/antd.css';
-import { Modal, Button, Form, Select } from 'antd';
+import { Modal, Button, Form, Select, Table, Space } from 'antd';
 import { CourseEnrollmentCheckbox } from '../common';
+
+const columns = [
+  {
+    title: 'Course Code',
+    dataIndex: 'coursecode',
+    filters: [
+      {
+        text: 'labs',
+        value: 'labs',
+      },
+      {
+        text: 'cs',
+        value: 'cs',
+      },
+    ],
+    // specify the condition of filtering result
+    // here is that finding the name started with `value`
+    onFilter: (value, record) => record.name.indexOf(value) === 0,
+    sorter: (a, b) => a.name.charCodeAt(0) - b.name.charCodeAt(0),
+    sortDirections: ['ascend', 'descend'],
+  },
+  {
+    title: 'Course Name',
+    dataIndex: 'coursename',
+    sorter: (a, b) => a.characCodeAt(0) - b.charCodeAt(0),
+    sortDirections: ['ascend', 'descend'],
+  },
+  {
+    title: 'Action',
+    key: 'action',
+    render: (text, record) => (
+      <Space size="middle">
+        <a>Invite {record.name}</a>
+        <a>Delete</a>
+      </Space>
+    ),
+  },
+];
+
 
 const EditUserForm = props => {
   const { data } = useRestfulFetch(props.href);
-  const { data: course } = useRestfulFetch(props.courses);
+  const { data: courses } = useRestfulFetch(props.courses);
   const [courseSet, setCourseSet] = React.useState(new Set());
   const { values, disabled, onChange, setValues } = useFormWithErrors(
     schema,
@@ -17,11 +56,13 @@ const EditUserForm = props => {
   );
 
   React.useEffect(() => {
-    console.log(data);
+    console.log({data});
+    console.log({courses})
+    console.log(props.courses)
     if (data) {
       setValues(prevValues => ({ ...prevValues, ...data }));
     }
-  }, [data, setValues]);
+  }, [data, setValues, courses]);
 
   const changeValues = evt => {
     if (typeof evt == 'string') {
@@ -42,12 +83,11 @@ const EditUserForm = props => {
       userid: data.userid,
       userrole: values.role,
     };
-    console.log({ course });
 
     // client.patchUser(editedUser.userid, editedUser);
   }
 
-  if (!data || !values) {
+  if (!data || !values || !courses) {
     return <div>Loading...</div>;
   }
 
@@ -75,11 +115,16 @@ const EditUserForm = props => {
             <Select.Option value="student">Student</Select.Option>
           </Select>
         </Form.Item>
-        {/* {props.courses?.enrolled.map(course => (
-          <Form.Item htmlFor="courses" label="Courses">
+        {courses?.enrolled.map(course => (
+          <Form.Item>
             <CourseEnrollmentCheckbox value={true} course={course} />
           </Form.Item>
-        ))} */}
+        ))}
+        {courses?.available.map(course => (
+          <Form.Item>
+            <CourseEnrollmentCheckbox value={false} course={course} />
+          </Form.Item>
+        ))}
       </Form>
     </>
   );

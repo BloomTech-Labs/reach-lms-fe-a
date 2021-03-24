@@ -97,6 +97,9 @@ const UserManagement = props => {
                       onClick={e => {
                         e.preventDefault();
                         setSelectedUser(user._links.self.href);
+                        setSelectedUserCourses(
+                          user._links.mappified_courses.href
+                        );
                         userEdit.showModal();
                       }}
                     />,
@@ -132,6 +135,9 @@ const UserManagement = props => {
                       onClick={e => {
                         e.preventDefault();
                         setSelectedUser(user._links.self.href);
+                        setSelectedUserCourses(
+                          user._links.mappified_courses.href
+                        );
                         userEdit.showModal();
                       }}
                     />,
@@ -181,7 +187,7 @@ const UserManagement = props => {
         visible={userEdit.visible}
         hideModal={userEdit.hideModal}
         href={selectedUser}
-        // courses={selectedUserCourses}
+        courses={selectedUserCourses}
         onSubmit={userEdit.hideModal}
       />
       {/* <Modal

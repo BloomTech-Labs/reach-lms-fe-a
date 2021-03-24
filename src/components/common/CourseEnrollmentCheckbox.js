@@ -1,6 +1,14 @@
 import React from 'react';
 import { Card, Checkbox } from 'antd';
+import styled from 'styled-components';
 import { client } from '../../utils';
+
+const StyledP = styled.p`
+&&& {
+  margin: 0;
+  line-height: inherit;
+}
+`
 
 const CourseEnrollmentCheckbox = props => {
   const [checked, setChecked] = React.useState(props.value);
@@ -13,7 +21,7 @@ const CourseEnrollmentCheckbox = props => {
   };
 
   return (
-    <Card
+    <div
       style={{
         display: 'flex',
         justifyContent: 'space-evenly',
@@ -27,9 +35,9 @@ const CourseEnrollmentCheckbox = props => {
         name={props.course.courseid}
         onChange={onChange}
       />
-      <p>{props.course.coursecode}</p>
-      <p>{props.course.couresname}</p>
-    </Card>
+      <StyledP>{props.course.coursecode}</StyledP>
+      <StyledP>{props.course.coursename}</StyledP>
+    </div>
   );
 };
 
