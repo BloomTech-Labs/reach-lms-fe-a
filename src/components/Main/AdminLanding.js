@@ -82,7 +82,6 @@ const AdminLanding = props => {
         visible={programModal.visible}
         onCancel={handleCloseModal}
         onFinish={handleCloseModal}
-        closable="true"
       >
         <ProgramForm
           href={
