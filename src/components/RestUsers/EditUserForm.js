@@ -6,44 +6,49 @@ import 'antd/dist/antd.css';
 import { Modal, Button, Form, Select, Table, Space } from 'antd';
 import { CourseEnrollmentCheckbox } from '../common';
 
+const rowSelection = {
+  onChange: (selectedRowKeys, selectedRows) => {
+    console.log(
+      `selectedRowKeys: ${selectedRowKeys}`,
+      'selectedRows: ',
+      selectedRows
+    );
+  },
+  // getCheckboxProps: record => ({
+  //   disabled: record.name === 'Disabled User',
+  //   // Column configuration not to be checked
+  //   name: record.name,
+  // }),
+};
+
 const columns = [
   {
     title: 'Course Code',
     dataIndex: 'coursecode',
-    filters: [
-      {
-        text: 'labs',
-        value: 'labs',
-      },
-      {
-        text: 'cs',
-        value: 'cs',
-      },
-    ],
-    // specify the condition of filtering result
-    // here is that finding the name started with `value`
-    onFilter: (value, record) => record.name.indexOf(value) === 0,
-    sorter: (a, b) => a.name.charCodeAt(0) - b.name.charCodeAt(0),
-    sortDirections: ['ascend', 'descend'],
   },
   {
     title: 'Course Name',
     dataIndex: 'coursename',
-    sorter: (a, b) => a.characCodeAt(0) - b.charCodeAt(0),
-    sortDirections: ['ascend', 'descend'],
-  },
-  {
-    title: 'Action',
-    key: 'action',
-    render: (text, record) => (
-      <Space size="middle">
-        <a>Invite {record.name}</a>
-        <a>Delete</a>
-      </Space>
-    ),
   },
 ];
 
+const data = [
+  {
+    key: '1',
+    coursename: 'Course 1',
+    coursecode: 32,
+  },
+  {
+    key: '2',
+    coursename: 'Course 2',
+    coursecode: 42,
+  },
+  {
+    key: '3',
+    coursename: 'Course 3',
+    coursecode: 56,
+  },
+];
 
 const EditUserForm = props => {
   const { data } = useRestfulFetch(props.href);
@@ -56,11 +61,15 @@ const EditUserForm = props => {
   );
 
   React.useEffect(() => {
-    console.log({data});
-    console.log({courses})
-    console.log(props.courses)
+    console.log({ data });
+    console.log({ courses });
+    console.log(props.courses);
     if (data) {
       setValues(prevValues => ({ ...prevValues, ...data }));
+    }
+    if (courses) {
+      const newCourses = new Set();
+      courses.enrolled.forEach(course => {});
     }
   }, [data, setValues, courses]);
 
@@ -115,7 +124,7 @@ const EditUserForm = props => {
             <Select.Option value="student">Student</Select.Option>
           </Select>
         </Form.Item>
-        {courses?.enrolled.map(course => (
+        {/* {courses?.enrolled.map(course => (
           <Form.Item>
             <CourseEnrollmentCheckbox value={true} course={course} />
           </Form.Item>
@@ -124,8 +133,13 @@ const EditUserForm = props => {
           <Form.Item>
             <CourseEnrollmentCheckbox value={false} course={course} />
           </Form.Item>
-        ))}
+        ))} */}
       </Form>
+      <Table
+        rowSelection={{ type: 'checkbox', ...rowSelection }}
+        columns={columns}
+        dataSource={data}
+      />
     </>
   );
 

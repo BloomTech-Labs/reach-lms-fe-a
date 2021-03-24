@@ -183,7 +183,7 @@ const UserManagement = props => {
         onSubmit={userAdd.hideModal}
       />
       <EditUserForm
-        isWrapped={true}
+        isWrapped={false}
         visible={userEdit.visible}
         hideModal={userEdit.hideModal}
         href={selectedUser}
