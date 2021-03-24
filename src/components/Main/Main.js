@@ -4,6 +4,7 @@ import 'antd/dist/antd.css';
 import { Button, Modal } from 'antd';
 import { GhostLink } from '../common';
 import { ADMIN_LANDING } from '../../routes';
+import '../../styles/Main.css';
 import {
   EditModuleForm,
   AddModuleForm,
@@ -48,12 +49,18 @@ const Main = props => {
 
   return (
     <Styled.Content>
+      <style>
+        @import
+        url('https://fonts.googleapis.com/css2?family=Lato&family=Open+Sans:wght@300&family=Roboto+Mono&display=swap');
+      </style>
+
       <div>{programId && programInfo}</div>
 
       <h2>My Courses</h2>
 
       {user.userIsAdmin() && (
         <Button
+          className="group1"
           onClick={() => {
             courseAdd.showModal();
           }}
@@ -101,7 +108,7 @@ const Main = props => {
                 moduleAdd.showModal();
               }}
             >
-              Add a Module!
+              Add Module
             </Button>
             <Button
               onClick={() => {

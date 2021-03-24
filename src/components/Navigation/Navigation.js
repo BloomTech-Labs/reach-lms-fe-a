@@ -13,13 +13,16 @@ const StyledNav = styled.nav`
   flex-direction: row;
   justify-content: space-between;
   width: 100%;
-  background-color: lightgrey;
+  background-color: #436ea5;
 `;
 const StyledLogo = styled.h1`
+  display: flex;
+  align-items: center;
+  justify-content: center;
   position: relative;
-  font-size: 2vw;
+  font-size: 2.2vw;
   color: #252839;
-  -webkit-text-stroke: 0.3vw #383d52;
+  -webkit-text-stroke: 0.3vw white;
   text-transform: uppercase;
   &::before {
     content: attr(data-text);
@@ -28,9 +31,9 @@ const StyledLogo = styled.h1`
     left: 0;
     width: 100%;
     height: 100%;
-    color: #01fe87;
-    -webkit-text-stroke: 0vw #383d52;
-    border-right: 2px solid #01fe87;
+    color: #ff3a3a;
+    -webkit-text-stroke: 0vw white;
+    border-right: 2px solid white;
     overflow: hidden;
     animation: animate 6s linear infinite;
   }
@@ -80,7 +83,7 @@ const Navigation = props => {
   return (
     <StyledNav>
       <Link to="/">
-        <StyledLogo data-text="Reach...">REACH...</StyledLogo>
+        <StyledLogo data-text="Reach...">REACH</StyledLogo>
       </Link>
       <StyledMenu>
         <IconButton
