@@ -1,14 +1,15 @@
 import React from 'react';
+import { Card, Checkbox } from 'antd';
 import { client } from '../../utils';
 
 const CourseEnrollmentCheckbox = props => {
   const [checked, setChecked] = React.useState(props.value);
 
   const onChange = e => {
-    setChecked(e.target.value);
-    if (checked) {
-      props.setCourseSet(...courseSet, props.course.courseid);
-    }
+    setChecked(!checked);
+    // if (checked) {
+    //   // props.setCourseSet(...props.courseSet, props.course.courseid);
+    // }
   };
 
   return (

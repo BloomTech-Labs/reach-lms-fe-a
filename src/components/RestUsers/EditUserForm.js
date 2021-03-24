@@ -4,9 +4,12 @@ import { client } from '../../utils/api';
 import schema from '../../validation/EditUserSchema';
 import 'antd/dist/antd.css';
 import { Modal, Button, Form, Select } from 'antd';
+import { CourseEnrollmentCheckbox } from '../common';
 
 const EditUserForm = props => {
   const { data } = useRestfulFetch(props.href);
+  const { data: course } = useRestfulFetch(props.courses);
+  const [courseSet, setCourseSet] = React.useState(new Set());
   const { values, disabled, onChange, setValues } = useFormWithErrors(
     schema,
     data,
@@ -25,7 +28,10 @@ const EditUserForm = props => {
       onChange('role', evt);
       return;
     }
-    const { name, value } = evt.target;
+    const { name, value, checked, type } = evt.target;
+    if (type === 'checkbox') {
+      setCourseSet(prevState => prevState.add(checked));
+    }
     onChange(name, value);
   };
 
@@ -36,8 +42,9 @@ const EditUserForm = props => {
       userid: data.userid,
       userrole: values.role,
     };
+    console.log({ course });
 
-    client.patchUser(editedUser.userid, editedUser);
+    // client.patchUser(editedUser.userid, editedUser);
   }
 
   if (!data || !values) {
@@ -68,6 +75,11 @@ const EditUserForm = props => {
             <Select.Option value="student">Student</Select.Option>
           </Select>
         </Form.Item>
+        {/* {props.courses?.enrolled.map(course => (
+          <Form.Item htmlFor="courses" label="Courses">
+            <CourseEnrollmentCheckbox value={true} course={course} />
+          </Form.Item>
+        ))} */}
       </Form>
     </>
   );
