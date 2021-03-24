@@ -53,11 +53,8 @@ const Main = props => {
         @import
         url('https://fonts.googleapis.com/css2?family=Lato&family=Open+Sans:wght@300&family=Roboto+Mono&display=swap');
       </style>
-
       <div>{programId && programInfo}</div>
-
       <h2>My Courses</h2>
-
       {user.userIsAdmin() && (
         <Button
           className="group1"
@@ -68,7 +65,6 @@ const Main = props => {
           Add Course
         </Button>
       )}
-
       <CourseList
         href={href ?? '/courses'}
         mappedChild={courseEntity => (
@@ -139,9 +135,9 @@ const Main = props => {
       <AddModuleForm
         isWrapped={true}
         visible={moduleAdd.visible}
-        hideModal={moduleEdit.hideModal}
+        hideModal={moduleAdd.hideModal}
         courseId={courseId}
-        onSubmit={moduleEdit.hideModal}
+        onSubmit={moduleAdd.hideModal}
       />
       <EditModuleForm
         isWrapped={true}

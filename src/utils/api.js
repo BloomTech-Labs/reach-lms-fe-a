@@ -32,4 +32,5 @@ export const client = {
   patchUser: (userId, editedUser) =>
     axiosAuth().patch(`/users/user/${userId}`, editedUser),
   deleteUser: userId => axiosAuth().delete(`/users/user/${userId}`),
+  postNewUser: newUser => axiosAuth().post('/users/create-user', newUser),
 };
