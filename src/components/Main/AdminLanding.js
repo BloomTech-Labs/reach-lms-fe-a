@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useSubModal } from '../../hooks';
 import { GhostLink } from '../common';
 import { ProgramList, ProgramForm, ProgramSingleton } from '../RestPrograms';
-import { Modal, Button } from 'antd';
+import { Button } from 'antd';
 import { pathUtils } from '../../routes';
 import Styled from './AdminLanding.styles';
 import { EditOutlined, DeleteOutline } from '@material-ui/icons';

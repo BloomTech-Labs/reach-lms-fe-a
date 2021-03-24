@@ -10,7 +10,7 @@ const initValues = {
   username: '',
   firstname: '',
   lastname: '',
-  role: '',
+  roleType: '',
 };
 
 const AddNewUserForm = props => {
@@ -21,7 +21,7 @@ const AddNewUserForm = props => {
 
   const changeValues = evt => {
     if (typeof evt == 'string') {
-      onChange('role', evt);
+      onChange('roleType', evt);
       return;
     }
     const { name, value } = evt.target;
@@ -30,6 +30,7 @@ const AddNewUserForm = props => {
 
   const onSubmit = evt => {
     evt.preventDefault();
+    console.log({ values });
     client.postNewUser(values);
     resetValues();
   };
@@ -83,12 +84,12 @@ const AddNewUserForm = props => {
           />
           <Styled.Error>{errors.email}</Styled.Error>
         </Form.Item>
-        // the evt of the Select input on our form needs to be investigated
+        {/* the evt of the Select input on our form needs to be investigated */}
         <Form.Item label="User Roles">
           <Select value={values.role} onChange={changeValues}>
-            <Select.Option value="admin">Admin</Select.Option>
-            <Select.Option value="teacher">Teacher</Select.Option>
-            <Select.Option value="student">Student</Select.Option>
+            <Select.Option value="ADMIN">Admin</Select.Option>
+            <Select.Option value="TEACHER">Teacher</Select.Option>
+            <Select.Option value="STUDENT">Student</Select.Option>
           </Select>
         </Form.Item>
       </Form>
