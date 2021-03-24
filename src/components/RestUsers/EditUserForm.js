@@ -32,7 +32,7 @@ const columns = [
   },
 ];
 
-const data = [
+const dataSource = [
   {
     key: '1',
     coursename: 'Course 1',
@@ -124,21 +124,11 @@ const EditUserForm = props => {
             <Select.Option value="student">Student</Select.Option>
           </Select>
         </Form.Item>
-        {/* {courses?.enrolled.map(course => (
-          <Form.Item>
-            <CourseEnrollmentCheckbox value={true} course={course} />
-          </Form.Item>
-        ))}
-        {courses?.available.map(course => (
-          <Form.Item>
-            <CourseEnrollmentCheckbox value={false} course={course} />
-          </Form.Item>
-        ))} */}
       </Form>
       <Table
         rowSelection={{ type: 'checkbox', ...rowSelection }}
         columns={columns}
-        dataSource={data}
+        dataSource={dataSource}
       />
     </>
   );
