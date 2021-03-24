@@ -14,6 +14,7 @@ const EditUserForm = props => {
   );
 
   React.useEffect(() => {
+    console.log(data);
     if (data) {
       setValues(prevValues => ({ ...prevValues, ...data }));
     }
