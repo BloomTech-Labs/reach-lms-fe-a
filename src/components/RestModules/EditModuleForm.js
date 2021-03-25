@@ -27,9 +27,11 @@ function EditModuleForm(props) {
 
   React.useEffect(() => {
     if (data) {
+      console.log({ data });
+      console.log({ values });
       setValues(prevValues => ({ ...prevValues, ...data }));
     }
-  }, [data, setValues]);
+  }, [data, values, setValues]);
 
   const changeValues = e => {
     const { name, value } = e.target;
@@ -83,6 +85,7 @@ function EditModuleForm(props) {
             {errors.moduledescription ? `${errors.moduledescription}` : ''}
           </div>
         </Form.Item>
+
         <Form.Item label="Module Content:" name="modulecontent">
           <TextArea
             showCount
