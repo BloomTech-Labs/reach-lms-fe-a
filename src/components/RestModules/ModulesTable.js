@@ -1,7 +1,7 @@
 import React from 'react';
-// import { Card } from 'antd';
-import { Table } from 'antd';
+import { Table, Space } from 'antd';
 import { useRestfulFetch } from '../../hooks';
+import { DeleteOutline, EditOutlined } from '@material-ui/icons';
 
 const ModulesTable = props => {
   const { href } = props;
@@ -15,11 +15,6 @@ const ModulesTable = props => {
         data.moduleList.map(module => ({
           ...module,
           key: module.moduleid,
-          actions: [
-            module._links.self.href && (
-              <a href={module._links.self.href}>Link 2 Self</a>
-            ),
-          ],
         }))
       );
     }
@@ -41,6 +36,30 @@ const ModulesTable = props => {
     {
       title: 'Actions',
       dataIndex: 'actions',
+      render: (text, record) => {
+        return (
+          <Space size="middle">
+            {record._links.self.href && (
+              <EditOutlined
+                key="edit"
+                onClick={e => {
+                  e.preventDefault();
+                  console.log('edit module', record._links.self.href);
+                }}
+              />
+            )}
+            {record._links.self.href && (
+              <DeleteOutline
+                key="delete"
+                onClick={e => {
+                  e.preventDefault();
+                  console.log('delete module', record._links.self.href);
+                }}
+              />
+            )}
+          </Space>
+        );
+      },
     },
   ];
 

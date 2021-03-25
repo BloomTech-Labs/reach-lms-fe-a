@@ -6,12 +6,7 @@ import { GhostLink } from '../common';
 import { ADMIN_LANDING } from '../../routes';
 import { DeleteOutline } from '@material-ui/icons';
 import '../../styles/Main.css';
-import {
-  EditModuleForm,
-  AddModuleForm,
-  ModuleList,
-  ModuleSingleton,
-} from '../RestModules';
+import { EditModuleForm, AddModuleForm } from '../RestModules';
 import {
   CourseSingleton,
   CourseList,
@@ -22,7 +17,6 @@ import { ProgramSingleton } from '../RestPrograms';
 import { StudentTeacherManagement } from '../RestUsers';
 import { client } from '../../utils/api';
 import Styled from './Main.styles';
-import ModulesTable from '../RestModules/ModulesTable';
 
 const Main = props => {
   const { href, programId } = props;
