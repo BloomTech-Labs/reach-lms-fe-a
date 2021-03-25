@@ -83,7 +83,6 @@ function EditModuleForm(props) {
             {errors.moduledescription ? `${errors.moduledescription}` : ''}
           </div>
         </Form.Item>
-
         <Form.Item label="Module Content:" name="modulecontent">
           <TextArea
             showCount
