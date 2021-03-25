@@ -35,8 +35,6 @@ function EditCourseForm(props) {
   };
 
   function submitForm(e) {
-    e.preventDefault();
-
     const editedCourse = {
       courseid: data.courseid,
       coursename: values.coursename,

@@ -1,0 +1,13 @@
+h2{
+   display:flex;
+   justify-content: center;
+   align-items: center;
+   margin-left: 45%;
+}
+button.group1{
+   margin-left: 45%;
+}
+
+body{
+   font-family: 'Roboto Mono', monospace;
+}
