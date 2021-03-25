@@ -9,17 +9,24 @@ const CourseCard = props => {
   const [color, setColor] = useState('');
   const handleChangeComplete = color => {
     setColor(color.hex);
-    console.log(color);
   };
   return (
     <Card
+      actions={true}
       style={{
         backgroundColor: color,
       }}
       title={
-        <h3 color={color}>
-          <strong>{course.coursename}</strong>
-        </h3>
+        <div className="title">
+          <h3>
+            <strong>{course.coursename}</strong>
+            <CirclePicker
+              colors={['#673ab7', '#3f51b5', '#ffc107', '#ff9800', '#ff5722']}
+              onChangeComplete={handleChangeComplete}
+              circleSize={20}
+            />
+          </h3>
+        </div>
       }
       className="course-card"
     >
@@ -29,11 +36,6 @@ const CourseCard = props => {
       <p>
         <strong>Description:</strong> {course.coursedescription}
       </p>
-      <CirclePicker
-        colors={['#673ab7', '#3f51b5', '#ffc107', '#ff9800', '#ff5722']}
-        onChangeComplete={handleChangeComplete}
-        circleSize={36}
-      />
       {props.children}
     </Card>
   );
