@@ -63,7 +63,6 @@ const Main = props => {
           Add Course
         </Button>
       )}
-
       <CourseList
         href={href ?? '/courses'}
         mappedChild={courseEntity => (
@@ -71,31 +70,6 @@ const Main = props => {
             key={courseEntity._links.self.href}
             href={courseEntity._links.self.href}
           >
-            <ModuleList
-              href={courseEntity._links.modules.href}
-              mappedChild={moduleEntity => (
-                <ModuleSingleton
-                  key={moduleEntity._links.self.href}
-                  href={moduleEntity._links.self.href}
-                >
-                  <Button
-                    onClick={() => {
-                      setSelectedModule(moduleEntity._links.self.href);
-                      moduleEdit.showModal();
-                    }}
-                  >
-                    Edit Module
-                  </Button>
-                  <DeleteOutline
-                    key="delete"
-                    onClick={e => {
-                      e.preventDefault();
-                      client.deleteModule(module.moduleid);
-                    }}
-                  />
-                </ModuleSingleton>
-              )}
-            />
             <Button
               onClick={() => {
                 setSelectedCourse(courseEntity._links.self.href);
@@ -120,6 +94,38 @@ const Main = props => {
             >
               Manage Users
             </Button>
+            <DeleteOutline
+              key="delete"
+              onClick={e => {
+                e.preventDefault();
+                client.deleteCourse(courseEntity.courseid);
+              }}
+            />
+            <ModuleList
+              href={courseEntity._links.modules.href}
+              mappedChild={moduleEntity => (
+                <ModuleSingleton
+                  key={moduleEntity._links.self.href}
+                  href={moduleEntity._links.self.href}
+                >
+                  <Button
+                    onClick={() => {
+                      setSelectedModule(moduleEntity._links.self.href);
+                      moduleEdit.showModal();
+                    }}
+                  >
+                    Edit Module
+                  </Button>
+                  <DeleteOutline
+                    key="delete"
+                    onClick={e => {
+                      e.preventDefault();
+                      client.deleteModule(moduleEntity.moduleid);
+                    }}
+                  />
+                </ModuleSingleton>
+              )}
+            />
           </CourseSingleton>
         )}
       />
@@ -152,7 +158,6 @@ const Main = props => {
         href={selectedModule}
         onSubmit={moduleEdit.hideModal}
       />
-
       <Modal
         title="Manage Users"
         width="90vw"
