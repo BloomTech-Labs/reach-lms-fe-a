@@ -120,7 +120,14 @@ const EditUserForm = props => {
         <Modal
           visible={props.visible}
           onCancel={props.hideModal}
-          onOk={submitForm}
+          onOk={e => {
+            if (disabled) {
+              props.hideModal();
+            } else {
+              submitForm(e);
+              props.hideModal();
+            }
+          }}
         >
           {innerForm}
         </Modal>
