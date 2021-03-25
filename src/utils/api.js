@@ -32,5 +32,8 @@ export const client = {
   patchUser: (userId, editedUser) =>
     axiosAuth().patch(`/users/user/${userId}`, editedUser),
   deleteUser: userId => axiosAuth().delete(`/users/user/${userId}`),
+  getAllNotCourses: userId => axiosAuth().get(`/courses/anti-user/${userId}`),
+  getCourseEnrollmentObject: userId =>
+    axiosAuth().get(`/courses/mappify-by-user/${userId}`),
   postNewUser: newUser => axiosAuth().post('/users/create-user', newUser),
 };

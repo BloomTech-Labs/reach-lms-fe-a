@@ -1,9 +1,3 @@
-//  ## VIEW MODE 2 — <UserManagement />
-// - [ ] Each USER_COMPONENT will have the following actions
-//   - [ ] MANAGE — <ManageUser href={GET user by user id} />
-//       - [ ] List of courses the user is attached to (with DELETE option to remove this user from course)
-//       - [ ] Option to ADD new course to that user (once this action is hit, we should show a collection of courses we could attach to this user)
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useSubModal } from '../../hooks';
@@ -20,12 +14,7 @@ const UserManagement = props => {
   const userAdd = useSubModal();
   const userEdit = useSubModal();
   const [selectedUser, setSelectedUser] = React.useState('');
-
-  // const handleCloseModal = () => {
-  //   setSelectedUser('');
-  //   userAdd.hideModal();
-  //   userEdit.hideModal();
-  // };
+  const [selectedUserCourses, setSelectedUserCourses] = React.useState('');
 
   return (
     <>
@@ -44,29 +33,33 @@ const UserManagement = props => {
 
         <Styled.Users>
           {/*ADMINS*/}
-
           <UserList
             href="/users/admins"
             mappedChild={user => (
               <Styled.Card
                 style={{ width: 500, height: 100, margin: 20 }}
-                actions={[
-                  <EditOutlined
-                    key="edit"
-                    onClick={e => {
-                      e.preventDefault();
-                      setSelectedUser(user._links.self.href);
-                      userEdit.showModal();
-                    }}
-                  />,
-                  <DeleteOutline
-                    key="delete"
-                    onClick={e => {
-                      e.preventDefault();
-                      client.deleteUser(user.userid);
-                    }}
-                  />,
-                ]}
+                actions={
+                  user._links.mappified_courses && [
+                    <EditOutlined
+                      key="edit"
+                      onClick={e => {
+                        e.preventDefault();
+                        setSelectedUser(user._links.self.href);
+                        setSelectedUserCourses(
+                          user._links.mappified_courses.href
+                        );
+                        userEdit.showModal();
+                      }}
+                    />,
+                    <DeleteOutline
+                      key="delete"
+                      onClick={e => {
+                        e.preventDefault();
+                        client.deleteUser(user.userid);
+                      }}
+                    />,
+                  ]
+                }
               >
                 <Meta
                   title={`${user.firstname} ${user.lastname} : ${user.username} ${user.role}`}
@@ -77,29 +70,33 @@ const UserManagement = props => {
           />
 
           {/*TEACHERS*/}
-
           <UserList
             href="/users/teachers"
             mappedChild={user => (
               <Styled.Card
                 style={{ width: 500, height: 100, margin: 20 }}
-                actions={[
-                  <EditOutlined
-                    key="edit"
-                    onClick={e => {
-                      e.preventDefault();
-                      setSelectedUser(user._links.self.href);
-                      userEdit.showModal();
-                    }}
-                  />,
-                  <DeleteOutline
-                    key="delete"
-                    onClick={e => {
-                      e.preventDefault();
-                      client.deleteUser(user.userid);
-                    }}
-                  />,
-                ]}
+                actions={
+                  user._links.mappified_courses && [
+                    <EditOutlined
+                      key="edit"
+                      onClick={e => {
+                        e.preventDefault();
+                        setSelectedUser(user._links.self.href);
+                        setSelectedUserCourses(
+                          user._links.mappified_courses.href
+                        );
+                        userEdit.showModal();
+                      }}
+                    />,
+                    <DeleteOutline
+                      key="delete"
+                      onClick={e => {
+                        e.preventDefault();
+                        client.deleteUser(user.userid);
+                      }}
+                    />,
+                  ]
+                }
               >
                 <Meta
                   title={`${user.firstname} ${user.lastname} : ${user.username} ${user.role}`}
@@ -110,29 +107,33 @@ const UserManagement = props => {
           />
 
           {/*STUDENTS*/}
-
           <UserList
             href="/users/students"
             mappedChild={user => (
               <Styled.Card
                 style={{ width: 500, height: 100, margin: 20 }}
-                actions={[
-                  <EditOutlined
-                    key="edit"
-                    onClick={e => {
-                      e.preventDefault();
-                      setSelectedUser(user._links.self.href);
-                      userEdit.showModal();
-                    }}
-                  />,
-                  <DeleteOutline
-                    key="delete"
-                    onClick={e => {
-                      e.preventDefault();
-                      client.deleteUser(user.userid);
-                    }}
-                  />,
-                ]}
+                actions={
+                  user._links.mappified_courses && [
+                    <EditOutlined
+                      key="edit"
+                      onClick={e => {
+                        e.preventDefault();
+                        setSelectedUser(user._links.self.href);
+                        setSelectedUserCourses(
+                          user._links.mappified_courses.href
+                        );
+                        userEdit.showModal();
+                      }}
+                    />,
+                    <DeleteOutline
+                      key="delete"
+                      onClick={e => {
+                        e.preventDefault();
+                        client.deleteUser(user.userid);
+                      }}
+                    />,
+                  ]
+                }
               >
                 <Meta
                   title={`${user.firstname} ${user.lastname} : ${user.username} ${user.role}`}
@@ -145,19 +146,6 @@ const UserManagement = props => {
       </Styled.Content>
 
       {/*MODAL FORMS MGMT*/}
-
-      {/* <Modal
-        title="Add User"
-        width="90vw"
-        visible={userAdd.visible}
-        onCancel={handleCloseModal}
-        onFinish={handleCloseModal}
-      >
-        <AddNewUserForm
-          href={selectedUser && selectedUser !== '' ? selectedUser : ''}
-          visible={userAdd.visible}
-        /> */}
-      {/* </Modal> */}
       <AddNewUserForm
         isWrapped={true}
         visible={userAdd.visible}
@@ -170,20 +158,9 @@ const UserManagement = props => {
         visible={userEdit.visible}
         hideModal={userEdit.hideModal}
         href={selectedUser}
+        courses={selectedUserCourses}
         onSubmit={userEdit.hideModal}
       />
-      {/* <Modal
-        title="Edit User"
-        width="90vw"
-        visible={userEdit.visible}
-        onCancel={handleCloseModal}
-        onFinish={handleCloseModal}
-      >
-        <EditUserForm
-          href={selectedUser && selectedUser !== '' ? selectedUser : ''}
-          visible={userEdit.visible}
-        />
-      </Modal> */}
     </>
   );
 };

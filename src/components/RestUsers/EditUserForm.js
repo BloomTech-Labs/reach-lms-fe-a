@@ -1,12 +1,25 @@
 import React from 'react';
 import { useFormWithErrors, useRestfulFetch } from '../../hooks';
-import { client } from '../../utils/api';
 import schema from '../../validation/EditUserSchema';
 import 'antd/dist/antd.css';
-import { Modal, Button, Form, Select } from 'antd';
+import { Modal, Button, Form, Select, Table } from 'antd';
+
+const columns = [
+  {
+    title: 'Course Code',
+    dataIndex: 'coursecode',
+  },
+  {
+    title: 'Course Name',
+    dataIndex: 'coursename',
+  },
+];
 
 const EditUserForm = props => {
   const { data } = useRestfulFetch(props.href);
+  const { data: courses } = useRestfulFetch(props.courses);
+  const [allCourses, setAllCourses] = React.useState([]);
+  const [courseSet, setCourseSet] = React.useState([]);
   const { values, disabled, onChange, setValues } = useFormWithErrors(
     schema,
     data,
@@ -17,29 +30,54 @@ const EditUserForm = props => {
     if (data) {
       setValues(prevValues => ({ ...prevValues, ...data }));
     }
-  }, [data, setValues]);
+    if (courses) {
+      setAllCourses(
+        courses.enrolled
+          .map(course => {
+            return { ...course, key: course.courseid, enrolled: true };
+          })
+          .concat(
+            courses.available.map(course => {
+              return { ...course, key: course.courseid, enrolled: false };
+            })
+          )
+      );
+      setCourseSet(courses.enrolled.map(course => course.courseid));
+    }
+  }, [data, setValues, courses]);
+
+  const rowSelection = {
+    onChange: (selectedRowKeys, selectedRows) => {
+      setCourseSet(selectedRowKeys);
+    },
+    getCheckboxProps: data => ({
+      name: data.name,
+      value: data.key,
+    }),
+    selectedRowKeys: courseSet,
+  };
 
   const changeValues = evt => {
     if (typeof evt == 'string') {
       onChange('role', evt);
       return;
     }
-    const { name, value } = evt.target;
+    const { name, value, checked, type } = evt.target;
+    if (type === 'checkbox') {
+      setCourseSet(prevState => prevState.add(checked));
+    }
     onChange(name, value);
   };
 
   function submitForm(e) {
     e.preventDefault();
-
-    const editedUser = {
-      userid: data.userid,
-      userrole: values.role,
-    };
-
-    client.patchUser(editedUser.userid, editedUser);
   }
 
-  if (!data || !values) {
+  if (!props.visible) {
+    return null;
+  }
+
+  if (!data || !values || !courses) {
     return <div>Loading...</div>;
   }
 
@@ -68,6 +106,11 @@ const EditUserForm = props => {
           </Select>
         </Form.Item>
       </Form>
+      <Table
+        rowSelection={{ type: 'checkbox', ...rowSelection }}
+        columns={columns}
+        dataSource={allCourses}
+      />
     </>
   );
 
