@@ -104,7 +104,14 @@ const AddNewUserForm = props => {
         <Modal
           visible={props.visible}
           onCancel={props.hideModal}
-          onOk={onSubmit}
+          onOk={e => {
+            if (disabled) {
+              props.hideModal();
+            } else {
+              onSubmit(e);
+              props.hideModal();
+            }
+          }}
         >
           {innerForm}
         </Modal>

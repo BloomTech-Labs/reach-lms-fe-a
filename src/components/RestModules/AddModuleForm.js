@@ -84,9 +84,13 @@ function AddModuleForm(props) {
       {props.isWrapped ? (
         <Modal
           visible={props.visible}
-          onOk={() => {
-            submitForm();
-            props.hideModal();
+          onOk={e => {
+            if (disabled) {
+              props.hideModal();
+            } else {
+              submitForm(e);
+              props.hideModal();
+            }
           }}
           onCancel={props.hideModal}
         >

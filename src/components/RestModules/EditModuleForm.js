@@ -27,9 +27,11 @@ function EditModuleForm(props) {
 
   React.useEffect(() => {
     if (data) {
+      console.log({ data });
+      console.log({ values });
       setValues(prevValues => ({ ...prevValues, ...data }));
     }
-  }, [data, setValues]);
+  }, [data, values, setValues]);
 
   const changeValues = e => {
     const { name, value } = e.target;
@@ -83,6 +85,21 @@ function EditModuleForm(props) {
             {errors.moduledescription ? `${errors.moduledescription}` : ''}
           </div>
         </Form.Item>
+
+        <Form.Item label="Module Content:" name="modulecontent">
+          <TextArea
+            showCount
+            maxLength={250}
+            id="modulecontent"
+            name="modulecontent"
+            value={values.modulecontent}
+            onChange={changeValues}
+            rows={4}
+          />
+          <div style={{ color: 'red' }}>
+            {errors.modulecontent ? `${errors.modulecontent}` : ''}
+          </div>
+        </Form.Item>
       </Form>
     </>
   );
@@ -93,7 +110,14 @@ function EditModuleForm(props) {
         <Modal
           visible={props.visible}
           onCancel={props.hideModal}
-          onOk={submitForm}
+          onOk={e => {
+            if (disabled) {
+              props.hideModal();
+            } else {
+              submitForm(e);
+              props.hideModal();
+            }
+          }}
         >
           {innerForm}
         </Modal>

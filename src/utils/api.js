@@ -15,16 +15,16 @@ export const client = {
   postCourse: (programId, newCourse) =>
     axiosAuth().post(`/courses/${programId}/course`, newCourse),
   putCourse: (courseId, newCourse) =>
-    axiosAuth().put(`/courses/course/${courseId}`, newCourse),
+    axiosAuth().put(`/courses/${courseId}`, newCourse),
   patchCourse: (courseId, editedCourse) =>
     axiosAuth().patch(`/courses/${courseId}`, editedCourse),
-  deleteCourse: courseId => axiosAuth().delete(`/courses/course/${courseId}`),
+  deleteCourse: courseId => axiosAuth().delete(`/courses/${courseId}`),
   // --------------- MODULE ---------------
   postModule: (courseId, newModule) =>
     axiosAuth().post(`/modules/${courseId}/module`, newModule),
   patchModule: (moduleId, editedModule) =>
     axiosAuth().patch(`/modules/${moduleId}`, editedModule),
-  deleteModule: moduleId => axiosAuth().delete(`/modules/module/${moduleId}`),
+  deleteModule: moduleId => axiosAuth().delete(`/modules/${moduleId}`),
   // --------------- USER ---------------
   attachUserToCourse: (userId, courseId) =>
     axiosAuth().put(`/courses/course/${courseId}/user/${userId}`),
