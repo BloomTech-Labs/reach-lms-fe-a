@@ -22,6 +22,7 @@ import { ProgramSingleton } from '../RestPrograms';
 import { StudentTeacherManagement } from '../RestUsers';
 import { client } from '../../utils/api';
 import Styled from './Main.styles';
+import ModulesTable from '../RestModules/ModulesTable';
 
 const Main = props => {
   const { href, programId } = props;
@@ -69,69 +70,77 @@ const Main = props => {
       )}
       <CourseList
         href={href ?? '/courses'}
-        mappedChild={courseEntity => (
-          <CourseSingleton
-            key={courseEntity._links.self.href}
-            href={courseEntity._links.self.href}
-          >
-            <Button
-              onClick={() => {
-                setSelectedCourse(courseEntity._links.self.href);
-                courseEdit.showModal();
-              }}
-            >
-              Edit Course
-            </Button>
-            <Button
-              onClick={() => {
-                setCourseId(courseEntity.courseid);
-                moduleAdd.showModal();
-              }}
-            >
-              Add Module
-            </Button>
-            <Button
-              onClick={() => {
-                setSelectedCourse(courseEntity._links.self.href);
-                manageStudentTeacher.showModal();
-              }}
-            >
-              Manage Users
-            </Button>
-            <DeleteOutline
-              key="delete"
-              onClick={e => {
-                e.preventDefault();
-                client.deleteCourse(courseEntity.courseid);
-              }}
-            />
-            <ModuleList
-              href={courseEntity._links.modules.href}
-              mappedChild={moduleEntity => (
-                <ModuleSingleton
-                  key={moduleEntity._links.self.href}
-                  href={moduleEntity._links.self.href}
-                >
-                  <Button
-                    onClick={() => {
-                      setSelectedModule(moduleEntity._links.self.href);
-                      moduleEdit.showModal();
-                    }}
-                  >
-                    Edit Module
-                  </Button>
-                  <DeleteOutline
-                    key="delete"
-                    onClick={e => {
-                      e.preventDefault();
-                      client.deleteModule(moduleEntity.moduleid);
-                    }}
-                  />
-                </ModuleSingleton>
+        mappedChild={courseEntity => {
+          console.log(courseEntity);
+          return (
+            <>
+              {courseEntity._links.modules.href && (
+                <ModulesTable href={courseEntity._links.modules.href} />
               )}
-            />
-          </CourseSingleton>
-        )}
+              <CourseSingleton
+                key={courseEntity._links.self.href}
+                href={courseEntity._links.self.href}
+              >
+                <Button
+                  onClick={() => {
+                    setSelectedCourse(courseEntity._links.self.href);
+                    courseEdit.showModal();
+                  }}
+                >
+                  Edit Course
+                </Button>
+                <Button
+                  onClick={() => {
+                    setCourseId(courseEntity.courseid);
+                    moduleAdd.showModal();
+                  }}
+                >
+                  Add Module
+                </Button>
+                <Button
+                  onClick={() => {
+                    setSelectedCourse(courseEntity._links.self.href);
+                    manageStudentTeacher.showModal();
+                  }}
+                >
+                  Manage Users
+                </Button>
+                <DeleteOutline
+                  key="delete"
+                  onClick={e => {
+                    e.preventDefault();
+                    client.deleteCourse(courseEntity.courseid);
+                  }}
+                />
+                <ModuleList
+                  href={courseEntity._links.modules.href}
+                  mappedChild={moduleEntity => (
+                    <ModuleSingleton
+                      key={moduleEntity._links.self.href}
+                      href={moduleEntity._links.self.href}
+                    >
+                      <Button
+                        onClick={() => {
+                          setSelectedModule(moduleEntity._links.self.href);
+                          moduleEdit.showModal();
+                        }}
+                      >
+                        Edit Module
+                      </Button>
+                      <DeleteOutline
+                        key="delete"
+                        onClick={e => {
+                          e.preventDefault();
+                          client.deleteModule(moduleEntity.moduleid);
+                        }}
+                      />
+                    </ModuleSingleton>
+                  )}
+                />
+              </CourseSingleton>
+            </>
+          );
+        }}
       />
       <AddCourseForm
         isWrapped={true}
