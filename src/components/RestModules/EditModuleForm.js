@@ -83,18 +83,6 @@ function EditModuleForm(props) {
             {errors.moduledescription ? `${errors.moduledescription}` : ''}
           </div>
         </Form.Item>
-
-        <Form.Item label="Module Content:" name="modulecontent">
-          <Input
-            id="modulecontent"
-            name="modulecontent"
-            value={values.modulecontent}
-            onChange={changeValues}
-          />
-          <div style={{ color: 'red' }}>
-            {errors.modulecontent ? `${errors.modulecontent}` : ''}
-          </div>
-        </Form.Item>
       </Form>
     </>
   );

@@ -15,7 +15,6 @@ const UserManagement = props => {
   const userEdit = useSubModal();
   const [selectedUser, setSelectedUser] = React.useState('');
   const [selectedUserCourses, setSelectedUserCourses] = React.useState('');
-
   return (
     <>
       <Styled.Content>
