@@ -3,23 +3,7 @@ import { useFormWithErrors, useRestfulFetch } from '../../hooks';
 import { client } from '../../utils/api';
 import schema from '../../validation/EditUserSchema';
 import 'antd/dist/antd.css';
-import { Modal, Button, Form, Select, Table, Space } from 'antd';
-import { CourseEnrollmentCheckbox } from '../common';
-
-const rowSelection = {
-  onChange: (selectedRowKeys, selectedRows) => {
-    console.log(
-      `selectedRowKeys: ${selectedRowKeys}`,
-      'selectedRows: ',
-      selectedRows
-    );
-  },
-  // getCheckboxProps: record => ({
-  //   disabled: record.name === 'Disabled User',
-  //   // Column configuration not to be checked
-  //   name: record.name,
-  // }),
-};
+import { Modal, Button, Form, Select, Table } from 'antd';
 
 const columns = [
   {
@@ -32,28 +16,11 @@ const columns = [
   },
 ];
 
-const dataSource = [
-  {
-    key: '1',
-    coursename: 'Course 1',
-    coursecode: 32,
-  },
-  {
-    key: '2',
-    coursename: 'Course 2',
-    coursecode: 42,
-  },
-  {
-    key: '3',
-    coursename: 'Course 3',
-    coursecode: 56,
-  },
-];
-
 const EditUserForm = props => {
   const { data } = useRestfulFetch(props.href);
   const { data: courses } = useRestfulFetch(props.courses);
-  const [courseSet, setCourseSet] = React.useState(new Set());
+  const [allCourses, setAllCourses] = React.useState([]);
+  const [courseSet, setCourseSet] = React.useState([]);
   const { values, disabled, onChange, setValues } = useFormWithErrors(
     schema,
     data,
@@ -61,17 +28,35 @@ const EditUserForm = props => {
   );
 
   React.useEffect(() => {
-    console.log({ data });
-    console.log({ courses });
-    console.log(props.courses);
     if (data) {
       setValues(prevValues => ({ ...prevValues, ...data }));
     }
     if (courses) {
-      const newCourses = new Set();
-      courses.enrolled.forEach(course => {});
+      setAllCourses(
+        courses.enrolled
+          .map(course => {
+            return { ...course, key: course.courseid, enrolled: true };
+          })
+          .concat(
+            courses.available.map(course => {
+              return { ...course, key: course.courseid, enrolled: false };
+            })
+          )
+      );
+      setCourseSet(courses.enrolled.map(course => course.courseid));
     }
   }, [data, setValues, courses]);
+
+  const rowSelection = {
+    onChange: (selectedRowKeys, selectedRows) => {
+      setCourseSet(selectedRowKeys);
+    },
+    getCheckboxProps: data => ({
+      name: data.name,
+      value: data.key,
+    }),
+    selectedRowKeys: courseSet,
+  };
 
   const changeValues = evt => {
     if (typeof evt == 'string') {
@@ -98,6 +83,10 @@ const EditUserForm = props => {
 
   if (!data || !values || !courses) {
     return <div>Loading...</div>;
+  }
+
+  if (!props.visible) {
+    return null;
   }
 
   const innerForm = (
@@ -128,7 +117,7 @@ const EditUserForm = props => {
       <Table
         rowSelection={{ type: 'checkbox', ...rowSelection }}
         columns={columns}
-        dataSource={dataSource}
+        dataSource={allCourses}
       />
     </>
   );
