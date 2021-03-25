@@ -112,7 +112,10 @@ function EditCourseForm(props) {
         <Modal
           visible={props.visible}
           onCancel={props.hideModal}
-          onOk={submitForm}
+          onOk={() => {
+            submitForm();
+            props.hideModal();
+          }}
         >
           {innerForm}
         </Modal>
