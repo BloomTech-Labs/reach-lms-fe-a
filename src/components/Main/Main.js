@@ -4,6 +4,7 @@ import 'antd/dist/antd.css';
 import { Button, Modal } from 'antd';
 import { GhostLink } from '../common';
 import { ADMIN_LANDING } from '../../routes';
+import { DeleteOutline } from '@material-ui/icons';
 import {
   EditModuleForm,
   AddModuleForm,
@@ -18,6 +19,7 @@ import {
 } from '../RestCourses';
 import { ProgramSingleton } from '../RestPrograms';
 import { StudentTeacherManagement } from '../RestUsers';
+import { client } from '../../utils/api';
 import Styled from './Main.styles';
 
 const Main = props => {
@@ -84,6 +86,13 @@ const Main = props => {
                   >
                     Edit Module
                   </Button>
+                  <DeleteOutline
+                    key="delete"
+                    onClick={e => {
+                      e.preventDefault();
+                      client.deleteModule(module.moduleid);
+                    }}
+                  />
                 </ModuleSingleton>
               )}
             />
