@@ -10,10 +10,17 @@ const ModulesTable = props => {
   const [modulesWithKeys, setModulesWithKeys] = React.useState(null);
 
   React.useEffect(() => {
-    console.log(data);
     if (data && data.hasOwnProperty('moduleList')) {
       setModulesWithKeys(
-        data.moduleList.map(module => ({ ...module, key: module.moduleid }))
+        data.moduleList.map(module => ({
+          ...module,
+          key: module.moduleid,
+          actions: [
+            module._links.self.href && (
+              <a href={module._links.self.href}>Link 2 Self</a>
+            ),
+          ],
+        }))
       );
     }
   }, [data]);
@@ -26,12 +33,14 @@ const ModulesTable = props => {
     {
       title: 'Module Name',
       dataIndex: 'modulename',
-      // key: 'modulename',
     },
     {
       title: 'Description',
       dataIndex: 'moduledescription',
-      // key: 'description',
+    },
+    {
+      title: 'Actions',
+      dataIndex: 'actions',
     },
   ];
 
@@ -39,16 +48,7 @@ const ModulesTable = props => {
     return null;
   }
 
-  return (
-    <>
-      {/* <Card title={module.modulename}>
-       <h3>Description: {module.moduledescription}</h3> */}
-      {/* PLEASE DO NOT REMOVE THE FOLLOWING LINE */}
-      {/* {props.children}
-       </Card> */}
-      <Table columns={columns} dataSource={modulesWithKeys} />
-    </>
-  );
+  return <Table columns={columns} dataSource={modulesWithKeys} />;
 };
 
 export default ModulesTable;

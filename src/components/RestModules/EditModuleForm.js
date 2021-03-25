@@ -77,10 +77,21 @@ function EditModuleForm(props) {
             name="moduledescription"
             value={values.moduledescription}
             onChange={changeValues}
-            rows={4}
+            rows={5}
+          />
+        </Form.Item>
+        <Form.Item label="Module Content:" name="modulecontent">
+          <TextArea
+            showCount
+            maxLength={250}
+            id="modulecontent"
+            name="modulecontent"
+            value={values.modulecontent}
+            onChange={changeValues}
+            rows={25}
           />
           <div style={{ color: 'red' }}>
-            {errors.moduledescription ? `${errors.moduledescription}` : ''}
+            {errors.modulecontent ? `${errors.modulecontent}` : ''}
           </div>
         </Form.Item>
       </Form>
@@ -94,6 +105,7 @@ function EditModuleForm(props) {
           visible={props.visible}
           onCancel={props.hideModal}
           onOk={submitForm}
+          width="100%"
         >
           {innerForm}
         </Modal>
