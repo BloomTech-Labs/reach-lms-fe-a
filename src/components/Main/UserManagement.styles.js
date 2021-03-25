@@ -18,12 +18,13 @@ const Content = styled.div`
 `;
 
 const HeaderDiv = styled.header`
-  width: 80%;
+  width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
   h2 {
     font-size: 1.95rem;
+    margin: 15px;
   }
   div.options {
     display: flex;

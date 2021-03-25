@@ -84,8 +84,11 @@ function AddModuleForm(props) {
       {props.isWrapped ? (
         <Modal
           visible={props.visible}
+          onOk={() => {
+            submitForm();
+            props.hideModal();
+          }}
           onCancel={props.hideModal}
-          onOk={submitForm}
         >
           {innerForm}
         </Modal>

@@ -10,7 +10,7 @@ const initValues = {
   username: '',
   firstname: '',
   lastname: '',
-  role: '',
+  roleType: '',
 };
 
 const AddNewUserForm = props => {
@@ -21,7 +21,8 @@ const AddNewUserForm = props => {
 
   const changeValues = evt => {
     if (typeof evt == 'string') {
-      onChange('role', evt);
+      // this strange exists to handle the change-function for AntD's `Select` element
+      onChange('roleType', evt);
       return;
     }
     const { name, value } = evt.target;
@@ -43,6 +44,29 @@ const AddNewUserForm = props => {
         size="large"
         onFinish={onSubmit}
       >
+        <Form.Item
+          label="*Email"
+          htmlFor="email"
+          rules={[{ required: true, message: 'Email is required' }]}
+        >
+          <Input
+            name="email"
+            id="email"
+            value={values.email}
+            onChange={changeValues}
+          />
+          <Styled.Error>{errors.email}</Styled.Error>
+        </Form.Item>
+        <Form.Item
+          label="*Role"
+          rules={[{ required: true, message: 'Role is required' }]}
+        >
+          <Select value={values.role} onChange={changeValues}>
+            <Select.Option value="ADMIN">Admin</Select.Option>
+            <Select.Option value="TEACHER">Teacher</Select.Option>
+            <Select.Option value="STUDENT">Student</Select.Option>
+          </Select>
+        </Form.Item>
         <Form.Item label="First Name" htmlFor="firstname">
           <Input
             id="firstname"
@@ -61,7 +85,7 @@ const AddNewUserForm = props => {
           />
           <Styled.Error>{errors.lastname}</Styled.Error>
         </Form.Item>
-        <Form.Item label="User Name" htmlFor="username">
+        <Form.Item label="Username" htmlFor="username">
           <Input
             id="username"
             name="username"
@@ -69,27 +93,6 @@ const AddNewUserForm = props => {
             onChange={changeValues}
           />
           <Styled.Error>{errors.username}</Styled.Error>
-        </Form.Item>
-        <Form.Item
-          label="Email"
-          htmlFor="email"
-          rules={[{ required: true, message: 'Email is required' }]}
-        >
-          <Input
-            name="email"
-            id="email"
-            value={values.email}
-            onChange={changeValues}
-          />
-          <Styled.Error>{errors.email}</Styled.Error>
-        </Form.Item>
-        // the evt of the Select input on our form needs to be investigated
-        <Form.Item label="User Roles">
-          <Select value={values.role} onChange={changeValues}>
-            <Select.Option value="admin">Admin</Select.Option>
-            <Select.Option value="teacher">Teacher</Select.Option>
-            <Select.Option value="student">Student</Select.Option>
-          </Select>
         </Form.Item>
       </Form>
     </>
