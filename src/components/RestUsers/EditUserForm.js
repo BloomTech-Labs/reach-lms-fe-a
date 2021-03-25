@@ -1,6 +1,5 @@
 import React from 'react';
 import { useFormWithErrors, useRestfulFetch } from '../../hooks';
-import { client } from '../../utils/api';
 import schema from '../../validation/EditUserSchema';
 import 'antd/dist/antd.css';
 import { Modal, Button, Form, Select, Table } from 'antd';
@@ -72,21 +71,14 @@ const EditUserForm = props => {
 
   function submitForm(e) {
     e.preventDefault();
-
-    const editedUser = {
-      userid: data.userid,
-      userrole: values.role,
-    };
-
-    // client.patchUser(editedUser.userid, editedUser);
-  }
-
-  if (!data || !values || !courses) {
-    return <div>Loading...</div>;
   }
 
   if (!props.visible) {
     return null;
+  }
+
+  if (!data || !values || !courses) {
+    return <div>Loading...</div>;
   }
 
   const innerForm = (
