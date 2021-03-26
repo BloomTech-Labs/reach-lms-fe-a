@@ -1,6 +1,5 @@
 import React from 'react';
 import { Modal, Button, Form, Input, Select } from 'antd';
-import Styled from './AddNewUserForm.styles';
 import schema from '../../validation/NewUserSchema';
 import { useFormWithErrors } from '../../hooks';
 import { client } from '../../utils/api';
@@ -14,7 +13,7 @@ const initValues = {
 };
 
 const AddNewUserForm = props => {
-  const { values, disabled, errors, onChange, resetValues } = useFormWithErrors(
+  const { values, disabled, onChange, resetValues } = useFormWithErrors(
     schema,
     initValues
   );
@@ -46,8 +45,10 @@ const AddNewUserForm = props => {
       >
         <Form.Item
           label="*Email"
-          htmlFor="email"
-          rules={[{ required: true, message: 'Email is required' }]}
+          name="email"
+          rules={[
+            { required: true, message: 'A valid remail address is required.' },
+          ]}
         >
           <Input
             name="email"
@@ -55,11 +56,11 @@ const AddNewUserForm = props => {
             value={values.email}
             onChange={changeValues}
           />
-          <Styled.Error>{errors.email}</Styled.Error>
         </Form.Item>
         <Form.Item
+          name="role"
           label="*Role"
-          rules={[{ required: true, message: 'Role is required' }]}
+          rules={[{ required: true, message: 'Role is required.' }]}
         >
           <Select value={values.role} onChange={changeValues}>
             <Select.Option value="ADMIN">Admin</Select.Option>
@@ -67,32 +68,29 @@ const AddNewUserForm = props => {
             <Select.Option value="STUDENT">Student</Select.Option>
           </Select>
         </Form.Item>
-        <Form.Item label="First Name" htmlFor="firstname">
+        <Form.Item label="First Name" name="firstname">
           <Input
             id="firstname"
             name="firstname"
             value={values.firstname}
             onChange={changeValues}
           />
-          <Styled.Error>{errors.firstname}</Styled.Error>
         </Form.Item>
-        <Form.Item label="Last Name" htmlFor="lastname">
+        <Form.Item label="Last Name" name="lastname">
           <Input
             id="lastname"
             name="lastname"
             value={values.lastname}
             onChange={changeValues}
           />
-          <Styled.Error>{errors.lastname}</Styled.Error>
         </Form.Item>
-        <Form.Item label="Username" htmlFor="username">
+        <Form.Item label="Username" name="username">
           <Input
             id="username"
             name="username"
             value={values.username}
             onChange={changeValues}
           />
-          <Styled.Error>{errors.username}</Styled.Error>
         </Form.Item>
       </Form>
     </>

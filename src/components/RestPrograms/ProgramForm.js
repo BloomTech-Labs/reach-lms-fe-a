@@ -19,7 +19,6 @@ export default function CreateProgram(props) {
 
   const {
     values,
-    errors,
     disabled,
     onChange,
     resetValues,
@@ -67,19 +66,35 @@ export default function CreateProgram(props) {
         size="large"
         onFinish={submitForm}
       >
-        <Form.Item htmlFor="programname" label="Program Name:" validateStatus>
+        <Form.Item
+          name="programname"
+          label="Program Name:"
+          rules={[
+            {
+              min: 5,
+              required: true,
+              message: 'ⓧ Program name must be at least 5 characters.',
+            },
+          ]}
+        >
           <Input
             id="programname"
             name="programname"
             value={values.programname}
             onChange={changeValues}
           />
-          <div style={{ color: 'red' }}>
-            {errors.programname ? `${errors.programname} ` : ''}
-          </div>
         </Form.Item>
 
-        <Form.Item htmlFor="programtype" label="Program Type:">
+        <Form.Item
+          name="programtype"
+          label="Program Type:"
+          rules={[
+            {
+              required: true,
+              message: 'ⓧ Program type is required.',
+            },
+          ]}
+        >
           <Select
             id="programtype"
             name="programtype"
@@ -137,12 +152,19 @@ export default function CreateProgram(props) {
               -Other-
             </Select.Option>
           </Select>
-          <div style={{ color: 'red' }}>
-            {errors.programtype ? `${errors.programtype} ` : ''}
-          </div>
         </Form.Item>
 
-        <Form.Item htmlFor="programdescription" label="Program Description:">
+        <Form.Item
+          name="programdescription"
+          label="Program Description:"
+          rules={[
+            {
+              min: 10,
+              required: true,
+              message: 'ⓧ Program description must be at least 10 characters.',
+            },
+          ]}
+        >
           <Input.TextArea
             onKeyPress={evt => {
               if (evt.key === 'Enter') {
@@ -157,9 +179,6 @@ export default function CreateProgram(props) {
             onChange={changeValues}
             rows={4}
           />
-          <div style={{ color: 'red' }}>
-            {errors.programdescription ? `${errors.programdescription} ` : ''}
-          </div>
         </Form.Item>
       </Form>
     </>

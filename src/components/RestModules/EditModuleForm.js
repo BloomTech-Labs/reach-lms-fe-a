@@ -18,7 +18,6 @@ function EditModuleForm(props) {
 
   const {
     values,
-    errors,
     disabled,
     onChange,
     resetValues,
@@ -59,19 +58,36 @@ function EditModuleForm(props) {
     <>
       <h1 className="edit-form-h1">Edit Module</h1>
       <Form name="basic" layout="vertical" size="large" onFinish={submitForm}>
-        <Form.Item label="Module Name:" name="modulename" validateStatus>
+        <Form.Item
+          label="Module Name:"
+          name="modulename"
+          rules={[
+            {
+              min: 5,
+              required: true,
+              message: 'ⓧ Module name must be at least 5 characters.',
+            },
+          ]}
+        >
           <Input
             id="modulename"
             name="modulename"
             value={values.modulename}
             onChange={changeValues}
           />
-          <div style={{ color: 'red' }}>
-            {errors.modulename ? `${errors.modulename}` : ''}
-          </div>
         </Form.Item>
 
-        <Form.Item label="Module Description:" name="moduledescription">
+        <Form.Item
+          label="Module Description:"
+          name="moduledescription"
+          rules={[
+            {
+              min: 10,
+              required: true,
+              message: 'ⓧ Module description must be at least 10 characters.',
+            },
+          ]}
+        >
           <TextArea
             showCount
             maxLength={250}
@@ -81,12 +97,19 @@ function EditModuleForm(props) {
             onChange={changeValues}
             rows={4}
           />
-          <div style={{ color: 'red' }}>
-            {errors.moduledescription ? `${errors.moduledescription}` : ''}
-          </div>
         </Form.Item>
 
-        <Form.Item label="Module Content:" name="modulecontent">
+        <Form.Item
+          label="Module Content:"
+          name="modulecontent"
+          rules={[
+            {
+              min: 10,
+              required: true,
+              message: 'ⓧ Module content must be at least 10 characters.',
+            },
+          ]}
+        >
           <TextArea
             showCount
             maxLength={250}
@@ -96,9 +119,6 @@ function EditModuleForm(props) {
             onChange={changeValues}
             rows={4}
           />
-          <div style={{ color: 'red' }}>
-            {errors.modulecontent ? `${errors.modulecontent}` : ''}
-          </div>
         </Form.Item>
       </Form>
     </>

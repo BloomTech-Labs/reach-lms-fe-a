@@ -15,7 +15,7 @@ const initialFormErrors = {
 
 function EditCourseForm(props) {
   const { data } = useRestfulFetch(props.href);
-  const { values, errors, disabled, onChange, setValues } = useFormWithErrors(
+  const { values, disabled, onChange, setValues } = useFormWithErrors(
     schema,
     data,
     initialFormErrors,
@@ -63,31 +63,55 @@ function EditCourseForm(props) {
           coursedescription: data.coursedescription,
         }}
       >
-        <Form.Item htmlFor="coursename" label="Course Name:" validateStatus>
+        <Form.Item
+          name="coursename"
+          label="Course Name:"
+          rules={[
+            {
+              min: 5,
+              required: true,
+              message: 'ⓧ Course name must be at least 5 characters.',
+            },
+          ]}
+        >
           <Input
             id="coursename"
             name="coursename"
             value={values.coursename}
             onChange={changeValues}
           />
-          <div style={{ color: 'red' }}>
-            {errors.coursename ? `${errors.coursename}` : ''}
-          </div>
         </Form.Item>
 
-        <Form.Item htmlFor="coursecode" label="Course Code:">
+        <Form.Item
+          name="coursecode"
+          label="Course Code:"
+          rules={[
+            {
+              min: 5,
+              required: true,
+              message: 'ⓧ Course code must be at least 5 characters.',
+            },
+          ]}
+        >
           <Input
             id="coursecode"
             name="coursecode"
             value={values.coursecode}
             onChange={changeValues}
           />
-          <div style={{ color: 'red' }}>
-            {errors.coursecode ? `${errors.coursecode}` : ''}
-          </div>
         </Form.Item>
 
-        <Form.Item htmlFor="coursedescription" label="Course Description:">
+        <Form.Item
+          name="coursedescription"
+          label="Course Description:"
+          rules={[
+            {
+              min: 10,
+              required: true,
+              message: 'ⓧ Course code must be at least 10 characters.',
+            },
+          ]}
+        >
           <TextArea
             // onKeyPress={handleKeyPress}
             showCount
@@ -98,9 +122,6 @@ function EditCourseForm(props) {
             onChange={changeValues}
             rows={4}
           />
-          <div style={{ color: 'red' }}>
-            {errors.coursedescription ? `${errors.coursedescription}` : ''}
-          </div>
         </Form.Item>
       </Form>
     </>
