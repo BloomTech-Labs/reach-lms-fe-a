@@ -14,9 +14,6 @@ const CourseCard = props => {
   return (
     <Card
       actions={true}
-      // style={{
-      //   backgroundColor: color,
-      // }}
       title={
         <div className="title">
           <h3>
