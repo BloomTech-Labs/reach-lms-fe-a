@@ -1,7 +1,6 @@
 import React from 'react';
 import { Modal, Button, Form, Input, Select } from 'antd';
-import schema from '../../validation/NewUserSchema';
-import { useFormWithErrors } from '../../hooks';
+import { useForm } from '../../hooks';
 import { client } from '../../utils/api';
 
 const initValues = {
@@ -13,10 +12,7 @@ const initValues = {
 };
 
 const AddNewUserForm = props => {
-  const { values, disabled, onChange, resetValues } = useFormWithErrors(
-    schema,
-    initValues
-  );
+  const { values, onChange, resetValues } = useForm(initValues);
 
   const changeValues = evt => {
     if (typeof evt == 'string') {
@@ -47,7 +43,11 @@ const AddNewUserForm = props => {
           label="*Email"
           name="email"
           rules={[
-            { required: true, message: 'A valid remail address is required.' },
+            {
+              required: true,
+              type: 'email',
+              message: 'A valid email address is required.',
+            },
           ]}
         >
           <Input
@@ -68,7 +68,16 @@ const AddNewUserForm = props => {
             <Select.Option value="STUDENT">Student</Select.Option>
           </Select>
         </Form.Item>
-        <Form.Item label="First Name" name="firstname">
+        <Form.Item
+          label="First Name"
+          name="firstname"
+          rules={[
+            {
+              type: 'string',
+              message: 'First name must be written in letters.',
+            },
+          ]}
+        >
           <Input
             id="firstname"
             name="firstname"
@@ -76,7 +85,16 @@ const AddNewUserForm = props => {
             onChange={changeValues}
           />
         </Form.Item>
-        <Form.Item label="Last Name" name="lastname">
+        <Form.Item
+          label="Last Name"
+          name="lastname"
+          rules={[
+            {
+              type: 'string',
+              message: 'Last name must be written in letters.',
+            },
+          ]}
+        >
           <Input
             id="lastname"
             name="lastname"
@@ -84,7 +102,17 @@ const AddNewUserForm = props => {
             onChange={changeValues}
           />
         </Form.Item>
-        <Form.Item label="Username" name="username">
+        <Form.Item
+          label="Username"
+          name="username"
+          rules={[
+            {
+              type: 'string',
+              message:
+                'A valid username can only contain letters (a-z) and numbers(0-9).',
+            },
+          ]}
+        >
           <Input
             id="username"
             name="username"
@@ -102,14 +130,7 @@ const AddNewUserForm = props => {
         <Modal
           visible={props.visible}
           onCancel={props.hideModal}
-          onOk={e => {
-            if (disabled) {
-              props.hideModal();
-            } else {
-              onSubmit(e);
-              props.hideModal();
-            }
-          }}
+          onOk={onSubmit}
         >
           {innerForm}
         </Modal>
@@ -117,12 +138,7 @@ const AddNewUserForm = props => {
         <>
           {innerForm}
           <div className="button-container">
-            <Button
-              onClick={onSubmit}
-              type="primary"
-              disabled={disabled}
-              className="button"
-            >
+            <Button onClick={onSubmit} type="primary" className="button">
               Submit
             </Button>
           </div>

@@ -74,6 +74,7 @@ function AddCourseForm(props) {
           rules={[
             {
               min: 5,
+              type: 'string',
               required: true,
               message: 'ⓧ Course name must be at least 5 characters.',
             },
@@ -93,6 +94,7 @@ function AddCourseForm(props) {
           rules={[
             {
               min: 5,
+              type: 'string',
               required: true,
               message: 'ⓧ Course code must be at least 5 characters.',
             },
@@ -112,6 +114,7 @@ function AddCourseForm(props) {
           rules={[
             {
               min: 10,
+              type: 'string',
               required: true,
               message: 'ⓧ Course code must be at least 10 characters.',
             },

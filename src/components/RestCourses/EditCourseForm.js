@@ -1,6 +1,5 @@
 import React from 'react';
-import schema from '../../validation/CourseSchema';
-import { useFormWithErrors, useRestfulFetch } from '../../hooks';
+import { useForm, useRestfulFetch } from '../../hooks';
 import '../../styles/Form.css';
 import 'antd/dist/antd.css';
 import { Modal, Button, Input, Select, Form } from 'antd';
@@ -15,12 +14,7 @@ const initialFormErrors = {
 
 function EditCourseForm(props) {
   const { data } = useRestfulFetch(props.href);
-  const { values, disabled, onChange, setValues } = useFormWithErrors(
-    schema,
-    data,
-    initialFormErrors,
-    false
-  );
+  const { values, onChange, setValues } = useForm(data, initialFormErrors);
 
   React.useEffect(() => {
     if (data) {
@@ -69,6 +63,7 @@ function EditCourseForm(props) {
           rules={[
             {
               min: 5,
+              type: 'string',
               required: true,
               message: 'ⓧ Course name must be at least 5 characters.',
             },
@@ -88,6 +83,7 @@ function EditCourseForm(props) {
           rules={[
             {
               min: 5,
+              type: 'string',
               required: true,
               message: 'ⓧ Course code must be at least 5 characters.',
             },
@@ -107,6 +103,7 @@ function EditCourseForm(props) {
           rules={[
             {
               min: 10,
+              type: 'string',
               required: true,
               message: 'ⓧ Course code must be at least 10 characters.',
             },
@@ -133,10 +130,7 @@ function EditCourseForm(props) {
         <Modal
           visible={props.visible}
           onCancel={props.hideModal}
-          onOk={() => {
-            submitForm();
-            props.hideModal();
-          }}
+          onOk={submitForm}
         >
           {innerForm}
         </Modal>
@@ -144,12 +138,7 @@ function EditCourseForm(props) {
         <>
           {innerForm}
           <div className="button-container">
-            <Button
-              onClick={submitForm}
-              type="primary"
-              disabled={disabled}
-              className="button"
-            >
+            <Button onClick={submitForm} type="primary" className="button">
               Submit
             </Button>
           </div>

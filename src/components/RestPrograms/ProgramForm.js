@@ -1,6 +1,5 @@
 import React from 'react';
-import schema from '../../validation/ProgramSchema';
-import { useFormWithErrors, useRestfulFetch, useUserRole } from '../../hooks';
+import { useForm, useRestfulFetch, useUserRole } from '../../hooks';
 // ant design
 import 'antd/dist/antd.css';
 import { Modal, Button, Input, Select, Form } from 'antd';
@@ -17,13 +16,7 @@ export default function CreateProgram(props) {
   const { data } = useRestfulFetch(href);
   const { userid } = useUserRole();
 
-  const {
-    values,
-    disabled,
-    onChange,
-    resetValues,
-    setValues,
-  } = useFormWithErrors(schema, initialValues);
+  const { values, onChange, resetValues, setValues } = useForm(initialValues);
 
   React.useEffect(() => {
     if (data) {
@@ -72,6 +65,7 @@ export default function CreateProgram(props) {
           rules={[
             {
               min: 5,
+              type: 'string',
               required: true,
               message: 'ⓧ Program name must be at least 5 characters.',
             },
@@ -90,6 +84,7 @@ export default function CreateProgram(props) {
           label="Program Type:"
           rules={[
             {
+              type: 'string',
               required: true,
               message: 'ⓧ Program type is required.',
             },
@@ -160,7 +155,7 @@ export default function CreateProgram(props) {
           rules={[
             {
               min: 10,
-              required: true,
+              type: 'string',
               message: 'ⓧ Program description must be at least 10 characters.',
             },
           ]}
@@ -198,12 +193,7 @@ export default function CreateProgram(props) {
         <>
           {innerForm}
           <div className="button-container">
-            <Button
-              onClick={submitForm}
-              type="primary"
-              disabled={disabled}
-              className="button"
-            >
+            <Button onClick={submitForm} type="primary" className="button">
               Submit
             </Button>
           </div>
