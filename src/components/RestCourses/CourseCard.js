@@ -1,9 +1,10 @@
 import React from 'react';
 import 'antd/dist/antd.css';
-import { Card } from 'antd';
+import { Card, Tag } from 'antd';
 import '../../styles/CourseCard.css';
 import { CirclePicker } from 'react-color';
 import { useState } from 'react';
+import Tags from './Tags';
 const CourseCard = props => {
   const { course } = props;
   const [color, setColor] = useState('');
@@ -13,9 +14,9 @@ const CourseCard = props => {
   return (
     <Card
       actions={true}
-      style={{
-        backgroundColor: color,
-      }}
+      // style={{
+      //   backgroundColor: color,
+      // }}
       title={
         <div className="title">
           <h3>
@@ -26,6 +27,8 @@ const CourseCard = props => {
               circleSize={20}
             />
           </h3>
+          <Tags color={color} />
+          <Tag color={color}>Hello</Tag>
         </div>
       }
       className="course-card"
@@ -33,9 +36,11 @@ const CourseCard = props => {
       <h4>
         <strong>Course Code:</strong> {course.coursecode}
       </h4>
-      <p>
+      <h4>
         <strong>Description:</strong> {course.coursedescription}
-      </p>
+      </h4>
+      <h4>Tags :</h4>
+
       {props.children}
     </Card>
   );
