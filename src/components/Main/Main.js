@@ -77,6 +77,7 @@ const Main = props => {
             href={courseEntity._links.self.href}
           >
             <AddIcon
+              style={{ fontSize: 35 }}
               key="add"
               onClick={() => {
                 setCourseId(courseEntity.courseid);
@@ -84,6 +85,7 @@ const Main = props => {
               }}
             />
             <GroupAddIcon
+              style={{ fontSize: 35 }}
               key="manage"
               onClick={() => {
                 setSelectedCourse(courseEntity._links.self.href);
@@ -91,6 +93,7 @@ const Main = props => {
               }}
             />
             <EditOutlined
+              style={{ fontSize: 32 }}
               key="edit"
               onClick={() => {
                 // e.preventDefault();
@@ -99,6 +102,7 @@ const Main = props => {
               }}
             />
             <DeleteOutline
+              style={{ fontSize: 35 }}
               key="delete"
               onClick={e => {
                 e.preventDefault();
