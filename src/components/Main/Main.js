@@ -57,18 +57,19 @@ const Main = props => {
         @import
         url('https://fonts.googleapis.com/css2?family=Lato&family=Open+Sans:wght@300&family=Roboto+Mono&display=swap');
       </style>
-      <div>{programId && programInfo}</div>
-      <h2>My Courses</h2>
-      {user.userIsAdmin() && (
-        <Button
-          className="group1"
-          onClick={() => {
-            courseAdd.showModal();
-          }}
-        >
-          Add Course
-        </Button>
-      )}
+      <Styled.Header>
+        <div>{programId && programInfo}</div>
+        <h2>My Courses</h2>
+        {user.userIsAdmin() && (
+          <AddIcon
+            style={{ fontSize: 35 }}
+            className="group1"
+            onClick={() => {
+              courseAdd.showModal();
+            }}
+          />
+        )}
+      </Styled.Header>
       <CourseList
         href={href ?? '/courses'}
         mappedChild={courseEntity => (
