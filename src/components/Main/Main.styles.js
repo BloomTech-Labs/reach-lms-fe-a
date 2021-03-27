@@ -11,7 +11,7 @@ const Header = styled.div`
   display: flex;
   flex-flow: row nowrap;
   justify-content: left;
-  align-items: top;
+  align-items: center;
   width: 30vw;
 `;
 

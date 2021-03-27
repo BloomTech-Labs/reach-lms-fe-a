@@ -22,7 +22,7 @@ const StyledLogo = styled.h1`
   position: relative;
   color: white;
   width: 15vw;
-  margin-top: 3%;
+  top: 15%;
   font-size: 2.2vw;
   &&:hover {
     color: red;
