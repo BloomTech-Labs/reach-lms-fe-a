@@ -4,7 +4,7 @@ import 'antd/dist/antd.css';
 import { Button, Modal } from 'antd';
 import { GhostLink } from '../common';
 import { ADMIN_LANDING } from '../../routes';
-import { DeleteOutline } from '@material-ui/icons';
+import { EditOutlined, DeleteOutline } from '@material-ui/icons';
 import '../../styles/Main.css';
 import {
   EditModuleForm,
@@ -74,14 +74,22 @@ const Main = props => {
             key={courseEntity._links.self.href}
             href={courseEntity._links.self.href}
           >
-            <Button
+            {/* <Button
               onClick={() => {
                 setSelectedCourse(courseEntity._links.self.href);
                 courseEdit.showModal();
               }}
             >
               Edit Course
-            </Button>
+            </Button> */}
+            <EditOutlined
+              key="edit"
+              onClick={e => {
+                // e.preventDefault();
+                setSelectedCourse(courseEntity._links.self.href);
+                courseEdit.showModal();
+              }}
+            />
             <Button
               onClick={() => {
                 setCourseId(courseEntity.courseid);
