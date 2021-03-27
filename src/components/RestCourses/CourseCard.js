@@ -9,7 +9,9 @@ const CourseCard = props => {
     <Card
       title={
         <h3>
-          <strong>{course.coursename}</strong>
+          <strong>
+            {course.coursename} {props.children}
+          </strong>
         </h3>
       }
       className="course-card"
