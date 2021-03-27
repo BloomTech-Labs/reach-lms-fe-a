@@ -76,15 +76,6 @@ const Main = props => {
             key={courseEntity._links.self.href}
             href={courseEntity._links.self.href}
           >
-            {/* <Button
-              onClick={() => {
-                setSelectedCourse(courseEntity._links.self.href);
-                courseEdit.showModal();
-              }}
-            >
-              Edit Course
-            </Button> */}
-
             <AddIcon
               key="add"
               onClick={() => {
@@ -121,14 +112,13 @@ const Main = props => {
                   key={moduleEntity._links.self.href}
                   href={moduleEntity._links.self.href}
                 >
-                  <Button
+                  <EditOutlined
+                    key="edit"
                     onClick={() => {
                       setSelectedModule(moduleEntity._links.self.href);
                       moduleEdit.showModal();
                     }}
-                  >
-                    Edit Module
-                  </Button>
+                  />
                   <DeleteOutline
                     key="delete"
                     onClick={e => {
