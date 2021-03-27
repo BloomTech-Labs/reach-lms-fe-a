@@ -1,12 +1,14 @@
 import React from 'react';
 import { useSubModal, useUserRole } from '../../hooks';
 import 'antd/dist/antd.css';
-import { Button, Modal } from 'antd';
+import { Modal } from 'antd';
 import { GhostLink } from '../common';
 import { ADMIN_LANDING } from '../../routes';
 import { EditOutlined, DeleteOutline } from '@material-ui/icons';
 import AddIcon from '@material-ui/icons/Add';
 import GroupAddIcon from '@material-ui/icons/GroupAdd';
+import { Popup } from 'semantic-ui-react';
+import 'semantic-ui-css/semantic.min.css';
 import '../../styles/Main.css';
 import {
   EditModuleForm,
