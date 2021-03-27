@@ -24,6 +24,9 @@ const StyledLogo = styled.h1`
   width: 15vw;
   margin-top: 3%;
   font-size: 2.2vw;
+  &&:hover {
+    color: red;
+  }
 `;
 const StyledMenu = styled.div`
   color: white;
