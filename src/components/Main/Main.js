@@ -84,38 +84,58 @@ const Main = props => {
             key={courseEntity._links.self.href}
             href={courseEntity._links.self.href}
           >
-            <AddIcon
-              style={{ fontSize: 35 }}
-              key="add"
-              onClick={() => {
-                setCourseId(courseEntity.courseid);
-                moduleAdd.showModal();
-              }}
+            <Popup
+              content="Add A New Module"
+              trigger={
+                <AddIcon
+                  style={{ fontSize: 35 }}
+                  key="add"
+                  onClick={() => {
+                    setCourseId(courseEntity.courseid);
+                    moduleAdd.showModal();
+                  }}
+                />
+              }
             />
-            <GroupAddIcon
-              style={{ fontSize: 35 }}
-              key="manage"
-              onClick={() => {
-                setSelectedCourse(courseEntity._links.self.href);
-                manageStudentTeacher.showModal();
-              }}
+            <Popup
+              content="Manage Users"
+              trigger={
+                <GroupAddIcon
+                  style={{ fontSize: 35 }}
+                  key="manage"
+                  onClick={() => {
+                    setSelectedCourse(courseEntity._links.self.href);
+                    manageStudentTeacher.showModal();
+                  }}
+                />
+              }
             />
-            <EditOutlined
-              style={{ fontSize: 32 }}
-              key="edit"
-              onClick={() => {
-                // e.preventDefault();
-                setSelectedCourse(courseEntity._links.self.href);
-                courseEdit.showModal();
-              }}
+            <Popup
+              content="Edit Course"
+              trigger={
+                <EditOutlined
+                  style={{ fontSize: 32 }}
+                  key="edit"
+                  onClick={() => {
+                    // e.preventDefault();
+                    setSelectedCourse(courseEntity._links.self.href);
+                    courseEdit.showModal();
+                  }}
+                />
+              }
             />
-            <DeleteOutline
-              style={{ fontSize: 35 }}
-              key="delete"
-              onClick={e => {
-                e.preventDefault();
-                client.deleteCourse(courseEntity.courseid);
-              }}
+            <Popup
+              content="Delete Course"
+              trigger={
+                <DeleteOutline
+                  style={{ fontSize: 35 }}
+                  key="delete"
+                  onClick={e => {
+                    e.preventDefault();
+                    client.deleteCourse(courseEntity.courseid);
+                  }}
+                />
+              }
             />
             <ModuleList
               href={courseEntity._links.modules.href}
@@ -124,19 +144,29 @@ const Main = props => {
                   key={moduleEntity._links.self.href}
                   href={moduleEntity._links.self.href}
                 >
-                  <EditOutlined
-                    key="edit"
-                    onClick={() => {
-                      setSelectedModule(moduleEntity._links.self.href);
-                      moduleEdit.showModal();
-                    }}
+                  <Popup
+                    content="Edit Module"
+                    trigger={
+                      <EditOutlined
+                        key="edit"
+                        onClick={() => {
+                          setSelectedModule(moduleEntity._links.self.href);
+                          moduleEdit.showModal();
+                        }}
+                      />
+                    }
                   />
-                  <DeleteOutline
-                    key="delete"
-                    onClick={e => {
-                      e.preventDefault();
-                      client.deleteModule(moduleEntity.moduleid);
-                    }}
+                  <Popup
+                    content="Delete Module"
+                    trigger={
+                      <DeleteOutline
+                        key="delete"
+                        onClick={e => {
+                          e.preventDefault();
+                          client.deleteModule(moduleEntity.moduleid);
+                        }}
+                      />
+                    }
                   />
                 </ModuleSingleton>
               )}
