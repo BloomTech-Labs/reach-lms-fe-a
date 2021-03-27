@@ -5,6 +5,8 @@ import { Button, Modal } from 'antd';
 import { GhostLink } from '../common';
 import { ADMIN_LANDING } from '../../routes';
 import { EditOutlined, DeleteOutline } from '@material-ui/icons';
+import AddIcon from '@material-ui/icons/Add';
+import GroupAddIcon from '@material-ui/icons/GroupAdd';
 import '../../styles/Main.css';
 import {
   EditModuleForm,
@@ -82,30 +84,29 @@ const Main = props => {
             >
               Edit Course
             </Button> */}
+
+            <AddIcon
+              key="add"
+              onClick={() => {
+                setCourseId(courseEntity.courseid);
+                moduleAdd.showModal();
+              }}
+            />
+            <GroupAddIcon
+              key="manage"
+              onClick={() => {
+                setSelectedCourse(courseEntity._links.self.href);
+                manageStudentTeacher.showModal();
+              }}
+            />
             <EditOutlined
               key="edit"
-              onClick={e => {
+              onClick={() => {
                 // e.preventDefault();
                 setSelectedCourse(courseEntity._links.self.href);
                 courseEdit.showModal();
               }}
             />
-            <Button
-              onClick={() => {
-                setCourseId(courseEntity.courseid);
-                moduleAdd.showModal();
-              }}
-            >
-              Add Module
-            </Button>
-            <Button
-              onClick={() => {
-                setSelectedCourse(courseEntity._links.self.href);
-                manageStudentTeacher.showModal();
-              }}
-            >
-              Manage Users
-            </Button>
             <DeleteOutline
               key="delete"
               onClick={e => {
