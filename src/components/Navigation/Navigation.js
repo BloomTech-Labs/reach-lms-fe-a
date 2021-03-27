@@ -93,7 +93,7 @@ const Navigation = props => {
           aria-label="menu"
           onClick={handleClick}
         >
-          <MenuIcon />
+          <MenuIcon style={{ fontSize: 35 }} />
         </IconButton>
         <Menu
           id="simple-menu"
