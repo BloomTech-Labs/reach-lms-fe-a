@@ -10,7 +10,7 @@ const CourseCard = props => {
   const { Panel } = Collapse;
 
   return (
-    <Collapse accordian className="course-card">
+    <Collapse accordion className="course-card">
       <Panel header={course.coursename}>
         <h4>
           <strong>Course Code:</strong> {course.coursecode}
