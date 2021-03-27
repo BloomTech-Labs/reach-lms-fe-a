@@ -63,12 +63,17 @@ const Main = props => {
         <div>{programId && programInfo}</div>
         <h2>My Courses</h2>
         {user.userIsAdmin() && (
-          <AddIcon
-            style={{ fontSize: 35 }}
-            className="group1"
-            onClick={() => {
-              courseAdd.showModal();
-            }}
+          <Popup
+            content="Add A New Course"
+            trigger={
+              <AddIcon
+                style={{ fontSize: 35 }}
+                className="group1"
+                onClick={() => {
+                  courseAdd.showModal();
+                }}
+              />
+            }
           />
         )}
       </Styled.Header>
