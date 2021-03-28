@@ -6,14 +6,7 @@ import '../../styles/CourseCard.css';
 const CourseCard = props => {
   const { course } = props;
   return (
-    <Card
-      title={
-        <h3>
-          <strong>{course.coursename}</strong>
-        </h3>
-      }
-      className="course-card"
-    >
+    <Card header={course.coursename}>
       <h4>
         <strong>Course Code:</strong> {course.coursecode}
       </h4>
@@ -21,6 +14,7 @@ const CourseCard = props => {
         <strong>Description:</strong> {course.coursedescription}
       </p>
       {props.children}
+      {/* <ModulesTable href={course._links.modules.href} /> */}
     </Card>
   );
 };
