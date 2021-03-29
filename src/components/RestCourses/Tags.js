@@ -6,7 +6,7 @@ import { PlusOutlined } from '@ant-design/icons';
 
 export default class Tags extends React.Component {
   state = {
-    tags: ['Unremovable', 'Tag 2', 'Tag 3'],
+    tags: ['Default Tag', 'Tag 2'],
     inputVisible: false,
     inputValue: '',
     editInputIndex: -1,
