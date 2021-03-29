@@ -60,7 +60,6 @@ const Main = props => {
       <CourseList
         href={href ?? '/courses'}
         mappedChild={courseEntity => {
-          console.log(courseEntity);
           return (
             <Collapse accordion className="course-card">
               <Collapse.Panel header={courseEntity.coursename}>
@@ -71,6 +70,7 @@ const Main = props => {
                   <strong>Description:</strong> {courseEntity.coursedescription}
                 </p>
                 <Button
+                  key={courseEntity._links.self.href + 'editCourse'}
                   onClick={() => {
                     setSelectedCourse(courseEntity._links.self.href);
                     courseEdit.showModal();
@@ -79,6 +79,7 @@ const Main = props => {
                   Edit Course
                 </Button>
                 <Button
+                  key={courseEntity._links.self.href + 'addModule'}
                   onClick={() => {
                     setCourseId(courseEntity.courseid);
                     moduleAdd.showModal();
@@ -87,6 +88,7 @@ const Main = props => {
                   Add Module
                 </Button>
                 <Button
+                  key={courseEntity._links.self.href + 'manageUsers'}
                   onClick={() => {
                     setSelectedCourse(courseEntity._links.self.href);
                     manageStudentTeacher.showModal();
@@ -95,13 +97,17 @@ const Main = props => {
                   Manage Users
                 </Button>
                 <DeleteOutline
-                  key="delete"
+                  key={courseEntity._links.self.href + 'delete'}
                   onClick={e => {
                     e.preventDefault();
                     client.deleteCourse(courseEntity.courseid);
                   }}
                 />
-                <ModulesTable href={courseEntity._links.modules.href} />
+                <ModulesTable
+                  key={courseEntity._links.self.href}
+                  href={courseEntity._links.modules.href}
+                  setSelectedModule={setSelectedModule}
+                />
               </Collapse.Panel>
             </Collapse>
           );

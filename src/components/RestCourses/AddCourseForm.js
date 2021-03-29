@@ -122,6 +122,7 @@ function AddCourseForm(props) {
     <>
       {props.isWrapped ? (
         <Modal
+          key={props.key + 'modal'}
           visible={props.visible}
           onCancel={props.hideModal}
           onOk={e => {

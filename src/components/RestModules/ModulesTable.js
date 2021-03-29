@@ -44,7 +44,7 @@ const ModulesTable = props => {
                 key="edit"
                 onClick={e => {
                   e.preventDefault();
-                  console.log('edit module', record._links.self.href);
+                  // props.setSelectedModule(record._links.self.href);
                 }}
               />
             )}

@@ -27,8 +27,6 @@ function EditModuleForm(props) {
 
   React.useEffect(() => {
     if (data) {
-      console.log({ data });
-      console.log({ values });
       setValues(prevValues => ({ ...prevValues, ...data }));
     }
   }, [data, values, setValues]);
