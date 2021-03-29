@@ -1,8 +1,6 @@
 import React from 'react';
 import { Modal, Button, Form, Input, Select } from 'antd';
-import Styled from './AddNewUserForm.styles';
-import schema from '../../validation/NewUserSchema';
-import { useFormWithErrors } from '../../hooks';
+import { useForm } from '../../hooks';
 import { client } from '../../utils/api';
 
 const initValues = {
@@ -14,10 +12,7 @@ const initValues = {
 };
 
 const AddNewUserForm = props => {
-  const { values, disabled, errors, onChange, resetValues } = useFormWithErrors(
-    schema,
-    initValues
-  );
+  const { values, onChange, resetValues } = useForm(initValues);
 
   const changeValues = evt => {
     if (typeof evt == 'string') {
@@ -46,8 +41,14 @@ const AddNewUserForm = props => {
       >
         <Form.Item
           label="*Email"
-          htmlFor="email"
-          rules={[{ required: true, message: 'Email is required' }]}
+          name="email"
+          rules={[
+            {
+              required: true,
+              type: 'email',
+              message: 'A valid email address is required.',
+            },
+          ]}
         >
           <Input
             name="email"
@@ -55,11 +56,11 @@ const AddNewUserForm = props => {
             value={values.email}
             onChange={changeValues}
           />
-          <Styled.Error>{errors.email}</Styled.Error>
         </Form.Item>
         <Form.Item
+          name="role"
           label="*Role"
-          rules={[{ required: true, message: 'Role is required' }]}
+          rules={[{ required: true, message: 'Role is required.' }]}
         >
           <Select value={values.role} onChange={changeValues}>
             <Select.Option value="ADMIN">Admin</Select.Option>
@@ -67,32 +68,57 @@ const AddNewUserForm = props => {
             <Select.Option value="STUDENT">Student</Select.Option>
           </Select>
         </Form.Item>
-        <Form.Item label="First Name" htmlFor="firstname">
+        <Form.Item
+          label="First Name"
+          name="firstname"
+          rules={[
+            {
+              type: 'string',
+              message: 'First name must be written in letters.',
+            },
+          ]}
+        >
           <Input
             id="firstname"
             name="firstname"
             value={values.firstname}
             onChange={changeValues}
           />
-          <Styled.Error>{errors.firstname}</Styled.Error>
         </Form.Item>
-        <Form.Item label="Last Name" htmlFor="lastname">
+        <Form.Item
+          label="Last Name"
+          name="lastname"
+          rules={[
+            {
+              type: 'string',
+              message: 'Last name must be written in letters.',
+            },
+          ]}
+        >
           <Input
             id="lastname"
             name="lastname"
             value={values.lastname}
             onChange={changeValues}
           />
-          <Styled.Error>{errors.lastname}</Styled.Error>
         </Form.Item>
-        <Form.Item label="Username" htmlFor="username">
+        <Form.Item
+          label="Username"
+          name="username"
+          rules={[
+            {
+              type: 'string',
+              message:
+                'A valid username can only contain letters (a-z) and numbers(0-9).',
+            },
+          ]}
+        >
           <Input
             id="username"
             name="username"
             value={values.username}
             onChange={changeValues}
           />
-          <Styled.Error>{errors.username}</Styled.Error>
         </Form.Item>
       </Form>
     </>
@@ -104,14 +130,7 @@ const AddNewUserForm = props => {
         <Modal
           visible={props.visible}
           onCancel={props.hideModal}
-          onOk={e => {
-            if (disabled) {
-              props.hideModal();
-            } else {
-              onSubmit(e);
-              props.hideModal();
-            }
-          }}
+          onOk={onSubmit}
         >
           {innerForm}
         </Modal>
@@ -119,12 +138,7 @@ const AddNewUserForm = props => {
         <>
           {innerForm}
           <div className="button-container">
-            <Button
-              onClick={onSubmit}
-              type="primary"
-              disabled={disabled}
-              className="button"
-            >
+            <Button onClick={onSubmit} type="primary" className="button">
               Submit
             </Button>
           </div>

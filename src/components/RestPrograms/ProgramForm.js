@@ -1,6 +1,5 @@
 import React from 'react';
-import schema from '../../validation/ProgramSchema';
-import { useFormWithErrors, useRestfulFetch, useUserRole } from '../../hooks';
+import { useForm, useRestfulFetch, useUserRole } from '../../hooks';
 // ant design
 import 'antd/dist/antd.css';
 import { Modal, Button, Input, Select, Form } from 'antd';
@@ -17,14 +16,7 @@ export default function CreateProgram(props) {
   const { data } = useRestfulFetch(href);
   const { userid } = useUserRole();
 
-  const {
-    values,
-    errors,
-    disabled,
-    onChange,
-    resetValues,
-    setValues,
-  } = useFormWithErrors(schema, initialValues);
+  const { values, onChange, resetValues, setValues } = useForm(initialValues);
 
   React.useEffect(() => {
     if (data) {
@@ -67,19 +59,37 @@ export default function CreateProgram(props) {
         size="large"
         onFinish={submitForm}
       >
-        <Form.Item htmlFor="programname" label="Program Name:" validateStatus>
+        <Form.Item
+          name="programname"
+          label="Program Name:"
+          rules={[
+            {
+              min: 5,
+              type: 'string',
+              required: true,
+              message: 'ⓧ Program name must be at least 5 characters.',
+            },
+          ]}
+        >
           <Input
             id="programname"
             name="programname"
             value={values.programname}
             onChange={changeValues}
           />
-          <div style={{ color: 'red' }}>
-            {errors.programname ? `${errors.programname} ` : ''}
-          </div>
         </Form.Item>
 
-        <Form.Item htmlFor="programtype" label="Program Type:">
+        <Form.Item
+          name="programtype"
+          label="Program Type:"
+          rules={[
+            {
+              type: 'string',
+              required: true,
+              message: 'ⓧ Program type is required.',
+            },
+          ]}
+        >
           <Select
             id="programtype"
             name="programtype"
@@ -137,12 +147,19 @@ export default function CreateProgram(props) {
               -Other-
             </Select.Option>
           </Select>
-          <div style={{ color: 'red' }}>
-            {errors.programtype ? `${errors.programtype} ` : ''}
-          </div>
         </Form.Item>
 
-        <Form.Item htmlFor="programdescription" label="Program Description:">
+        <Form.Item
+          name="programdescription"
+          label="Program Description:"
+          rules={[
+            {
+              min: 10,
+              type: 'string',
+              message: 'ⓧ Program description must be at least 10 characters.',
+            },
+          ]}
+        >
           <Input.TextArea
             onKeyPress={evt => {
               if (evt.key === 'Enter') {
@@ -157,9 +174,6 @@ export default function CreateProgram(props) {
             onChange={changeValues}
             rows={4}
           />
-          <div style={{ color: 'red' }}>
-            {errors.programdescription ? `${errors.programdescription} ` : ''}
-          </div>
         </Form.Item>
       </Form>
     </>
@@ -179,12 +193,7 @@ export default function CreateProgram(props) {
         <>
           {innerForm}
           <div className="button-container">
-            <Button
-              onClick={submitForm}
-              type="primary"
-              disabled={disabled}
-              className="button"
-            >
+            <Button onClick={submitForm} type="primary" className="button">
               Submit
             </Button>
           </div>

@@ -1,9 +1,9 @@
 import React from 'react';
-import schema from '../../validation/CourseSchema';
-import { useFormWithErrors, useRestfulFetch } from '../../hooks';
+import { useForm, useRestfulFetch } from '../../hooks';
 import 'antd/dist/antd.css';
 import { Modal, Button, Input, Select, Form } from 'antd';
 import { client } from '../../utils/api';
+
 const { TextArea } = Input;
 
 const initialFormValues = {
@@ -15,12 +15,7 @@ const initialFormValues = {
 function AddCourseForm(props) {
   const [programId, setProgramId] = React.useState(props.programId);
   const { data: programs } = useRestfulFetch(`/programs/${props.userId}`);
-  const { values, errors, disabled, onChange } = useFormWithErrors(
-    schema,
-    initialFormValues,
-    initialFormValues,
-    false
-  );
+  const { values, onChange } = useForm(initialFormValues);
 
   const changeValues = e => {
     if (typeof e == 'number') {
@@ -67,38 +62,68 @@ function AddCourseForm(props) {
               }
             >
               {programs?.programList.map(programIn => (
-                <Select.Option value={programIn.programid}>
+                <Select.Option
+                  key={Math.random(100)}
+                  value={programIn.programid}
+                >
                   {programIn.programname}
                 </Select.Option>
               ))}
             </Select>
           </Form.Item>
         )}
-        <Form.Item htmlFor="coursename" label="Course Name:" validateStatus>
+        <Form.Item
+          name="coursename"
+          label="Course Name:"
+          rules={[
+            {
+              min: 5,
+              type: 'string',
+              required: true,
+              message: 'ⓧ Course name must be at least 5 characters.',
+            },
+          ]}
+        >
           <Input
             id="coursename"
             name="coursename"
             value={values.coursename}
             onChange={changeValues}
           />
-          <div style={{ color: 'red' }}>
-            {errors.coursename ? `${errors.coursename}` : ''}
-          </div>
         </Form.Item>
 
-        <Form.Item htmlFor="coursecode" label="Course Code:">
+        <Form.Item
+          name="coursecode"
+          label="Course Code:"
+          rules={[
+            {
+              min: 5,
+              type: 'string',
+              required: true,
+              message: 'ⓧ Course code must be at least 5 characters.',
+            },
+          ]}
+        >
           <Input
             id="coursecode"
             name="coursecode"
             value={values.coursecode}
             onChange={changeValues}
           />
-          <div style={{ color: 'red' }}>
-            {errors.coursecode ? `${errors.coursecode}` : ''}
-          </div>
         </Form.Item>
 
-        <Form.Item htmlFor="coursedescription" label="Course Description:">
+        <Form.Item
+          name="coursedescription"
+          label="Course Description:"
+          rules={[
+            {
+              min: 10,
+              type: 'string',
+              required: true,
+              message: 'ⓧ Course description must be at least 10 characters.',
+            },
+          ]}
+        >
           <TextArea
             // onKeyPress={handleKeyPress}
             showCount
@@ -109,9 +134,6 @@ function AddCourseForm(props) {
             onChange={changeValues}
             rows={4}
           />
-          <div style={{ color: 'red' }}>
-            {errors.coursedescription ? `${errors.coursedescription}` : ''}
-          </div>
         </Form.Item>
         {props.children}
       </Form>
@@ -122,16 +144,10 @@ function AddCourseForm(props) {
     <>
       {props.isWrapped ? (
         <Modal
+          key={props.key + 'modal'}
           visible={props.visible}
           onCancel={props.hideModal}
-          onOk={e => {
-            if (disabled) {
-              props.hideModal();
-            } else {
-              submitForm(e);
-              props.hideModal();
-            }
-          }}
+          onOk={submitForm}
         >
           {innerForm}
         </Modal>
@@ -139,12 +155,7 @@ function AddCourseForm(props) {
         <>
           {innerForm}
           <div className="button-container">
-            <Button
-              onClick={submitForm}
-              type="primary"
-              disabled={disabled}
-              className="button"
-            >
+            <Button onClick={submitForm} type="primary" className="button">
               Submit
             </Button>
           </div>
