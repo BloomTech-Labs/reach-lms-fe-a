@@ -1,6 +1,5 @@
 import React from 'react';
-import schema from '../../validation/CourseSchema';
-import { useFormWithErrors, useRestfulFetch } from '../../hooks';
+import { useForm, useRestfulFetch } from '../../hooks';
 import '../../styles/Form.css';
 import 'antd/dist/antd.css';
 import { Modal, Button, Input, Select, Form } from 'antd';
@@ -15,12 +14,7 @@ const initialFormErrors = {
 
 function EditCourseForm(props) {
   const { data } = useRestfulFetch(props.href);
-  const { values, errors, disabled, onChange, setValues } = useFormWithErrors(
-    schema,
-    data,
-    initialFormErrors,
-    false
-  );
+  const { values, onChange, setValues } = useForm(data, initialFormErrors);
 
   React.useEffect(() => {
     if (data) {
@@ -63,31 +57,58 @@ function EditCourseForm(props) {
           coursedescription: data.coursedescription,
         }}
       >
-        <Form.Item htmlFor="coursename" label="Course Name:" validateStatus>
+        <Form.Item
+          name="coursename"
+          label="Course Name:"
+          rules={[
+            {
+              min: 5,
+              type: 'string',
+              required: true,
+              message: 'ⓧ Course name must be at least 5 characters.',
+            },
+          ]}
+        >
           <Input
             id="coursename"
             name="coursename"
             value={values.coursename}
             onChange={changeValues}
           />
-          <div style={{ color: 'red' }}>
-            {errors.coursename ? `${errors.coursename}` : ''}
-          </div>
         </Form.Item>
 
-        <Form.Item htmlFor="coursecode" label="Course Code:">
+        <Form.Item
+          name="coursecode"
+          label="Course Code:"
+          rules={[
+            {
+              min: 5,
+              type: 'string',
+              required: true,
+              message: 'ⓧ Course code must be at least 5 characters.',
+            },
+          ]}
+        >
           <Input
             id="coursecode"
             name="coursecode"
             value={values.coursecode}
             onChange={changeValues}
           />
-          <div style={{ color: 'red' }}>
-            {errors.coursecode ? `${errors.coursecode}` : ''}
-          </div>
         </Form.Item>
 
-        <Form.Item htmlFor="coursedescription" label="Course Description:">
+        <Form.Item
+          name="coursedescription"
+          label="Course Description:"
+          rules={[
+            {
+              min: 10,
+              type: 'string',
+              required: true,
+              message: 'ⓧ Course description must be at least 10 characters.',
+            },
+          ]}
+        >
           <TextArea
             // onKeyPress={handleKeyPress}
             showCount
@@ -98,9 +119,6 @@ function EditCourseForm(props) {
             onChange={changeValues}
             rows={4}
           />
-          <div style={{ color: 'red' }}>
-            {errors.coursedescription ? `${errors.coursedescription}` : ''}
-          </div>
         </Form.Item>
       </Form>
     </>
@@ -112,10 +130,7 @@ function EditCourseForm(props) {
         <Modal
           visible={props.visible}
           onCancel={props.hideModal}
-          onOk={() => {
-            submitForm();
-            props.hideModal();
-          }}
+          onOk={submitForm}
         >
           {innerForm}
         </Modal>
@@ -123,12 +138,7 @@ function EditCourseForm(props) {
         <>
           {innerForm}
           <div className="button-container">
-            <Button
-              onClick={submitForm}
-              type="primary"
-              disabled={disabled}
-              className="button"
-            >
+            <Button onClick={submitForm} type="primary" className="button">
               Submit
             </Button>
           </div>

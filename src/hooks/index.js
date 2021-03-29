@@ -1,4 +1,4 @@
-export { useFormWithErrors } from './useFormWithErrors';
+export { useForm } from './useForm';
 export { useUserRole } from './useUserRole';
 export { useMountEffect } from './useMountEffect';
 export { useEffectAfterMount } from './useEffectAfterMount';
