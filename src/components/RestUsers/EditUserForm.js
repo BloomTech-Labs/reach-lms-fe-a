@@ -1,6 +1,5 @@
 import React from 'react';
-import { useFormWithErrors, useRestfulFetch } from '../../hooks';
-import schema from '../../validation/EditUserSchema';
+import { useForm, useRestfulFetch } from '../../hooks';
 import 'antd/dist/antd.css';
 import { Modal, Button, Form, Select, Table } from 'antd';
 
@@ -20,11 +19,7 @@ const EditUserForm = props => {
   const { data: courses } = useRestfulFetch(props.courses);
   const [allCourses, setAllCourses] = React.useState([]);
   const [courseSet, setCourseSet] = React.useState([]);
-  const { values, disabled, onChange, setValues } = useFormWithErrors(
-    schema,
-    data,
-    false
-  );
+  const { values, onChange, setValues } = useForm(data);
 
   React.useEffect(() => {
     if (data) {
@@ -93,7 +88,17 @@ const EditUserForm = props => {
           userrole: data.role,
         }}
       >
-        <Form.Item htmlFor="role" label="User Roles:" validateStatus>
+        <Form.Item
+          name="role"
+          label="User Roles:"
+          rules={[
+            {
+              required: true,
+              type: 'string',
+              message: 'ⓧ Role is required.',
+            },
+          ]}
+        >
           <Select
             id="role"
             name="role"
@@ -120,14 +125,7 @@ const EditUserForm = props => {
         <Modal
           visible={props.visible}
           onCancel={props.hideModal}
-          onOk={e => {
-            if (disabled) {
-              props.hideModal();
-            } else {
-              submitForm(e);
-              props.hideModal();
-            }
-          }}
+          onOk={submitForm}
         >
           {innerForm}
         </Modal>
@@ -135,12 +133,7 @@ const EditUserForm = props => {
         <>
           {innerForm}
           <div className="button-container">
-            <Button
-              onClick={submitForm}
-              type="primary"
-              disabled={disabled}
-              className="button"
-            >
+            <Button onClick={submitForm} type="primary" className="button">
               Submit
             </Button>
           </div>

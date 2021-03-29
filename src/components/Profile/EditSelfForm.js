@@ -1,6 +1,5 @@
 import React from 'react';
-import schema from '../../validation/ProfileSchema';
-import { useFormWithErrors, useRestfulFetch } from '../../hooks';
+import { useForm, useRestfulFetch } from '../../hooks';
 import { client } from '../../utils/api';
 
 // Ant Design
@@ -17,14 +16,9 @@ const initialFormValues = {
 const EditSelfForm = props => {
   const { data } = useRestfulFetch('/users/getuserinfo');
 
-  const {
-    values,
-    errors,
-    disabled,
-    onChange,
-    resetValues,
-    setValues,
-  } = useFormWithErrors(schema, initialFormValues, initialFormValues, false);
+  const { values, onChange, resetValues, setValues } = useForm(
+    initialFormValues
+  );
 
   React.useEffect(() => {
     if (data) {
@@ -54,41 +48,78 @@ const EditSelfForm = props => {
         size="large"
         layout="vertical"
       >
-        <Form.Item htmlFor="firstname" label="First Name:">
+        <Form.Item
+          name="firstname"
+          label="First Name:"
+          rules={[
+            {
+              min: 2,
+              type: 'string',
+              message: 'ⓧ First name must be at least 2 characters.',
+            },
+          ]}
+        >
           <Input
             id="firstname"
             name="firstname"
             value={values.firstname}
             onChange={changeValues}
           />
-          <div style={{ color: 'red' }}>{errors.firstname ?? ''}</div>
         </Form.Item>
-        <Form.Item htmlFor="lastname" label="Last Name:">
+        <Form.Item
+          name="lastname"
+          label="Last Name:"
+          rules={[
+            {
+              min: 2,
+              type: 'string',
+              message: 'ⓧ Last name must be at least 2 characters.',
+            },
+          ]}
+        >
           <Input
             id="lastname"
             name="lastname"
             value={values.lastname}
             onChange={changeValues}
           />
-          <div style={{ color: 'red' }}>{errors.lastname ?? ''}</div>
         </Form.Item>
-        <Form.Item htmlFor="email" label="Email:" name="email">
+        <Form.Item
+          name="email"
+          label="Email:"
+          rules={[
+            {
+              type: 'email',
+              required: true,
+              message: 'ⓧ An email address is required.',
+            },
+          ]}
+        >
           <Input
             id="email"
             name="email"
             value={values.email}
             onChange={changeValues}
           />
-          <div style={{ color: 'red' }}>{errors.email ?? ''}</div>
         </Form.Item>
-        <Form.Item htmlFor="phonenumber" label="Phone Number:">
+        <Form.Item
+          htmlFor="phonenumber"
+          label="Phone Number:"
+          rules={[
+            {
+              min: 10,
+              required: true,
+              type: 'string',
+              message: 'ⓧ Phone number must be at least 10 digits.',
+            },
+          ]}
+        >
           <Input
             id="phonenumber"
             name="phonenumber"
             value={values.phonenumber}
             onChange={changeValues}
           />
-          <div style={{ color: 'red' }}>{errors.phonenumber ?? ''}</div>
         </Form.Item>
       </Form>
     </>
@@ -108,12 +139,7 @@ const EditSelfForm = props => {
         <>
           {innerForm}
           <div className="button-container">
-            <Button
-              onClick={editUserSubmit}
-              type="primary"
-              disabled={disabled}
-              className="button"
-            >
+            <Button onClick={editUserSubmit} type="primary" className="button">
               Submit
             </Button>
           </div>
