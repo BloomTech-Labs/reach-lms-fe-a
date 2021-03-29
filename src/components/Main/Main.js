@@ -4,7 +4,11 @@ import 'antd/dist/antd.css';
 import { Button, Modal, Collapse } from 'antd';
 import { GhostLink } from '../common';
 import { ADMIN_LANDING } from '../../routes';
-import { DeleteOutline } from '@material-ui/icons';
+import { EditOutlined, DeleteOutline } from '@material-ui/icons';
+import AddIcon from '@material-ui/icons/Add';
+import GroupAddIcon from '@material-ui/icons/GroupAdd';
+import { Popup } from 'semantic-ui-react';
+import 'semantic-ui-css/semantic.min.css';
 import '../../styles/Main.css';
 import { EditModuleForm, AddModuleForm, ModulesTable } from '../RestModules';
 import { CourseList, AddCourseForm, EditCourseForm } from '../RestCourses';
@@ -45,18 +49,24 @@ const Main = props => {
         @import
         url('https://fonts.googleapis.com/css2?family=Lato&family=Open+Sans:wght@300&family=Roboto+Mono&display=swap');
       </style>
-      <div>{programId && programInfo}</div>
-      <h2>My Courses</h2>
-      {user.userIsAdmin() && (
-        <Button
-          className="group1"
-          onClick={() => {
-            courseAdd.showModal();
-          }}
-        >
-          Add Course
-        </Button>
-      )}
+      <Styled.Header>
+        <div>{programId && programInfo}</div>
+        <h2>My Courses</h2>
+        {user.userIsAdmin() && (
+          <Popup
+            content="Add A New Course"
+            trigger={
+              <AddIcon
+                style={{ fontSize: 35 }}
+                className="group1"
+                onClick={() => {
+                  courseAdd.showModal();
+                }}
+              />
+            }
+          />
+        )}
+      </Styled.Header>
       <CourseList
         href={href ?? '/courses'}
         mappedChild={courseEntity => {
@@ -112,6 +122,100 @@ const Main = props => {
             </Collapse>
           );
         }}
+        //         mappedChild={courseEntity => (
+        //           <CourseSingleton
+        //             key={courseEntity._links.self.href}
+        //             href={courseEntity._links.self.href}
+        //           >
+        //             <Popup
+        //               content="Add A New Module"
+        //               trigger={
+        //                 <AddIcon
+        //                   style={{ fontSize: 35 }}
+        //                   key="add"
+        //                   onClick={() => {
+        //                     setCourseId(courseEntity.courseid);
+        //                     moduleAdd.showModal();
+        //                   }}
+        //                 />
+        //               }
+        //             />
+        //             <Popup
+        //               content="Manage Users"
+        //               trigger={
+        //                 <GroupAddIcon
+        //                   style={{ fontSize: 35 }}
+        //                   key="manage"
+        //                   onClick={() => {
+        //                     setSelectedCourse(courseEntity._links.self.href);
+        //                     manageStudentTeacher.showModal();
+        //                   }}
+        //                 />
+        //               }
+        //             />
+        //             <Popup
+        //               content="Edit Course"
+        //               trigger={
+        //                 <EditOutlined
+        //                   style={{ fontSize: 32 }}
+        //                   key="edit"
+        //                   onClick={() => {
+        //                     // e.preventDefault();
+        //                     setSelectedCourse(courseEntity._links.self.href);
+        //                     courseEdit.showModal();
+        //                   }}
+        //                 />
+        //               }
+        //             />
+        //             <Popup
+        //               content="Delete Course"
+        //               trigger={
+        //                 <DeleteOutline
+        //                   style={{ fontSize: 35 }}
+        //                   key="delete"
+        //                   onClick={e => {
+        //                     e.preventDefault();
+        //                     client.deleteCourse(courseEntity.courseid);
+        //                   }}
+        //                 />
+        //               }
+        //             />
+        //             <ModuleList
+        //               href={courseEntity._links.modules.href}
+        //               mappedChild={moduleEntity => (
+        //                 <ModuleSingleton
+        //                   key={moduleEntity._links.self.href}
+        //                   href={moduleEntity._links.self.href}
+        //                 >
+        //                   <Popup
+        //                     content="Edit Module"
+        //                     trigger={
+        //                       <EditOutlined
+        //                         key="edit"
+        //                         onClick={() => {
+        //                           setSelectedModule(moduleEntity._links.self.href);
+        //                           moduleEdit.showModal();
+        //                         }}
+        //                       />
+        //                     }
+        //                   />
+        //                   <Popup
+        //                     content="Delete Module"
+        //                     trigger={
+        //                       <DeleteOutline
+        //                         key="delete"
+        //                         onClick={e => {
+        //                           e.preventDefault();
+        //                           client.deleteModule(moduleEntity.moduleid);
+        //                         }}
+        //                       />
+        //                     }
+        //                   />
+        //                 </ModuleSingleton>
+        //               )}
+        //             />
+        //           </CourseSingleton>
+        // )}
       />
       <AddCourseForm
         isWrapped={true}
