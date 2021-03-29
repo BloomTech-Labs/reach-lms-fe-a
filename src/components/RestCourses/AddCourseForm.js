@@ -3,6 +3,7 @@ import { useForm, useRestfulFetch } from '../../hooks';
 import 'antd/dist/antd.css';
 import { Modal, Button, Input, Select, Form } from 'antd';
 import { client } from '../../utils/api';
+
 const { TextArea } = Input;
 
 const initialFormValues = {
@@ -61,7 +62,10 @@ function AddCourseForm(props) {
               }
             >
               {programs?.programList.map(programIn => (
-                <Select.Option value={programIn.programid}>
+                <Select.Option
+                  key={Math.random(100)}
+                  value={programIn.programid}
+                >
                   {programIn.programname}
                 </Select.Option>
               ))}
@@ -140,6 +144,7 @@ function AddCourseForm(props) {
     <>
       {props.isWrapped ? (
         <Modal
+          key={props.key + 'modal'}
           visible={props.visible}
           onCancel={props.hideModal}
           onOk={submitForm}

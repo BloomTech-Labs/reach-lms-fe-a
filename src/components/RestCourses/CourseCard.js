@@ -30,6 +30,7 @@ const CourseCard = props => {
         <strong>Description:</strong> {course.coursedescription}
       </p>
       {props.children}
+      {/* <ModulesTable href={course._links.modules.href} /> */}
     </Card>
   );
 };

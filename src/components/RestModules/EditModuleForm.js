@@ -24,7 +24,8 @@ function EditModuleForm(props) {
     if (data) {
       setValues(prevValues => ({ ...prevValues, ...data }));
     }
-  }, [data, values, setValues]);
+    console.log({ data }, 'editModuleForm');
+  }, [data, setValues]);
 
   const changeValues = e => {
     const { name, value } = e.target;
