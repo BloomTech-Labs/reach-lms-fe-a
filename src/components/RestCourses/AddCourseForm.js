@@ -116,7 +116,7 @@ function AddCourseForm(props) {
               min: 10,
               type: 'string',
               required: true,
-              message: 'ⓧ Course code must be at least 10 characters.',
+              message: 'ⓧ Course description must be at least 10 characters.',
             },
           ]}
         >
