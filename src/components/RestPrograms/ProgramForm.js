@@ -1,8 +1,11 @@
 import React from 'react';
 import { useForm, useRestfulFetch, useUserRole } from '../../hooks';
+//react color
+import { CirclePicker } from 'react-color';
+import Tags from '../RestCourses/Tags';
 // ant design
 import 'antd/dist/antd.css';
-import { Modal, Button, Input, Select, Form } from 'antd';
+import { Modal, Button, Input, Select, Form,Tag } from 'antd';
 import { client } from '../../utils/api';
 
 const initialValues = {
@@ -12,6 +15,10 @@ const initialValues = {
 };
 
 export default function CreateProgram(props) {
+  const [color, setColor] = React.useState('');
+  const handleChangeComplete = color => {
+    setColor(color.hex);
+  };
   const { href } = props;
   const { data } = useRestfulFetch(href);
   const { userid } = useUserRole();
@@ -176,6 +183,13 @@ export default function CreateProgram(props) {
           />
         </Form.Item>
       </Form>
+      <CirclePicker
+              colors={['#673ab7', '#3f51b5', '#ffc107', '#ff9800', '#ff5722']}
+              onChangeComplete={handleChangeComplete}
+              circleSize={20}
+            />
+       <Tags color={color} />
+          <Tag color={color}>Hello</Tag>
     </>
   );
 
