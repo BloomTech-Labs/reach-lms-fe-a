@@ -43,8 +43,7 @@ const UserManagement = props => {
           </div>
         </Styled.HeaderDiv>
         <UserTable
-          key={'https://reach-team-a-be.herokuapp.com/users'}
-          href={'https://reach-team-a-be.herokuapp.com/users'}
+          href={'/users'}
           setSelectedUser={setSelectedUser}
           userEdit={userEdit}
         />
