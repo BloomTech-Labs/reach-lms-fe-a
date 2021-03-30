@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSubModal, useUserRole } from '../../hooks';
 import 'antd/dist/antd.css';
-import { Modal, Collapse, Space } from 'antd';
+import { Input, Modal, Collapse, Space, Button } from 'antd';
 import { GhostLink } from '../common';
 import { ADMIN_LANDING } from '../../routes';
 import { EditOutlined, DeleteOutline } from '@material-ui/icons';
@@ -14,9 +14,9 @@ import { EditModuleForm, AddModuleForm, ModulesTable } from '../RestModules';
 import { CourseList, AddCourseForm, EditCourseForm } from '../RestCourses';
 import { ProgramSingleton } from '../RestPrograms';
 import { StudentTeacherManagement } from '../RestUsers';
+import { FileUploader } from '../FileUploader';
 import { client } from '../../utils/api';
 import Styled from './Main.styles';
-import { Input, Button } from 'antd';
 
 const Main = props => {
   const { href, programId } = props;
@@ -156,6 +156,7 @@ const Main = props => {
                 <p>
                   <strong>Description:</strong> {courseEntity.coursedescription}
                 </p>
+                <FileUploader />
                 <ModulesTable
                   key={courseEntity._links.self.href}
                   href={courseEntity._links.modules.href}
