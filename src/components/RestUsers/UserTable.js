@@ -12,7 +12,6 @@ const UserTable = props => {
   const [usersWithKeys, setUsersWithKeys] = React.useState(null);
 
   React.useEffect(() => {
-    console.log(data);
     if (data && data.hasOwnProperty('userList')) {
       setUsersWithKeys(
         data.userList.map(user => ({
