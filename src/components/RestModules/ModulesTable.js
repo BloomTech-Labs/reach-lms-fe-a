@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Table, Space } from 'antd';
 import { useRestfulFetch } from '../../hooks';
 import { DeleteOutline, EditOutlined } from '@material-ui/icons';
@@ -45,13 +46,9 @@ const ModulesTable = props => {
             <Popup
               content="View Module"
               trigger={
-                <PageviewIcon
-                  key="view"
-                  onClick={() => {
-                    props.setSelectedModule(record._links.self.href);
-                    props.moduleEdit.showModal();
-                  }}
-                />
+                <Link to="/edit-module">
+                  <PageviewIcon key="view" />
+                </Link>
               }
             />
             <Popup
