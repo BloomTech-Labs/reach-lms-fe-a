@@ -15,9 +15,20 @@ const Header = styled.div`
   width: 30vw;
 `;
 
+const TopCourseCard = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
+const IconsDiv = styled.div`
+  display: flex;
+`;
+
 const Styled = {
   Content,
   Header,
+  TopCourseCard,
+  IconsDiv,
 };
 
 export default Styled;

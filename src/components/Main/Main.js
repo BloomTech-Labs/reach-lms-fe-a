@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSubModal, useUserRole } from '../../hooks';
 import 'antd/dist/antd.css';
-import { Modal, Collapse } from 'antd';
+import { Modal, Collapse, Space } from 'antd';
 import { GhostLink } from '../common';
 import { ADMIN_LANDING } from '../../routes';
 import { EditOutlined, DeleteOutline } from '@material-ui/icons';
@@ -73,65 +73,71 @@ const Main = props => {
           return (
             <Collapse accordion className="course-card">
               <Collapse.Panel header={courseEntity.coursename}>
-                <h4>
-                  <strong>Course Code:</strong> {courseEntity.coursecode}
-                </h4>
+                <Styled.TopCourseCard>
+                  <h4>
+                    <strong>Course Code:</strong> {courseEntity.coursecode}
+                  </h4>
+                  <Styled.IconsDiv>
+                    <Space>
+                      <Popup
+                        content="Add A New Module"
+                        trigger={
+                          <AddIcon
+                            style={{ fontSize: 35 }}
+                            key="add"
+                            onClick={() => {
+                              setCourseId(courseEntity.courseid);
+                              moduleAdd.showModal();
+                            }}
+                          />
+                        }
+                      />
+                      <Popup
+                        content="Manage Users"
+                        trigger={
+                          <GroupAddIcon
+                            style={{ fontSize: 35 }}
+                            key="manage"
+                            onClick={() => {
+                              setSelectedCourse(courseEntity._links.self.href);
+                              manageStudentTeacher.showModal();
+                            }}
+                          />
+                        }
+                      />
+                      <Popup
+                        content="Edit Course"
+                        trigger={
+                          <EditOutlined
+                            style={{ fontSize: 32 }}
+                            key="edit"
+                            onClick={() => {
+                              // e.preventDefault();
+                              setSelectedCourse(courseEntity._links.self.href);
+                              courseEdit.showModal();
+                            }}
+                          />
+                        }
+                      />
+                      <Popup
+                        content="Delete Course"
+                        trigger={
+                          <DeleteOutline
+                            style={{ fontSize: 35 }}
+                            key="delete"
+                            onClick={e => {
+                              e.preventDefault();
+                              client.deleteCourse(courseEntity.courseid);
+                            }}
+                          />
+                        }
+                      />
+                    </Space>
+                  </Styled.IconsDiv>
+                </Styled.TopCourseCard>
                 <p>
                   <strong>Description:</strong> {courseEntity.coursedescription}
                 </p>
-                <Popup
-                  content="Add A New Module"
-                  trigger={
-                    <AddIcon
-                      style={{ fontSize: 35 }}
-                      key="add"
-                      onClick={() => {
-                        setCourseId(courseEntity.courseid);
-                        moduleAdd.showModal();
-                      }}
-                    />
-                  }
-                />
-                <Popup
-                  content="Manage Users"
-                  trigger={
-                    <GroupAddIcon
-                      style={{ fontSize: 35 }}
-                      key="manage"
-                      onClick={() => {
-                        setSelectedCourse(courseEntity._links.self.href);
-                        manageStudentTeacher.showModal();
-                      }}
-                    />
-                  }
-                />
-                <Popup
-                  content="Edit Course"
-                  trigger={
-                    <EditOutlined
-                      style={{ fontSize: 32 }}
-                      key="edit"
-                      onClick={() => {
-                        // e.preventDefault();
-                        setSelectedCourse(courseEntity._links.self.href);
-                        courseEdit.showModal();
-                      }}
-                    />
-                  }
-                />
-                <Popup
-                  content="Delete Course"
-                  trigger={
-                    <DeleteOutline
-                      style={{ fontSize: 35 }}
-                      key="delete"
-                      onClick={e => {
-                        e.preventDefault();
-                        client.deleteCourse(courseEntity.courseid);
-                      }}
-                    />
-                  }
-                />
                 <ModulesTable
                   key={courseEntity._links.self.hrey}
                   href={courseEntity._links.modules.href}
