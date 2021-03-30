@@ -10,9 +10,9 @@ const Content = styled.div`
 const Header = styled.div`
   display: flex;
   flex-flow: row nowrap;
-  justify-content: left;
+  justify-content: center;
   align-items: center;
-  width: 30vw;
+  width: 60vw;
 `;
 
 const TopCourseCard = styled.div`

@@ -66,7 +66,6 @@ const Main = props => {
       <Styled.Header>
         <div>{programId && programInfo}</div>
         <h2>My Courses</h2>
-        <Styled.SearchContainer>{searchBar}</Styled.SearchContainer>
         {user.userIsAdmin() && (
           <Popup
             content="Add A New Course"
@@ -81,6 +80,7 @@ const Main = props => {
             }
           />
         )}
+        <Styled.SearchContainer>{searchBar}</Styled.SearchContainer>
       </Styled.Header>
       <CourseList
         href={
