@@ -1,38 +1,59 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { useSubModal } from '../../hooks';
-import { UserList, AddNewUserForm, EditUserForm } from '../RestUsers';
+import { useSubModal, useUserRole } from '../../hooks';
+import { UserTable, AddNewUserForm, EditUserForm } from '../RestUsers';
 import { client } from '../../utils/api';
 import Styled from './UserManagement.styles';
 
 //ant design + mui imports
-import Meta from 'antd/lib/card/Meta';
+import 'semantic-ui-css/semantic.min.css';
 import { Button } from 'antd';
 import { EditOutlined, DeleteOutline } from '@material-ui/icons';
+import AddIcon from '@material-ui/icons/Add';
+import { Popup } from 'semantic-ui-react';
 
 const UserManagement = props => {
+  const user = useUserRole();
   const userAdd = useSubModal();
   const userEdit = useSubModal();
   const [selectedUser, setSelectedUser] = React.useState('');
   const [selectedUserCourses, setSelectedUserCourses] = React.useState('');
+
   return (
     <>
       <Styled.Content>
         <Styled.HeaderDiv>
           <h2>All Users</h2>
           <div className="options">
-            <Button size="large" onClick={userAdd.showModal}>
-              Add New User
-            </Button>
+            {user.userIsAdmin() && (
+              <Popup
+                content="Add New User"
+                trigger={
+                  <AddIcon
+                    style={{ fontSize: 35 }}
+                    className="group1"
+                    onClick={() => {
+                      userAdd.showModal();
+                    }}
+                  />
+                }
+              />
+            )}
             <Link to="/admin">
               <Button size="large">Manage All Programs</Button>
             </Link>
           </div>
         </Styled.HeaderDiv>
+        <UserTable
+          key={'https://reach-team-a-be.herokuapp.com/users'}
+          href={'https://reach-team-a-be.herokuapp.com/users'}
+          setSelectedUser={setSelectedUser}
+          userEdit={userEdit}
+        />
 
-        <Styled.Users>
+        {/* <Styled.Users>
           {/*ADMINS*/}
-          <UserList
+        {/* <UserList
             href="/users/admins"
             mappedChild={user => (
               <Styled.Card
@@ -69,7 +90,7 @@ const UserManagement = props => {
           />
 
           {/*TEACHERS*/}
-          <UserList
+        {/* <UserList
             href="/users/teachers"
             mappedChild={user => (
               <Styled.Card
@@ -103,10 +124,10 @@ const UserManagement = props => {
                 />
               </Styled.Card>
             )}
-          />
+          />  */}
 
-          {/*STUDENTS*/}
-          <UserList
+        {/*STUDENTS*/}
+        {/* <UserList
             href="/users/students"
             mappedChild={user => (
               <Styled.Card
@@ -141,7 +162,7 @@ const UserManagement = props => {
               </Styled.Card>
             )}
           />
-        </Styled.Users>
+              </Styled.Users> */}
       </Styled.Content>
 
       {/*MODAL FORMS MGMT*/}

@@ -133,7 +133,7 @@ const Main = props => {
                   }
                 />
                 <ModulesTable
-                  key={courseEntity._links.self.hrey}
+                  key={courseEntity._links.self.href}
                   href={courseEntity._links.modules.href}
                   setSelectedModule={setSelectedModule}
                   moduleEdit={moduleEdit}
