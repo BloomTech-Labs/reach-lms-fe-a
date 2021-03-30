@@ -48,11 +48,19 @@ const Card = styled(AntCard)`
   margin: 20px;
 `;
 
+const SearchContainer = styled.div`
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+  align-items: center;
+`;
+
 const Styled = {
   Users,
   Content,
   HeaderDiv,
   Card,
+  SearchContainer,
 };
 
 export default Styled;

@@ -6,6 +6,7 @@ import { DeleteOutline, EditOutlined } from '@material-ui/icons';
 import PageviewIcon from '@material-ui/icons/Pageview';
 import { Popup } from 'semantic-ui-react';
 import { client } from '../../utils';
+import { pathUtils } from '../../routes';
 
 const ModulesTable = props => {
   const { href } = props;
@@ -46,7 +47,7 @@ const ModulesTable = props => {
             <Popup
               content="View Module"
               trigger={
-                <Link to="/edit-module">
+                <Link to={pathUtils.makeModMarkdown(record.moduleid)}>
                   <PageviewIcon key="view" />
                 </Link>
               }
