@@ -1,9 +1,12 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Table, Space } from 'antd';
 import { useRestfulFetch } from '../../hooks';
 import { DeleteOutline, EditOutlined } from '@material-ui/icons';
+import PageviewIcon from '@material-ui/icons/Pageview';
 import { Popup } from 'semantic-ui-react';
 import { client } from '../../utils';
+import { pathUtils } from '../../routes';
 
 const ModulesTable = props => {
   const { href } = props;
@@ -41,6 +44,14 @@ const ModulesTable = props => {
       render: (text, record) => {
         return (
           <Space size="middle">
+            <Popup
+              content="View Module"
+              trigger={
+                <Link to={pathUtils.makeModMarkdown(record.moduleid)}>
+                  <PageviewIcon key="view" />
+                </Link>
+              }
+            />
             <Popup
               content="Edit Module"
               trigger={

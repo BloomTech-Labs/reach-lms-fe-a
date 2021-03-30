@@ -6,22 +6,38 @@ import Styled from './UserManagement.styles';
 
 //ant design + mui imports
 import 'semantic-ui-css/semantic.min.css';
-import { Button } from 'antd';
+import { Input, Button } from 'antd';
 import AddIcon from '@material-ui/icons/Add';
 import { Popup } from 'semantic-ui-react';
 
 const UserManagement = props => {
+  const { href } = props;
   const user = useUserRole();
   const userAdd = useSubModal();
   const userEdit = useSubModal();
   const [selectedUser, setSelectedUser] = React.useState('');
   const [selectedUserCourses, setSelectedUserCourses] = React.useState('');
 
+  //form values
+  const [searchedTerm, setSearchedTerm] = React.useState(undefined);
+  const [searchValue, setSearchValue] = React.useState('');
+
+  const searchBar = (
+    <>
+      <Input
+        value={searchValue}
+        onChange={evt => setSearchValue(evt.target.value)}
+      />
+      <Button onClick={() => setSearchedTerm(searchValue)}> Search!</Button>
+    </>
+  );
+
   return (
     <>
       <Styled.Content>
         <Styled.HeaderDiv>
           <h2>All Users</h2>
+          <Styled.SearchContainer>{searchBar}</Styled.SearchContainer>
           <div className="options">
             {user.userIsAdmin() && (
               <Popup
@@ -43,7 +59,9 @@ const UserManagement = props => {
           </div>
         </Styled.HeaderDiv>
         <UserTable
-          href={'/users'}
+          href={
+            href ?? `/users/${searchedTerm ? `?query=${searchedTerm}` : ''}`
+          }
           setSelectedUser={setSelectedUser}
           userEdit={userEdit}
         />
