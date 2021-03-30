@@ -112,7 +112,6 @@ const Main = props => {
                       style={{ fontSize: 32 }}
                       key="edit"
                       onClick={() => {
-                        // e.preventDefault();
                         setSelectedCourse(courseEntity._links.self.href);
                         courseEdit.showModal();
                       }}
@@ -125,15 +124,14 @@ const Main = props => {
                     <DeleteOutline
                       style={{ fontSize: 35 }}
                       key="delete"
-                      onClick={e => {
-                        e.preventDefault();
+                      onClick={() => {
                         client.deleteCourse(courseEntity.courseid);
                       }}
                     />
                   }
                 />
                 <ModulesTable
-                  key={courseEntity._links.self.hrey}
+                  key={courseEntity._links.self.href}
                   href={courseEntity._links.modules.href}
                   setSelectedModule={setSelectedModule}
                   moduleEdit={moduleEdit}
