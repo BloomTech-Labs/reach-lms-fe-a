@@ -15,6 +15,15 @@ const Header = styled.div`
   width: 30vw;
 `;
 
+const TopCourseCard = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
+const IconsDiv = styled.div`
+  display: flex;
+`;
+
 const SearchContainer = styled.div`
   display: flex;
   flex-flow: row nowrap;
@@ -25,6 +34,8 @@ const SearchContainer = styled.div`
 const Styled = {
   Content,
   Header,
+  TopCourseCard,
+  IconsDiv,
   SearchContainer,
 };
 
