@@ -20,6 +20,7 @@ import { NotFoundPage } from './components/NotFound';
 import { LoadingComponent } from './components/LoadingComponent';
 import { HomePage } from './components/Dashboard';
 import { Wrapper } from './components/Wrapper';
+import { Editor } from './components/Markdown';
 import {
   Main,
   AdminMain,
@@ -33,6 +34,7 @@ import {
   ADMIN_LANDING,
   MAIN_DASH,
   USER_MANAGEMENT,
+  MOD_MARKDOWN,
 } from './routes';
 
 ReactDOM.render(
@@ -108,6 +110,14 @@ function App() {
             component={() => (
               <Wrapper>
                 <UserManagement />
+              </Wrapper>
+            )}
+          />
+          <SecureRoute
+            path={MOD_MARKDOWN}
+            component={() => (
+              <Wrapper>
+                <Editor />
               </Wrapper>
             )}
           />

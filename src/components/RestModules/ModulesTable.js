@@ -2,6 +2,7 @@ import React from 'react';
 import { Table, Space } from 'antd';
 import { useRestfulFetch } from '../../hooks';
 import { DeleteOutline, EditOutlined } from '@material-ui/icons';
+import PageviewIcon from '@material-ui/icons/Pageview';
 import { Popup } from 'semantic-ui-react';
 import { client } from '../../utils';
 
@@ -41,6 +42,18 @@ const ModulesTable = props => {
       render: (text, record) => {
         return (
           <Space size="middle">
+            <Popup
+              content="View Module"
+              trigger={
+                <PageviewIcon
+                  key="view"
+                  onClick={() => {
+                    props.setSelectedModule(record._links.self.href);
+                    props.moduleEdit.showModal();
+                  }}
+                />
+              }
+            />
             <Popup
               content="Edit Module"
               trigger={
