@@ -16,6 +16,7 @@ import { ProgramSingleton } from '../RestPrograms';
 import { StudentTeacherManagement } from '../RestUsers';
 import { client } from '../../utils/api';
 import Styled from './Main.styles';
+import { Input, Button } from 'antd';
 
 const Main = props => {
   const { href, programId } = props;
@@ -28,6 +29,19 @@ const Main = props => {
   const moduleEdit = useSubModal();
   const manageStudentTeacher = useSubModal();
   const [courseId, setCourseId] = React.useState(0);
+
+  const [searchedTerm, setSearchedTerm] = React.useState(undefined);
+  const [searchValue, setSearchValue] = React.useState('');
+
+  const searchBar = (
+    <>
+      <Input
+        value={searchValue}
+        onChange={evt => setSearchValue(evt.target.value)}
+      />
+      <Button onClick={() => setSearchedTerm(searchValue)}> Search!</Button>
+    </>
+  );
 
   const programInfo = (
     <GhostLink to={ADMIN_LANDING}>
@@ -52,6 +66,7 @@ const Main = props => {
       <Styled.Header>
         <div>{programId && programInfo}</div>
         <h2>My Courses</h2>
+        <Styled.SearchContainer>{searchBar}</Styled.SearchContainer>
         {user.userIsAdmin() && (
           <Popup
             content="Add A New Course"
@@ -68,7 +83,10 @@ const Main = props => {
         )}
       </Styled.Header>
       <CourseList
-        href={href ?? '/courses'}
+        href={
+          href ??
+          `/courses/relevant${searchedTerm ? `?query=${searchedTerm}` : ''}`
+        }
         mappedChild={courseEntity => {
           return (
             <Collapse accordion className="course-card">
@@ -139,7 +157,7 @@ const Main = props => {
                   <strong>Description:</strong> {courseEntity.coursedescription}
                 </p>
                 <ModulesTable
-                  key={courseEntity._links.self.hrey}
+                  key={courseEntity._links.self.href}
                   href={courseEntity._links.modules.href}
                   setSelectedModule={setSelectedModule}
                   moduleEdit={moduleEdit}
