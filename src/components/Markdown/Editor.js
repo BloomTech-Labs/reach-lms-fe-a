@@ -4,14 +4,14 @@ import { useRestfulFetch } from '../../hooks';
 import marked from 'marked';
 import { sampleText } from './sampleText';
 
-const EditorFn = props => {
+const EditorFn = () => {
   const { moduleId } = useParams();
-  const { data } = useRestfulFetch(`/modules/module/${moduleId}`);
+  const { data } = useRestfulFetch(`/modules/markdown/${moduleId}`);
   const [text, setText] = React.useState(sampleText);
 
   React.useEffect(() => {
     if (data) {
-      setText(data.modulecontent);
+      setText(data);
     }
   }, [data]);
 
