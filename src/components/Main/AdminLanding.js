@@ -14,10 +14,10 @@ const AdminLanding = props => {
   const programModal = useSubModal();
   const [selectedProgram, setSelectedProgram] = React.useState('');
 
-  // const handleCloseModal = () => {
-  //   setSelectedProgram('');
-  //   programModal.hideModal();
-  // };
+  const handleCloseModal = () => {
+    setSelectedProgram('');
+    programModal.hideModal();
+  };
 
   return (
     <>
@@ -98,9 +98,9 @@ const AdminLanding = props => {
       <ProgramForm
         isWrapped={true}
         visible={programModal.visible}
-        hideModal={programModal.hideModal}
+        hideModal={handleCloseModal}
         href={selectedProgram}
-        onSubmit={programModal.hideModal}
+        onSubmit={handleCloseModal}
       />
     </>
   );

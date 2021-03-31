@@ -12,17 +12,23 @@ const initialValues = {
 };
 
 export default function CreateProgram(props) {
-  const { href } = props;
-  const { data } = useRestfulFetch(href);
+  let { href } = props;
+  let { data } = useRestfulFetch(href);
   const { userid } = useUserRole();
 
   const { values, onChange, resetValues, setValues } = useForm(initialValues);
+  const [form] = Form.useForm();
 
   React.useEffect(() => {
     if (data) {
       setValues(prev => ({ ...prev, ...data }));
+      form.setFieldsValue({ ...form.getFieldsValue(), ...data });
     }
-  }, [data, setValues]);
+    if (!href) {
+      setValues(initialValues);
+      form.setFieldsValue(initialValues);
+    }
+  }, [data, href, setValues]);
 
   const changeValues = e => {
     const { name, value, type } = e.target;
@@ -34,14 +40,26 @@ export default function CreateProgram(props) {
     onChange('programtype', value);
   };
 
-  function submitForm(e) {
-    // e.preventDefault();
+  function submitForm(values) {
     if (!href) {
       client.postProgram(userid, values);
     } else {
-      client.patchProgram(data.programid, values);
+      const editedProgram = {
+        programid: data.programid,
+        programname: values.programname,
+        programtype: values.programtype,
+        programdescription: values.programdescription,
+      };
+      client.patchProgram(editedProgram.programid, editedProgram);
+    }
+    if (props.hideModal) {
+      props.hideModal();
+    }
+    if (props.onSubmit) {
+      props.onSubmit();
     }
     resetValues();
+    href = '';
   }
 
   if (!data && href) {
@@ -52,12 +70,18 @@ export default function CreateProgram(props) {
 
   const innerForm = (
     <>
-      <h1>Create Program</h1>
+      {!href ? <h1>Create Program</h1> : <h1>Edit Program</h1>}
       <Form
         name="Program Form"
         layout="vertical"
         size="large"
         onFinish={submitForm}
+        form={form}
+        initialValues={{
+          programname: data ? data.programname : '',
+          programtype: data ? data.programtype : '',
+          programdescription: data ? data.programdescription : '',
+        }}
       >
         <Form.Item
           name="programname"
@@ -184,8 +208,12 @@ export default function CreateProgram(props) {
       {props.isWrapped ? (
         <Modal
           visible={props.visible}
-          onCancel={props.hideModal}
-          onOk={submitForm}
+          onCancel={() => {
+            props.hideModal();
+            href = '';
+            form.resetFields();
+          }}
+          onOk={form.submit}
         >
           {innerForm}
         </Modal>
