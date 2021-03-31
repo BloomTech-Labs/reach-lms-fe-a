@@ -8,7 +8,6 @@ const Content = styled.div`
 `;
 
 const Header = styled.div`
-  margin-right: 50%;
   width: 100%;
   height: 10vh;
 `;

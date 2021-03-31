@@ -3,7 +3,9 @@ import { useParams } from 'react-router-dom';
 import { useRestfulFetch } from '../../hooks';
 import marked from 'marked';
 import { sampleText } from './sampleText';
+import { Button } from 'antd';
 import Styled from './Editor.styles';
+import { client } from '../../utils/api';
 
 const EditorFn = () => {
   const { moduleId } = useParams();
@@ -26,6 +28,12 @@ const EditorFn = () => {
     return { __html };
   };
 
+  function submitForm(e) {
+    e.preventDefault();
+
+    client.putMarkdown(moduleId, text);
+  }
+
   return (
     <Styled.Content>
       <div className="container">
@@ -43,13 +51,19 @@ const EditorFn = () => {
           </div>
           <div className="col-sm-6">
             <div
-              className="dark-mode"
+              className="textarea-html"
               dangerouslySetInnerHTML={renderText(text)}
             />
           </div>
         </div>
       </div>
+      <div className="button-container">
+        <Button onClick={submitForm} type="primary" className="button">
+          Submit
+        </Button>
+      </div>
     </Styled.Content>
   );
 };
+
 export default EditorFn;
