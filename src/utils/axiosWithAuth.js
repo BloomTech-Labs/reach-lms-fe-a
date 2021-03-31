@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const getBaseParams = () => {
+export const getBaseParams = () => {
   const token = localStorage.getItem('okta-token-storage');
   const parsed_token = JSON.parse(token);
   const access_token = parsed_token['accessToken']['value'];

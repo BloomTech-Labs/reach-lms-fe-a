@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useSubModal, useUserRole } from '../../hooks';
 import { UserTable, AddNewUserForm, EditUserForm } from '../RestUsers';
+import { FileUploader } from '../FileUploader';
 import Styled from './UserManagement.styles';
 
 //ant design + mui imports
@@ -58,6 +59,7 @@ const UserManagement = props => {
             </Link>
           </div>
         </Styled.HeaderDiv>
+        <FileUploader url="https://reach-team-a-be.herokuapp.com/upload/csv/student-roster" />
         <UserTable
           href={
             href ?? `/users/${searchedTerm ? `?query=${searchedTerm}` : ''}`

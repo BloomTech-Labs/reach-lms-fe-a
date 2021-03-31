@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSubModal, useUserRole } from '../../hooks';
 import 'antd/dist/antd.css';
-import { Modal, Collapse, Space } from 'antd';
+import { Input, Modal, Collapse, Space, Button } from 'antd';
 import { GhostLink } from '../common';
 import { ADMIN_LANDING } from '../../routes';
 import { EditOutlined, DeleteOutline } from '@material-ui/icons';
@@ -14,9 +14,9 @@ import { EditModuleForm, AddModuleForm, ModulesTable } from '../RestModules';
 import { CourseList, AddCourseForm, EditCourseForm } from '../RestCourses';
 import { ProgramSingleton } from '../RestPrograms';
 import { StudentTeacherManagement } from '../RestUsers';
+import { FileUploader } from '../FileUploader';
 import { client } from '../../utils/api';
 import Styled from './Main.styles';
-import { Input, Button } from 'antd';
 
 const Main = props => {
   const { href, programId } = props;
@@ -66,7 +66,6 @@ const Main = props => {
       <Styled.Header>
         <div>{programId && programInfo}</div>
         <h2>My Courses</h2>
-        <Styled.SearchContainer>{searchBar}</Styled.SearchContainer>
         {user.userIsAdmin() && (
           <Popup
             content="Add A New Course"
@@ -81,6 +80,7 @@ const Main = props => {
             }
           />
         )}
+        <Styled.SearchContainer>{searchBar}</Styled.SearchContainer>
       </Styled.Header>
       <CourseList
         href={
@@ -156,6 +156,9 @@ const Main = props => {
                 <p>
                   <strong>Description:</strong> {courseEntity.coursedescription}
                 </p>
+                <FileUploader
+                  url={`https://reach-team-a-be.herokuapp.com/upload/csv/course-student-roster/${courseEntity.courseid}`}
+                />
                 <ModulesTable
                   key={courseEntity._links.self.href}
                   href={courseEntity._links.modules.href}
