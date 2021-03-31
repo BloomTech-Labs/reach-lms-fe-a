@@ -88,7 +88,6 @@ const Main = props => {
           `/courses/relevant${searchedTerm ? `?query=${searchedTerm}` : ''}`
         }
         mappedChild={courseEntity => {
-          console.log(courseEntity);
           return (
             <Collapse accordion className="course-card">
               <Collapse.Panel header={courseEntity.coursename}>

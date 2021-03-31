@@ -10,7 +10,6 @@ const uploadprops = url => {
     action: url,
 
     onChange(info) {
-      console.log(info);
       if (info.file.status !== 'uploading') {
         console.log(info.file, info.fileList);
       }
