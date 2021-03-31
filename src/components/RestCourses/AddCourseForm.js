@@ -16,6 +16,7 @@ function AddCourseForm(props) {
   const [programId, setProgramId] = React.useState(props.programId);
   const { data: programs } = useRestfulFetch(`/programs/${props.userId}`);
   const { values, onChange } = useForm(initialFormValues);
+  const [form] = Form.useForm();
 
   const changeValues = e => {
     if (typeof e == 'number') {
@@ -27,8 +28,7 @@ function AddCourseForm(props) {
     onChange(name, valueToUse);
   };
 
-  function submitForm(e) {
-    e.preventDefault();
+  function submitForm(values) {
     const { courseid, coursename, coursecode, coursedescription } = values;
     const newCourse = {
       courseid,
@@ -38,6 +38,9 @@ function AddCourseForm(props) {
     };
     // this programId is what will associate the new course with an existing program
     client.postCourse(programId, newCourse);
+    if (props.hideModal) {
+      props.hideModal();
+    }
     if (props.onSubmit) {
       props.onSubmit();
     }
@@ -46,7 +49,13 @@ function AddCourseForm(props) {
   const innerForm = (
     <>
       <h1 className="edit-form-h1">Add Course</h1>
-      <Form name="basic" layout="vertical" size="large" onFinish={submitForm}>
+      <Form
+        name="basic"
+        layout="vertical"
+        size="large"
+        onFinish={submitForm}
+        form={form}
+      >
         {!props.programId && (
           <Form.Item
             name="programSelected"
@@ -147,7 +156,7 @@ function AddCourseForm(props) {
           key={props.key + 'modal'}
           visible={props.visible}
           onCancel={props.hideModal}
-          onOk={submitForm}
+          onOk={form.submit}
         >
           {innerForm}
         </Modal>
