@@ -88,6 +88,7 @@ const Main = props => {
           `/courses/relevant${searchedTerm ? `?query=${searchedTerm}` : ''}`
         }
         mappedChild={courseEntity => {
+          console.log(courseEntity);
           return (
             <Collapse accordion className="course-card">
               <Collapse.Panel header={courseEntity.coursename}>
@@ -156,7 +157,9 @@ const Main = props => {
                 <p>
                   <strong>Description:</strong> {courseEntity.coursedescription}
                 </p>
-                <FileUploader />
+                <FileUploader
+                  url={`https://reach-team-a-be.herokuapp.com/upload/csv/course-student-roster/${courseEntity.courseid}`}
+                />
                 <ModulesTable
                   key={courseEntity._links.self.href}
                   href={courseEntity._links.modules.href}
