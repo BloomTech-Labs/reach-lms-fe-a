@@ -9,22 +9,20 @@ const { TextArea } = Input;
 const initialFormErrors = {
   modulename: '',
   moduledescription: '',
-  modulecontent: '',
 };
 
 function EditModuleForm(props) {
   const { data } = useRestfulFetch(props.href);
-
   const { values, onChange, resetValues, setValues } = useForm(
     data,
     initialFormErrors
   );
+  const [form] = Form.useForm();
 
   React.useEffect(() => {
     if (data) {
       setValues(prevValues => ({ ...prevValues, ...data }));
     }
-    console.log({ data }, 'editModuleForm');
   }, [data, setValues]);
 
   const changeValues = e => {
@@ -32,27 +30,40 @@ function EditModuleForm(props) {
     onChange(name, value);
   };
 
-  function submitForm(e) {
-    e.preventDefault();
-    const { modulename, moduledescription, modulecontent } = values;
+  function submitForm(values) {
     const newModule = {
-      modulename,
-      moduledescription,
-      modulecontent,
+      modulename: values.modulename,
+      moduledescription: values.moduledescription,
     };
 
     client.patchModule(data.moduleid, newModule);
+    if (props.hideModal) {
+      props.hideModal();
+    }
+    if (props.onSubmit) {
+      props.onSubmit();
+    }
     resetValues();
   }
 
-  if (!values) {
+  if (!data || !values) {
     return <div>Loading module data...</div>;
   }
 
   const innerForm = (
     <>
       <h1 className="edit-form-h1">Edit Module</h1>
-      <Form name="basic" layout="vertical" size="large" onFinish={submitForm}>
+      <Form
+        name="basic"
+        layout="vertical"
+        size="large"
+        onFinish={submitForm}
+        form={form}
+        initialValues={{
+          modulename: data.modulename,
+          moduledescription: data.moduledescription,
+        }}
+      >
         <Form.Item
           label="Module Name:"
           name="modulename"
@@ -95,29 +106,6 @@ function EditModuleForm(props) {
             rows={4}
           />
         </Form.Item>
-
-        <Form.Item
-          label="Module Content:"
-          name="modulecontent"
-          rules={[
-            {
-              min: 10,
-              type: 'string',
-              required: true,
-              message: 'ⓧ Module content must be at least 10 characters.',
-            },
-          ]}
-        >
-          <TextArea
-            showCount
-            maxLength={250}
-            id="modulecontent"
-            name="modulecontent"
-            value={values.modulecontent}
-            onChange={changeValues}
-            rows={4}
-          />
-        </Form.Item>
       </Form>
     </>
   );
@@ -128,7 +116,7 @@ function EditModuleForm(props) {
         <Modal
           visible={props.visible}
           onCancel={props.hideModal}
-          onOk={submitForm}
+          onOk={form.submit}
         >
           {innerForm}
         </Modal>
