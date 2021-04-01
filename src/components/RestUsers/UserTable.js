@@ -56,6 +56,7 @@ const UserTable = props => {
                   key="edit"
                   onClick={() => {
                     props.setSelectedUser(record._links.self.href);
+                    props.setSelectedUserCourses(record.userid);
                     props.userEdit.showModal();
                   }}
                 />

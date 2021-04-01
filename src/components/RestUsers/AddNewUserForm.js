@@ -13,6 +13,7 @@ const initValues = {
 
 const AddNewUserForm = props => {
   const { values, onChange, resetValues } = useForm(initValues);
+  const [form] = Form.useForm();
 
   const changeValues = evt => {
     if (typeof evt == 'string') {
@@ -24,9 +25,22 @@ const AddNewUserForm = props => {
     onChange(name, value);
   };
 
-  const onSubmit = evt => {
-    evt.preventDefault();
-    client.postNewUser(values);
+  const onSubmit = values => {
+    const { email, username, firstname, lastname, roleType } = values;
+    const newUser = {
+      email,
+      username,
+      firstname,
+      lastname,
+      roleType,
+    };
+    client.postNewUser(newUser);
+    if (props.hideModal) {
+      props.hideModal();
+    }
+    if (props.onSubmit) {
+      props.onSubmit();
+    }
     resetValues();
   };
 
@@ -38,6 +52,7 @@ const AddNewUserForm = props => {
         layout="vertical"
         size="large"
         onFinish={onSubmit}
+        form={form}
       >
         <Form.Item
           label="*Email"
@@ -58,11 +73,11 @@ const AddNewUserForm = props => {
           />
         </Form.Item>
         <Form.Item
-          name="role"
+          name="roleType"
           label="*Role"
           rules={[{ required: true, message: 'Role is required.' }]}
         >
-          <Select value={values.role} onChange={changeValues}>
+          <Select value={values.roleType} onChange={changeValues}>
             <Select.Option value="ADMIN">Admin</Select.Option>
             <Select.Option value="TEACHER">Teacher</Select.Option>
             <Select.Option value="STUDENT">Student</Select.Option>
@@ -130,7 +145,7 @@ const AddNewUserForm = props => {
         <Modal
           visible={props.visible}
           onCancel={props.hideModal}
-          onOk={onSubmit}
+          onOk={form.submit}
         >
           {innerForm}
         </Modal>

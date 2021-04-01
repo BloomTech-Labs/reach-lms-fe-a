@@ -2,6 +2,7 @@ import React from 'react';
 import { useForm, useRestfulFetch } from '../../hooks';
 import 'antd/dist/antd.css';
 import { Modal, Button, Form, Select, Table } from 'antd';
+import { client } from '../../utils/api';
 
 const columns = [
   {
@@ -16,28 +17,23 @@ const columns = [
 
 const EditUserForm = props => {
   const { data } = useRestfulFetch(props.href);
-  const { data: courses } = useRestfulFetch(props.courses);
+  const { data: courses } = useRestfulFetch(`/courses/user/${props.courses}`);
   const [allCourses, setAllCourses] = React.useState([]);
   const [courseSet, setCourseSet] = React.useState([]);
   const { values, onChange, setValues } = useForm(data);
+  const [form] = Form.useForm();
 
   React.useEffect(() => {
     if (data) {
       setValues(prevValues => ({ ...prevValues, ...data }));
     }
-    if (courses) {
+    if (courses && courses.hasOwnProperty('courseList')) {
       setAllCourses(
-        courses.enrolled
-          .map(course => {
-            return { ...course, key: course.courseid, enrolled: true };
-          })
-          .concat(
-            courses.available.map(course => {
-              return { ...course, key: course.courseid, enrolled: false };
-            })
-          )
+        courses?.courseList.map(course => {
+          return { ...course, key: course.courseid, enrolled: true };
+        })
       );
-      setCourseSet(courses.enrolled.map(course => course.courseid));
+      setCourseSet(courses.courseList.map(course => course.courseid));
     }
   }, [data, setValues, courses]);
 
@@ -64,15 +60,25 @@ const EditUserForm = props => {
     onChange(name, value);
   };
 
-  function submitForm(e) {
-    e.preventDefault();
+  function submitForm(values) {
+    const editedUser = {
+      userid: data.userid,
+      role: values.role,
+    };
+    client.patchUserNewRole(editedUser.userid, editedUser.role);
+    if (props.hideModal) {
+      props.hideModal();
+    }
+    if (props.onSubmit) {
+      props.onSubmit();
+    }
   }
 
   if (!props.visible) {
     return null;
   }
 
-  if (!data || !values || !courses) {
+  if (!data || !values) {
     return <div>Loading...</div>;
   }
 
@@ -83,9 +89,10 @@ const EditUserForm = props => {
         name="basic"
         layout="vertical"
         size="large"
+        form={form}
         onFinish={submitForm}
         initialValues={{
-          userrole: data.role,
+          role: data.role,
         }}
       >
         <Form.Item
@@ -105,17 +112,21 @@ const EditUserForm = props => {
             value={values.role}
             onChange={changeValues}
           >
-            <Select.Option value="admin">Admin</Select.Option>
-            <Select.Option value="teacher">Teacher</Select.Option>
-            <Select.Option value="student">Student</Select.Option>
+            <Select.Option value="ADMIN">Admin</Select.Option>
+            <Select.Option value="TEACHER">Teacher</Select.Option>
+            <Select.Option value="STUDENT">Student</Select.Option>
           </Select>
         </Form.Item>
       </Form>
-      <Table
-        rowSelection={{ type: 'checkbox', ...rowSelection }}
-        columns={columns}
-        dataSource={allCourses}
-      />
+      {allCourses ? (
+        <Table
+          rowSelection={{ type: 'checkbox', ...rowSelection }}
+          columns={columns}
+          dataSource={allCourses}
+        />
+      ) : (
+        <div>no courses</div>
+      )}
     </>
   );
 
@@ -125,7 +136,7 @@ const EditUserForm = props => {
         <Modal
           visible={props.visible}
           onCancel={props.hideModal}
-          onOk={submitForm}
+          onOk={form.submit}
         >
           {innerForm}
         </Modal>

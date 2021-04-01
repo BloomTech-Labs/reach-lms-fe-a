@@ -34,6 +34,8 @@ export const client = {
     axiosAuth().delete(`/courses/course/${courseId}/user/${userId}`),
   patchUser: (userId, editedUser) =>
     axiosAuth().patch(`/users/user/${userId}`, editedUser),
+  patchUserNewRole: (userId, roleType) =>
+    axiosAuth().patch(`/users/user/${userId}/${roleType}`),
   deleteUser: userId => axiosAuth().delete(`/users/user/${userId}`),
   getAllNotCourses: userId => axiosAuth().get(`/courses/anti-user/${userId}`),
   getCourseEnrollmentObject: userId =>

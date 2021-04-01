@@ -16,22 +16,34 @@ const initialValues = {
 
 function AddModuleForm(props) {
   const { values, onChange, resetValues } = useForm(initialValues);
+  const [form] = Form.useForm();
 
   const changeValues = e => {
     const { name, value } = e.target;
     onChange(name, value);
   };
 
-  function submitForm(e) {
-    e.preventDefault();
+  function submitForm(values) {
     client.postModule(props.courseId, values);
+    if (props.hideModal) {
+      props.hideModal();
+    }
+    if (props.onSubmit) {
+      props.onSubmit();
+    }
     resetValues();
   }
 
   const innerForm = (
     <>
       <h1 className="edit-form-h1">Add Module</h1>
-      <Form name="basic" layout="vertical" size="large" onFinish={submitForm}>
+      <Form
+        name="basic"
+        layout="vertical"
+        size="large"
+        onFinish={submitForm}
+        form={form}
+      >
         <Form.Item
           label="Module Name:"
           name="modulename"
@@ -104,7 +116,7 @@ function AddModuleForm(props) {
       {props.isWrapped ? (
         <Modal
           visible={props.visible}
-          onOk={submitForm}
+          onOk={form.submit}
           onCancel={props.hideModal}
         >
           {innerForm}

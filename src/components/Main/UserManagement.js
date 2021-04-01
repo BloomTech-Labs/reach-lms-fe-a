@@ -65,6 +65,7 @@ const UserManagement = props => {
             href ?? `/users/${searchedTerm ? `?query=${searchedTerm}` : ''}`
           }
           setSelectedUser={setSelectedUser}
+          setSelectedUserCourses={setSelectedUserCourses}
           userEdit={userEdit}
         />
       </Styled.Content>

@@ -15,6 +15,7 @@ const initialFormErrors = {
 function EditCourseForm(props) {
   const { data } = useRestfulFetch(props.href);
   const { values, onChange, setValues } = useForm(data, initialFormErrors);
+  const [form] = Form.useForm();
 
   React.useEffect(() => {
     if (data) {
@@ -28,7 +29,7 @@ function EditCourseForm(props) {
     onChange(name, valueToUse);
   };
 
-  function submitForm(e) {
+  function submitForm(values) {
     const editedCourse = {
       courseid: data.courseid,
       coursename: values.coursename,
@@ -37,6 +38,12 @@ function EditCourseForm(props) {
     };
 
     client.patchCourse(editedCourse.courseid, editedCourse);
+    if (props.hideModal) {
+      props.hideModal();
+    }
+    if (props.onSubmit) {
+      props.onSubmit();
+    }
   }
 
   if (!data || !values) {
@@ -51,6 +58,7 @@ function EditCourseForm(props) {
         layout="vertical"
         size="large"
         onFinish={submitForm}
+        form={form}
         initialValues={{
           coursename: data.coursename,
           coursecode: data.coursecode,
@@ -130,7 +138,7 @@ function EditCourseForm(props) {
         <Modal
           visible={props.visible}
           onCancel={props.hideModal}
-          onOk={submitForm}
+          onOk={form.submit}
         >
           {innerForm}
         </Modal>

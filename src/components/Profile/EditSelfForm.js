@@ -15,10 +15,11 @@ const initialFormValues = {
 
 const EditSelfForm = props => {
   const { data } = useRestfulFetch('/users/getuserinfo');
-
   const { values, onChange, resetValues, setValues } = useForm(
+    data,
     initialFormValues
   );
+  const [form] = Form.useForm();
 
   React.useEffect(() => {
     if (data) {
@@ -32,11 +33,26 @@ const EditSelfForm = props => {
     onChange(name, valueToUse);
   };
 
-  function editUserSubmit(e) {
-    e.preventDefault();
-    const editedUser = { ...values, userid: data.userid };
-    client.patchUser(data.userid, editedUser);
+  function editUserSubmit(values) {
+    const editedUser = {
+      userid: data.userid,
+      firstname: values.firstname,
+      lastname: values.lastname,
+      phonenumber: values.phonenumber,
+      email: values.email,
+    };
+    client.patchUser(editedUser.userid, editedUser);
+    if (props.hideModal) {
+      props.hideModal();
+    }
+    if (props.onSubmit) {
+      props.onSubmit();
+    }
     resetValues();
+  }
+
+  if (!data || !values) {
+    return <div>Loading...</div>;
   }
 
   const innerForm = (
@@ -47,6 +63,13 @@ const EditSelfForm = props => {
         onFinish={editUserSubmit}
         size="large"
         layout="vertical"
+        form={form}
+        initialValues={{
+          firstname: data.firstname,
+          lastname: data.lastname,
+          email: data.email,
+          phonenumber: data.phonenumber,
+        }}
       >
         <Form.Item
           name="firstname"
@@ -131,7 +154,7 @@ const EditSelfForm = props => {
         <Modal
           visible={props.visible}
           onCancel={props.hideModal}
-          onOk={editUserSubmit}
+          onOk={form.submit}
         >
           {innerForm}
         </Modal>
