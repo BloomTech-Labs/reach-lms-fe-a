@@ -2,6 +2,7 @@ import React from 'react';
 import { useForm, useRestfulFetch } from '../../hooks';
 import 'antd/dist/antd.css';
 import { Modal, Button, Form, Select, Table } from 'antd';
+import { client } from '../../utils/api';
 
 const columns = [
   {
@@ -20,13 +21,13 @@ const EditUserForm = props => {
   const [allCourses, setAllCourses] = React.useState([]);
   const [courseSet, setCourseSet] = React.useState([]);
   const { values, onChange, setValues } = useForm(data);
+  const [form] = Form.useForm();
 
   React.useEffect(() => {
     if (data) {
       setValues(prevValues => ({ ...prevValues, ...data }));
     }
-    if (courses) {
-      console.log(courses);
+    if (courses && courses.hasOwnProperty('courseList')) {
       setAllCourses(
         courses?.courseList.map(course => {
           return { ...course, key: course.courseid, enrolled: true };
@@ -59,8 +60,18 @@ const EditUserForm = props => {
     onChange(name, value);
   };
 
-  function submitForm(e) {
-    e.preventDefault();
+  function submitForm(values) {
+    const editedUser = {
+      userid: data.userid,
+      role: values.role,
+    };
+    client.patchUserNewRole(editedUser.userid, editedUser.role);
+    if (props.hideModal) {
+      props.hideModal();
+    }
+    if (props.onSubmit) {
+      props.onSubmit();
+    }
   }
 
   if (!props.visible) {
@@ -78,6 +89,7 @@ const EditUserForm = props => {
         name="basic"
         layout="vertical"
         size="large"
+        form={form}
         onFinish={submitForm}
         initialValues={{
           role: data.role,
@@ -106,11 +118,15 @@ const EditUserForm = props => {
           </Select>
         </Form.Item>
       </Form>
-      <Table
-        rowSelection={{ type: 'checkbox', ...rowSelection }}
-        columns={columns}
-        dataSource={allCourses}
-      />
+      {allCourses ? (
+        <Table
+          rowSelection={{ type: 'checkbox', ...rowSelection }}
+          columns={columns}
+          dataSource={allCourses}
+        />
+      ) : (
+        <div>no courses</div>
+      )}
     </>
   );
 
@@ -120,7 +136,7 @@ const EditUserForm = props => {
         <Modal
           visible={props.visible}
           onCancel={props.hideModal}
-          onOk={submitForm}
+          onOk={form.submit}
         >
           {innerForm}
         </Modal>
