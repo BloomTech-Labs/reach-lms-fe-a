@@ -58,7 +58,7 @@ const EditorFn = () => {
         </div>
       </div>
       <div className="button-container">
-        <Button onClick={submitForm} type="primary" className="button">
+        <Button onClick={submitForm} type="secondary" className="button">
           Submit
         </Button>
       </div>
