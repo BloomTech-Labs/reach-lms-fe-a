@@ -15,3 +15,15 @@ class ColorPickerUtility extends React.Component {
       editInputValue: '',
       color: '#ff5722',
     };
+    handleClose = removedTag => {
+        const tags = this.state.tags.filter(tag => tag !== removedTag);
+        this.setState({ tags });
+      };
+    
+      showInput = () => {
+        this.setState({ inputVisible: true }, () => this.input.focus());
+      };
+    
+      handleInputChange = e => {
+        this.setState({ inputValue: e.target.value });
+      };
