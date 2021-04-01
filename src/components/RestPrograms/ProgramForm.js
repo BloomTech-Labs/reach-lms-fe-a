@@ -28,7 +28,7 @@ export default function CreateProgram(props) {
       setValues(initialValues);
       form.setFieldsValue(initialValues);
     }
-  }, [data, href, setValues]);
+  }, [data, href, form, setValues]);
 
   const changeValues = e => {
     const { name, value, type } = e.target;
