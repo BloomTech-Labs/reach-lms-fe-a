@@ -27,3 +27,25 @@ class ColorPickerUtility extends React.Component {
       handleInputChange = e => {
         this.setState({ inputValue: e.target.value });
       };
+      handleInputConfirm = () => {
+        const { inputValue } = this.state;
+        let { tags } = this.state;
+        if (inputValue && tags.indexOf(inputValue) === -1) {
+          tags = [...tags, { title: inputValue, hexcode: '#ff5722' }];
+        }
+        this.setState({
+          tags,
+          inputVisible: false,
+          inputValue: '',
+        });
+      };
+    
+      handleEditInputChange = e => {
+        this.setState({ editInputValue: e.target.value });
+      };
+    
+      handleEditInputConfirm = () => {
+        this.setState(({ tags, editInputIndex, editInputValue, color }) => {
+          const newTags = [...tags];
+          newTags[editInputIndex].title = editInputValue;
+          newTags[editInputIndex].hexcode = color;
