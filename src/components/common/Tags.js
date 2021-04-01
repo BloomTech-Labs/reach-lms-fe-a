@@ -3,7 +3,7 @@ import { CirclePicker } from 'react-color';
 import { Tag, Input, Tooltip } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 
-class ColorPickerUtility extends React.Component {
+class Tags extends React.Component {
     state = {
       tags: [
         { title: 'Unremovable', hexcode: '#673ab7' },
@@ -157,4 +157,4 @@ class ColorPickerUtility extends React.Component {
   }
 }
 
-export default ColorPickerUtility;
+export default Tags;

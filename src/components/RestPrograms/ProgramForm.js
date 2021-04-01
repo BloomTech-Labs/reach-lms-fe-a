@@ -1,5 +1,6 @@
 import React from 'react';
 import { useForm, useRestfulFetch, useUserRole } from '../../hooks';
+import {Tags} from '../common';
 // ant design
 import 'antd/dist/antd.css';
 import { Modal, Button, Input, Select, Form } from 'antd';
@@ -199,6 +200,7 @@ export default function CreateProgram(props) {
             rows={4}
           />
         </Form.Item>
+        <Tags/>
       </Form>
     </>
   );
