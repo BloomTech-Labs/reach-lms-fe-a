@@ -25,6 +25,8 @@ export const client = {
   patchModule: (moduleId, editedModule) =>
     axiosAuth().patch(`/modules/${moduleId}`, editedModule),
   deleteModule: moduleId => axiosAuth().delete(`/modules/${moduleId}`),
+  putMarkdown: (moduleId, text) =>
+    axiosAuth().put(`/modules/markdown/${moduleId}`, text),
   // --------------- USER ---------------
   attachUserToCourse: (userId, courseId) =>
     axiosAuth().put(`/courses/course/${courseId}/user/${userId}`),
