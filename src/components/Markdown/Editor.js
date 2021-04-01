@@ -3,6 +3,9 @@ import { useParams } from 'react-router-dom';
 import { useRestfulFetch } from '../../hooks';
 import marked from 'marked';
 import { sampleText } from './sampleText';
+import { Button } from 'antd';
+import Styled from './Editor.styles';
+import { client } from '../../utils/api';
 
 const EditorFn = () => {
   const { moduleId } = useParams();
@@ -25,28 +28,41 @@ const EditorFn = () => {
     return { __html };
   };
 
+  function submitForm(e) {
+    e.preventDefault();
+
+    client.putMarkdown(moduleId, text);
+  }
+
   return (
-    <div className="container">
-      <div className="header">
-        <h2>Welcome to the Markdown Zone</h2>
-      </div>
-      <div className="row">
-        <div className="col-sm-6">
-          <textarea
-            onChange={handleChange}
-            value={text}
-            className="form-control dark-mode"
-            rows="35"
-          />
+    <Styled.Content>
+      <div className="container">
+        <Styled.Header>
+          <h2>Module Markdown Editor</h2>
+        </Styled.Header>
+        <div className="row">
+          <div className="col-sm-6">
+            <textarea
+              onChange={handleChange}
+              value={text}
+              className="form-control"
+              rows="100"
+            />
+          </div>
+          <div className="col-sm-6">
+            <div
+              className="textarea-html"
+              dangerouslySetInnerHTML={renderText(text)}
+            />
+          </div>
         </div>
-        <div className="col-sm-6 dark-mode">
-          <div
-            className="dark-mode"
-            dangerouslySetInnerHTML={renderText(text)}
-          />
-        </div>
       </div>
-    </div>
+      <div className="button-container">
+        <Button onClick={submitForm} type="primary" className="button">
+          Submit
+        </Button>
+      </div>
+    </Styled.Content>
   );
 };
 

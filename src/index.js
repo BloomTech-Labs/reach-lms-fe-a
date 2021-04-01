@@ -10,6 +10,7 @@ import { Security, LoginCallback, SecureRoute } from '@okta/okta-react';
 
 // Styling
 import 'antd/dist/antd.less';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import './styles/App.css';
 
 // COMPONENTS & PAGES
