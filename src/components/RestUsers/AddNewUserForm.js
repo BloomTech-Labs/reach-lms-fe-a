@@ -34,8 +34,6 @@ const AddNewUserForm = props => {
       lastname,
       roleType,
     };
-    console.log({ values });
-    console.log({ newUser });
     client.postNewUser(newUser);
     if (props.hideModal) {
       props.hideModal();
