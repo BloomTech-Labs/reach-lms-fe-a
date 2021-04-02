@@ -5,6 +5,17 @@ Deployed link: a.reachlms.dev
 
 ## Contributors
 
+Contributors from Labs 32 (March 2021):
+
+| [Chaz Kiker](https://github.com/chazkiker2) | [Christopher Girvin](https://github.com/BUGBOUNTYchrisg8691) | [Sebastian Mendoza](https://github.com/sebass482) | [David Chang](https://github.com/dav1dchang) | [Simone Ballard](https://github.com/simonesquad) | [Rhea Manuel](https://github.com/rhea-manuel) |
+|  
+| [<img src="https://avatars.githubusercontent.com/u/70249988?v=4" width = "200" />](https://github.com/chazkiker2) | [<img src="https://avatars.githubusercontent.com/u/65675733?v=4" width = "200" />](https://github.com/BUGBOUNTYchrisg8691) | [<img src="https://avatars.githubusercontent.com/u/66289590?v=4" width = "200" />](https://github.com/sebass482) | [<img src="https://avatars.githubusercontent.com/u/70392706?s=400&u=2e5a31261597a86c31eba71d4546912a16e236f3&v=4" width = "200" />](https://github.com/dav1dchang) | [<img src="https://avatars.githubusercontent.com/u/50623822?s=400&u=ba6af6a7e826fa735e142f23a76c947ffed3e55f&v=4" width = "200" />](https://github.com/simonesquad) | [<img src="https://avatars.githubusercontent.com/u/33386393?v=4" width = "200" />](https://github.com/rhea-manuel) | 
+
+<br>
+<br>
+
+Contributors from Labs 31 (February 2021):
+
 | [Alden Ho](https://github.com/aldenho52) | [Ashton Turner](https://github.com/ashtoturn) | [Bhawnish Kumar](https://github.com/mrbhawnish) | [David Chang](https://github.com/dav1dchang) | [Joel Vega](https://github.com/JoelVega97) |
 | [Simone Ballard](https://github.com/simonesquad) |
 |  
