@@ -8,7 +8,6 @@ function LoadingComponent(props) {
 }
 
 export default LoadingComponent;
-
 LoadingComponent.propTypes = {
   message: PropTypes.string.isRequired,
 };
