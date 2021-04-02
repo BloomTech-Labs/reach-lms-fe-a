@@ -6,7 +6,7 @@ Jumping straight into the `RestEntity` would probably feel rather heady and a bi
 
 We're going to take the `<ProgramComponent />` below and transform it by implementing the `<RestEntity />` component.
 
-### `ProgramComponent` — Before `RestEntity`
+## `ProgramComponent` — Before `RestEntity`
 
 Let's look at the following component. It does a couple of things:
 
@@ -125,6 +125,7 @@ But anything fetching data is going to do it in relatively the same way. And eac
 
 Enter `RestEntity`. This component is all about data-fetching.
 
+---
 
 ## RestEntity Overview
 
@@ -195,14 +196,334 @@ If this pattern looks familiar to you, that's probably b/c you've seen it before
 
 - And finally, you may recognize that this looks a hell of a lot like a callback function. And that’s because ***that's exactly what it is***. At the end of the day, all of our React components are **functions**. *(Yes, technically even your class components are functions... cuz JS... but don't worry about that.)* And every single one of them has the ability to take in `props`. All this `RestEntity` does is FETCH DATA FOR YOU based on the endpoint you pass on in. Then, it hands the data you care about back to you so that you can take that data as PROPS. For any component you wish to use that data for! This is a powerful pattern.
 
-So here’s the flow. Our `<RestEntity href=“/endpoint”>` parent component is going to take in that `href` prop and hit that endpoint in our backend. Bang. Boom. In one line of code, you have effectively triggered a GET request to an endpoint. For now, that’s all you need to know about why that hits an endpoint (though I’ll expand later on for anyone who wants to know how this component is working under the hood).
+Let's try it out with the `ProgramComponent` we were looking at previously
 
-Okay, so what about the next part?
+---
+
+## `ProgramComponent` — With `RestEntity`
+
+<br />
+<details>
+
+<summary>Drop down to see original `Program.js` code</summary>
+
+---
+
+### Review `ProgramComponent.js` — Before RestEntity
+
+---
 
 ```javascript
-<Singleton 
-  component={data => (
-    <Component />
-  )}
-/>
+import React from "react";
+import axios from "axios";
+
+const ProgramComponent = props => {
+  const [data, setData] = React.useState(undefined);
+  const [error, setError] = React.useState("");
+
+  React.useEffect(() => {
+    axiosAuth().get(`/programs/program/${props.programId}`)
+    .then(res => {
+      setData(res.data);
+    })
+    .catch(err => {
+      setError(err.message);
+    });
+  }, []);
+
+  return (
+    <>
+    {
+      // if data exists and is truthy (i.e., not `undefined` or `null`)
+      // then we'll render our program card with information!
+      data ?
+        <div>
+          <h1>Program Name: {data.programName}</h1>
+          <p>Description: {data.description}</p>
+        </div>
+        // otherwise, we'll show the user that we're loading 
+        // up their data
+        : <div>Loading...</div>
+    }
+    {
+      // if error exists and is not an empty string,
+      // then we'll render this tiny p tag with a warning to our user!
+      error && error !== "" && <p>Oh no! There's been a problem! {error}</p>
+    }
+    </p>
+  );
+};
+
+export default ProgramComponent;
+```
+
+</details>
+<br/>
+
+So our goal is to use the `<RestEntity />` component in our `<ProgramComponent />` so that it the `ProgramComponent` itself doesn't need to worry about fetching data, it can just worry about presenting that data.
+
+Something to keep in mind: our `ProgramComponent` needs to present ONE SINGLE program. So any endpoint it hits should be feeding back ONE Program.
+
+Reminder: `RestEntity` is a compound component with multiple layers:
+
+```javascript
+// When dealing with one Single Entity, use the `Singleton`
+<RestEntity href="some-sorta-endpoint">
+  <Singleton /> 
+  <Error />
+  <Loading />
+</RestEntity>
+```
+
+Hmmm... There's something familiar about this pattern here. Let's look at the `useEffect` hook in our original `ProgramComponent.js`...
+
+```javascript
+ React.useEffect(() => {
+    axiosAuth().get(`/programs/program/${props.programId}`)
+    .then(res => {
+      setData(res.data);
+    })
+    .catch(err => {
+      setError(err.message);
+    });
+  }, []);
+```
+
+That effect:
+
+- FETCH — makes a GET request at an endpoint `"/programs/program/${props.programId}"`
+
+- SUCCESS — sets data in `.then`
+
+- ERROR — snags an error message in `.catch`
+
+- LOADING — this is less visible, but the `async` nature of a `axios.get` implicitly includes "loading", as the Promise returned from the `.get()` will either SUCCEED or FAIL (error) -- but it's definitely going to RESOLVE. So BEFORE it resolves is when we're loading.
+
+The four parts of a fully implemented `RestEntity` align EXACTLY with that same approach.
+
+```javascript
+React.useEffect(() => {
+  axios.get(/* FETCH — "endpoint" */)
+  .then(/* SUCCESS — data obtained */)
+  .catch(/* FAIL — some error happened */)
+  .finally(/* RESOLVE */)
+}, []);
+
+<RestEntity href="endpoint"> {/*FETCH — .get("endpoint")*/}
+  <Singleton />  {/* SUCCESS — data obtained */}
+  <Error /> {/* FAIL — some error happened */}
+  <Loading /> {/* RESOLVE */}
+</RestEntity>
+```
+
+<br>
+
+> ##  Yup. Our `RestEntity` component is the JSX equivalent of an `axios` request.
+
+<br>
+
+Our `RestEntity` parent component takes in a `prop.href` to decide where the data it's supposed to fetch is located. What endpoint did we use in `ProgramComponent.js`?? This was located in the `useEffect` hook:
+
+```javascript
+axiosAuth().get(`/programs/program/${props.programId}`)
+```
+
+So... let's try this out:
+
+```javascript
+import React from "react";
+// import axios from "axios";
+
+import RestEntity from "./RestEntity";
+
+const ProgramComponent = props => {
+  // const [data, setData] = React.useState(undefined);
+  // const [error, setError] = React.useState("");
+
+  // React.useEffect(() => {
+  //   axiosAuth().get(`/programs/program/${props.programId}`)
+  //   .then(res => {
+  //     setData(res.data);
+  //   })
+  //   .catch(err => {
+  //     setError(err.message);
+  //   });
+  // }, []);
+
+  return (
+    <RestEntity href={`/programs/program/${props.programId}`}>
+      {/*
+        okay... so what the hell did this do? 
+        Now the RestEntity has supposedly fetched my data.
+        But how do I access anything with it? 
+      */}
+      <RestEntity.Singleton />
+      <RestEntity.Error />
+      <RestEntity.Loading />
+    </RestEntity>
+  );
+};
+
+export default ProgramComponent;
+```
+
+Our `<RestEntity href=“/endpoint”>` parent component is going to take in that `href` prop and hit `GET /programs/program/${programId}` . Bang. Boom. In one line of code, you have effectively triggered a GET request to an endpoint. For now, that’s all you need to know about ***why*** that hits an endpoint: because you told it to.
+
+NOTE: I'll add information about how the RestEntity works under the hood later
+
+Okay, so what about the next part? How do I get to DO anything with that data?
+That's where the `RestEntity.Singleton` sub-component comes in. The most important prop that `Singleton` receives is the `props.component`. The value assigned to this prop can look two different ways:
+
+- A Higher Order function, or a "callback" function.
+- A straight up Component.
+
+<br>
+<details>
+<summary>Quick Refresher on Callbacks</summary>
+
+---
+
+### A Quick refresher on callbacks & functions
+
+---
+
+#### Functions First
+
+- functions can be ***arrow*** functions or ***traditional (non-arrow)***
+- arrow functions can have ***explicit*** or ***implicit*** `return` statements
+- functions can be ***named*** or ***anonymous***
+
+```javascript
+// NAMED VS ANONYMOUS
+const namedArrowImplicit = param => param.toString().toUpperCase();
+
+const namedArrowExplicit = param => {
+  return param.toString().toUpperCase();
+}
+
+function namedTraditional(param) {
+  return param.toString().toUpperCase();
+}
+
+// Note that the following Anonymous Functions
+// would have no noticeable effect of any sort
+// 
+// they are created where they stand
+// but then they are not accessible after 
+// initial creation
+
+// ANONYMOUS ARROW
+param => (param.toString().toUpperCase());
+// ANONYMOUS ARROW
+param => {
+  return param.toString().toUpperCase();
+};
+// ANONYMOUS TRADITIONAL
+function(param) {
+  return param.toString().toUpperCase();
+}
+
+// fun fact: arrow functions are 
+// actually a shorthand for declaring anonymous functions
+// 
+// what happens when you name an anonymous function?
+// this is all arrow functions are under the hood
+const namedAnonymousFunction = function(param) {
+  return param.toString().toUpperCase();
+}
+```
+
+#### Callbacks
+
+You can define and use callbacks in one of two ways:
+
+- Anonymous Functions
+- Named Functions
+
+Consider the `.map` function, the function you've probably used in JS more than any other function except `console.log()`
+
+`.map` requires a CALLBACK FUNCTION as a parameter!
+
+```javascript
+const array1 = [1, 2, 3, 4, 5]
+
+const map1 = array1.map(x => x * 2);
+console.log(map1); // -> [2, 4, 6, 8, 10]
+```
+
+Here, `x => x * 2` is your callback function. It's anonymous. This is how you usually use the `map` function.
+
+But what if it wasn't anonymous?
+
+```javascript
+const array1 = [1, 2, 3, 4, 5]
+
+// anonymous callback --- created and passed at the same time
+const map1 = array1.map(x => x * 2);
+console.log(map1); // -> [2, 4, 6, 8, 10]
+
+
+const namedCallback = x => x * 2; // named callback created
+const map2 = array1.map(namedCallback); // named callback passed in
+console.log(map2); // -> [2, 4, 6, 8, 10]
+```
+
+</details>
+<br>
+
+Let's think all the way back to the original `ProgramComponent.js`. What did its return statement look like?
+
+```javascript
+return (
+    <>
+    {
+      // if data exists and is truthy (i.e., not `undefined` or `null`)
+      // then we'll render our program card with information!
+      data ?
+        <div>
+          <h1>Program Name: {data.programName}</h1>
+          <p>Description: {data.description}</p>
+        </div>
+        // otherwise, we'll show the user that we're loading 
+        // up their data
+        : <div>Loading...</div>
+    }
+    {
+      // if error exists and is not an empty string,
+      // then we'll render this tiny p tag with a warning to our user!
+      error && error !== "" && <p>Oh no! There's been a problem! {error}</p>
+    }
+    </p>
+  );
+```
+
+It was handling a bunch of logic to decide whether it was in a place to show data or not.
+
+But the essence behind all the ternaries and truthiness fail-safes contained three different
+views based on the three shapes of state (LOADING, SUCCESS, ERROR).
+
+LOADING:
+
+```javascript
+// otherwise, we'll show the user that we're loading up their data
+<div>Loading...</div>
+```
+
+SUCCESS:
+
+```javascript
+// if data exists and is truthy (i.e., not `undefined` or `null`)
+// then we'll render our program card with information!
+<div>
+  <h1>Program Name: {data.programName}</h1>
+  <p>Description: {data.description}</p>
+</div>
+```
+
+ERROR:
+
+```javascript
+// if error exists and is not an empty string,
+// then we'll render this tiny p tag with a warning to our user!
+<p>Oh no! There's been a problem! {error}</p>
 ```

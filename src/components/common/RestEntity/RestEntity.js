@@ -6,10 +6,6 @@ const RestContext = React.createContext();
 function RestEntity(props) {
   const { data, links, error, status } = useRestfulFetch(props.href);
 
-  // useEffectAfterMount(() => {
-  //   // we can do anything with props.href here if desired
-  // }, [props.href]);
-
   const value = React.useMemo(() => ({ data, links, error, status }), [
     data,
     error,
