@@ -1,6 +1,21 @@
 # The `RestEntity` Component and how to use it
 
-## Intro
+## Table of Contents
+
+- Rest Entity Overview
+  - Why we're using it
+  - What it CAN do
+  - What it REQUIRES, at minimum
+- [Tutorial](#tutorial)
+- Supporting Info
+  - Overview of basic JS concepts for anyone who actively needs to see a refresher
+  - Links to more in-depth resources for those concepts
+
+- Additional Links & Resources
+
+---
+
+## Tutorial
 
 Jumping straight into the `RestEntity` would probably feel rather heady and a bit overwhelming. So let's start by looking at a regular React component that we're more familiar with.
 
