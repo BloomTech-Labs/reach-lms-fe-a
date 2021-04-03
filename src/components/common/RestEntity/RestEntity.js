@@ -22,7 +22,7 @@ function useRestContext() {
   const context = React.useContext(RestContext);
   if (!context) {
     throw new Error(
-      `Collection compound components cannot be rendered outside the collection component`
+      `RestEntity sub-components cannot be rendered outside the RestEntity component`
     );
   }
   return context;
