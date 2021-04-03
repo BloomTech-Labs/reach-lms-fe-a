@@ -40,7 +40,7 @@ import axios from "axios";
 
 const ProgramComponent = props => {
   const [data, setData] = React.useState(undefined);
-  const [error, setError] = React.useState("");
+  const [error, setError] = React.useState(undefined);
 
   React.useEffect(() => {
     axiosAuth().get(`/programs/program/${props.programId}`)
@@ -48,7 +48,7 @@ const ProgramComponent = props => {
       setData(res.data);
     })
     .catch(err => {
-      setError(err.message);
+      setError(err);
     });
   }, []);
 
@@ -62,14 +62,12 @@ const ProgramComponent = props => {
           <h1>Program Name: {data.programName}</h1>
           <p>Description: {data.description}</p>
         </div>
-        // otherwise, we'll show the user that we're loading 
-        // up their data
+        // otherwise, we'll show the user that we're loading up their data
         : <div>Loading...</div>
     }
     {
-      // if error exists and is not an empty string,
-      // then we'll render this tiny p tag with a warning to our user!
-      error && error !== "" && <p>Oh no! There's been a problem! {error}</p>
+      // if error exists, then we'll render this warning to our user!
+      error && <p>Oh no! There's been a problem!</p>
     }
     </p>
   );
@@ -78,7 +76,7 @@ const ProgramComponent = props => {
 export default ProgramComponent;
 ```
 
-So our `ProgramComponent` above might look fairly simple compared to all the cool shit you know how to do. But. When you break it down, that `ProgramComponent` is juggling a lot of things even though it only has two jobs. We haven't yet even talked about Redux (or state management in general), other components, interactivity. 
+So our `ProgramComponent` above might look fairly simple compared to all the cool shit you know how to do. But. When you break it down, that `ProgramComponent` is juggling a lot of things even though it only has two jobs. We haven't yet even talked about Redux (or state management in general), other components, interactivity.
 
 Currently, this component worries about:
 
@@ -194,7 +192,7 @@ If this pattern looks familiar to you, that's probably b/c you've seen it before
 
 - Or, this pattern has been generally referred to as `render props` . If ya know, you know. If ya don't: no worries.
 
-- And finally, you may recognize that this looks a hell of a lot like a callback function. And that’s because ***that's exactly what it is***. At the end of the day, all of our React components are **functions**. *(Yes, technically even your class components are functions... cuz JS... but don't worry about that.)* And every single one of them has the ability to take in `props`. All this `RestEntity` does is FETCH DATA FOR YOU based on the endpoint you pass on in. Then, it hands the data you care about back to you so that you can take that data as PROPS. For any component you wish to use that data for! This is a powerful pattern.
+- And finally, you may recognize that this looks a hell of a lot like a callback function. And that’s because ***that's exactly what it is***. At the end of the day, all of our React components are **functions**. *(Yes, even the class components are functions... cuz JS classes are syntactic sugar)* And every single one of them has the ability to take in `props`. All this `RestEntity` does is FETCH DATA FOR YOU based on the endpoint you pass on in. Then, it hands the data you care about back to you so that you can take that data as PROPS. For any component you wish to use that data for! This is a powerful pattern.
 
 Let's try it out with the `ProgramComponent` we were looking at previously
 
@@ -219,7 +217,7 @@ import axios from "axios";
 
 const ProgramComponent = props => {
   const [data, setData] = React.useState(undefined);
-  const [error, setError] = React.useState("");
+  const [error, setError] = React.useState(undefined);
 
   React.useEffect(() => {
     axiosAuth().get(`/programs/program/${props.programId}`)
@@ -227,7 +225,7 @@ const ProgramComponent = props => {
       setData(res.data);
     })
     .catch(err => {
-      setError(err.message);
+      setError(err);
     });
   }, []);
 
@@ -241,14 +239,12 @@ const ProgramComponent = props => {
           <h1>Program Name: {data.programName}</h1>
           <p>Description: {data.description}</p>
         </div>
-        // otherwise, we'll show the user that we're loading 
-        // up their data
+        // otherwise, we'll show the user that we're loading up their data
         : <div>Loading...</div>
     }
     {
-      // if error exists and is not an empty string,
-      // then we'll render this tiny p tag with a warning to our user!
-      error && error !== "" && <p>Oh no! There's been a problem! {error}</p>
+      // if error exists, then we'll render this warning to our user!
+      error && <p>Oh no! There's been a problem!</p>
     }
     </p>
   );
@@ -338,7 +334,7 @@ import RestEntity from "./RestEntity";
 
 const ProgramComponent = props => {
   // const [data, setData] = React.useState(undefined);
-  // const [error, setError] = React.useState("");
+  // const [error, setError] = React.useState(undefined);
 
   // React.useEffect(() => {
   //   axiosAuth().get(`/programs/program/${props.programId}`)
@@ -346,7 +342,7 @@ const ProgramComponent = props => {
   //     setData(res.data);
   //   })
   //   .catch(err => {
-  //     setError(err.message);
+  //     setError(err);
   //   });
   // }, []);
 
@@ -371,15 +367,133 @@ Our `<RestEntity href=“/endpoint”>` parent component is going to take in tha
 
 NOTE: I'll add information about how the RestEntity works under the hood later
 
-Okay, so what about the next part? How do I get to DO anything with that data?
+Okay, so what about the next part? How do I DO anything with that data? And how does the whole Loading & Error state come into play?
+
+That's where the sub-components come in.
+
+We have the `Singleton` for success state, `Error` for error state, and `Loading` for loading state.
+
+
+Let's think all the way back to the original `ProgramComponent.js`. What did its return statement look like?
+
+```javascript
+return (
+    <>
+    {
+      // if data exists and is truthy (i.e., not `undefined` or `null`)
+      // then we'll render our program card with information!
+      data ?
+        <div>
+          <h1>Program Name: {data.programName}</h1>
+          <p>Description: {data.description}</p>
+        </div>
+        // otherwise, we'll show the user that we're loading up their data
+        : <div>Loading...</div>
+    }
+    {
+      // if error exists, then we'll render this warning to our user!
+      error && <p>Oh no! There's been a problem!</p>
+    }
+    </p>
+  );
+```
+
+It was handling a bunch of logic to decide whether it was in a place to show data or not.
+
+But the essence behind all the ternaries and truthiness fail-safes contained three different
+views based on the three shapes of state (LOADING, SUCCESS, ERROR).
+
+LOADING:
+
+```javascript
+// if data is still being fetched
+// we'll show the user that we're loading up their data
+return <div>Loading...</div>;
+```
+
+ERROR:
+
+```javascript
+// if we hit an error, then we'll render this warning to our user!
+return <p>Oh no! There's been a problem!</p>;
+```
+
+SUCCESS:
+
+```javascript
+// if data was successfully fetched, 
+// then we'll render our program JSX to display that data
+return  (
+  <div>
+    <h1>Program Name: {data.programName}</h1>
+    <p>Description: {data.description}</p>
+  </div>
+);
+```
+
+Do you notice anything interesting there? Of the three different states, only ONE depends on external data of any sort—SUCCESS. We can display anything we want to for a Loading message or an Error message... the only thing that depends on the actual data is the success!! And logically so, because if you're loading data or failed to get the data, then you definitely don't have any data that you could depend on.
+
+So let's plug our `Error` and `Loading` states into our new and improved `ProgramComponent.js`
+
+```javascript
+import React from "react";
+import RestEntity from "./RestEntity";
+
+const ProgramComponent = props => {
+  return (
+    <RestEntity href={`/programs/program/${props.programId}`}>
+
+      {/* WE STILL DON'T KNOW WHAT TO DO HERE */}
+      <RestEntity.Singleton />
+      
+      {/* The JSX inside this will only display if we hit an error */}
+      <RestEntity.Error>
+        <p>Oh no! There's been a problem!</p>
+      </RestEntity.Error>
+      
+      {/* The JSX inside this will only display when we're loading up data */}
+      <RestEntity.Loading>
+        <div>Loading...</div>
+      </RestEntity.Loading>
+
+    </RestEntity>
+  );
+};
+
+export default ProgramComponent;
+```
+
+Wow! We now have a component that can:
+
+- Fetch Data from the endpoint that we specified
+
+- Display a Loading message when that data is still being fetched.
+
+- Display a warning message if something goes wrong while fetching the data
+
+There's just one piece missing... and it's the most important piece: HOW do we display the JSX that presents the data we care about.
+
+In this example, we still need to render this on SUCCESS:
+
+```javascript
+// if data was successfully fetched, 
+// then we'll render our program JSX to display that data
+(
+  <div>
+    <h1>Program Name: {data.programName}</h1>
+    <p>Description: {data.description}</p>
+  </div>
+);
+```
+
 That's where the `RestEntity.Singleton` sub-component comes in. The most important prop that `Singleton` receives is the `props.component`. The value assigned to this prop can look two different ways:
 
-- A Higher Order function, or a "callback" function.
-- A straight up Component.
+- A "callback Component"
+- A straight up Component
 
 <br>
 <details>
-<summary>Quick Refresher on Callbacks</summary>
+<summary>Quick Refresher on Callbacks & Functions</summary>
 
 ---
 
@@ -471,59 +585,298 @@ console.log(map2); // -> [2, 4, 6, 8, 10]
 </details>
 <br>
 
-Let's think all the way back to the original `ProgramComponent.js`. What did its return statement look like?
+If you opt for the "callback Component", this is what it would look like in this example:
 
 ```javascript
-return (
-    <>
-    {
-      // if data exists and is truthy (i.e., not `undefined` or `null`)
-      // then we'll render our program card with information!
-      data ?
+(
+  <RestEntity.Singleton 
+    component={data => {
+      return  (
         <div>
-          <h1>Program Name: {data.programName}</h1>
+          <h1>Program Name: {data.programname}</h1>
           <p>Description: {data.description}</p>
         </div>
-        // otherwise, we'll show the user that we're loading 
-        // up their data
-        : <div>Loading...</div>
-    }
-    {
-      // if error exists and is not an empty string,
-      // then we'll render this tiny p tag with a warning to our user!
-      error && error !== "" && <p>Oh no! There's been a problem! {error}</p>
-    }
-    </p>
+      );
+    }}
+  />
+)
+```
+
+Alternatively, you could use the implicit return feature of an arrow function:
+
+```javascript
+(
+  <RestEntity.Singleton 
+    component={data => (
+      <div>
+        <h1>Program Name: {data.programname}</h1>
+        <p>Description: {data.description}</p>
+      </div>
+    )}
+  />
+)
+```
+
+But consider this: what if we had a previously defined Component that expected `props` that look a lot like our actual `data`...
+
+```javascript
+import React from "react";
+
+const ProgramCard = props => {
+  return (
+    <div>
+      <h1>Program Name: {props.programname}</h1>
+      <p>Description: {props.description}</p>
+    </div>
   );
+};
+
+export default ProgramCard;
 ```
 
-It was handling a bunch of logic to decide whether it was in a place to show data or not.
-
-But the essence behind all the ternaries and truthiness fail-safes contained three different
-views based on the three shapes of state (LOADING, SUCCESS, ERROR).
-
-LOADING:
+If that component was defined elsewhere, we could use it as the `props.component` for `Singleton` like so:
 
 ```javascript
-// otherwise, we'll show the user that we're loading up their data
-<div>Loading...</div>
+(<RestEntity.Singleton component={ProgramCard} />)
 ```
 
-SUCCESS:
+If you don't understand why that works, feel free to open up the [Quick Refresher on Callbacks and Functions](#a-quick-refresher-on-callbacks--functions) section for examples of that in regular JavaScript functions.
+
+Components are functions. And functions can be named or anonymous.
+So Components can be named or anonymous because Components are functions.
 
 ```javascript
-// if data exists and is truthy (i.e., not `undefined` or `null`)
-// then we'll render our program card with information!
+// named component
+const Component = props => {
+  return (
+    <div>
+      <h1>This is JSX</h1>
+      <p>It could even depend on data passed in like: {props.dataPassedIn}</p>
+    </div>
+  )
+};
+
+// anonymous, unnamed component
+props => {
+  return (
+    <div>
+      <h1>This is JSX</h1>
+      <p>It could even depend on data passed in like: {props.dataPassedIn}</p>
+    </div>
+  );
+};
+
+// or if non-arrows are better for you:
+// named component
+function Component(props) {
+  return (
+    <div>
+      <h1>This is JSX</h1>
+      <p>It could even depend on data passed in like: {props.dataPassedIn}</p>
+    </div>
+  );
+}
+
+// anonymous, unnamed component
+function(props) {
+  return (
+    <div>
+      <h1>This is JSX</h1>
+      <p>It could even depend on data passed in like: {props.dataPassedIn}</p>
+    </div>
+  );
+}
+```
+
+With the `Singleton component={callbackFn}`, the `callbackFn`, that could be a NAMED COMPONENT or an ANONYMOUS COMPONENT. Either way, it's being used as a Callback Component.
+
+```javascript
+
+// anonymous, unnamed callback function 
+// created and passed in at the same time
+const map1 = array.map(x => x * 2);
+
+// named function created
+const namedCallback = x => x * 2;
+// named function passed in as a callback function
+const map2 = array.map(namedCallback)
+
+// anonymous, unnamed callback Component passed in
+// created and passed in at the same time
+(
+  <RestEntity.Singleton 
+    component={data => (
+      <div>
+        <h1>Program Name: {data.programname}</h1>
+        <p>Description: {data.description}</p>
+      </div>
+    )}
+  />
+)
+
+// named Component passed in as a callback here
+// it must've been created/defined elsewhere
+(
+  <RestEntity.Singleton 
+    component={ProgramCard}
+  />
+)
+```
+
+## Basic Functioning Version
+
+Let's look at our finished `ProgramComponent` now that it's using the `RestEntity`
+
+```javascript
+import React from "react";
+import RestEntity from "./RestEntity";
+
+const ProgramComponent = props => {
+  return (
+    {/* The data we care about is at the endpoint passed into `href` */}
+    <RestEntity href={`/programs/program/${props.programId}`}>
+
+      {/* This JSX will render when our data is successfully obtained */}
+      <RestEntity.Singleton 
+        component={data => (
+          <div>
+            <h1>Program Name: {data.programname}</h1>
+            <p>Description: {data.description}</p>
+          </div>
+        )}
+      />
+      
+      {/* The JSX inside this will only display if we hit an error */}
+      <RestEntity.Error>
+        <p>Oh no! There's been a problem!</p>
+      </RestEntity.Error>
+      
+      {/* The JSX inside this will only display when we're loading up data */}
+      <RestEntity.Loading>
+        <div>Loading...</div>
+      </RestEntity.Loading>
+
+    </RestEntity>
+  );
+};
+
+export default ProgramComponent;
+```
+
+Now we could have some page where we wanted to use this `ProgramComponent` and simply pass in a `programId` as `props.programId`. The component will handle the fetching of data for that program. Loading and Error messages are displayed as needed. If it successfully gets the data we want, it will render the following JSX.
+
+```javascript
+(
 <div>
-  <h1>Program Name: {data.programName}</h1>
+  <h1>Program Name: {data.programname}</h1>
   <p>Description: {data.description}</p>
 </div>
+)
 ```
 
-ERROR:
+And you don't see one single of logic in that component.
+
+That's one powerful component. BUT... there's still something missing.
+
+## What's Missing? Scaling Up
+
+Our `ProgramComponent` in its current place is powerful. But is it flexible? 
+
+Not remotely. The `ProgramComponent` is going to display same JSX for any time I render it. 
 
 ```javascript
-// if error exists and is not an empty string,
-// then we'll render this tiny p tag with a warning to our user!
-<p>Oh no! There's been a problem! {error}</p>
+(
+<div>
+  <h1>Program Name: {data.programname}</h1>
+  <p>Description: {data.description}</p>
+</div>
+)
 ```
+
+What if I wanted to add a button to that program? Or I wanted to maybe include the `programtype` or whatever. Would I have to build out a fully-featured implementation of the `RestEntity` component for one measly button?
+
+You could... but yikes. The `RestEntity` is flexible as hell. What if we tackled somme of the same inversion of control that `RestEntity` gives to us — the ability to render any sort of JSX or component.
+
+Let's shift our approach a bit. Let's refactor the `ProgramComponent` to act as an abstraction from the `RestEntity` so that other team members can re-use the same component for data fetching any time they need to fetch one single program. 
+
+Since we're shifting the approach, I'm going to refer to our NEW Program-fetching component to `ProgramSingleton`.
+
+Currently, the `ProgramComponent` knows:
+
+- How to hit ONE endpoint... `GET "/programs/program/${programId}"`
+- How to render ONE variation of JSX for Program data.
+
+But it has all of the power of the `RestEntity` waiting to be used.
+
+What could the `ProgramSingleton` do to extend flexibility
+
+- We should allow someone to pass in a `href` of their choosing. What if the backend introduced a `GET program by programname` endpoint that you suddenly wanted to use? Our `ProgramComponent` only took in `props.programId`. We could change that to be `props.href` where someone could pass in any endpoint they wanted.
+
+- We should allow someone to choose the component they wanted to render for this `ProgramSingleton` view. That way, we could reuse this component for the `EDIT Program` form or the `VIEW Program` Page!
+
+- But maybe we could DEFAULT our rendered program JSX in case someone wanted that default. If we choose that, our default component could additionally allow `props.children` to be passed in to build WITHIN that default JSX.
+
+```javascript
+import React from "react";
+import RestEntity from "./RestEntity";
+
+const ProgramSingleton = props => {
+  let endpointToHit;
+
+  if (props.href) {
+    endpointToHit = props.href;
+  }
+  else if (props.programId) {
+    endpointToHit = `/programs/program/${props.programId}`
+  }
+  else {
+    throw new Error(
+      `Invalid endpoint: Please pass in href or a programId`
+      );
+  }
+
+  // default callback component -- this is the JSX that will render
+  // if someone calls renders <ProgramSingleton /> without
+  // a 'props.mappedChild' callback component
+  const defaultRender = data => (
+    <div>
+      <h1>Program Name: {data.programname}</h1>
+      <p>Description: {data.description}</p>
+      {/* If someone renders the following:
+      
+      <ProgramSingleton>
+        <button>Delete This Program</button>
+      </ProgramSingleton>  
+      
+      We'd want to include that button in our Default JSX!
+      */}
+      {props.children}
+    </div>
+  );
+
+  return (
+    <RestEntity href={endpointToHit}>
+
+      {/* This JSX will render when our data is successfully obtained */}
+      <RestEntity.Singleton 
+        component={props.mappedChild ?? defaultRender}
+      />
+      
+      {/* The JSX inside this will only display if we hit an error */}
+      <RestEntity.Error>
+        <p>Oh no! There's been a problem!</p>
+      </RestEntity.Error>
+      
+      {/* The JSX inside this will only display when we're loading up data */}
+      <RestEntity.Loading>
+        <div>Loading...</div>
+      </RestEntity.Loading>
+
+    </RestEntity>
+  );
+};
+
+export default ProgramSingleton;
+```
+
+And THAT is one crazy component.
