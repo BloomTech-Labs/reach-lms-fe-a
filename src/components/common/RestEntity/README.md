@@ -1,49 +1,90 @@
 # The `RestEntity` Component and how to use it
 
+---
+
 ## Table of Contents
 
-- [Rest Entity Overview](#restentity-overview)
-  - What it is
-  - Why we're using it
-  - What it CAN do
-  - What it REQUIRES, at minimum
-- [Tutorial](#tutorial)
-  - `ProgramComponent.js` — Before `RestEntity`
-  - `ProgramComponent.js` — After `RestEntity`
-  - 
-- Supporting Info
-  - Overview of basic JS concepts for anyone who actively needs to see a refresher
-  - Links to more in-depth resources for those concepts
-
-- Additional Links & Resources
+- [The `RestEntity` Component and how to use it](#the-restentity-component-and-how-to-use-it)
+  - [Table of Contents](#table-of-contents)
+  - [RestEntity Overview](#restentity-overview)
+    - [What is it?](#what-is-it)
+    - [Why use it?](#why-use-it)
+    - [General Structure](#general-structure)
+    - [`Singleton` or `List`? When to use each](#singleton-or-list-when-to-use-each)
+    - [`RestEntity` Parent Component](#restentity-parent-component)
+    - [`RestEntity.Error` Sub-Component](#restentityerror-sub-component)
+    - [`RestEntity.Loading` Sub-Component](#restentityloading-sub-component)
+    - [`RestEntity.Singleton` Sub-Component](#restentitysingleton-sub-component)
+      - [Quick Example](#quick-example)
+    - [`RestEntity.List` Sub-Component](#restentitylist-sub-component)
+  - [Tutorial](#tutorial)
+    - [`ProgramComponent` — Before `RestEntity`](#programcomponent--before-restentity)
+    - [`ProgramComponent` — With `RestEntity`](#programcomponent--with-restentity)
+    - [Basic Functioning Implementation](#basic-functioning-implementation)
+    - [What's Missing? Scaling Up](#whats-missing-scaling-up)
+  - [Supporting Info](#supporting-info)
+    - [A Quick refresher on callbacks & functions](#a-quick-refresher-on-callbacks--functions)
+      - [Functions First](#functions-first)
+      - [Callbacks](#callbacks)
 
 ---
 
 ## RestEntity Overview
 
-The `RestEntity` component is a compound component that utilizes the React Context API to handle data-fetching and consume relational links. Though using such a component will feel new and different to many of you, I promise it appears more intimidating than it really is. Once you're working with it,
-it'll feel very similar to the same old React that you're used to.
+### What is it?
+
+The `RestEntity` component is a compound component that utilizes the React Context API to handle data-fetching and consume relational links. Though using such a component will feel new and different to many of you, I promise it simply *appears* more intimidating than it really is. Once you're working with it, it'll feel very similar to the same old React that you're used to.
 
 The whole purpose of the `RestEntity` is to simplify the process of interacting with HAL-shaped data from our RESTful, HATEOAS-oriented backend. That is to say, every single data object has hypermedia links. Instead of worrying about complex Redux thunks and/or over-the-top routing, our `RestEntity` is going to take whatever endpoint you want to feed it and get the data you care about. Then, it'll give control back to you so you can do what you're so good at doing: building components to PRESENT information.
 
+### Why use it?
+
+In an application like Reach LMS, many of our components are going to have to worry about data fetching. There's most likely going to be at LEAST two different components for each "Category of Data," so to speak.
+
+In Reach LMS, the four most crucial types of data are:
+
+- User
+- Program
+- Course
+- Module
+
+Each one of those will probably be presented either as a one-off view or a list of multiple. Say that a user click on a Profile Page — now my component would have to fetch data for a **SINGLE USER**. And then that user clicks on their `ManageUsers` dashboard to view all of the users in their system; now `ManageUsers` would have to fetch data for a **LIST OF USERS**.
+
+You can probably pretty easily imagine a situation for a Single view vs a List view for each of the four big data types above.
+
+- User:
+  - Profile Page — Single User
+  - User Management Dash — List of Users
+- Program
+  - Edit Program Form — Fetch Single Program
+  - Program Dashboard — List of Programs
+- And so on, and so forth
+
+Handling all of that data fetching IN each component on top of managing application state, user-flow, interactivity, and everything else would result in some wildly complex components.
+
+But anything fetching data is going to do it in relatively the same way. And each component really just needs to be able to decide how to DISPLAY that information to the user.
+
+Enter `RestEntity`. This component is all about data-fetching.
+
 ### General Structure
 
-The `RestEntity` compound component has a couple parts, most of which are completely optional.
+The `RestEntity` compound component has a couple parts:
 
-- `RestEntity` parent component — Manages Data Fetching
-- `Singleton` sub-component — Manages what component to render once the data is successfully fetched (this is for one-off pieces of data... like GET program by programId... you're receiving one program so you should use the `Singleton`)
-- `List` sub-component — Manages what component to render once the data is successfully fetched (this is for collections of data... like [GET all programs] or [GET programs by admin id]... you're receiving a LIST of PROGRAMS so you should use `List`)
+- <sup><strong>+</strong></sup> `RestEntity` parent component — Manages Data Fetching
+- <sup><strong>++</strong></sup> `Singleton` sub-component — Manages what component to render once the data is successfully fetched (this is for one-off pieces of data... like GET program by programId... you're receiving one program so you should use the `Singleton`)
+- <sup><strong>++</strong></sup> `List` sub-component — Manages what component to render once the data is successfully fetched (this is for collections of data... like [GET all programs] or [GET programs by admin id]... you're receiving a LIST of PROGRAMS so you should use `List`)
 - `Error` sub-component — Manages what should be rendered if the data-fetching hits an error
 - `Loading` sub-component — manages what should be rendered while the data is still being fetched.
 
----
+<sup>+</sup> Required — The `RestEntity` parent component MUST be used in order to reap the benefits
+
+<sup>++</sup> Required (choose one!) — It would make sense to choose either the `List` or `Singleton` sub-component. See the following section on deciding use case
 
 ---
 
-### `Singleton` or `List`? Which to use & when
+### `Singleton` or `List`? When to use each
 
-
-***wtf is "singleton"?*** First and foremost, I *dearly* apologize for the choice of "singleton" as the word of choice... Java brings the worst out of my naming conventions. The reason this is called "singleton" is because the *Singleton Pattern* is an object-oriented programming pattern that restricts the instantiation of a class to one "single" instance. When I named this component on the night it was drunkenly created, I was thinking of that pattern.
+***wtf is "singleton"?*** First and foremost, I *dearly* apologize for the choice of "singleton" as the word of choice... Java brings the worst out of my naming conventions. The reason this is called "singleton" is because the *Singleton Pattern* is an object-oriented programming pattern that restricts the instantiation of a class to one "single" instance. When I named this component on the night it was drunkenly crafted, I was thinking of that pattern.
 
 The `RestEntity.List` sub-component is to be used when you're fetching a COLLECTION of some entity. When you hit "GET all courses" or "GET courses by user id", the backend is returning a LIST of Course entities.
 
@@ -51,7 +92,7 @@ The `RestEntity.Singleton` sub-component is to be used when you're fetching a SI
 
 `RestEntity.List` is for a **LIST** of whatever you're fetching.
 
-`RestEntity.Singleton` is for a **SINGLE** entity (program, user, course, module, etc.)
+`RestEntity.Singleton` is for a **SINGLE** entity of whatever you're fetching
 
 ---
 
@@ -70,45 +111,162 @@ The overarching `RestEntity` component takes the following as props:
 
 ### `RestEntity.Error` Sub-Component
 
+The `RestEntity.Error` sub-component allows you to define what you'd like to display in the case that our data-fetching hits an error.
+
 The `Error` sub-component simply takes `props.children` that represent whatever you want to display if there were to be an error.
 
 For instance, say I wanted to render the following JSX if we hit an error:
 
 ```javascript
+(
   <div>
     <h1>This is an Error Message</h1>
     <p>Literally anything I want could be inside of here</p>
   </div>
+)
 ```
 
-All I would have to do is WRAP that inside of the `RestEntity.Error`. When you wrap any JSX in another React Component, that component takes 
-all that JSX as `props.children`.
+All I would have to do is WRAP that inside of the `RestEntity.Error`. When you nest any JSX in another React Component, that component implicitly consumes all that JSX as `props.children`.
 
 ```javascript
-<RestEntity.Error>
-  <div>
-    <h1>This is an Error Message</h1>
-    <p>Literally anything I want could be inside of here</p>
-  </div>
-</RestEntity.Error>
+(
+  <RestEntity href={ENDPOINT_TO_HIT}>
+    
+    {/* other sub-components omitted */}
+    
+    <RestEntity.Error>
+      <div>
+        <h1>This is an Error Message</h1>
+        <p>Literally anything I want could be inside of here</p>
+      </div>
+    </RestEntity.Error>
 
-
+  </RestEntity>
+)
 ```
 
-----
+Now, if an error were to occur when fetching data at the endpoint passed into `RestEntity`'s `props.href`, the JSX within the `RestEntity.Error` would be displayed.
+
+---
 
 ### `RestEntity.Loading` Sub-Component
 
+The `Loading` sub-component allows you to define what you'd like to display while data is in the process of being fetched. So it's exactly like `RestEntity.Error`, just for Loading state!
+
+You can nest JSX inside within the `<Loading></Loading>` tags to pass those components in as `props.children`. Note that this JSX could be regular HTML or custom React Components.
+
+If I wanted to render the following while loading:
+
+```javascript
+(
+  <div>
+      <h1>Loading...</h1>
+      <Spinner />
+  </div>
+)
+```
+
+I can just nest that JSX within the `Loading` tags and it will display while the data is still being obtained.
+
+```javascript
+(
+  <RestEntity href={ENDPOINT_TO_HIT}>
+    
+    {/* other sub-components omitted */}
+
+    <RestEntity.Loading>
+      <div>
+        <h1>Loading...</h1>
+        <Spinner />
+      </div>
+    </RestEntity.Loading>
+    
+  </RestEntity>
+)
+```
 
 ---
 
 ### `RestEntity.Singleton` Sub-Component
 
+As mentioned above, the `Singleton` sub-component is for single entities of data. When you hit a `GET "courses/course/{courseId}"`, the backend is going to respond with one single course. That's when the `Singleton` should be utilized.
+
+props:
+
+- `component` — A component to render once the data is successfully fetched
+  - This `prop.component` can be passed in one of two ways:
+     1. A named Component, i.e., `<Singleton component={Component} />`
+     2. An anonymous, unnamed Component — effectively defining a component inline
+
+The `<Singleton component={props => (<Component />) } />`
+
+This `component` prop is powerful, because after the `RestEntity` parent component successfully retrieves your data, it will give control back to you at this `Singleton` sub-component. This is where you get to decide what to DO with the data that was fetched. What really happens is that our `Singleton` passes the retrieved data as `props` to whatever component you specify here.
+
+If I were getting one Single Course
+
+```javascript
+(
+  <RestEntity href="/courses/course/1"> {/* Fetching Course with id of 1 */}
+    <RestEntity.Singleton 
+      component={data => {
+        // now we have access to the fetched data!
+        console.log(data); // this would print out the fetched Course 
+        return (
+          <div>This is Course with a name of {data.coursename}</div>
+        );
+      }} 
+    />
+  </RestEntity>
+)
+```
+
+#### Quick Example 
+
+Say we were getting one single Course and we wanted to render the following component:
+
+```javascript
+// CourseCard.js
+import React from "react";
+
+const CourseCard = props => {
+  return (
+    <div>
+      <h1>Course Name: {props.coursename}</h1>
+      <p>Description: {props.description}</p>
+    </div>
+  );
+};
+
+export default CourseCard;
+```
+
+When using the `RestEntity.Singleton`, we could pass that component in as a named component, like so:
+
+```javascript
+(
+  <Singleton component={CourseCard} />
+)
+```
+
+Or we could define such a component as an anonymous, unnamed component:
+
+```javascript
+(
+  <Singleton component={props => (
+      <div>
+        <h1>Course Name: {props.coursename}</h1>
+        <p>Description: {props.description}</p>
+      </div>
+    )} 
+  /> {/* Note self-closing tag for Singleton */}
+)
+```
 
 ---
 
 ### `RestEntity.List` Sub-Component
 
+---
 
 ```javascript
 const EndpointComponent = props => {
@@ -163,7 +321,7 @@ Jumping straight into the `RestEntity` would probably feel rather heady and a bi
 
 We're going to take the `<ProgramComponent />` below and transform it by implementing the `<RestEntity />` component.
 
-## `ProgramComponent` — Before `RestEntity`
+### `ProgramComponent` — Before `RestEntity`
 
 Let's look at the following component. It does a couple of things:
 
@@ -188,8 +346,6 @@ Let's look at the following component. It does a couple of things:
 I know you know all of this. The verbosity of my bullet points above are not intended to feel condescending. Rather, I'm trying to bring us back to the basics of WHY we use `axios` calls, `useEffect` and `useState` hooks. Further, I want you to think about these components as ***state machines***. Because that's exactly what they are. And this frame of thinking is exactly how you should approach the `RestEntity` component.
 
 > Every component that performs data-fetching has at least three states: ***LOADING***, ***SUCCESS***, ***ERROR***. Rather than `console.log(error)` when things go wrong, we should be SHOWING our User that there has been a problem.
-
-### `ProgramComponent.js` — Before RestEntity
 
 ```javascript
 import React from "react";
@@ -247,59 +403,16 @@ But what if it had to worry about just one job:
 
 - ~~Fetching Data — which comes with all complications discussed above~~
 
-## The Problem
-
-In an application like Reach LMS, many of our components are going to have to worry about data fetching. There's most likely going to be at LEAST two different components for each "Category of Data," so to speak.
-
-In Reach LMS, the four biggest root types of data are:
-
-- User
-
-- Program
-
-- Course
-
-- Module
-
-Each one of those will probably be presented either as a one-off view or a list of multiple. Say that a user click on a Profile Page — now my component would have to fetch data for a **SINGLE USER**. And then that user clicks on their `ManageUsers` dashboard to view all of the users in their system; now `ManageUsers` would have to fetch data for a **LIST OF USERS**.
-
-You can probably pretty easily imagine a situation for a Single view vs a List view for each of the four big data types above.
-
-- User:
-  - Profile Page — Single User
-  - User Management Dash — List of Users
-- Program
-  - Edit Program Form — Fetch Single Program
-  - Program Dashboard — List of Programs
-- And so on, and so forth
-
-
-Handling all of that data fetching IN each component on top of managing application state, user-flow, interactivity, and everything else would result in some wildly complex components.
-
-But anything fetching data is going to do it in relatively the same way. And each component really just needs to be able to decide how to DISPLAY that information to the user. 
-
-Enter `RestEntity`. This component is all about data-fetching.
-
----
-
-## EXTRACTED REST_ENTITY OVERVIEW
-
 Let's try it out with the `ProgramComponent` we were looking at previously
 
 ---
 
-## `ProgramComponent` — With `RestEntity`
+### `ProgramComponent` — With `RestEntity`
 
 <br />
 <details>
 
 <summary>Drop down to see original `Program.js` code</summary>
-
----
-
-### Review `ProgramComponent.js` — Before RestEntity
-
----
 
 ```javascript
 import React from "react";
@@ -354,7 +467,7 @@ Reminder: `RestEntity` is a compound component with multiple layers:
 
 ```javascript
 // When dealing with one Single Entity, use the `Singleton`
-<RestEntity href="some-sorta-endpoint">
+<RestEntity href={/* SOME ENDPOINT */}>
   <Singleton /> 
   <Error />
   <Loading />
@@ -719,7 +832,7 @@ const map2 = array.map(namedCallback)
 )
 ```
 
-## Basic Functioning Version
+### Basic Functioning Implementation
 
 Let's look at our finished `ProgramComponent` now that it's using the `RestEntity`
 
@@ -774,7 +887,7 @@ And you don't see one single of logic in that component.
 
 That's one powerful component. BUT... there's still something missing.
 
-## What's Missing? Scaling Up
+### What's Missing? Scaling Up
 
 Our `ProgramComponent` in its current place is powerful. But is it flexible? 
 
@@ -876,7 +989,6 @@ export default ProgramSingleton;
 ```
 
 And THAT is one crazy component.
-
 
 ---
 
