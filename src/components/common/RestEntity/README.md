@@ -14,7 +14,7 @@
     - [`RestEntity` Parent Component](#restentity-parent-component)
     - [`Singleton` or `List`? When to use each](#singleton-or-list-when-to-use-each)
     - [`RestEntity.Singleton` Sub-Component](#restentitysingleton-sub-component)
-      - [Quick Example](#quick-example)
+      - [Understanding `props.component`](#understanding-propscomponent)
     - [`RestEntity.List` Sub-Component](#restentitylist-sub-component)
       - [Understanding the `props.path`](#understanding-the-propspath)
     - [`RestEntity.Error` Sub-Component](#restentityerror-sub-component)
@@ -90,14 +90,22 @@ The `RestEntity` compound component has a couple parts:
 
 ### `RestEntity` Parent Component
 
-The overarching `RestEntity` component takes the following as props:
+Our `RestEntity` parent component is going to take in a `href` prop that represents an endpoint that we want to hit. This will drive the fetching and organization of your data. Additionally, it will keep track of the data-fetching lifecycle described below.
+
+This parent component will also keep track of the state of this data-fetching mission. Data fetching has three possible states: LOADING, SUCCESS, ERROR. This `RestEntity` parent component takes the endpoint you want, gets that data, organizes it nicely, keeps track of its own state. Finally, it notifies all of its sub-components what's going on and provides the relevant information.
+
+This parent component is the smartest piece of this compound component. Once you tell it what you want, it's going to go get it and dole out agency depending on whether it succeeds.
+
+That said, this compound component is a team. Even though `RestEntity` will fetch your data and consistently fetch it, that data won't go anywhere or do anything unless you utilize the other sub-components that are listed below.
+
+
+props:
 
 - `href` — the ENDPOINT that you want to hit!
-  - If you want to get all the programs, you'd hit the `BASE_URL/programs/program/{programId}`.
-  - this `href` can be either (1) the FULL URL or (2) just the location that you care about
-    - Example: If I wanted to get the program with an id of `1`, I could pass in either of the following as `props.href`:
-      - FULL URL: `"https://reach-team-a-be.herokuapp.com/programs/program/1"`
-      - Location: `"/programs/program/1"`
+  - If you want to get the program with the programid of 1, you'd hit the `BASE_URL/programs/program/1`.
+  - this `href` can be either 
+    1. the FULL URL `props.href="https://reach-team-a-be.herokuapp.com/programs/program/1"`
+    2. just the location that you care about: `props.href="/programs/program/1"`
 
 ---
 
@@ -127,27 +135,9 @@ props:
      1. A named Component, i.e., `<Singleton component={Component} />`
      2. An anonymous, unnamed Component — effectively defining a component inline
 
-This `component` prop is powerful, because after the `RestEntity` parent component successfully retrieves your data, it will give control back to you at this `Singleton` sub-component. This is where you get to decide what to DO with the data that was fetched. What really happens is that our `Singleton` passes the retrieved data as `props` to whatever component you specify here.
+#### Understanding `props.component`
 
-If I were getting one Single Course
-
-```javascript
-(
-  <RestEntity href="/courses/course/1"> {/* Fetching Course with id of 1 */}
-    <RestEntity.Singleton 
-      component={data => {
-        // now we have access to the fetched data!
-        console.log(data); // this would print out the fetched Course 
-        return (
-          <div>This is Course with a name of {data.coursename}</div>
-        );
-      }} 
-    />
-  </RestEntity>
-)
-```
-
-#### Quick Example
+The `component` prop is powerful, because after the `RestEntity` parent component successfully retrieves your data, it will give control back to you at this `Singleton` sub-component. This is where you get to decide what to DO with the data that was fetched. What really happens is that our `Singleton` passes the retrieved data as `props` to whatever component you specify here.
 
 Say we were getting one single Course and we wanted to render the following component:
 
@@ -167,25 +157,34 @@ const CourseCard = props => {
 export default CourseCard;
 ```
 
-When using the `RestEntity.Singleton`, we could pass that component in as a named component, like so:
+If we wanted the course with an id of 1, we could hit `GET "/courses/course/1"`. We could tell `RestEntity.Singleton` to render the above component as soon as the data has been fetched.
 
 ```javascript
 (
-  <Singleton component={CourseCard} />
+  <RestEntity href="/courses/course/1"> {/* Fetching Course with id of 1 */}
+    <RestEntity.Singleton component={CourseCard} />
+  </RestEntity>
 )
 ```
 
-Or we could define such a component as an anonymous, unnamed component:
+Or, alternatively, we could define the component specified above inline, as an anonymous, unnamed component.
 
 ```javascript
 (
-  <Singleton component={props => (
-      <div>
-        <h1>Course Name: {props.coursename}</h1>
-        <p>Description: {props.description}</p>
-      </div>
-    )} 
-  />
+  <RestEntity href="/courses/course/1"> {/* Fetching Course with id of 1 */}
+    <RestEntity.Singleton 
+      component={data => {
+        // now we have access to the fetched data!
+        console.log(data); // this would print out the fetched Course 
+        return (
+          <div>
+            <h1>Course Name: {data.coursename}</h1>
+            <p>Description: {data.description}</p>
+          </div>
+        );
+      }} 
+    />
+  </RestEntity>
 )
 ```
 
@@ -617,16 +616,13 @@ const ProgramComponent = props => {
 export default ProgramComponent;
 ```
 
-Our `<RestEntity href=“/endpoint”>` parent component is going to take in that `href` prop and hit `GET /programs/program/${programId}` . Bang. Boom. In one line of code, you have effectively triggered a GET request to an endpoint. For now, that’s all you need to know about ***why*** that hits an endpoint: because you told it to.
-
-NOTE: I'll add information about how the RestEntity works under the hood later
+Our `RestEntity` parent component is going to take in that `href` prop and hit `GET "/programs/program/${programId}"` . Bang. Boom. In one line of code, you have effectively triggered a GET request to an endpoint. For now, that’s all you need to know about ***why*** that hits an endpoint: because you told it to.
 
 Okay, so what about the next part? How do I DO anything with that data? And how does the whole Loading & Error state come into play?
 
 That's where the sub-components come in.
 
 We have the `Singleton` for success state, `Error` for error state, and `Loading` for loading state.
-
 
 Let's think all the way back to the original `ProgramComponent.js`. What did its return statement look like?
 
