@@ -2,11 +2,15 @@
 
 ## Table of Contents
 
-- Rest Entity Overview
+- [Rest Entity Overview](#restentity-overview)
+  - What it is
   - Why we're using it
   - What it CAN do
   - What it REQUIRES, at minimum
 - [Tutorial](#tutorial)
+  - `ProgramComponent.js` — Before `RestEntity`
+  - `ProgramComponent.js` — After `RestEntity`
+  - 
 - Supporting Info
   - Overview of basic JS concepts for anyone who actively needs to see a refresher
   - Links to more in-depth resources for those concepts
@@ -14,6 +18,144 @@
 - Additional Links & Resources
 
 ---
+
+## RestEntity Overview
+
+The `RestEntity` component is a compound component that utilizes the React Context API to handle data-fetching and consume relational links. Though using such a component will feel new and different to many of you, I promise it appears more intimidating than it really is. Once you're working with it,
+it'll feel very similar to the same old React that you're used to.
+
+The whole purpose of the `RestEntity` is to simplify the process of interacting with HAL-shaped data from our RESTful, HATEOAS-oriented backend. That is to say, every single data object has hypermedia links. Instead of worrying about complex Redux thunks and/or over-the-top routing, our `RestEntity` is going to take whatever endpoint you want to feed it and get the data you care about. Then, it'll give control back to you so you can do what you're so good at doing: building components to PRESENT information.
+
+### General Structure
+
+The `RestEntity` compound component has a couple parts, most of which are completely optional.
+
+- `RestEntity` parent component — Manages Data Fetching
+- `Singleton` sub-component — Manages what component to render once the data is successfully fetched (this is for one-off pieces of data... like GET program by programId... you're receiving one program so you should use the `Singleton`)
+- `List` sub-component — Manages what component to render once the data is successfully fetched (this is for collections of data... like [GET all programs] or [GET programs by admin id]... you're receiving a LIST of PROGRAMS so you should use `List`)
+- `Error` sub-component — Manages what should be rendered if the data-fetching hits an error
+- `Loading` sub-component — manages what should be rendered while the data is still being fetched.
+
+---
+
+---
+
+### `Singleton` or `List`? Which to use & when
+
+
+***wtf is "singleton"?*** First and foremost, I *dearly* apologize for the choice of "singleton" as the word of choice... Java brings the worst out of my naming conventions. The reason this is called "singleton" is because the *Singleton Pattern* is an object-oriented programming pattern that restricts the instantiation of a class to one "single" instance. When I named this component on the night it was drunkenly created, I was thinking of that pattern.
+
+The `RestEntity.List` sub-component is to be used when you're fetching a COLLECTION of some entity. When you hit "GET all courses" or "GET courses by user id", the backend is returning a LIST of Course entities.
+
+The `RestEntity.Singleton` sub-component is to be used when you're fetching a SINGLE entity. When you hit [GET a course by course id], the backend is returning one SINGLE `Course`.
+
+`RestEntity.List` is for a **LIST** of whatever you're fetching.
+
+`RestEntity.Singleton` is for a **SINGLE** entity (program, user, course, module, etc.)
+
+---
+
+### `RestEntity` Parent Component
+
+The overarching `RestEntity` component takes the following as props:
+
+- `href` — the ENDPOINT that you want to hit!
+  - If you want to get all the programs, you'd hit the `BASE_URL/programs/program/{programId}`.
+  - this `href` can be either (1) the FULL URL or (2) just the location that you care about
+    - Example: If I wanted to get the program with an id of `1`, I could pass in either of the following as `props.href`:
+      - FULL URL: `"https://reach-team-a-be.herokuapp.com/programs/program/1"`
+      - Location: `"/programs/program/1"`
+
+---
+
+### `RestEntity.Error` Sub-Component
+
+The `Error` sub-component simply takes `props.children` that represent whatever you want to display if there were to be an error.
+
+For instance, say I wanted to render the following JSX if we hit an error:
+
+```javascript
+  <div>
+    <h1>This is an Error Message</h1>
+    <p>Literally anything I want could be inside of here</p>
+  </div>
+```
+
+All I would have to do is WRAP that inside of the `RestEntity.Error`. When you wrap any JSX in another React Component, that component takes 
+all that JSX as `props.children`.
+
+```javascript
+<RestEntity.Error>
+  <div>
+    <h1>This is an Error Message</h1>
+    <p>Literally anything I want could be inside of here</p>
+  </div>
+</RestEntity.Error>
+
+
+```
+
+----
+
+### `RestEntity.Loading` Sub-Component
+
+
+---
+
+### `RestEntity.Singleton` Sub-Component
+
+
+---
+
+### `RestEntity.List` Sub-Component
+
+
+```javascript
+const EndpointComponent = props => {
+  return (
+    
+    <RestEntity href=“/endpoint”>
+
+      {/* Successful Fetch State */}  
+      <RestEntity.Singleton 
+        component={data => (
+          <SomeComponent {...data} />
+        )}
+      />
+
+      {/* Error State */}  
+      <RestEntity.Error>
+        <div>Oh no...! An error has occurred!</div>
+      </RestEntity.Error>
+
+      {/* Loading State */}  
+      <RestEntity.Loading>
+        <Spinner />
+      </RestEntity.Loading>
+
+    </RestEntity>
+  );
+
+};
+```
+
+In the above example, we have a fully-implemented `<RestEntity />` component with a `<Singleton />`, `<Error />`, `<Loading />` nested inside.
+
+As you may have guessed, the `Error` and `Loading` parts are only going to display their children when our data-fetching hits an error-state or a loading state.
+
+But what’s happening with the `href` prop for `<RestEntity />`? 
+
+And *what in the world* is going on with the `component={data => (<Component {...data} />)}` for `<Singleton />`?
+
+This may look strange or scary or new to some, but trust me... it’s nothing you haven’t done before—even if you don't realize it quite yet.
+
+If this pattern looks familiar to you, that's probably b/c you've seen it before!
+
+- it could be that you recognize this pattern from some `<SecureRoute />`  components (or even the old API for the `<Route />` components from `"react-router-dom"`).
+
+- Or, this pattern has been generally referred to as `render props` . If ya know, you know. If ya don't: no worries.
+
+- And finally, you may recognize that this looks a hell of a lot like a callback function. And that’s because ***that's exactly what it is***. At the end of the day, all of our React components are **functions**. *(Yes, even the class components are functions... cuz JS classes are syntactic sugar)* And every single one of them has the ability to take in `props`. All this `RestEntity` does is FETCH DATA FOR YOU based on the endpoint you pass on in. Then, it hands the data you care about back to you so that you can take that data as PROPS. For any component you wish to use that data for! This is a powerful pattern.
 
 ## Tutorial
 
@@ -140,74 +282,7 @@ Enter `RestEntity`. This component is all about data-fetching.
 
 ---
 
-## RestEntity Overview
-
-The `RestEntity` component is a compound component that utilizes the React Context API to handle data-fetching and consume relational links. Though using such a component will feel new and different to many of you, I promise it appears more intimidating than it really is. Once you're working with it,
-it'll feel very similar to the same old React that you're used to.
-
-The whole purpose of the `RestEntity` is to simplify the process of interacting with HAL-shaped data from our RESTful, HATEOAS-oriented backend. That is to say, every single data object has hypermedia links. Instead of worrying about complex Redux thunks and/or over-the-top routing, our `RestEntity` is going to take whatever endpoint you want to feed it and get the data you care about. Then, it'll give control back to you so you can do what you're so good at doing: building components to PRESENT information.
-
-The `RestEntity` has a couple parts, most of which are completely optional.
-
-```javascript
-const EndpointComponent = props => {
-  return (
-    
-    <RestEntity href=“/endpoint”>
-
-      {/* Successful Fetch State */}  
-      <RestEntity.Singleton 
-        component={data => (
-          <SomeComponent {...data} />
-        )}
-      />
-
-      {/* Error State */}  
-      <RestEntity.Error>
-        <div>Oh no...! An error has occurred!</div>
-      </RestEntity.Error>
-
-      {/* Loading State */}  
-      <RestEntity.Loading>
-        <Spinner />
-      </RestEntity.Loading>
-
-    </RestEntity>
-  );
-
-};
-
-```
-
-Quick note on this "dot-notation" with components, for anyone who hasn't ever encountered that before: React Components are JavaScript functions (even the class components). And JavaScript functions are JavaScript OBJECTS. And JS Objects have PROPERTIES.
-
-This example above simply takes four components: `<RestEntity />`, `<Singleton />`, `<Error />`, `<Loading />`  and wraps them up into one cohesive package by doing this:
-
-```javascript
-RestEntity.Singleton = Singleton; // Singleton is just a function component
-RestEntity.Error = RestError; // RestError is just a function component
-RestEntity.Loading = Loading; // Loading is just a function component
-
-export default RestEntity; // RestEntity is now a COMPOUND component
-```
-
-In the above example, we have a fully-implemented `<RestEntity />` component with a `<Singleton />`, `<Error />`, `<Loading />` nested inside.
-
-As you may have guessed, the `Error` and `Loading` parts are only going to display their children when our data-fetching hits an error-state or a loading state.
-
-But what’s happening with the `href` prop for `<RestEntity />`? 
-
-And *what in the world* is going on with the `component={data => (<Component {...data} />)}` for `<Singleton />`?
-
-This may look strange or scary or new to some, but trust me... it’s nothing you haven’t done before—even if you don't realize it quite yet.
-
-If this pattern looks familiar to you, that's probably b/c you've seen it before!
-
-- it could be that you recognize this pattern from some `<SecureRoute />`  components (or even the old API for the `<Route />` components from `"react-router-dom"`).
-
-- Or, this pattern has been generally referred to as `render props` . If ya know, you know. If ya don't: no worries.
-
-- And finally, you may recognize that this looks a hell of a lot like a callback function. And that’s because ***that's exactly what it is***. At the end of the day, all of our React components are **functions**. *(Yes, even the class components are functions... cuz JS classes are syntactic sugar)* And every single one of them has the ability to take in `props`. All this `RestEntity` does is FETCH DATA FOR YOU based on the endpoint you pass on in. Then, it hands the data you care about back to you so that you can take that data as PROPS. For any component you wish to use that data for! This is a powerful pattern.
+## EXTRACTED REST_ENTITY OVERVIEW
 
 Let's try it out with the `ProgramComponent` we were looking at previously
 
@@ -506,100 +581,6 @@ That's where the `RestEntity.Singleton` sub-component comes in. The most importa
 - A "callback Component"
 - A straight up Component
 
-<br>
-<details>
-<summary>Quick Refresher on Callbacks & Functions</summary>
-
----
-
-### A Quick refresher on callbacks & functions
-
----
-
-#### Functions First
-
-- functions can be ***arrow*** functions or ***traditional (non-arrow)***
-- arrow functions can have ***explicit*** or ***implicit*** `return` statements
-- functions can be ***named*** or ***anonymous***
-
-```javascript
-// NAMED VS ANONYMOUS
-const namedArrowImplicit = param => param.toString().toUpperCase();
-
-const namedArrowExplicit = param => {
-  return param.toString().toUpperCase();
-}
-
-function namedTraditional(param) {
-  return param.toString().toUpperCase();
-}
-
-// Note that the following Anonymous Functions
-// would have no noticeable effect of any sort
-// 
-// they are created where they stand
-// but then they are not accessible after 
-// initial creation
-
-// ANONYMOUS ARROW
-param => (param.toString().toUpperCase());
-// ANONYMOUS ARROW
-param => {
-  return param.toString().toUpperCase();
-};
-// ANONYMOUS TRADITIONAL
-function(param) {
-  return param.toString().toUpperCase();
-}
-
-// fun fact: arrow functions are 
-// actually a shorthand for declaring anonymous functions
-// 
-// what happens when you name an anonymous function?
-// this is all arrow functions are under the hood
-const namedAnonymousFunction = function(param) {
-  return param.toString().toUpperCase();
-}
-```
-
-#### Callbacks
-
-You can define and use callbacks in one of two ways:
-
-- Anonymous Functions
-- Named Functions
-
-Consider the `.map` function, the function you've probably used in JS more than any other function except `console.log()`
-
-`.map` requires a CALLBACK FUNCTION as a parameter!
-
-```javascript
-const array1 = [1, 2, 3, 4, 5]
-
-const map1 = array1.map(x => x * 2);
-console.log(map1); // -> [2, 4, 6, 8, 10]
-```
-
-Here, `x => x * 2` is your callback function. It's anonymous. This is how you usually use the `map` function.
-
-But what if it wasn't anonymous?
-
-```javascript
-const array1 = [1, 2, 3, 4, 5]
-
-// anonymous callback --- created and passed at the same time
-const map1 = array1.map(x => x * 2);
-console.log(map1); // -> [2, 4, 6, 8, 10]
-
-
-const namedCallback = x => x * 2; // named callback created
-const map2 = array1.map(namedCallback); // named callback passed in
-console.log(map2); // -> [2, 4, 6, 8, 10]
-```
-
-</details>
-<br>
-
 If you opt for the "callback Component", this is what it would look like in this example:
 
 ```javascript
@@ -895,3 +876,125 @@ export default ProgramSingleton;
 ```
 
 And THAT is one crazy component.
+
+
+---
+
+## Supporting Info
+
+- Compound Component Dot Notation
+
+<details>
+
+  <summary>Compound Component "Dot Notation"</summary>
+
+Quick note on this "dot-notation" with components, for anyone who hasn't ever encountered that before: React Components are JavaScript functions (even the class components). And JavaScript functions are JavaScript OBJECTS. And JS Objects have PROPERTIES.
+
+This example above simply takes four components: `<RestEntity />`, `<Singleton />`, `<Error />`, `<Loading />`  and wraps them up into one cohesive package by doing this:
+
+```javascript
+RestEntity.Singleton = Singleton; // Singleton is just a function component
+RestEntity.Error = RestError; // RestError is just a function component
+RestEntity.Loading = Loading; // Loading is just a function component
+
+export default RestEntity; // RestEntity is now a COMPOUND component
+```
+
+</details>
+
+
+
+
+<br>
+<details>
+<summary>Quick Refresher on Callbacks & Functions</summary>
+
+---
+
+### A Quick refresher on callbacks & functions
+
+---
+
+#### Functions First
+
+- functions can be ***arrow*** functions or ***traditional (non-arrow)***
+- arrow functions can have ***explicit*** or ***implicit*** `return` statements
+- functions can be ***named*** or ***anonymous***
+
+```javascript
+// NAMED VS ANONYMOUS
+const namedArrowImplicit = param => param.toString().toUpperCase();
+
+const namedArrowExplicit = param => {
+  return param.toString().toUpperCase();
+}
+
+function namedTraditional(param) {
+  return param.toString().toUpperCase();
+}
+
+// Note that the following Anonymous Functions
+// would have no noticeable effect of any sort
+// 
+// they are created where they stand
+// but then they are not accessible after 
+// initial creation
+
+// ANONYMOUS ARROW
+param => (param.toString().toUpperCase());
+// ANONYMOUS ARROW
+param => {
+  return param.toString().toUpperCase();
+};
+// ANONYMOUS TRADITIONAL
+function(param) {
+  return param.toString().toUpperCase();
+}
+
+// fun fact: arrow functions are 
+// actually a shorthand for declaring anonymous functions
+// 
+// what happens when you name an anonymous function?
+// this is all arrow functions are under the hood
+const namedAnonymousFunction = function(param) {
+  return param.toString().toUpperCase();
+}
+```
+
+#### Callbacks
+
+You can define and use callbacks in one of two ways:
+
+- Anonymous Functions
+- Named Functions
+
+Consider the `.map` function, the function you've probably used in JS more than any other function except `console.log()`
+
+`.map` requires a CALLBACK FUNCTION as a parameter!
+
+```javascript
+const array1 = [1, 2, 3, 4, 5]
+
+const map1 = array1.map(x => x * 2);
+console.log(map1); // -> [2, 4, 6, 8, 10]
+```
+
+Here, `x => x * 2` is your callback function. It's anonymous. This is how you usually use the `map` function.
+
+But what if it wasn't anonymous?
+
+```javascript
+const array1 = [1, 2, 3, 4, 5]
+
+// anonymous callback --- created and passed at the same time
+const map1 = array1.map(x => x * 2);
+console.log(map1); // -> [2, 4, 6, 8, 10]
+
+
+const namedCallback = x => x * 2; // named callback created
+const map2 = array1.map(namedCallback); // named callback passed in
+console.log(map2); // -> [2, 4, 6, 8, 10]
+```
+
+</details>
+<br>
