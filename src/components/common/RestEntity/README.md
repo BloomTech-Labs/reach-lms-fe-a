@@ -21,7 +21,7 @@
     - [`ProgramComponent` — Before `RestEntity`](#programcomponent--before-restentity)
     - [`ProgramComponent` — With `RestEntity`](#programcomponent--with-restentity)
     - [Basic Functioning Implementation](#basic-functioning-implementation)
-    - [What's Missing? Scaling Up](#whats-missing-scaling-up)
+    - [What's Missing? Flexible Abstractions](#whats-missing-flexible-abstractions)
   - [Supporting Info](#supporting-info)
     - [A Quick refresher on callbacks & functions](#a-quick-refresher-on-callbacks--functions)
       - [Functions First](#functions-first)
@@ -345,7 +345,7 @@ Let's look at the following component. It does a couple of things:
 
 I know you know all of this. The verbosity of my bullet points above are not intended to feel condescending. Rather, I'm trying to bring us back to the basics of WHY we use `axios` calls, `useEffect` and `useState` hooks. Further, I want you to think about these components as ***state machines***. Because that's exactly what they are. And this frame of thinking is exactly how you should approach the `RestEntity` component.
 
-> Every component that performs data-fetching has at least three states: ***LOADING***, ***SUCCESS***, ***ERROR***. Rather than `console.log(error)` when things go wrong, we should be SHOWING our User that there has been a problem.
+> ### Every component that performs data-fetching has at least three states: ***LOADING***, ***SUCCESS***, ***ERROR***. Rather than `console.log(error)` when things go wrong, we should be SHOWING our User that there has been a problem.
 
 ```javascript
 import React from "react";
@@ -689,12 +689,12 @@ In this example, we still need to render this on SUCCESS:
 );
 ```
 
-That's where the `RestEntity.Singleton` sub-component comes in. The most important prop that `Singleton` receives is the `props.component`. The value assigned to this prop can look two different ways:
+That's where the `RestEntity.Singleton` sub-component comes in. The most important prop that `Singleton` receives is the `props.component`. The value assigned to this prop should be a React Component (which is acting as a callback component). This can look two different ways:
 
-- A "callback Component"
-- A straight up Component
+- An anonymous, unnamed component passed in as a callback
+- A named Component passed in as a callback
 
-If you opt for the "callback Component", this is what it would look like in this example:
+If you opt for the , this is what it would look like in this example:
 
 ```javascript
 (
@@ -774,8 +774,12 @@ props => {
     </div>
   );
 };
+```
 
-// or if non-arrows are better for you:
+<details>
+<summary>Or, if traditional, non-arrow function components are more your jam</summary>
+
+```javascript
 // named component
 function Component(props) {
   return (
@@ -797,19 +801,12 @@ function(props) {
 }
 ```
 
+</details>
+<br>
+
 With the `Singleton component={callbackFn}`, the `callbackFn`, that could be a NAMED COMPONENT or an ANONYMOUS COMPONENT. Either way, it's being used as a Callback Component.
 
 ```javascript
-
-// anonymous, unnamed callback function 
-// created and passed in at the same time
-const map1 = array.map(x => x * 2);
-
-// named function created
-const namedCallback = x => x * 2;
-// named function passed in as a callback function
-const map2 = array.map(namedCallback)
-
 // anonymous, unnamed callback Component passed in
 // created and passed in at the same time
 (
@@ -876,18 +873,16 @@ Now we could have some page where we wanted to use this `ProgramComponent` and s
 
 ```javascript
 (
-<div>
-  <h1>Program Name: {data.programname}</h1>
-  <p>Description: {data.description}</p>
-</div>
+  <div>
+    <h1>Program Name: {data.programname}</h1>
+    <p>Description: {data.description}</p>
+  </div>
 )
 ```
 
-And you don't see one single of logic in that component.
+And you don't see one single line of logic in that component. That's one powerful pattern. **BUT... there's still something missing.**
 
-That's one powerful component. BUT... there's still something missing.
-
-### What's Missing? Scaling Up
+### What's Missing? Flexible Abstractions
 
 Our `ProgramComponent` in its current place is powerful. But is it flexible? 
 
@@ -895,10 +890,10 @@ Not remotely. The `ProgramComponent` is going to display same JSX for any time I
 
 ```javascript
 (
-<div>
-  <h1>Program Name: {data.programname}</h1>
-  <p>Description: {data.description}</p>
-</div>
+  <div>
+    <h1>Program Name: {data.programname}</h1>
+    <p>Description: {data.description}</p>
+  </div>
 )
 ```
 
@@ -951,13 +946,10 @@ const ProgramSingleton = props => {
     <div>
       <h1>Program Name: {data.programname}</h1>
       <p>Description: {data.description}</p>
-      {/* If someone renders the following:
-      
-      <ProgramSingleton>
-        <button>Delete This Program</button>
-      </ProgramSingleton>  
-      
-      We'd want to include that button in our Default JSX!
+      {/* If someone renders this component without a 'mappedChild` prop,
+      they could potentially nest JSX inside the 
+      <ProgramSingleton></ProgramSingleton> opening and closing tags.
+      We'd want to include that JSX in our default render!
       */}
       {props.children}
     </div>
@@ -993,8 +985,6 @@ And THAT is one crazy component.
 ---
 
 ## Supporting Info
-
-- Compound Component Dot Notation
 
 <details>
 
