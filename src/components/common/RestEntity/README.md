@@ -11,14 +11,14 @@
     - [Why use it?](#why-use-it)
   - [API](#api)
     - [General Structure](#general-structure)
-    - [`Singleton` or `List`? When to use each](#singleton-or-list-when-to-use-each)
     - [`RestEntity` Parent Component](#restentity-parent-component)
-    - [`RestEntity.Error` Sub-Component](#restentityerror-sub-component)
-    - [`RestEntity.Loading` Sub-Component](#restentityloading-sub-component)
+    - [`Singleton` or `List`? When to use each](#singleton-or-list-when-to-use-each)
     - [`RestEntity.Singleton` Sub-Component](#restentitysingleton-sub-component)
       - [Quick Example](#quick-example)
     - [`RestEntity.List` Sub-Component](#restentitylist-sub-component)
       - [Understanding the `props.path`](#understanding-the-propspath)
+    - [`RestEntity.Error` Sub-Component](#restentityerror-sub-component)
+    - [`RestEntity.Loading` Sub-Component](#restentityloading-sub-component)
   - [Tutorial](#tutorial)
     - [`ProgramComponent` — Before `RestEntity`](#programcomponent--before-restentity)
     - [`ProgramComponent` — With `RestEntity`](#programcomponent--with-restentity)
@@ -74,15 +74,30 @@ Enter `RestEntity`. This component is all about data-fetching.
 
 The `RestEntity` compound component has a couple parts:
 
-- <sup><strong>+</strong></sup> `RestEntity` parent component — Manages Data Fetching
-- <sup><strong>++</strong></sup> `Singleton` sub-component — Manages what component to render once the data is successfully fetched (this is for one-off pieces of data... like GET program by programId... you're receiving one program so you should use the `Singleton`)
-- <sup><strong>++</strong></sup> `List` sub-component — Manages what component to render once the data is successfully fetched (this is for collections of data... like [GET all programs] or [GET programs by admin id]... you're receiving a LIST of PROGRAMS so you should use `List`)
-- `Error` sub-component — Manages what should be rendered if the data-fetching hits an error
-- `Loading` sub-component — manages what should be rendered while the data is still being fetched.
+- [**`RestEntity`**](#restentity-parent-component)<sup><strong>+</strong></sup> parent component — Manages Data Fetching
+- [**`Singleton`**](#restentitysingleton-sub-component)<sup><strong>++</strong></sup>  sub-component — Manages what component to render once the data is successfully fetched
+  - This is for one-off pieces of data... like `[GET program by programId]`... you're receiving one program so you should use the `Singleton`
+- [**`List`**](#restentitylist-sub-component)<sup><strong>++</strong></sup>  sub-component — Manages what component to render once the data is successfully fetched
+  - This is for collections of data... like `[GET all programs]` or `[GET programs by admin id]`... you're receiving a LIST of PROGRAMS so you should use `List`
+- [**`Error`**](#restentityerror-sub-component) sub-component — Manages what should be rendered if the data-fetching hits an error
+- [**`Loading`**](#restentityloading-sub-component) sub-component — manages what should be rendered while the data is still being fetched.
 
 <sup>+</sup> Required — The `RestEntity` parent component MUST be used in order to reap the benefits
 
-<sup>++</sup> Required (choose one!) — It would make sense to choose either the `List` or `Singleton` sub-component. See the following section on deciding use case
+<sup>++</sup> Required (choose one!) — It would make sense to choose either the `List` or `Singleton` sub-component. See [Singleton or List — when to use each](#singleton-or-list-when-to-use-each)
+
+---
+
+### `RestEntity` Parent Component
+
+The overarching `RestEntity` component takes the following as props:
+
+- `href` — the ENDPOINT that you want to hit!
+  - If you want to get all the programs, you'd hit the `BASE_URL/programs/program/{programId}`.
+  - this `href` can be either (1) the FULL URL or (2) just the location that you care about
+    - Example: If I wanted to get the program with an id of `1`, I could pass in either of the following as `props.href`:
+      - FULL URL: `"https://reach-team-a-be.herokuapp.com/programs/program/1"`
+      - Location: `"/programs/program/1"`
 
 ---
 
@@ -100,96 +115,6 @@ The `RestEntity.Singleton` sub-component is to be used when you're fetching a SI
 
 ---
 
-### `RestEntity` Parent Component
-
-The overarching `RestEntity` component takes the following as props:
-
-- `href` — the ENDPOINT that you want to hit!
-  - If you want to get all the programs, you'd hit the `BASE_URL/programs/program/{programId}`.
-  - this `href` can be either (1) the FULL URL or (2) just the location that you care about
-    - Example: If I wanted to get the program with an id of `1`, I could pass in either of the following as `props.href`:
-      - FULL URL: `"https://reach-team-a-be.herokuapp.com/programs/program/1"`
-      - Location: `"/programs/program/1"`
-
----
-
-### `RestEntity.Error` Sub-Component
-
-The `RestEntity.Error` sub-component allows you to define what you'd like to display in the case that our data-fetching hits an error.
-
-The `Error` sub-component simply takes `props.children` that represent whatever you want to display if there were to be an error.
-
-For instance, say I wanted to render the following JSX if we hit an error:
-
-```javascript
-(
-  <div>
-    <h1>This is an Error Message</h1>
-    <p>Literally anything I want could be inside of here</p>
-  </div>
-)
-```
-
-All I would have to do is WRAP that inside of the `RestEntity.Error`. When you nest any JSX in another React Component, that component implicitly consumes all that JSX as `props.children`.
-
-```javascript
-(
-  <RestEntity href={ENDPOINT_TO_HIT}>
-    
-    {/* other sub-components omitted */}
-    
-    <RestEntity.Error>
-      <div>
-        <h1>This is an Error Message</h1>
-        <p>Literally anything I want could be inside of here</p>
-      </div>
-    </RestEntity.Error>
-
-  </RestEntity>
-)
-```
-
-Now, if an error were to occur when fetching data at the endpoint passed into `RestEntity`'s `props.href`, the JSX within the `RestEntity.Error` would be displayed.
-
----
-
-### `RestEntity.Loading` Sub-Component
-
-The `Loading` sub-component allows you to define what you'd like to display while data is in the process of being fetched. So it's exactly like `RestEntity.Error`, just for Loading state!
-
-You can nest JSX inside within the `<Loading></Loading>` tags to pass those components in as `props.children`. Note that this JSX could be regular HTML or custom React Components.
-
-If I wanted to render the following while loading:
-
-```javascript
-(
-  <div>
-      <h1>Loading...</h1>
-      <Spinner />
-  </div>
-)
-```
-
-I can just nest that JSX within the `Loading` tags and it will display while the data is still being obtained.
-
-```javascript
-(
-  <RestEntity href={ENDPOINT_TO_HIT}>
-    
-    {/* other sub-components omitted */}
-
-    <RestEntity.Loading>
-      <div>
-        <h1>Loading...</h1>
-        <Spinner />
-      </div>
-    </RestEntity.Loading>
-    
-  </RestEntity>
-)
-```
-
----
 
 ### `RestEntity.Singleton` Sub-Component
 
@@ -358,6 +283,84 @@ We're currently getting all courses, that's why there's a  `courseList` property
       </div>
     )}
   />
+)
+```
+
+---
+
+### `RestEntity.Error` Sub-Component
+
+The `RestEntity.Error` sub-component allows you to define what you'd like to display in the case that our data-fetching hits an error.
+
+The `Error` sub-component simply takes `props.children` that represent whatever you want to display if there were to be an error.
+
+For instance, say I wanted to render the following JSX if we hit an error:
+
+```javascript
+(
+  <div>
+    <h1>This is an Error Message</h1>
+    <p>Literally anything I want could be inside of here</p>
+  </div>
+)
+```
+
+All I would have to do is WRAP that inside of the `RestEntity.Error`. When you nest any JSX in another React Component, that component implicitly consumes all that JSX as `props.children`.
+
+```javascript
+(
+  <RestEntity href={ENDPOINT_TO_HIT}>
+    
+    {/* other sub-components omitted */}
+    
+    <RestEntity.Error>
+      <div>
+        <h1>This is an Error Message</h1>
+        <p>Literally anything I want could be inside of here</p>
+      </div>
+    </RestEntity.Error>
+
+  </RestEntity>
+)
+```
+
+Now, if an error were to occur when fetching data at the endpoint passed into `RestEntity`'s `props.href`, the JSX within the `RestEntity.Error` would be displayed.
+
+---
+
+### `RestEntity.Loading` Sub-Component
+
+The `Loading` sub-component allows you to define what you'd like to display while data is in the process of being fetched. So it's exactly like `RestEntity.Error`, just for Loading state!
+
+You can nest JSX inside within the `<Loading></Loading>` tags to pass those components in as `props.children`. Note that this JSX could be regular HTML or custom React Components.
+
+If I wanted to render the following while loading:
+
+```javascript
+(
+  <div>
+      <h1>Loading...</h1>
+      <Spinner />
+  </div>
+)
+```
+
+I can just nest that JSX within the `Loading` tags and it will display while the data is still being obtained.
+
+```javascript
+(
+  <RestEntity href={ENDPOINT_TO_HIT}>
+    
+    {/* other sub-components omitted */}
+
+    <RestEntity.Loading>
+      <div>
+        <h1>Loading...</h1>
+        <Spinner />
+      </div>
+    </RestEntity.Loading>
+    
+  </RestEntity>
 )
 ```
 
