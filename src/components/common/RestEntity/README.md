@@ -9,6 +9,7 @@
   - [RestEntity Overview](#restentity-overview)
     - [What is it?](#what-is-it)
     - [Why use it?](#why-use-it)
+  - [API](#api)
     - [General Structure](#general-structure)
     - [`Singleton` or `List`? When to use each](#singleton-or-list-when-to-use-each)
     - [`RestEntity` Parent Component](#restentity-parent-component)
@@ -17,6 +18,7 @@
     - [`RestEntity.Singleton` Sub-Component](#restentitysingleton-sub-component)
       - [Quick Example](#quick-example)
     - [`RestEntity.List` Sub-Component](#restentitylist-sub-component)
+      - [Understanding the `props.path`](#understanding-the-propspath)
   - [Tutorial](#tutorial)
     - [`ProgramComponent` — Before `RestEntity`](#programcomponent--before-restentity)
     - [`ProgramComponent` — With `RestEntity`](#programcomponent--with-restentity)
@@ -65,6 +67,8 @@ Handling all of that data fetching IN each component on top of managing applicat
 But anything fetching data is going to do it in relatively the same way. And each component really just needs to be able to decide how to DISPLAY that information to the user.
 
 Enter `RestEntity`. This component is all about data-fetching.
+
+## API
 
 ### General Structure
 
@@ -198,8 +202,6 @@ props:
      1. A named Component, i.e., `<Singleton component={Component} />`
      2. An anonymous, unnamed Component — effectively defining a component inline
 
-The `<Singleton component={props => (<Component />) } />`
-
 This `component` prop is powerful, because after the `RestEntity` parent component successfully retrieves your data, it will give control back to you at this `Singleton` sub-component. This is where you get to decide what to DO with the data that was fetched. What really happens is that our `Singleton` passes the retrieved data as `props` to whatever component you specify here.
 
 If I were getting one Single Course
@@ -220,7 +222,7 @@ If I were getting one Single Course
 )
 ```
 
-#### Quick Example 
+#### Quick Example
 
 Say we were getting one single Course and we wanted to render the following component:
 
@@ -258,7 +260,7 @@ Or we could define such a component as an anonymous, unnamed component:
         <p>Description: {props.description}</p>
       </div>
     )} 
-  /> {/* Note self-closing tag for Singleton */}
+  />
 )
 ```
 
@@ -266,54 +268,100 @@ Or we could define such a component as an anonymous, unnamed component:
 
 ### `RestEntity.List` Sub-Component
 
----
+The `List` sub-component is to be used when fetching a COLLECTION of data. When you hit a `GET "/courses/"`, the backend is going to respond with a LIST of courses. That's when the `List` should be utilized.
 
-```javascript
-const EndpointComponent = props => {
-  return (
-    
-    <RestEntity href=“/endpoint”>
+props:
 
-      {/* Successful Fetch State */}  
-      <RestEntity.Singleton 
-        component={data => (
-          <SomeComponent {...data} />
-        )}
-      />
+- `path` — The bracket-notation representation of the path to the data you care about... this is essentially your dot-notation for getting from the data that `RestEntity` retrieves to the specific list of data you care about!
+- `component` — This works exactly the same as `props.component` for Singleton, except for the fact that NOW it's going to render this component for EVERY piece of data INSIDE THE LIST.
 
-      {/* Error State */}  
-      <RestEntity.Error>
-        <div>Oh no...! An error has occurred!</div>
-      </RestEntity.Error>
+#### Understanding the `props.path`
 
-      {/* Loading State */}  
-      <RestEntity.Loading>
-        <Spinner />
-      </RestEntity.Loading>
+For instance `GET all courses` responds with an object that looks like this:
 
-    </RestEntity>
-  );
+<details>
 
-};
+<summary>Unfold to see example JSON</summary>
+
+```json
+{
+  "_embedded": {
+    "courseList": [
+      {
+        "courseid": 1,
+        "coursename": "Course One",
+        "coursecode": "COURSE_ONE",
+        "coursedescription": "course one description",
+        "_links": {
+          "self": {
+            "href": "https://https://reach-team-a-be.herokuapp.com/courses/course/1"
+          },
+          "modules": {
+            "href": "https://reach-team-a-be.herokuapp.com/modules/by-course/1"
+          }
+        }
+      },
+      {
+        "courseid": 2,
+        "coursename": "Course Two",
+        "coursecode": "COURSE_TWO",
+        "coursedescription": "course two description",
+        "_links": {
+          "self": {
+            "href": "https://reach-team-a-be.herokuapp.com/courses/course/2"
+          },
+          "modules": {
+            "href": "https://reach-team-a-be.herokuapp.com/modules/by-course/2"
+          }
+        }
+      },
+    ]
+  },
+  "_links": {
+    "self": {
+      "href": "https://https://reach-team-a-be.herokuapp.com/courses"
+    }
+  }
+}
 ```
 
-In the above example, we have a fully-implemented `<RestEntity />` component with a `<Singleton />`, `<Error />`, `<Loading />` nested inside.
+</details>
 
-As you may have guessed, the `Error` and `Loading` parts are only going to display their children when our data-fetching hits an error-state or a loading state.
+So, as you can see in the data enclosed above, the top-level `res.data` is not a list
 
-But what’s happening with the `href` prop for `<RestEntity />`? 
+Instead, the collection of courses that we care about is located at `res.data._embedded.courseList`.
 
-And *what in the world* is going on with the `component={data => (<Component {...data} />)}` for `<Singleton />`?
+Now, as it turns out, the `RestEntity` is smart enough to strip out the `_embedded` property and organize our data to remain consistent with the `Singleton`. After fetching, the `RestEntity` is going to end up with `data` that looks like this:
 
-This may look strange or scary or new to some, but trust me... it’s nothing you haven’t done before—even if you don't realize it quite yet.
+```javascript
+const data = {
+  "courseList": [ /* all the courses */  ],
+  "_links": {
+    "self": {
+      "href": "https://https://reach-team-a-be.herokuapp.com/courses"
+    }
+  }
+}
+```
 
-If this pattern looks familiar to you, that's probably b/c you've seen it before!
+We're currently getting all courses, that's why there's a  `courseList` property. If we were getting all programs, that property would be called `programList` and have a list of programs. Those properties change depending on what endpoint you hit. So we ned to tell `RestEntity.List` how to access the list of data that we care about. Hence the `props.path`:
 
-- it could be that you recognize this pattern from some `<SecureRoute />`  components (or even the old API for the `<Route />` components from `"react-router-dom"`).
+```javascript
+(
+  <RestEntity.List 
+    path={["courseList"]}
+    component={data => (
+      <div>
+        <h1>Course Name: {data.coursename}</h1>
+        <p>Code: {data.coursecode}</p>
+        <p>Description: {data.coursedescription}</p>
+      </div>
+    )}
+  />
+)
+```
 
-- Or, this pattern has been generally referred to as `render props` . If ya know, you know. If ya don't: no worries.
-
-- And finally, you may recognize that this looks a hell of a lot like a callback function. And that’s because ***that's exactly what it is***. At the end of the day, all of our React components are **functions**. *(Yes, even the class components are functions... cuz JS classes are syntactic sugar)* And every single one of them has the ability to take in `props`. All this `RestEntity` does is FETCH DATA FOR YOU based on the endpoint you pass on in. Then, it hands the data you care about back to you so that you can take that data as PROPS. For any component you wish to use that data for! This is a powerful pattern.
+---
 
 ## Tutorial
 
