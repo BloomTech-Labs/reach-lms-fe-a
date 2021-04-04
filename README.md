@@ -1,4 +1,9 @@
-# REACH LMS 2021
+# Reach LMS Frontend
+
+![MIT](https://img.shields.io/packagist/l/doctrine/orm.svg)
+![React](https://img.shields.io/badge/react-v16.7.0--alpha.2-blue.svg)
+![Redux](https://img.shields.io/badge/react-redux-brightgreen)
+![Java](https://img.shields.io/badge/java-spring-red)
 
 Deployed link: <https://a.reachlms.dev>
 
